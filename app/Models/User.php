@@ -8,10 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
-{
-    use HasApiTokens, HasFactory, Notifiable;
+//Spatie
+use Spatie\Permission\Traits\HasRoles;
 
+class User extends Authenticatable
+
+{
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    protected $connection = 'mysql';
     /**
      * The attributes that are mass assignable.
      *
@@ -42,3 +46,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 }
+ 
