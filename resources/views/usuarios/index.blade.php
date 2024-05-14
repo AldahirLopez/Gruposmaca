@@ -10,33 +10,38 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
-                        @can('crear-usuarios')
-                        <a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
-                        @endcan
+                        <div style="margin-top: 15px;">
+                            <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
+                            @can('crear-usuarios')
+                            <a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
+                            @endcan
+                        </div>
 
-                        <table class="table table-striped mt-2">
-                            <thead style="background-color: #6777ef;">
-                                <th style="display: none;">ID</th>
-                                <th style="color: #fff;">Nombre</th>
-                                <th style="color: #fff;">E-mail</th>
-                                <th style="color: #fff;">Rol</th>
-                                <th style="color: #fff;">Acciones</th>
+                        <!-- Table with stripped rows -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="display: none;">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach($usuarios as $usuario)
                                 <tr>
                                     <td style="display: none;">{{$usuario->id}}</td>
-                                    <td>{{$usuario->name}}</td>
-                                    <td>{{$usuario->email}}</td>
-                                    <td>
+                                    <td scope="row">{{$usuario->name}}</td>
+                                    <td scope="row">{{$usuario->email}}</td>
+                                    <td scope="row">
                                         @if(!empty($usuario->getRoleNames()))
                                         @foreach($usuario->getRoleNames() as $rolname)
                                         <h5><span class="badge badge-dark">{{$rolname}}</span></h5>
                                         @endforeach
                                         @endif
                                     </td>
-                                    <td>
+                                    <td scope="row">
                                         @can('editar-usuarios')
                                         <a class="btn btn-info" href="{{ route('usuarios.edit', $usuario->id) }}">Editar</a>
                                         @endcan
@@ -49,6 +54,26 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <table class="table table-striped mt-2">
+                            <thead style="background-color: #6777ef;">
+                                <th style="display: none;">ID</th>
+                                <th style="color: #fff;">Nombre</th>
+                                <th style="color: #fff;">E-mail</th>
+                                <th style="color: #fff;">Rol</th>
+                                <th style="color: #fff;">Acciones</th>
+                            </thead>
+                            <tbody>
+
                             </tbody>
                         </table>
                         <div class="pagination justify-content-end">

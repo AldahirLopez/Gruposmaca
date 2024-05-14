@@ -10,21 +10,24 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
-                        @can('crear-rol')
-                        <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
-                        @endcan
-
-                        <table class="table table-striped mt-2">
-                            <thead style="background-color: #6777ef;">
-                                <th style="color: #fff;">Rol</th>
-                                <th style="color: #fff;">Acciones</th>
+                        <div style="margin-top: 15px;">
+                            <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
+                            @can('crear-rol')
+                            <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
+                            @endcan
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach($roles as $role)
                                 <tr>
-                                    <td>{{$role->name}}</td>
-                                    <td>
+                                    <td scope="row">{{$role->name}}</td>
+                                    <td scope="row">
 
                                         @can('editar-rol')
                                         <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">Editar</a>
