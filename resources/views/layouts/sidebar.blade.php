@@ -10,25 +10,39 @@
         </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed" data-bs-target="#usuarios-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="usuarios-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ route('usuarios.index') }}">
-                        <i class="bi bi-circle"></i><span>Crear Usuario</span>
+                        <i class="bi bi-circle"></i><span>Ver Usuarios</span>
                     </a>
                 </li>
             </ul>
         </li>
+
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed" data-bs-target="#roles-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Roles</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="roles-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ route('roles.index') }}">
-                        <i class="bi bi-circle"></i><span>Crear Rol</span>
+                        <i class="bi bi-circle"></i><span>Ver Roles</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-menu-button-wide"></i><span>Operacion y Mantenimiento</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="operacion-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('operacion.index') }}">
+                        <i class="bi bi-circle"></i><span>Ver Dictamenes</span>
                     </a>
                 </li>
             </ul>
@@ -38,9 +52,9 @@
         <li class="nav-heading">Paginas</li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="users-profile.html">
+            <a class="nav-link collapsed" href="{{ route('operacion.index') }}">
                 <i class="bi bi-person"></i>
-                <span>Profile</span>
+                <span>Operacion y Mantenimiento</span>
             </a>
         </li><!-- End Profile Page Nav -->
 

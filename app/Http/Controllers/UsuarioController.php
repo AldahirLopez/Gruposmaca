@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 //agregamos 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Arr;
@@ -17,10 +17,10 @@ class UsuarioController extends Controller
 {
     function __construct()
     {
-        $this -> middleware('permission:ver-usuarios|crear-usuarios|editar-usuarios|borrar-usuarios',['only' => ['index'] ]);
-        $this -> middleware('permission:crear-usuarios', ['only' => ['create','store'] ]);
-        $this -> middleware('permission:editar-usuarios',['only' => ['edit', 'update'] ]);
-        $this -> middleware('permission:borrar-usuarios',['only' => ['destroy'] ]);
+        $this->middleware('permission:ver-usuarios|crear-usuarios|editar-usuarios|borrar-usuarios', ['only' => ['index']]);
+        $this->middleware('permission:crear-usuarios', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-usuarios', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-usuarios', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -29,9 +29,8 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-         $usuarios = User::paginate(5); 
-         return view('usuarios.index', compact('usuarios')); 
-
+        $usuarios = User::paginate(5);
+        return view('usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -41,8 +40,8 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name' , 'name')->all();
-        return view('usuarios.crear', compact('roles')); 
+        $roles = Role::pluck('name', 'name')->all();
+        return view('usuarios.crear', compact('roles'));
     }
 
     /**
@@ -53,7 +52,7 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
@@ -64,8 +63,9 @@ class UsuarioController extends Controller
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
-        $user -> assignRole($request->input('roles'));
+        $user->assignRole($request->input('roles'));
 
+        session()->flash('success', 'Usuario creado exitosamente');
         return redirect()->route('usuarios.index');
     }
 
@@ -104,25 +104,26 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
+            'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'same:confirm-password',
             'roles' => 'required'
         ]);
 
         $input = $request->all();
-        if(!empty($input['password'])){
+        if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
-        }else{
+        } else {
             $input = Arr::except($input, array('password'));
         }
 
         $user = User::find($id);
-        $user -> update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
+        $user->update($input);
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
 
-        $user -> assignRole($request->input('roles'));
+        $user->assignRole($request->input('roles'));
+        session()->flash('success', 'Usuario actualizado exitosamente');
         return redirect()->route('usuarios.index');
     }
 
@@ -135,29 +136,30 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
         User::find($id)->delete();
+        session()->flash('success', 'Usuario eliminado exitosamente');
         return redirect()->route('usuarios.index');
+        
     }
 
     public function updateProfile(Request $request, $id)
-{
-    // Validación de los datos del formulario
-    $this->validate($request, [
-        'name' => 'required',
-        'email' => 'required|email|unique:users,email,' . $id,
-        //'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Asegura que la foto sea una imagen válida
-    ]);
+    {
+        // Validación de los datos del formulario
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            //'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Asegura que la foto sea una imagen válida
+        ]);
 
-    // Obtención del usuario
-    $user = User::find($id);
+        // Obtención del usuario
+        $user = User::find($id);
 
-    // Actualización del nombre
-    $user->name = $request->input('name');
+        // Actualización del nombre
+        $user->name = $request->input('name');
 
-    // Actualización del correo electrónico
-    $user->email = $request->input('email');
+        // Actualización del correo electrónico
+        $user->email = $request->input('email');
 
-    // Guardar los cambios en la base de datos
-    $user->save();
-}
-
+        // Guardar los cambios en la base de datos
+        $user->save();
+    }
 }
