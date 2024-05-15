@@ -12,6 +12,12 @@ class DictamenOp extends Model
     protected $connection = 'segunda_db';
 
     protected $table = 'numdicop';
+
+    protected $fillable = [
+        'nombre',
+        // Aquí puedes agregar otros campos que desees permitir en asignación masiva
+    ];
+
     // Relación con el modelo User
     public function usuario()
     {

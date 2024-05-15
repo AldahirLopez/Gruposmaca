@@ -76,7 +76,8 @@ class OperacionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $dictamen = DictamenOp::find($id);
+        return view('armonia.operacion.editar', compact('dictamen'));
     }
 
     /**
@@ -86,20 +87,20 @@ class OperacionController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'Nombre_dictamen' => 'required',
+            'nombre' => 'required',
         ]);
 
         // Buscar la obra por su ID y actualizar los datos
         $NumDictamen = DictamenOp::findOrFail($id);
         $NumDictamen->update([
-            'Nombre_dictamen' => $request->Nombre_dictamen,
+            'nombre' => $request->nombre,
             // Aquí puedes añadir más campos que necesites actualizar
         ]);
 
         // Agregar el mensaje de éxito a la sesión
         session()->flash('success', 'El dictamen ha sido actualizado exitosamente');
         // Redirigir a la vista de edición de la obra
-        return view('armonia.operacion.index');
+        return redirect()->route('operacion.index', $id);
     }
 
     /**
@@ -115,5 +116,9 @@ class OperacionController extends Controller
 
         // Redireccionar con un mensaje de éxito
         return redirect()->route('operacion.index')->with('success', 'Dictamen eliminado exitosamente');
+    }
+
+    public function listararchivos(){
+        
     }
 }

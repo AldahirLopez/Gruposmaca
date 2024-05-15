@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ArchivosOp extends Model
 {
     use HasFactory;
+    protected $connection = 'segunda_db';
+    
     protected $table = 'dicarchivos';
     // Relación con el modelo User
     public function usuario()
