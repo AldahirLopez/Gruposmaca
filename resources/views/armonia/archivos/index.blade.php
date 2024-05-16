@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Archivos del dictamen  </h3>
+        <h3 class="page__heading">Archivos del dictamen </h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -13,7 +13,7 @@
                         <div style="margin-top: 15px;">
                             <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
                             @can('crear-archivos')
-                            <a class="btn btn-warning" href="{{ route('archivos.create') }}">Nuevo</a>
+                            <a class="btn btn-warning" href="{{ route('archivos.create', ['dictamen_id' => $dictamen_id]) }}">Nuevo</a>
                             @endcan
                         </div>
                         <table class="table table-striped">
@@ -29,7 +29,14 @@
                                 <tr>
                                     <td scope="row">{{$archivo->nombre}}</td>
                                     <td scope="row">
-                                       
+                                        <a href="#" class="btn btn-primary" onclick="mostrarArchivo('{{ Storage::url($archivo->rutadoc) }}')">Mostrar Archivo</a>
+                                        <script>
+                                            function mostrarArchivo(url) {
+                                                // Abrir una nueva ventana o pestaña con la URL del archivo
+                                                window.open(url, '_blank');
+                                            }
+                                        </script>
+                                    </td>
                                     </td>
                                     <td scope="row">
 

@@ -40,9 +40,14 @@ class ArchivosDicController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // Obtener el usuario autenticado actualmente
+        $usuario = auth()->user();
+        // Obtener el dictamen_id de la solicitud (si se pasó)
+        $dictamen_id = $request->dictamen_id;
+        // Pasar el usuario y el dictamen_id a la vista
+        return view('armonia.archivos.crear', compact('usuario', 'dictamen_id'));
     }
 
     /**
@@ -50,7 +55,34 @@ class ArchivosDicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Obtener el ID del dictamen de la URL
+        $dictamenId = $request->dictamen_id;
+
+        // Obtener el ID del usuario autenticado
+        $usuarioId = auth()->id();
+
+        // Validar los datos del formulario
+        $request->validate([
+            'nombre' => 'required',
+            'archivo' => 'required|file', // Validar que se haya subido un archivo
+        ]);
+
+        // Crear una nueva instancia del modelo Archivos
+        $archivo = new ArchivosOp();
+        $archivo->nombre = $request->input('nombre'); // Asignar el nombre
+        // Guardar el archivo en el sistema de archivos
+        $archivoSubido = $request->file('archivo');
+        $rutaArchivo = $archivoSubido->store('public/archivos');
+        $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
+
+        // Asignar el dictamen_id obtenido de la URL
+        $archivo->numdicop_id = $dictamenId;
+
+        // Guardar la nueva entrada en la base de datos
+        $archivo->save();
+
+        // Redirigir al usuario a la página de lista de archivos con el dictamen_id en la URL
+        return redirect()->route('archivos.index', ['dictamen_id' => $dictamenId])->with('success', 'Documento creado exitosamente');
     }
 
     /**
@@ -82,6 +114,22 @@ class ArchivosDicController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Buscar el plano por su ID
+        $archivo = ArchivosOp::findOrFail($id);
+
+
+        // Obtener la ruta del archivo asociado al plano
+        $rutaArchivo = storage_path('app/public/' . $archivo->rutadoc);
+
+        // Verificar si el archivo existe y eliminarlo
+        if (file_exists($rutaArchivo)) {
+            unlink($rutaArchivo); // Eliminar el archivo del sistema de archivos
+        }
+
+        // Eliminar el plano de la base de datos
+        $archivo->delete();
+
+        // Redirigir al usuario a la página de lista de planos
+        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id ])->with('success', 'Documento eliminado exitosamente');
     }
 }
