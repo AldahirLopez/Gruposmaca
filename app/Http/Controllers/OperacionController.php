@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\DictamenOp;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\DictamenOp;
+use Illuminate\Support\Facades\Storage;
 
 class OperacionController extends Controller
 {
@@ -108,17 +108,43 @@ class OperacionController extends Controller
      */
     public function destroy(string $id)
     {
+
+        //Aca lo que se hara sera mandar el pendiente de borrar a la tabla  de Dictamenop y luego se tiene que notiicar al usuari
+        //administrador que tiene una notificacion pendiente de aprobar para poder eliminar el registro
+        // Buscar el dictamen por su ID
+        //Obetner si es administrador y si si borrarlo de una si no solo lanar el pendiente
+        $dictamen = DictamenOp::findOrFail($id);
+
+        // Marcar el dictamen como pendiente de eliminación
+        $dictamen->pending_deletion = true;
+        $dictamen->save();
+
+        // No se notifica ya que se tomara el valor de la tabla Notificar al administrador
+
+        // Redireccionar con un mensaje de notificación
+        return redirect()->route('operacion.index')->with('success', 'Solicitud de eliminación enviada para aprobación.');
+    }
+    public function listararchivos(string $id)
+    {
+
         // Buscar el dictamen por su ID
         $dictamen = DictamenOp::findOrFail($id);
+
+        // Obtener los archivos relacionados
+        $archivos = $dictamen->dicarchivos;
+
+        // Eliminar los archivos del sistema de archivos
+        foreach ($archivos as $archivo) {
+            Storage::delete('public/' . $archivo->rutadoc);
+        }
+
+        // Eliminar los registros relacionados en dicarchivos
+        $dictamen->dicarchivos()->delete();
 
         // Eliminar el dictamen
         $dictamen->delete();
 
         // Redireccionar con un mensaje de éxito
         return redirect()->route('operacion.index')->with('success', 'Dictamen eliminado exitosamente');
-    }
-
-    public function listararchivos(){
-        
     }
 }

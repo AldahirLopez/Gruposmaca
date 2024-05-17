@@ -10,13 +10,18 @@ class DictamenOp extends Model
     use HasFactory;
 
     protected $connection = 'segunda_db';
-
     protected $table = 'numdicop';
 
     protected $fillable = [
         'nombre',
         // Aquí puedes agregar otros campos que desees permitir en asignación masiva
     ];
+
+    // Relación con el modelo ArchivosOp
+    public function dicarchivos()
+    {
+        return $this->hasMany(ArchivosOp::class, 'numdicop_id');
+    }
 
     // Relación con el modelo User
     public function usuario()

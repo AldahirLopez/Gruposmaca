@@ -29,18 +29,31 @@
                                 <tr>
                                     <td scope="row">{{$dictamen->nombre}}</td>
                                     <td scope="row">
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-primary" disabled>Ver Archivos</button>
+                                        @else
                                         <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}" class="btn btn-info">Listar Archivos</a>
+                                        @endif
+
                                     </td>
                                     <td scope="row">
 
                                         @can('editar-operacion')
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-primary" disabled>Editar</button>
+                                        @else
                                         <a class="btn btn-primary" href="{{ route('operacion.edit', $dictamen->id) }}">Editar</a>
+                                        @endif
                                         @endcan
 
                                         @can('borrar-operacion')
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
+                                        @else
                                         {!! Form::open(['method' => 'DELETE', 'route' => ['operacion.destroy', $dictamen->id], 'style'=>'display:inline']) !!}
-                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
+                                        {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
+                                        @endif
                                         @endcan
                                     </td>
                                 </tr>

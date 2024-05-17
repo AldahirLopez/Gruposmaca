@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
+                            <a href="{{ route('operacion.index') }}" class="btn btn-danger">Regresar</a>
                             @if ($cantidadArchivos < 3)
                                 @can('crear-archivos')
                                     <a class="btn btn-success"
