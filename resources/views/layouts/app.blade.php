@@ -15,7 +15,9 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -52,6 +54,7 @@
 
     <div class="pagetitle">
       <h1>Grupo SMACA</h1>
+      <!-- 
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
@@ -77,23 +80,21 @@
           @endif
           @endforeach
         </ol>
-
-
-
       </nav>
+      -->
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
       @if(session('success'))
-      <div class="alert alert-success">
-        {{ session('success') }}
-      </div>
-      @endif
+    <div class="alert alert-success">
+      {{ session('success') }}
+    </div>
+  @endif
       @if(session('error'))
-      <div class="alert alert-danger">
-        {{ session('error') }}
-      </div>
-      @endif
+    <div class="alert alert-danger">
+      {{ session('error') }}
+    </div>
+  @endif
       @yield('content')
     </section>
 

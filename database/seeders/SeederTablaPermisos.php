@@ -41,6 +41,12 @@ class SeederTablaPermisos extends Seeder
             'editar-operacion',
             'borrar-operacion',
 
+            //Tabla Archivos
+            'ver-archivos',
+            'crear-archivos',
+            'editar-archivos',
+            'borrar-archivos',
+
             //Tabla Diseño 
             'ver-diseño',
             'crear-diseño',

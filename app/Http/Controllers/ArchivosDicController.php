@@ -30,10 +30,14 @@ class ArchivosDicController extends Controller
         $archivos = ArchivosOp::where('numdicop_id', $dictamen_id)
             ->paginate(5);
 
+            // Contar la cantidad de archivos asociados al número de dictamen
+        $cantidadArchivos = ArchivosOp::where('numdicop_id', $dictamen_id)->count();
+
         // Pasar el usuario, los archivos y el ID del dictamen a la vista
         return view('armonia.archivos.index', [
             'archivos' => $archivos,
             'dictamen_id' => $dictamen_id,
+            'cantidadArchivos' => $cantidadArchivos
         ]);
     }
 
@@ -44,8 +48,18 @@ class ArchivosDicController extends Controller
     {
         // Obtener el usuario autenticado actualmente
         $usuario = auth()->user();
+
         // Obtener el dictamen_id de la solicitud (si se pasó)
         $dictamen_id = $request->dictamen_id;
+
+        // Contar la cantidad de archivos asociados al número de dictamen
+        $cantidadArchivos = ArchivosOp::where('numdicop_id', $dictamen_id)->count();
+
+        // Verificar si ya hay ocho archivos asociados
+        if ($cantidadArchivos >= 8) {
+            return redirect()->route('archivos.index', ['dictamen_id' => $dictamen_id])->with('error', 'No se pueden agregar más archivos. Se alcanzó el límite de ocho archivos.');
+        }
+
         // Pasar el usuario y el dictamen_id a la vista
         return view('armonia.archivos.crear', compact('usuario', 'dictamen_id'));
     }
@@ -98,7 +112,14 @@ class ArchivosDicController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Obtener el usuario autenticado actualmente
+        $usuario = auth()->user();
+        // Buscar el plano por su ID
+        $archivo = ArchivosOp::findOrFail($id);
+
+        $dictamen = $archivo->numdicop_id;
+        // Pasar el usuario y el dictamen_id a la vista
+        return view('armonia.archivos.editar', compact('usuario', 'archivo', 'dictamen'));
     }
 
     /**
@@ -106,7 +127,40 @@ class ArchivosDicController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validar los datos del formulario
+        $request->validate([
+            'nombre' => 'required',
+            'archivo' => 'file', // El archivo es opcional en la actualización
+        ]);
+
+        // Buscar el plano por su ID
+        $archivo = ArchivosOp::findOrFail($id);
+
+        // Actualizar los campos
+        $archivo->nombre = $request->nombre;
+
+        // Verificar si se proporcionó un nuevo archivo
+        if ($request->hasFile('archivo')) {
+            // Obtener la ruta del archivo anterior
+            $rutaArchivoAnterior = storage_path('app/public/' . $archivo->rutadoc);
+
+            // Verificar si el archivo anterior existe y eliminarlo
+            if (file_exists($rutaArchivoAnterior)) {
+                unlink($rutaArchivoAnterior); // Eliminar el archivo anterior del sistema de archivos
+            }
+
+            // Guardar el nuevo archivo en el sistema de archivos
+            $archivoSubido = $request->file('archivo');
+            $rutaArchivo = $archivoSubido->store('public/archivos');
+            $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
+        }
+
+        // Guardar los cambios en la base de datos
+        $archivo->save();
+
+        // Redirigir al usuario a la página de lista de planos
+        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])->with('success', 'Archivo actualizado exitosamente');
+
     }
 
     /**
@@ -130,6 +184,6 @@ class ArchivosDicController extends Controller
         $archivo->delete();
 
         // Redirigir al usuario a la página de lista de planos
-        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id ])->with('success', 'Documento eliminado exitosamente');
+        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])->with('success', 'Documento eliminado exitosamente');
     }
 }

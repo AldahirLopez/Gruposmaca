@@ -13,7 +13,7 @@
                         <div style="margin-top: 15px;">
                             <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
                             @can('crear-operacion')
-                            <a class="btn btn-warning" href="{{ route('operacion.create') }}">Nuevo</a>
+                            <a class="btn btn-success" href="{{ route('operacion.create') }}">Nuevo</a>
                             @endcan
                         </div>
                         <table class="table table-striped">
@@ -29,7 +29,7 @@
                                 <tr>
                                     <td scope="row">{{$dictamen->nombre}}</td>
                                     <td scope="row">
-                                        <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}" class="btn btn-primary">Listar Archivos</a>
+                                        <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}" class="btn btn-info">Listar Archivos</a>
                                     </td>
                                     <td scope="row">
 
