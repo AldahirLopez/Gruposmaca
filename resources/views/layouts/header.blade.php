@@ -96,10 +96,10 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         @auth
-                        <h6>{{ Auth::user()->name }}</h6>
-                        @foreach(Auth::user()->getRoleNames() as $role)
-                        <span>{{ $role }}</span>
-                        @endforeach
+                            <h6>{{ Auth::user()->name }}</h6>
+                            @foreach(Auth::user()->getRoleNames() as $role)
+                                <span>{{ $role }}</span>
+                            @endforeach
                         @endauth
                     </li>
                     <li>
@@ -137,10 +137,14 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}" onclick="event.preventDefault();
+                 document.getElementById('logout-form').submit();">
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Sign Out</span>
+                            <span>Salir</span>
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
