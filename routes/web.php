@@ -36,4 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/approval/{id}/approve', [ApprovalController::class, 'approveDeletion'])->name('approval.approve');
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
 
+    //ruta cambio de contraseña
+    Route::get('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'showChangePasswordForm'])->name('usuarios.showchangepasswordform');
+
+    Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
 });

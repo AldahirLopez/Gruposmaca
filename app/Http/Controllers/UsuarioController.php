@@ -138,7 +138,6 @@ class UsuarioController extends Controller
         User::find($id)->delete();
         session()->flash('success', 'Usuario eliminado exitosamente');
         return redirect()->route('usuarios.index');
-        
     }
 
     public function updateProfile(Request $request, $id)
@@ -161,5 +160,29 @@ class UsuarioController extends Controller
 
         // Guardar los cambios en la base de datos
         $user->save();
+    }
+
+    public function showChangePasswordForm($id)
+    {
+        // Aquí podrías realizar alguna verificación adicional, por ejemplo, si el usuario actual es el propietario del perfil
+        return view('usuarios.cambiar-contrasena');
+    }
+
+    public function updatePassword($id, Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        // Obtener el usuario
+        $user = User::findOrFail($id);
+
+        // Actualizar la contraseña del usuario
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Redirigir a alguna parte, por ejemplo, la página de perfil del usuario
+        return view('usuarios.perfil')->with('success', 'Contraseña actualizada exitosamente.');
     }
 }
