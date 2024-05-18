@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ArchivosOp;
+use App\Models\DictamenOp;
 use Illuminate\Http\Request;
 
 class ArchivosDicController extends Controller
@@ -26,16 +27,20 @@ class ArchivosDicController extends Controller
         // Obtener el ID del dictamen de la URL
         $dictamen_id = $request->dictamen_id;
 
+        // Obtener el nombre del dictamen
+        $dictamen = DictamenOp::findOrFail($dictamen_id)->nombre;
+
         // Obtener los archivos relacionados con el dictamen y el usuario logueado
         $archivos = ArchivosOp::where('numdicop_id', $dictamen_id)
             ->paginate(5);
 
-            // Contar la cantidad de archivos asociados al número de dictamen
+        // Contar la cantidad de archivos asociados al número de dictamen
         $cantidadArchivos = ArchivosOp::where('numdicop_id', $dictamen_id)->count();
 
-        // Pasar el usuario, los archivos y el ID del dictamen a la vista
+        // Pasar el nombre del dictamen, los archivos y el ID del dictamen a la vista
         return view('armonia.archivos.index', [
             'archivos' => $archivos,
+            'dictamen' => $dictamen,
             'dictamen_id' => $dictamen_id,
             'cantidadArchivos' => $cantidadArchivos
         ]);
@@ -160,7 +165,6 @@ class ArchivosDicController extends Controller
 
         // Redirigir al usuario a la página de lista de planos
         return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])->with('success', 'Archivo actualizado exitosamente');
-
     }
 
     /**

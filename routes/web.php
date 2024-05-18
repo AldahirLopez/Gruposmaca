@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArchivosDicController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
@@ -28,5 +29,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('operacion', OperacionController::class);
     Route::resource('archivos', ArchivosDicController::class);
-});
+    Route::resource('notificaciones', ApprovalController::class);
 
+    // Rutas para las notificaciones
+    Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
+    Route::post('/approval/{id}/approve', [ApprovalController::class, 'approveDeletion'])->name('approval.approve');
+    Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
+
+});

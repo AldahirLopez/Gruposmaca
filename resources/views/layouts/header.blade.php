@@ -11,95 +11,61 @@
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
 
+            <!-- Otros elementos del header -->
+            @if(auth()->check() && auth()->user()->hasRole('Administrador') && $pendingDeletions->isNotEmpty())
             <li class="nav-item dropdown">
-
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                     <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">4</span>
+                    <span class="badge bg-primary badge-number">{{ $pendingDeletions->count() }}</span>
                 </a><!-- End Notification Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                     <li class="dropdown-header">
-                        You have 4 new notifications
+                        You have {{ $pendingDeletions->count() }} new notifications
                         <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
+                    @foreach($pendingDeletions as $dictamen)
                     <li class="notification-item">
                         <i class="bi bi-exclamation-circle text-warning"></i>
                         <div>
-                            <h4>Lorem Ipsum</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>30 min. ago</p>
+                            <h4>Solicitud de eliminación</h4>
+                            <p>El dictamen "{{ $dictamen->nombre }}" está pendiente de aprobación para ser eliminado.</p>
+                            <p>{{ $dictamen->updated_at->diffForHumans() }}</p>
+                            <a href="{{ route('approval.show', $dictamen->id) }}" class="btn btn-primary">Ver detalles</a>
                         </div>
                     </li>
-
                     <li>
                         <hr class="dropdown-divider">
                     </li>
+                    @endforeach
 
-                    <li class="notification-item">
-                        <i class="bi bi-x-circle text-danger"></i>
-                        <div>
-                            <h4>Atque rerum nesciunt</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>1 hr. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="notification-item">
-                        <i class="bi bi-check-circle text-success"></i>
-                        <div>
-                            <h4>Sit rerum fuga</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>2 hrs. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="notification-item">
-                        <i class="bi bi-info-circle text-primary"></i>
-                        <div>
-                            <h4>Dicta reprehenderit</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>4 hrs. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
                     <li class="dropdown-footer">
                         <a href="#">Show all notifications</a>
                     </li>
-
                 </ul><!-- End Notification Dropdown Items -->
-
             </li><!-- End Notification Nav -->
+            @endif
 
-            <li class="nav-item dropdown pe-3">
+            <li class="nav-item dropdown pe-4">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                   <!-- <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">-->
+                   @auth
+                    <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
+                    @endauth
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         @auth
-                            <h6>{{ Auth::user()->name }}</h6>
-                            @foreach(Auth::user()->getRoleNames() as $role)
-                                <span>{{ $role }}</span>
-                            @endforeach
+                        <h6>{{ Auth::user()->name }}</h6>
+                        @foreach(Auth::user()->getRoleNames() as $role)
+                        <span>{{ $role }}</span>
+                        @endforeach
                         @endauth
                     </li>
                     <li>

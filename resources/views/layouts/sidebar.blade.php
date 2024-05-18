@@ -11,7 +11,7 @@
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#usuarios-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-people"></i><span>Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="usuarios-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
@@ -26,7 +26,7 @@
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#roles-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Roles</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-shield-lock-fill"></i><span>Roles</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="roles-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
@@ -40,7 +40,7 @@
         @if(auth()->check() && auth()->user()->hasRole('Operacion y Mantenimiento'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Operacion y Mantenimiento</span><i
+                    <i class="bi bi-folder"></i><span>Operacion y Mantenimiento</span><i
                         class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="operacion-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -58,11 +58,20 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('operacion.index') }}">
-                    <i class="bi bi-person"></i>
+                    <i class="bi bi-folder"></i>
                     <span>Operacion y Mantenimiento</span>
                 </a>
-            </li><!-- End Profile Page Nav -->
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('notificaciones.index') }}">
+                    <i class="bi bi-trash-fill"></i>
+                    <span>Pendientes de eliminacion dictamenes</span>
+                </a>
+            </li>
+            <!-- End Profile Page Nav -->
         @endif
+        
 
     </ul>
 
