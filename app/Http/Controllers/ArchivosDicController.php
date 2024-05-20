@@ -89,9 +89,10 @@ class ArchivosDicController extends Controller
         // Crear una nueva instancia del modelo Archivos
         $archivo = new ArchivosOp();
         $archivo->nombre = $request->input('nombre'); // Asignar el nombre
-        // Guardar el archivo en el sistema de archivos
+
+        // Guardar el archivo en el sistema de archivos en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
-        $rutaArchivo = $archivoSubido->store('public/archivos');
+        $rutaArchivo = $archivoSubido->store('public/armonia');
         $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
 
         // Asignar el dictamen_id obtenido de la URL

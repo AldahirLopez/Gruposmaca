@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\DictamenOp;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Auth; // Importa la clase Auth
+
 class OperacionController extends Controller
 {
 
@@ -24,7 +26,19 @@ class OperacionController extends Controller
      */
     public function index()
     {
-        $dictamenes = DictamenOp::all();
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
+
+        // Verificar si el usuario es administrador
+        if ($usuario->hasRole('Administrador')) {
+            // Si es administrador, obtener todos los dictámenes
+            $dictamenes = DictamenOp::all();
+        } else {
+            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
+            $dictamenes = DictamenOp::where('usuario_id', $usuario->id)->get();
+        }
+
+        // Pasar los dictámenes a la vista
         return view('armonia.operacion.index', compact('dictamenes'));
     }
 
@@ -54,7 +68,7 @@ class OperacionController extends Controller
 
         // Establecer los valores de los campos
         $NumDictamen->nombre = $request->numero_dictamen;
-        $NumDictamen->usuario_id  = $usuario->id;
+        $NumDictamen->usuario_id = $usuario->id;
 
         // Guardar la nueva entrada en la base de datos
         $NumDictamen->save();
