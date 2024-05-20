@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Dictámenes Operación y Mantenimiento</h3>
+        <h3 class="page__heading">Pendientes de Eliminar Dictámenes Operación y Mantenimiento</h3>
     </div>
     <div class="section-body">
         <div class="row">

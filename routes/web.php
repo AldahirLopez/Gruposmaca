@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArchivosDicController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('operacion', OperacionController::class);
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
+    Route::resource('anexo', AnexoController::class);
+
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');

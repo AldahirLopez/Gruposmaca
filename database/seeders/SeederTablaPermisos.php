@@ -63,7 +63,13 @@ class SeederTablaPermisos extends Seeder
             'ver-planos',
             'crear-planos',
             'editar-planos',
-            'borrar-planos'
+            'borrar-planos',
+
+            //Tabla Construccion
+            'ver-anexo',
+            'crear-anexo',
+            'editar-anexo',
+            'borrar-anexo'
 
 
 

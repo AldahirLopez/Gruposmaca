@@ -21,8 +21,8 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                     <li class="dropdown-header">
-                        You have {{ $pendingDeletions->count() }} new notifications
-                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                        Tienes {{ $pendingDeletions->count() }} nuevas notifiaciones
+                        <a href="{{ route('notificaciones.index')}}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -44,7 +44,7 @@
                     @endforeach
 
                     <li class="dropdown-footer">
-                        <a href="#">Show all notifications</a>
+                        <a href="{{ route('notificaciones.index')}}">Ver todas las notificaciones</a>
                     </li>
                 </ul><!-- End Notification Dropdown Items -->
             </li><!-- End Notification Nav -->
