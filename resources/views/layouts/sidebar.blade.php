@@ -37,7 +37,7 @@
             </ul>
         </li>
         @endif
-        @if(auth()->check() && auth()->user()->hasRole('Operacion y Mantenimiento'))
+        @if(auth()->check() && auth()->user()->hasAnyRole(['Operacion y Mantenimiento', 'Auditor']))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-folder"></i><span>Operacion y Mantenimiento</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -46,6 +46,19 @@
                 <li>
                     <a href="{{ route('operacion.index') }}">
                         <i class="bi bi-circle"></i><span>Ver Dictamenes</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#anexo-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-folder"></i><span>Anexo 30</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="anexo-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('anexo.index') }}">
+                        <i class="bi bi-circle"></i><span>Ver Servicios</span>
                     </a>
                 </li>
             </ul>
