@@ -4,10 +4,14 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArchivosDicController;
+use App\Http\Controllers\EstacionesAnexoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\OperacionController;
+use App\Http\Controllers\PagosAnexoController;
+use App\Http\Controllers\ServicioAnexoController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +36,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
     Route::resource('anexo', AnexoController::class);
+    Route::resource('servicio_anexo', ServicioAnexoController::class);
+    Route::resource('pago_anexo', PagosAnexoController::class);
+    Route::resource('estacion_anexo', EstacionesAnexoController::class);
 
+
+    Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');

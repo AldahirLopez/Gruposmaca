@@ -19,7 +19,7 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">Numero de dictamen</th>
+                                    <th scope="col">Identificador</th>
                                     <th scope="col">Detalles</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
@@ -41,6 +41,30 @@
                                             <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
                                         </form>
                                         <form action="{{ route('approval.approve', $dictamen->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                                @endforeach
+
+                                @foreach($servicios as $servicio)
+                                <tr>
+                                    <td scope="row">{{$servicio->nomenclatura}}</td>
+                                    <td scope="row">
+                                       
+                                    </td>
+                                    <td scope="row">
+                                        @can('editar-servicio')
+                                        <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->id) }}">Editar</a>
+                                        @endcan
+                                        @can('borrar-servicio')
+                                        <form action="{{ route('approval.cancel', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
+                                        </form>
+                                        <form action="{{ route('approval.approve', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                         </form>

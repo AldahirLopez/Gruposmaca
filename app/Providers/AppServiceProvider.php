@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\DictamenOp;
+use App\Models\ServicioAnexo;
 use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,16 +23,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
         View::composer('*', function ($view) {
             $user = Auth::user();
-            $pendingDeletions = collect();
+            $pendingDeletionsDictamen = collect();
+            $pendingDeletionsServicio = collect();
+            $pendingDeletionsServicioAn = collect();
 
             if ($user && $user->hasRole('Administrador')) {
-                $pendingDeletions = DictamenOp::where('pending_deletion', 1)->get();
+                $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
+                $pendingDeletionsServicio = ServicioAnexo::where('estado', 0)->get();
+                $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion', 1)->get();
             }
 
-            $view->with('pendingDeletions', $pendingDeletions);
+            $view->with('pendingDeletionsDictamen', $pendingDeletionsDictamen);
+            $view->with('pendingDeletionsServicio', $pendingDeletionsServicio);
+            $view->with('pendingDeletionsServicioAn', $pendingDeletionsServicioAn);
         });
     }
 }

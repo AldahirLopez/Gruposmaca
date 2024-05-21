@@ -10,44 +10,23 @@
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    function fetchNotifications() {
+                        $.get('/fetch-notifications', function(data) {
+                            $('#notifications-container').html(data);
+                        });
+                    }
 
-            <!-- Otros elementos del header -->
-            @if(auth()->check() && auth()->user()->hasRole('Administrador') && $pendingDeletions->isNotEmpty())
-            <li class="nav-item dropdown">
-                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                    <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">{{ $pendingDeletions->count() }}</span>
-                </a><!-- End Notification Icon -->
-
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                    <li class="dropdown-header">
-                        Tienes {{ $pendingDeletions->count() }} nuevas notifiaciones
-                        <a href="{{ route('notificaciones.index')}}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    @foreach($pendingDeletions as $dictamen)
-                    <li class="notification-item">
-                        <i class="bi bi-exclamation-circle text-warning"></i>
-                        <div>
-                            <h4>Solicitud de eliminación</h4>
-                            <p>El dictamen "{{ $dictamen->nombre }}" está pendiente de aprobación para ser eliminado.</p>
-                            <p>{{ $dictamen->updated_at->diffForHumans() }}</p>
-                            <a href="{{ route('approval.show', $dictamen->id) }}" class="btn btn-primary">Ver detalles</a>
-                        </div>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    @endforeach
-
-                    <li class="dropdown-footer">
-                        <a href="{{ route('notificaciones.index')}}">Ver todas las notificaciones</a>
-                    </li>
-                </ul><!-- End Notification Dropdown Items -->
-            </li><!-- End Notification Nav -->
+                    setInterval(fetchNotifications, 5000);
+                    fetchNotifications();
+                });
+            </script>
+            @if(auth()->check() && auth()->user()->hasRole('Administrador'))
+            <div id="notifications-container" class="d-flex align-items-center">
+                @include('partials.notifications-servicios')
+            </div>
             @endif
 
             <li class="nav-item dropdown pe-4">

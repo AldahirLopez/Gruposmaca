@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
+use Illuminate\Support\Carbon;
+
 class OperacionController extends Controller
 {
 
@@ -131,6 +133,14 @@ class OperacionController extends Controller
 
         // Marcar el dictamen como pendiente de eliminación
         $dictamen->pending_deletion = true;
+        // Obtener la fecha y hora actuales
+        $fechaHoraActual = Carbon::now();
+
+        // Formatear la fecha y la hora según tu preferencia
+        $fechaHoraFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
+
+        // Asignar la fecha y hora formateadas al modelo
+        $dictamen->eliminated_at = $fechaHoraFormateada;
         $dictamen->save();
 
         // No se notifica ya que se tomara el valor de la tabla Notificar al administrador
