@@ -33,7 +33,7 @@ class ServicioAnexoController extends Controller
         $usuario = Auth::user();
 
         // Verificar si el usuario es administrador
-        if ($usuario->hasRole('Administrador')) {
+        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador, obtener todos los dictámenes
             $servicios = ServicioAnexo::all();
         } else {
@@ -45,6 +45,10 @@ class ServicioAnexoController extends Controller
         return view('armonia.servicio_anexo.index', compact('servicios'));
     }
 
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
     /**
      * Show the form for creating a new resource.
      */

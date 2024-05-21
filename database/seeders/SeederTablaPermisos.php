@@ -69,7 +69,13 @@ class SeederTablaPermisos extends Seeder
             'ver-anexo',
             'crear-anexo',
             'editar-anexo',
-            'borrar-anexo'
+            'borrar-anexo',
+
+            //Tabla Servicios
+            'ver-servicio',
+            'crear-servicio',
+            'editar-servicio',
+            'borrar-servicio'
 
 
 

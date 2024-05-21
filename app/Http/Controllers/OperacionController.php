@@ -32,16 +32,21 @@ class OperacionController extends Controller
         $usuario = Auth::user();
 
         // Verificar si el usuario es administrador
-        if ($usuario->hasRole('Administrador')) {
-            // Si es administrador, obtener todos los dictámenes
+        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            // Si es administrador o auditor, obtener todos los dictámenes
             $dictamenes = DictamenOp::all();
         } else {
-            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
+            // Si no es administrador o auditor, obtener solo los dictámenes del usuario autenticado
             $dictamenes = DictamenOp::where('usuario_id', $usuario->id)->get();
         }
 
         // Pasar los dictámenes a la vista
         return view('armonia.operacion.index', compact('dictamenes'));
+    }
+
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
     }
 
     /**
