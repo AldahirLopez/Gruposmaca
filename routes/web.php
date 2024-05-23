@@ -13,6 +13,9 @@ use App\Http\Controllers\PagosAnexoController;
 use App\Http\Controllers\ServicioAnexoController;
 use App\Http\Controllers\NotificationController;
 
+use Illuminate\Support\Facades\Auth;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,11 +26,7 @@ use App\Http\Controllers\NotificationController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
-
 Auth::routes();
-
 Route::group(['middleware' => ['auth']], function () {
     Route::view('/', 'home')->name('home');
     Route::resource('roles', RolController::class);
@@ -39,6 +38,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_anexo', ServicioAnexoController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
+
+    Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
+
+    Route::get('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+
 
 
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);

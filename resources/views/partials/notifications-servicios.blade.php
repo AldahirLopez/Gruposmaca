@@ -63,7 +63,7 @@
     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
         <li class="dropdown-header">
             Tienes {{ $pendingDeletionsServicio->count() }} nuevas notificaciones
-            <a href="{{ route('notificaciones.index') }}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
+            <a href="{{ route('apro.anexo') }}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
         </li>
         <li>
             <hr class="dropdown-divider">
@@ -73,10 +73,9 @@
         <li class="notification-item">
             <i class="bi bi-exclamation-circle text-warning"></i>
             <div>
-                <h4>Solicitud de eliminación</h4>
-                <p>El servicio "{{ $servicio->nomenclatura }}" está pendiente de aprobación</p>
+                <h4>Solicitud de aprobacion</h4>
+                <p>El servicio de anexo 30 "{{ $servicio->nomenclatura }}" está pendiente de aprobación</p>
                 <p>{{ $servicio->updated_at->diffForHumans() }}</p>
-                <a href="{{ route('approval.show', $servicio->id) }}" class="btn btn-primary">Ver detalles</a>
             </div>
         </li>
         <li>
@@ -85,7 +84,7 @@
         @endforeach
 
         <li class="dropdown-footer">
-            <a href="{{ route('notificaciones.index') }}">Ver todas las notificaciones</a>
+            <a href="{{ route('apro.anexo') }}">Ver todas las notificaciones</a> 
         </li>
     </ul><!-- End Notification Dropdown Items -->
 </li><!-- End Notification Nav -->

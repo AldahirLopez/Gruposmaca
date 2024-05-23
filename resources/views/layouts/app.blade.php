@@ -51,35 +51,6 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <!-- <h1>Grupo SMACA</h1>-->
-      <!-- 
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-          @php
-          $segments = Request::segments();
-          $lastSegment = end($segments);
-          $breadcrumbs = [];
-          @endphp
-          @foreach($segments as $segment)
-          @php
-          $url = implode('/', array_slice($segments, 0, array_search($segment, $segments) + 1));
-          $breadcrumbs[] = [
-          'name' => ucfirst($segment),
-          'url' => $url
-          ];
-          @endphp
-          @endforeach
-          @foreach($breadcrumbs as $key => $breadcrumb)
-          @if ($loop->last && !is_numeric($breadcrumb['name']))
-          <li class="breadcrumb-item active">{{ $breadcrumb['name'] }}</li>
-          @elseif (!is_numeric($breadcrumb['name']))
-          <li class="breadcrumb-item"><a href="{{ url($breadcrumb['url']) }}">{{ $breadcrumb['name'] }}</a></li>
-          @endif
-          @endforeach
-        </ol>
-      </nav>
-      -->
     </div><!-- End Page Title -->
 
     <section class="section dashboard">

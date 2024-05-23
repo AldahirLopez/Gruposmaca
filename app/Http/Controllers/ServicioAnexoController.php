@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\ServicioAnexo;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\View;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -41,6 +43,8 @@ class ServicioAnexoController extends Controller
             $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
         }
 
+
+
         // Pasar los dictámenes a la vista
         return view('armonia.servicio_anexo.index', compact('servicios'));
     }
@@ -54,7 +58,42 @@ class ServicioAnexoController extends Controller
      */
     public function create()
     {
-        return view('armonia.servicio_anexo.crear');
+        // Lista de estados de México
+        $estados = [
+            'Aguascalientes',
+            'Baja California',
+            'Baja California Sur',
+            'Campeche',
+            'Chiapas',
+            'Chihuahua',
+            'Coahuila',
+            'Colima',
+            'Ciudad de México',
+            'Durango',
+            'Guanajuato',
+            'Guerrero',
+            'Hidalgo',
+            'Jalisco',
+            'México',
+            'Michoacán',
+            'Morelos',
+            'Nayarit',
+            'Nuevo León',
+            'Oaxaca',
+            'Puebla',
+            'Querétaro',
+            'Quintana Roo',
+            'San Luis Potosí',
+            'Sinaloa',
+            'Sonora',
+            'Tabasco',
+            'Tamaulipas',
+            'Tlaxcala',
+            'Veracruz',
+            'Yucatán',
+            'Zacatecas'
+        ];
+        return view('armonia.servicio_anexo.crear', compact('estados'));
     }
 
     /**
@@ -66,6 +105,7 @@ class ServicioAnexoController extends Controller
         $request->validate([
             'nombre' => 'required',
             'direccion' => 'required',
+            'estado' => 'required',
         ]);
 
         $usuario = Auth::user(); // O el método que uses para obtener el usuario
@@ -77,6 +117,7 @@ class ServicioAnexoController extends Controller
 
         $servicio->nombre_estacion = $request->nombre;
         $servicio->direccion_estacion = $request->direccion;
+        $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
         $servicio->estado = false;;
         $servicio->usuario_id = $usuario->id;;
@@ -179,5 +220,32 @@ class ServicioAnexoController extends Controller
         }
 
         return strtoupper($iniciales);
+    }
+
+    public function AproAnexo()
+    {
+
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
+
+        // Verificar si el usuario es administrador
+        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            // Si es administrador, obtener todos los dictámenes
+            $servicios = ServicioAnexo::all();
+        } else {
+            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
+            $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+        }
+
+        // Pasar los dictámenes a la vista
+        return view('armonia.servicio_anexo.apro_anexo', compact('servicios'));
+    }
+
+
+
+    public function generarpdfcotizacion(Request $request)
+    {
+        $pdf = PDF::loadView('armonia.servicio_anexo.cotizacion_pdf.cotizacion');
+        return $pdf->stream();
     }
 }

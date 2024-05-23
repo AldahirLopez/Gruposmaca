@@ -198,6 +198,10 @@ return [
         //Spatie
         Spatie\Permission\PermissionServiceProvider::class,
 
+        //PDF
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
+
     ],
 
     /*
@@ -211,8 +215,10 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
-    ])->toArray(),
+    'aliases' => [
+        // Otras fachadas...
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+    ],
 
 ];

@@ -38,6 +38,16 @@
                                         <label for="direccion">Direccion (Permiso de la CREE)</label>
                                         <input type="text" name="direccion" class="form-control">
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="estado">Estado</label>
+                                        <select name="estado" class="form-control">
+                                            @foreach($estados as $estado)
+                                            <option value="{{ $estado }}">{{ $estado }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div style="margin-top: 15px;">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
