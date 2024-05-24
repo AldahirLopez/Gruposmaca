@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <div style="margin-top: 15px;">
                             <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
-                            @can('crear-anexo')
+                            @can('crear-servicio')
                             <a class="btn btn-success" href="{{route('servicio_anexo.create')}}">Nuevo</a>
                             @endcan
                         </div>
