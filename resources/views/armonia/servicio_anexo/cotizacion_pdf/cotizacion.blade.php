@@ -109,7 +109,7 @@
         }
 
         .tabla-propuesta .concepto {
-            text-align: left;
+            text-align: left;  
         }
 
         .tabla-propuesta tfoot td {
@@ -200,11 +200,10 @@
     <div class="container">
         <div class="header">
             <div class="img-logo">
-                <img
-                    src="/Applications/XAMPP/xamppfiles/htdocs/Desarrollo/gruposmaca/resources/views/armonia/servicio_anexo/cotizacion_pdf/logo.png">
+                <img src="{{ public_path('assets/img/logoarmonia.png') }}">
             </div>
             <div class="header-text">
-                <h1>ARMONÍA Y CONTRASTE AMBIENTAL, S.A. DE C.V.</h1>
+                <h1>ARMONÍA Y CONTRASTE AMBIENTAL, S.A. DE C.V. </h1>
                 <p class="highlight"><strong>Unidad de Inspección</strong></p>
                 <p style="text-align: right;"><strong>Materia:</strong> Controles Volumétricos de Hidrocarburos y
                     Petrolíferos</p>
@@ -286,9 +285,8 @@
         </div>
     </div>
     <div class="container">
-        <div class="header">
-            <img
-                src="/Applications/XAMPP/xamppfiles/htdocs/Desarrollo/gruposmaca/resources/views/armonia/servicio_anexo/cotizacion_pdf/logo.png">
+        <div class="header"> 
+            <img src="{{ public_path('assets/img/logoarmonia.png') }}">
             <div class="header-text">
                 <h1>ARMONÍA Y CONTRASTE AMBIENTAL, S.A. DE C.V.</h1>
                 <p class="highlight"><strong>Unidad de Inspección</strong></p>
@@ -348,8 +346,7 @@
 
     <div class="container">
         <div class="header">
-            <img
-                src="/Applications/XAMPP/xamppfiles/htdocs/Desarrollo/gruposmaca/resources/views/armonia/servicio_anexo/cotizacion_pdf/logo.png">
+            <img src="{{ public_path('assets/img/logoarmonia.png') }}">
             <div class="header-text">
                 <h1>ARMONÍA Y CONTRASTE AMBIENTAL, S.A. DE C.V.</h1>
                 <p class="highlight"><strong>Unidad de Inspección</strong></p>
