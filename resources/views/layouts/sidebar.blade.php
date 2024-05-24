@@ -19,7 +19,7 @@
                         <i class="bi bi-circle"></i><span>Ver Usuarios</span>
                     </a>
                 </li>
-            </ul>
+            </ul> 
         </li>
         @endif
 
