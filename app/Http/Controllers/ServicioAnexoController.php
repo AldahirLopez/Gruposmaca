@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
@@ -29,25 +30,70 @@ class ServicioAnexoController extends Controller
         $this->middleware('permission:borrar-servicio', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         // Obtener el usuario autenticado
         $usuario = Auth::user();
 
-        // Verificar si el usuario es administrador
-        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador, obtener todos los dictámenes
-            $servicios = ServicioAnexo::all();
+        // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
+        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
+
+        // Obtener los usuarios correspondientes a esos IDs
+        $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+
+        // Verificar si se envió un usuario seleccionado en la solicitud
+        $usuarioSeleccionado = $request->input('usuario_id');
+
+        // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
+        if ($usuarioSeleccionado) {
+            $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
         } else {
-            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
-            $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            // Verificar si el usuario es administrador
+            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                // Si es administrador, obtener todos los servicios
+                $servicios = ServicioAnexo::all();
+            } else {
+                // Si no es administrador, obtener solo los servicios del usuario autenticado
+                $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            }
         }
 
-
-
-        // Pasar los dictámenes a la vista
-        return view('armonia.anexo.servicio_anexo.index', compact('servicios'));
+        // Pasar los servicios a la vista
+        return view('armonia.anexo.servicio_anexo.index', compact('servicios', 'usuarios'));
     }
+
+    public function obtenerServicios(Request $request)
+    {
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
+
+        // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
+        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
+
+        // Obtener los usuarios correspondientes a esos IDs
+        $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+
+        // Verificar si se envió un usuario seleccionado en la solicitud
+        $usuarioSeleccionado = $request->input('usuario_id');
+
+        // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
+        if ($usuarioSeleccionado) {
+            $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
+        } else {
+            // Verificar si el usuario es administrador
+            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                // Si es administrador, obtener todos los servicios
+                $servicios = ServicioAnexo::all();
+            } else {
+                // Si no es administrador, obtener solo los servicios del usuario autenticado
+                $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            }
+        }
+
+        // Pasar los servicios a la vista
+        return view('partials.tabla_servicios', compact('servicios', 'usuarios'));
+    }
+
 
     public function hasAnyRole($roles)
     {

@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-
+            @endif
         </div>
     </div>
 </section>
