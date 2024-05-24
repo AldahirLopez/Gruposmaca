@@ -30,7 +30,7 @@
         .header .header-text {
             flex: 1;
             text-align: right;
-            line-height: 1.3;
+            line-height: 1;
         }
 
         .header h1 {
