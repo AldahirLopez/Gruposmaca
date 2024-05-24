@@ -46,7 +46,7 @@ class ServicioAnexoController extends Controller
 
 
         // Pasar los dictámenes a la vista
-        return view('armonia.servicio_anexo.index', compact('servicios'));
+        return view('armonia.anexo.servicio_anexo.index', compact('servicios'));
     }
 
     public function hasAnyRole($roles)
@@ -93,7 +93,7 @@ class ServicioAnexoController extends Controller
             'Yucatán',
             'Zacatecas'
         ];
-        return view('armonia.servicio_anexo.crear', compact('estados'));
+        return view('armonia.anexo.servicio_anexo.crear', compact('estados'));
     }
 
     /**
@@ -238,7 +238,7 @@ class ServicioAnexoController extends Controller
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.servicio_anexo.apro_anexo', compact('servicios'));
+        return view('armonia.anexo.servicio_anexo.apro_anexo', compact('servicios'));
     }
 
 
@@ -260,7 +260,7 @@ class ServicioAnexoController extends Controller
 
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
-        $html = view('armonia.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
+        $html = view('armonia.anexo.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
         // Guardar el PDF en el almacenamiento de Laravel

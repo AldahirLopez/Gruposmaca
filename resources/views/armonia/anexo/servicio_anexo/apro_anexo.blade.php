@@ -31,15 +31,15 @@
                                     <td scope="row">{{$servicio->direccion_estacion}}</td>
                                     <td scope="row">{{$servicio->estado_estacion}}</td>
                                     <td scope="row">
-                                        @if($servicio->estado)
-                                        <button class="btn btn-primary" disabled>Cotizacion</button>
+                                        @if($servicio->pending_deletion)
+                                        <button class="btn btn-primary" disabled><i class="bi bi-file-pdf-fill"></i></button>
                                         @else
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal"><i class="bi bi-file-pdf-fill"></i></button>
                                         @endif
                                     </td>
                                     <td scope="row">
                                         @can('editar-servicio')
-                                        @if($servicio->estado)
+                                        @if($servicio->pending_deletion)
                                         <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
                                         @else
                                         <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}"><i class="bi bi-file-earmark-check-fill"></i></a>
@@ -47,7 +47,7 @@
                                         @endcan
                                         @can('borrar-servicio')
                                         @if($servicio->pending_deletion)
-                                        <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
+                                        <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                         @else
                                         {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                         {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
