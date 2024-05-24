@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Auth;
 */
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+    Route::post('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
     Route::view('/', 'home')->name('home');
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);

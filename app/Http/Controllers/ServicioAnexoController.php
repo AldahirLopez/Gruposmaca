@@ -8,6 +8,7 @@ use App\Models\ServicioAnexo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -118,16 +119,13 @@ class ServicioAnexoController extends Controller
         $servicio->direccion_estacion = $request->direccion;
         $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
-        $servicio->estado = false;
-        ;
-        $servicio->usuario_id = $usuario->id;
-        ;
+        $servicio->estado = false;;
+        $servicio->usuario_id = $usuario->id;;
 
 
         // Asigna otros campos al servicio
         $servicio->save();
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
-        ;
+        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');;
     }
 
     /**
@@ -247,23 +245,32 @@ class ServicioAnexoController extends Controller
 
     public function generarpdfcotizacion(Request $request)
     {
-        // Obtener la información del servicio
-        $nomenclatura = $request->query('nomenclatura');
-        $nombre_estacion = $request->query('nombre_estacion');
-        $direccion_estacion = $request->query('direccion_estacion');
-        $estado_estacion = $request->query('estado_estacion');
+        // Establecer la configuración regional en español
+        app()->setLocale('es');
+        // Obtener la información del servicio y los datos del formulario
+        $nomenclatura = $request->input('nomenclatura');
+        $nombre_estacion = $request->input('nombre_estacion');
+        $direccion_estacion = $request->input('direccion_estacion');
+        $estado_estacion = $request->input('estado_estacion');
+        $costo = $request->input('costo');
+        $iva = $request->input('iva');
 
-        // Pasar la variable $servicio a la vista
-        $html = view('armonia.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion'))->render();
+        // Obtener la fecha actual en el formato deseado (día de mes de año)
+        $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
-        // Forzar la codificación a UTF-8
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
-        // Cargar el HTML en DomPDF y generar el PDF
+        // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
+        $html = view('armonia.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
-        // Devolver el PDF como una descarga en una nueva ventana del navegador
-        return $pdf->stream('report.pdf', ['Attachment' => 0]);
+        // Guardar el PDF en el almacenamiento de Laravel
+        $pdfPath = 'public/temp/report.pdf'; // Ruta donde se guardará el PDF
+        Storage::put($pdfPath, $pdf->output());
 
+        // Obtener la URL pública del PDF
+        $pdfUrl = Storage::url($pdfPath);
+
+        // Devolver la URL del PDF como respuesta
+        return response()->json(['pdf_url' => $pdfUrl]);
     }
 }

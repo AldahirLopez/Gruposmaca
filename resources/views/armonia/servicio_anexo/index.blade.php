@@ -37,10 +37,10 @@
                                     <td scope="row">
                                         @if(!$servicio->estado)
                                         <center>
-                                            <button class="btn btn-primary" disabled><i class="bi bi-folder-check"></i></button>
+                                            <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
                                         </center>
                                         @else
-                                        <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-info">cotizacion</a>
+                                        <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-info"><i class="bi bi-file-earmark-check-fill"></i></a>
                                         @endif
                                     </td>
                                     <td scope="row">

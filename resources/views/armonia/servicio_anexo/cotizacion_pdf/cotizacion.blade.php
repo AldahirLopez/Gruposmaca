@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -109,7 +110,7 @@
         }
 
         .tabla-propuesta .concepto {
-            text-align: left;  
+            text-align: left;
         }
 
         .tabla-propuesta tfoot td {
@@ -219,7 +220,7 @@
         </div>
         <div class="line"></div>
         <div class="footer">
-            <p style="font-size: 14px; margin-top: 5px;">San Jacinto Amilpas, Oaxaca, 26 de Marzo de 2024.</p>
+            <p style="font-size: 14px; margin-top: 5px;">San Jacinto Amilpas, Oaxaca, {{ \Carbon\Carbon::now()->locale('es')->isoFormat('dddd D [de] MMMM [de] YYYY') }}.</p>
         </div>
 
 
@@ -236,8 +237,7 @@
             </p>
         </div>
 
-        <h2
-            style="text-align: center; font-weight: bold; text-decoration: underline; font-size: 16px; margin-top: 30px;">
+        <h2 style="text-align: center; font-weight: bold; text-decoration: underline; font-size: 16px; margin-top: 30px;">
             Propuesta económica</h2>
         <table class="tabla-propuesta">
             <thead>
@@ -256,22 +256,23 @@
                     <td class="concepto">Inspeccionar la correcta operación y funcionamiento de los equipos y programas
                         informáticos para llevar los controles volumétricos de hidrocarburos y petrolíferos de
                         conformidad en los Anexo 30 y 31 de la Resolución Miscelánea Fiscal.</td>
-                    <td>$25,000.00</td>
-                    <td>$25,000.00</td>
+                    <td>${{ number_format($costo, 0, ',', ',') }}</td>
+                    <td>${{ number_format($costo, 0, ',', ',') }}</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="4" style="text-align: right;">Subtotal</td>
-                    <td>$25,000.00</td>
+                    <td>${{ number_format($costo, 0, ',', ',') }}</td>
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: right;">I.V.A.</td>
-                    <td>$4,000.00</td>
+                    <td>${{ number_format($iva, 0, ',', ',') }}</td>
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: right;">Total</td>
-                    <td>$29,000.00</td>
+                    <td>${{ number_format($iva+$costo, 0, ',', ',') }}</td>
+
                 </tr>
                 <tr>
                     <td colspan="5" class="nota" style="text-align: left;">Nota: El costo es por estación de servicio y
@@ -285,7 +286,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="header"> 
+        <div class="header">
             <img src="{{ public_path('assets/img/logoarmonia.png') }}">
             <div class="header-text">
                 <h1>ARMONÍA Y CONTRASTE AMBIENTAL, S.A. DE C.V.</h1>

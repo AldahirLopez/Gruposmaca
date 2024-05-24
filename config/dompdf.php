@@ -1,6 +1,7 @@
 <?php
 
 return array(
+
     /*
     |--------------------------------------------------------------------------
     | Settings
@@ -277,9 +278,6 @@ return array(
          * @var bool
          */
         "enable_html5_parser" => true,
-
-        
-
     ),
 
 

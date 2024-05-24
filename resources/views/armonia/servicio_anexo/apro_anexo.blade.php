@@ -25,38 +25,37 @@
                             </thead>
                             <tbody>
                                 @foreach($servicios as $servicio)
-                                    <tr>
-                                        <td scope="row">{{$servicio->nomenclatura}}</td>
-                                        <td scope="row">{{$servicio->nombre_estacion}}</td>
-                                        <td scope="row">{{$servicio->direccion_estacion}}</td>
-                                        <td scope="row">{{$servicio->estado_estacion}}</td>
-                                        <td scope="row">
-                                            @if($servicio->estado)
-                                                <button class="btn btn-primary" disabled>Cotizacion</button>
-                                            @else
-                                            <a href="{{ route('pdf.cotizacion', ['nomenclatura' => $servicio->nomenclatura, 'nombre_estacion' => $servicio->nombre_estacion, 'direccion_estacion' => $servicio->direccion_estacion, 'estado_estacion' => $servicio->estado_estacion]) }}" class="btn btn-info" target="_blank">Cotización</a>
-                                            @endif
-                                        </td>
-                                        <td scope="row">
-                                            @can('editar-servicio')
-                                                @if($servicio->estado)
-                                                    <button class="btn btn-primary" disabled>Editar</button>
-                                                @else
-                                                    <a class="btn btn-primary"
-                                                        href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Aprobar</a>
-                                                @endif
-                                            @endcan
-                                            @can('borrar-servicio')
-                                                @if($servicio->pending_deletion)
-                                                    <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
-                                                @else
-                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
-                                                    {!! Form::close() !!}
-                                                @endif
-                                            @endcan
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td scope="row">{{$servicio->nomenclatura}}</td>
+                                    <td scope="row">{{$servicio->nombre_estacion}}</td>
+                                    <td scope="row">{{$servicio->direccion_estacion}}</td>
+                                    <td scope="row">{{$servicio->estado_estacion}}</td>
+                                    <td scope="row">
+                                        @if($servicio->estado)
+                                        <button class="btn btn-primary" disabled>Cotizacion</button>
+                                        @else
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal"><i class="bi bi-file-pdf-fill"></i></button>
+                                        @endif
+                                    </td>
+                                    <td scope="row">
+                                        @can('editar-servicio')
+                                        @if($servicio->estado)
+                                        <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
+                                        @else
+                                        <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}"><i class="bi bi-file-earmark-check-fill"></i></a>
+                                        @endif
+                                        @endcan
+                                        @can('borrar-servicio')
+                                        @if($servicio->pending_deletion)
+                                        <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
+                                        @else
+                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                        {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                        {!! Form::close() !!}
+                                        @endif
+                                        @endcan
+                                    </td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -66,4 +65,67 @@
         </div>
     </div>
 </section>
+
+<!-- Vertically centered Modal -->
+<div class="modal fade" id="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Registrar cotización</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" action="{{ route('pdf.cotizacion') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="nomenclatura" value="{{ $servicio->nomenclatura }}">
+                    <input type="hidden" name="nombre_estacion" value="{{ $servicio->nombre_estacion }}">
+                    <input type="hidden" name="direccion_estacion" value="{{ $servicio->direccion_estacion }}">
+                    <input type="hidden" name="estado_estacion" value="{{ $servicio->estado_estacion }}">
+                    <div class="form-group">
+                        <label for="costo">Costo</label>
+                        <input type="text" name="costo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="iva">IVA</label>
+                        <input type="text" name="iva" class="form-control">
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary" style="background-color: #002855; border-color: #002855;">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Vertically centered Modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var formularioCotizacion = document.querySelector('#modal form');
+
+        formularioCotizacion.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario por defecto
+
+            // Obtener los datos del formulario
+            var formData = new FormData(formularioCotizacion);
+
+            // Hacer la solicitud para generar el PDF
+            fetch('{{ route("pdf.cotizacion") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.open(data.pdf_url, '_blank'); // Abrir el PDF en una nueva ventana
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>
+
+
 @endsection
