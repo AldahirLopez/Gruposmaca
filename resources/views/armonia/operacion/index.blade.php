@@ -40,7 +40,7 @@
                                             @can('editar-operacion')
                                                 @if($dictamen->pending_deletion)
                                                     <button class="btn btn-primary" disabled>Editar</button>
-                                                @else
+                                                @else 
                                                     <a class="btn btn-primary"
                                                         href="{{ route('operacion.edit', $dictamen->id) }}">Editar</a>
                                                 @endif

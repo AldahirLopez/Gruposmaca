@@ -1,8 +1,6 @@
 <?php
 
 return array(
-
-    'DOMPDF_UNICODE_ENABLED' => true,
     /*
     |--------------------------------------------------------------------------
     | Settings

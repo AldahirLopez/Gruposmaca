@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\ServicioAnexo;
-use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -119,13 +118,16 @@ class ServicioAnexoController extends Controller
         $servicio->direccion_estacion = $request->direccion;
         $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
-        $servicio->estado = false;;
-        $servicio->usuario_id = $usuario->id;;
+        $servicio->estado = false;
+        ;
+        $servicio->usuario_id = $usuario->id;
+        ;
 
 
         // Asigna otros campos al servicio
         $servicio->save();
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');;
+        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
+        ;
     }
 
     /**
@@ -245,7 +247,23 @@ class ServicioAnexoController extends Controller
 
     public function generarpdfcotizacion(Request $request)
     {
-        $pdf = PDF::loadView('armonia.servicio_anexo.cotizacion_pdf.cotizacion');
-        return $pdf->stream();
+        // Obtener la información del servicio
+        $nomenclatura = $request->query('nomenclatura');
+        $nombre_estacion = $request->query('nombre_estacion');
+        $direccion_estacion = $request->query('direccion_estacion');
+        $estado_estacion = $request->query('estado_estacion');
+
+        // Pasar la variable $servicio a la vista
+        $html = view('armonia.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion'))->render();
+
+        // Forzar la codificación a UTF-8
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
+        // Cargar el HTML en DomPDF y generar el PDF
+        $pdf = PDF::loadHTML($html);
+
+        // Devolver el PDF como una descarga en una nueva ventana del navegador
+        return $pdf->stream('report.pdf', ['Attachment' => 0]);
+
     }
 }

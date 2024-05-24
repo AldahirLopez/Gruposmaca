@@ -25,37 +25,38 @@
                             </thead>
                             <tbody>
                                 @foreach($servicios as $servicio)
-                                <tr>
-                                    <td scope="row">{{$servicio->nomenclatura}}</td>
-                                    <td scope="row">{{$servicio->nombre_estacion}}</td>
-                                    <td scope="row">{{$servicio->direccion_estacion}}</td>
-                                    <td scope="row">{{$servicio->estado_estacion}}</td>
-                                    <td scope="row">
-                                        @if($servicio->estado)
-                                        <button class="btn btn-primary" disabled>Cotizacion</button>
-                                        @else
-                                        <a href="{{ route('pdf.cotizacion', ['nombre_estacion' => $servicio->nombre_estacion, 'direccion_estacion' => $servicio->direccion_estacion, 'estado_estacion' => $servicio->estado_estacion]) }}" class="btn btn-info">Cotización</a>
-                                        @endif
-                                    </td>
-                                    <td scope="row">
-                                        @can('editar-servicio')
-                                        @if($servicio->estado)
-                                        <button class="btn btn-primary" disabled>Editar</button>
-                                        @else
-                                        <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Aprobar</a>
-                                        @endif
-                                        @endcan
-                                        @can('borrar-servicio')
-                                        @if($servicio->pending_deletion)
-                                        <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
-                                        @else
-                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
-                                        {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
-                                        {!! Form::close() !!}
-                                        @endif
-                                        @endcan
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td scope="row">{{$servicio->nomenclatura}}</td>
+                                        <td scope="row">{{$servicio->nombre_estacion}}</td>
+                                        <td scope="row">{{$servicio->direccion_estacion}}</td>
+                                        <td scope="row">{{$servicio->estado_estacion}}</td>
+                                        <td scope="row">
+                                            @if($servicio->estado)
+                                                <button class="btn btn-primary" disabled>Cotizacion</button>
+                                            @else
+                                            <a href="{{ route('pdf.cotizacion', ['nomenclatura' => $servicio->nomenclatura, 'nombre_estacion' => $servicio->nombre_estacion, 'direccion_estacion' => $servicio->direccion_estacion, 'estado_estacion' => $servicio->estado_estacion]) }}" class="btn btn-info" target="_blank">Cotización</a>
+                                            @endif
+                                        </td>
+                                        <td scope="row">
+                                            @can('editar-servicio')
+                                                @if($servicio->estado)
+                                                    <button class="btn btn-primary" disabled>Editar</button>
+                                                @else
+                                                    <a class="btn btn-primary"
+                                                        href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Aprobar</a>
+                                                @endif
+                                            @endcan
+                                            @can('borrar-servicio')
+                                                @if($servicio->pending_deletion)
+                                                    <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
+                                                @else
+                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                    {!! Form::close() !!}
+                                                @endif
+                                            @endcan
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
