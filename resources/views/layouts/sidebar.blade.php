@@ -37,7 +37,7 @@
             </ul>
         </li>
         @endif
-        @if(auth()->check() && auth()->user()->hasAnyRole(['Operacion y Mantenimiento', 'Auditor']))
+        @if(auth()->check() && auth()->user()->hasAnyRole(['Operacion y Mantenimiento', 'Auditor', 'Verificador Anexo 30']))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-folder"></i><span>Operacion y Mantenimiento</span><i class="bi bi-chevron-down ms-auto"></i>
