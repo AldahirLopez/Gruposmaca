@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::connection('segunda_db')->create('numdicop', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->boolean('pending_deletion');
+            $table->boolean('eliminated_at');
             $table->unsignedBigInteger('usuario_id');
             $table->timestamps();
+            
 
             $table->foreign('usuario_id')->references('id')->on('gruposmaca.users');
         });

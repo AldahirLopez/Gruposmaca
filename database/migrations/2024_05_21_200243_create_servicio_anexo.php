@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::connection('segunda_db')->create('servicio_anexo', function (Blueprint $table) {
             $table->id(); // ID autoincremental
+            $table->string('nomenclatura')->unique()->nullable(); // Nomenclatura única, inicialmente null
             $table->string('nombre_estacion'); // Nombre de la estación
             $table->string('direccion_estacion'); // Dirección de la estación
+            $table->string('estado_estacion'); // Dirección de la estación
+            $table->boolean('pending_apro_estacion'); // Aprobacion de la estacion
+            $table->boolean('pending_deletion'); // Pendiente de Eliminacion
+            $table->boolean('eliminated_at'); // Fecha de eliminacion
             $table->unsignedBigInteger('usuario_id'); // Relación con usuario
-            $table->boolean('estado'); // Estado del servicio
-            $table->string('nomenclatura')->unique()->nullable(); // Nomenclatura única, inicialmente null
+            
             $table->timestamps(); // Timestamps
 
             // Agregar la clave foránea
