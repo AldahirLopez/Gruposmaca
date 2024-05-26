@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ArchivosOp;
 use App\Models\DictamenOp;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class ArchivosDicController extends Controller
 {

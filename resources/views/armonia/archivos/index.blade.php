@@ -8,7 +8,7 @@
     <div class="section-body">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card"> 
                     <div class="card-body">
                         <div style="margin-top: 15px;">
                             <a href="{{ route('operacion.index') }}" class="btn btn-danger">Regresar</a>
