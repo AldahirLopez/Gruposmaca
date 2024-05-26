@@ -16,7 +16,7 @@
                             <a class="btn btn-success" href="{{ route('servicio_anexo.create') }}">Nuevo</a>
                             @endcan
                         </div>
-                        @if(auth()->check() && auth()->user()->hasRole('Administrador', 'Auditor'))
+                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Auditor'))
                         <div style="margin-top: 15px;">
                             <label for="filtroUsuario">Filtrar por Usuario:</label>
                             <select id="filtroUsuario" class="form-control">

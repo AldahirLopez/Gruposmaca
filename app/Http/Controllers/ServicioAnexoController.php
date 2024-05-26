@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role;
 
+
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 class ServicioAnexoController extends Controller
@@ -32,26 +33,14 @@ class ServicioAnexoController extends Controller
 
     public function index(Request $request)
     {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
-
-        // Verificar que el usuario esté autenticado
-        if (!$usuario) {
-            return redirect()->route('login'); // Redirigir al login si no está autenticado
-        }
-
         // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
-        $rolVerificador = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first();
-
-        if ($rolVerificador) {
-            $usuariosConRol = $rolVerificador->users()->pluck('id');
-        } else {
-            // Manejar el caso en que el rol no exista
-            $usuariosConRol = collect();
-        }
+        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
 
         // Obtener los usuarios correspondientes a esos IDs
         $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
 
         // Verificar si se envió un usuario seleccionado en la solicitud
         $usuarioSeleccionado = $request->input('usuario_id');
@@ -61,7 +50,7 @@ class ServicioAnexoController extends Controller
             $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
         } else {
             // Verificar si el usuario es administrador
-            if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
                 // Si es administrador, obtener todos los servicios
                 $servicios = ServicioAnexo::all();
             } else {
@@ -70,7 +59,7 @@ class ServicioAnexoController extends Controller
             }
         }
 
-        // Pasar los servicios a la vista
+        // Pasar los servicios y usuarios a la vista
         return view('armonia.anexo.servicio_anexo.index', compact('servicios', 'usuarios'));
     }
 
@@ -299,11 +288,11 @@ class ServicioAnexoController extends Controller
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.anexo.servicio_anexo.apro_anexo', compact('servicios'));
+        return view('armonia.anexo.servicio_anexo.cotizacion.apro_anexo', compact('servicios'));
     }
 
 
-
+    //Metodo para generar el pdf de la cotizacion
     public function generarpdfcotizacion(Request $request)
     {
         // Establecer la configuración regional en español

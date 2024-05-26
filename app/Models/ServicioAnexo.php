@@ -15,6 +15,6 @@ class ServicioAnexo extends Model
     // Relación con el modelo User
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(User::class, 'usuario_id', 'id', 'mysql');
     }
 }
