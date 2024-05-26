@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
         }
 
-        .container {
+        .container { 
             max-width: 916px;
             margin: 0 auto;
             font-size: 13px;

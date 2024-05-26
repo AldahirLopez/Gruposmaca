@@ -35,8 +35,20 @@ class ServicioAnexoController extends Controller
         // Obtener el usuario autenticado
         $usuario = Auth::user();
 
+        // Verificar que el usuario esté autenticado
+        if (!$usuario) {
+            return redirect()->route('login'); // Redirigir al login si no está autenticado
+        }
+
         // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
-        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
+        $rolVerificador = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first();
+
+        if ($rolVerificador) {
+            $usuariosConRol = $rolVerificador->users()->pluck('id');
+        } else {
+            // Manejar el caso en que el rol no exista
+            $usuariosConRol = collect();
+        }
 
         // Obtener los usuarios correspondientes a esos IDs
         $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
@@ -49,7 +61,7 @@ class ServicioAnexoController extends Controller
             $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
         } else {
             // Verificar si el usuario es administrador
-            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
                 // Si es administrador, obtener todos los servicios
                 $servicios = ServicioAnexo::all();
             } else {
@@ -165,13 +177,16 @@ class ServicioAnexoController extends Controller
         $servicio->direccion_estacion = $request->direccion;
         $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
-        $servicio->estado = false;;
-        $servicio->usuario_id = $usuario->id;;
+        $servicio->estado = false;
+        ;
+        $servicio->usuario_id = $usuario->id;
+        ;
 
 
         // Asigna otros campos al servicio
         $servicio->save();
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');;
+        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
+        ;
     }
 
     /**

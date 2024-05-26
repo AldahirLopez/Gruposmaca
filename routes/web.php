@@ -26,9 +26,10 @@ use Illuminate\Support\Facades\Auth;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
-
+    Route::post('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
     Route::view('/', 'home')->name('home');
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
@@ -39,10 +40,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_anexo', ServicioAnexoController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
+    Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
 
-    
+
 
 
 
@@ -57,6 +59,4 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'showChangePasswordForm'])->name('usuarios.showchangepasswordform');
 
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
-
-    Route::get('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
 });
