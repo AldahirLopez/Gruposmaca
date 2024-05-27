@@ -19,7 +19,7 @@
                         <i class="bi bi-circle"></i><span>Ver Usuarios</span>
                     </a>
                 </li>
-            </ul> 
+            </ul>
         </li>
         @endif
 
@@ -63,12 +63,20 @@
                         <i class="bi bi-circle"></i><span>Ver Servicios</span>
                     </a>
                 </li>
-            </ul> 
+            </ul>
         </li>
         @endif
         <!-- End Components Nav -->
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
         <li class="nav-heading">Paginas</li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('ema.index') }}">
+                <i class="bi bi-folder-symlink-fill"></i>
+                <span>Tramites Ema</span>
+            </a>
+        </li>
+
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('operacion.index') }}">

@@ -12,7 +12,7 @@ use App\Http\Controllers\OperacionController;
 use App\Http\Controllers\PagosAnexoController;
 use App\Http\Controllers\ServicioAnexoController;
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\TramitesEmaController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_anexo', ServicioAnexoController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
+    Route::resource('ema', TramitesEmaController::class);
     Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
