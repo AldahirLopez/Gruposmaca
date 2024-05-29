@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('home') }}" class="btn btn-danger">Home</a>
+                            <a href="{{ route('anexo.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
                         </div>
                         <table class="table table-striped">
                             <thead>
