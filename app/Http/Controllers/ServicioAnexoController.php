@@ -167,9 +167,8 @@ class ServicioAnexoController extends Controller
         $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
         $servicio->estado = false;
-        ;
         $servicio->usuario_id = $usuario->id;
-        ;
+    
 
 
         // Asigna otros campos al servicio

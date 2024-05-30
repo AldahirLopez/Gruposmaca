@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\ArchivosAnexoController;
 use App\Http\Controllers\ArchivosDicController;
 use App\Http\Controllers\EstacionesAnexoController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
+    Route::resource('archivos_anexo', ArchivosAnexoController::class);
     Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
