@@ -40,7 +40,7 @@ class ArchivosDicController extends Controller
         $cantidadArchivos = ArchivosOp::where('numdicop_id', $dictamen_id)->count();
 
         // Pasar el nombre del dictamen, los archivos y el ID del dictamen a la vista
-        return view('armonia.archivos.index', [
+        return view('armonia.operacion.archivos.index', [
             'archivos' => $archivos,
             'dictamen' => $dictamen,
             'dictamen_id' => $dictamen_id,
@@ -64,11 +64,11 @@ class ArchivosDicController extends Controller
 
         // Verificar si ya hay ocho archivos asociados
         if ($cantidadArchivos >= 8) {
-            return redirect()->route('archivos.index', ['dictamen_id' => $dictamen_id])->with('error', 'No se pueden agregar más archivos. Se alcanzó el límite de ocho archivos.');
+            return redirect()->route('armonia.operacion.archivos.index', ['dictamen_id' => $dictamen_id])->with('error', 'No se pueden agregar más archivos. Se alcanzó el límite de ocho archivos.');
         }
 
         // Pasar el usuario y el dictamen_id a la vista
-        return view('armonia.archivos.crear', compact('usuario', 'dictamen_id'));
+        return view('armonia.operacion.archivos.crear', compact('usuario', 'dictamen_id'));
     }
 
     /**
@@ -127,7 +127,7 @@ class ArchivosDicController extends Controller
 
         $dictamen = $archivo->numdicop_id;
         // Pasar el usuario y el dictamen_id a la vista
-        return view('armonia.archivos.editar', compact('usuario', 'archivo', 'dictamen'));
+        return view('armonia.operacion.archivos.editar', compact('usuario', 'archivo', 'dictamen'));
     }
 
     /**
