@@ -43,6 +43,7 @@
                                         <th scope="col">Estacion de servicio</th>
                                         <th scope="col">Direccion</th>
                                         <th scope="col">Estado</th>
+                                        <th scope="col">Archivos</th>
                                         <th scope="col">Cotizacion</th>
                                         <th scope="col">Acciones</th>
                                     </tr>
@@ -62,6 +63,9 @@
                                             @else
                                             <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-info"><i class="bi bi-file-earmark-check-fill"></i></a>
                                             @endif
+                                        </td>
+                                        <td scope="row">
+                                            <a href="{{ route('archivos_anexo.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-info"><i class="bi bi-file-earmark-check-fill"></i></a>
                                         </td>
                                         <td scope="row">
                                             @can('editar-servicio')
