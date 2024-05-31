@@ -31,10 +31,12 @@ class AppServiceProvider extends ServiceProvider
 
             if ($user && $user->hasRole('Administrador')) {
                 $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
-                $pendingDeletionsServicio = ServicioAnexo::where([
-                    ['estado', '=', 0],
-                    ['pending_deletion', '=', 0]
-                ])->get();
+                $pendingDeletionsServicio = ServicioAnexo::where('estado', 0)
+                    ->where(function ($query) {
+                        $query->where('pending_deletion', 0)
+                            ->orWhereNull('pending_deletion');
+                    })
+                    ->get();
                 $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion', 1)->get();
             }
 

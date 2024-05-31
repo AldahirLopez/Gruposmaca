@@ -36,57 +36,59 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="rfc">RFC</label>
-                                        <input type="text" name="rfc" class="form-control">
+                                        <input type="text" name="rfc" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->RFC : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="domicilio_fiscal">Domicilio Fiscal</label>
-                                        <input type="text" name="domicilio_fiscal" class="form-control">
+                                        <input type="text" name="domicilio_fiscal" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Fiscal : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="telefono">Telefono</label>
-                                        <input type="text" name="telefono" class="form-control">
+                                        <input type="text" name="telefono" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Telefono : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="correo">Correo Electronico</label>
-                                        <input type="text" name="correo" class="form-control">
+                                        <input type="text" name="correo" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Correo : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="fecha_recepcion">Fecha de Recepcion de Solicitud</label>
-                                        <input type="text" name="fecha_recepcion" class="form-control">
+                                        <input type="text" name="fecha_recepcion" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Recepcion_Solicitud : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="cre">Num. de Permiso de la comision reguladora de energia</label>
-                                        <input type="text" name="cre" class="form-control">
+                                        <input type="text" name="cre" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Num_CRE : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="constancia">Num. de la Constancia de tramite o estacion de servicio</label>
-                                        <input type="text" name="constancia" class="form-control">
+                                        <input type="text" name="constancia" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Num_Constancia : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="domicilio_estacion">Domicilio de la estacion de servicio</label>
-                                        <input type="text" name="domicilio_estacion" class="form-control">
+                                        <input type="text" name="domicilio_estacion" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Estacion_Servicio : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="estado">Estado</label>
-                                        <select name="estado" class="form-control">
+                                        <select name="estado" class="form-select" id="estado" aria-label="Default select example">
                                             @foreach($estados as $estado)
-                                            <option value="{{ $estado }}">{{ $estado }}</option>
+                                            <option value="{{ $estado }}" {{ $archivoAnexo && $archivoAnexo->Direccion_Estado == $estado ? 'selected' : '' }}>
+                                                {{ $estado }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="contacto">Contacto</label>
-                                        <input type="text" name="contacto" class="form-control">
+                                        <input type="text" name="contacto" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Contacto : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="nom_repre">Nombre del representante legal</label>
-                                        <input type="text" name="nom_repre" class="form-control">
+                                        <input type="text" name="nom_repre" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Nombre_Representante_Legal : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="fecha_inspeccion">Fecha Programada de la Inspeccion</label>
-                                        <input type="text" name="fecha_inspeccion" class="form-control">
+                                        <input type="text" name="fecha_inspeccion" class="form-control" value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Inspeccion : '' }}">
                                     </div>
                                 </div>
                             </div>

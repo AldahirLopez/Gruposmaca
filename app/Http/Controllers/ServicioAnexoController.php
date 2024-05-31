@@ -287,7 +287,7 @@ class ServicioAnexoController extends Controller
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.anexo.servicio_anexo.cotizacion.apro_anexo', compact('servicios'));
+        return view('armonia.anexo.cotizacion.apro_anexo', compact('servicios'));
     }
 
 
@@ -309,7 +309,7 @@ class ServicioAnexoController extends Controller
 
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
-        $html = view('armonia.anexo.servicio_anexo.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
+        $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
         // Guardar el PDF en el almacenamiento de Laravel
