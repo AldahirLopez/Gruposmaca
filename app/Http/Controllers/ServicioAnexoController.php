@@ -168,13 +168,12 @@ class ServicioAnexoController extends Controller
         $servicio->nomenclatura = $nomenclatura;
         $servicio->estado = false;
         $servicio->usuario_id = $usuario->id;
-    
+
 
 
         // Asigna otros campos al servicio
         $servicio->save();
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
-        ;
+        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');;
     }
 
     /**
@@ -314,6 +313,26 @@ class ServicioAnexoController extends Controller
 
         // Guardar el PDF en el almacenamiento de Laravel
         $pdfPath = 'public/temp/report.pdf'; // Ruta donde se guardará el PDF
+        Storage::put($pdfPath, $pdf->output());
+
+        // Obtener la URL pública del PDF
+        $pdfUrl = Storage::url($pdfPath);
+
+        // Devolver la URL del PDF como respuesta
+        return response()->json(['pdf_url' => $pdfUrl]);
+    }
+
+    public function generarpdfot()
+    {
+        // Establecer la configuración regional en español
+        app()->setLocale('es');
+
+        // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
+        $html = view('armonia.anexo.servicio_anexo.formatos_anexo.orden_trabajo')->render();
+        $pdf = PDF::loadHTML($html);
+
+        // Guardar el PDF en el almacenamiento de Laravel
+        $pdfPath = 'public/temp/ot.pdf'; // Ruta donde se guardará el PDF
         Storage::put($pdfPath, $pdf->output());
 
         // Obtener la URL pública del PDF

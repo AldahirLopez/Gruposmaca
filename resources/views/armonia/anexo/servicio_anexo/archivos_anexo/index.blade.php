@@ -110,7 +110,12 @@
                             </tr>
                         </thead>
                         <tbody style="text-align: center;">
-
+                            <tr>
+                                <td scope="row">Orden de Trabajo</td>
+                                <td scope="row">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal"><i class="bi bi-file-pdf-fill"></i></button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -119,4 +124,54 @@
         </div>
     </div>
 </section>
+
+<!-- Vertically centered Modal -->
+<div class="modal fade" id="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Registrar Orden de Trabajo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" action="{{ route('pdf.ot') }}" method="POST">
+                    @csrf
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary" style="background-color: #002855; border-color: #002855;">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Vertically centered Modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var formularioCotizacion = document.querySelector('#modal form');
+
+        formularioCotizacion.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario por defecto
+
+            // Obtener los datos del formulario
+            var formData = new FormData(formularioCotizacion);
+
+            // Hacer la solicitud para generar el PDF
+            fetch('{{ route("pdf.ot") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.open(data.pdf_url, '_blank'); // Abrir el PDF en una nueva ventana
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>
+
 @endsection
