@@ -23,7 +23,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('operacion.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('servicio_operacion.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">
@@ -36,7 +36,7 @@
                                 <div style="margin-top: 15px;">
                                     <div class="col-xs-12 col-sm-12 col-md-12">
                                         <button type="submit" class="btn btn-primary">Guardar</button>
-                                        <a href="{{ route('operacion.index') }}" class="btn btn-danger">Regresar</a>
+                                        <a href="{{ route('servicio_operacion.index') }}" class="btn btn-danger">Regresar</a>
                                     </div>
                                 </div>
                             </div>

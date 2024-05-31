@@ -13,6 +13,7 @@ use App\Http\Controllers\OperacionController;
 use App\Http\Controllers\PagosAnexoController;
 use App\Http\Controllers\ServicioAnexoController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('notificaciones', ApprovalController::class);
     Route::resource('anexo', AnexoController::class);
     Route::resource('servicio_anexo', ServicioAnexoController::class);
+    Route::resource('servicio_operacion', ServicioOperacionController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);

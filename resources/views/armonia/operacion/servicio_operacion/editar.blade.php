@@ -10,7 +10,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::model($dictamen, ['method' => 'PATCH', 'route' => ['operacion.update', $dictamen->id]]) !!}
+                        {!! Form::model($dictamen, ['method' => 'PATCH', 'route' => ['servicio_operacion.update', $dictamen->id]]) !!}
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <div class="form-group">
@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Guardar</button>
-                            <a href="{{ route('operacion.index') }}" class="btn btn-danger">Regresar</a>
+                            <a href="{{ route('servicio_operacion.index') }}" class="btn btn-danger">Regresar</a>
                         </div>
                         {!! Form::close() !!}
                     </div>
