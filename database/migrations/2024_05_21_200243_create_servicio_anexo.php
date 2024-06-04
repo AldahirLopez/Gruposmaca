@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('nombre_estacion'); // Nombre de la estación
             $table->string('direccion_estacion'); // Dirección de la estación
             $table->string('estado_estacion'); // Dirección de la estación
-            $table->boolean('pending_apro_estacion'); // Aprobacion de la estacion
-            $table->boolean('pending_deletion'); // Pendiente de Eliminacion
-            $table->boolean('eliminated_at'); // Fecha de eliminacion
+            $table->boolean('estado')->nullable();; // Aprobacion de la estacion
+            $table->boolean('pending_apro_estacion')->nullable();; // Aprobacion de la estacion
+            $table->boolean('pending_deletion')->nullable();; // Pendiente de Eliminacion
+            $table->boolean('eliminated_at')->nullable();; // Fecha de eliminacion
             $table->unsignedBigInteger('usuario_id'); // Relación con usuario
             
             $table->timestamps(); // Timestamps

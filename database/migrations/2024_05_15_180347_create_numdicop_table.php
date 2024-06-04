@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::connection('segunda_db')->create('numdicop', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->boolean('pending_deletion');
-            $table->boolean('eliminated_at');
+            $table->boolean('pending_deletion')->nullable();;
+            $table->boolean('eliminated_at')->nullable();;
             $table->unsignedBigInteger('usuario_id');
             $table->timestamps();
             
