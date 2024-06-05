@@ -9,56 +9,72 @@ use Illuminate\Support\Facades\Storage;
 
 class FormatosController extends Controller
 {
-    public function save(Request $request, $id = null)
+
+    function __construct()
     {
-        // Validar los datos del formulario
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'archivo' => 'nullable|file', // El archivo es opcional para la edición
-        ]);
-
-        if ($id) {
-            // Si se proporciona un ID, estamos editando un formato existente
-            $formato = FormatoVigente::findOrFail($id);
-
-            // Guardar el formato actual en el historial
-            $formatoHistorico = new HistorialFormato();
-            $formatoHistorico->formato_id = $formato->id;
-            $formatoHistorico->nombre = $formato->nombre;
-            $formatoHistorico->rutadoc = $formato->rutadoc;
-
-            // Mover el archivo del formato vigente a la carpeta de historial
-            $rutaAntigua = 'public/armonia/operacionymantenimiento/formatos/' . $formato->rutadoc;
-            $nuevaRutaHistorial = 'public/armonia/operacionymantenimiento/historialformatos/' . $formato->rutadoc;
-            if (Storage::exists($rutaAntigua)) {
-                Storage::move($rutaAntigua, $nuevaRutaHistorial);
-            }
-            $formatoHistorico->save();
-
-        } else {
-            // Si no se proporciona un ID, estamos creando un nuevo formato
-            $formato = new FormatoVigente();
-        }
-
-        // Actualizar el nombre
-        $formato->nombre = $request->input('nombre');
-
-        // Si se sube un nuevo archivo, reemplazar el existente
-        if ($request->hasFile('archivo')) {
-            // Guardar el archivo en el sistema de archivos
-            $archivoSubido = $request->file('archivo');
-            $nombreArchivo = $archivoSubido->getClientOriginalName();
-            $rutaArchivo = $archivoSubido->store('public/armonia/operacionymantenimiento/formatosvigentes/' . $formato->nombre);
-
-            // Actualizar la ruta del archivo
-            $formato->rutadoc = str_replace('public/', '', $rutaArchivo);
-        }
-
-        // Guardar los cambios
-        $formato->save();
-
-        return redirect()->route('listar.anexo30')->with('success', 'Formato guardado correctamente');
+        $this->middleware('permission:ver-formato|crear-formato|editar-formato|borrar-formato', ['only' => ['index']]);
+        $this->middleware('permission:crear-formato', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-formato', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-formato', ['only' => ['destroy']]);
     }
+    public function save(Request $request, $id = null)
+{
+    // Validar los datos del formulario
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'archivo' => 'nullable|file', // El archivo es opcional para la edición
+    ]);
+
+    if ($id) {
+        // Si se proporciona un ID, estamos editando un formato existente
+        $formato = FormatoVigente::findOrFail($id);
+
+        // Guardar el formato actual en el historial
+        $formatoHistorico = new HistorialFormato();
+        $formatoHistorico->formato_id = $formato->id;
+        $formatoHistorico->nombre = $formato->nombre;
+
+        // Mover el archivo del formato vigente a la carpeta de historial
+        $rutaAntigua = 'public/' . $formato->rutadoc;
+        $nombreArchivoAntiguo = basename($rutaAntigua);
+        $timestamp = now()->format('YmdHis');
+        $nuevoNombreArchivo = pathinfo($nombreArchivoAntiguo, PATHINFO_FILENAME) . '_' . $timestamp . '.' . pathinfo($nombreArchivoAntiguo, PATHINFO_EXTENSION);
+        $nuevaRutaHistorial = 'public/armonia/operacionymantenimiento/historialformatos/' . $formato->nombre . '/' . $nuevoNombreArchivo;
+
+        if (Storage::exists($rutaAntigua)) {
+            Storage::move($rutaAntigua, $nuevaRutaHistorial);
+        }
+
+        // Actualizar la ruta del documento en el historial
+        $formatoHistorico->rutadoc = str_replace('public/', '', $nuevaRutaHistorial);
+        $formatoHistorico->save();
+    } else {
+        // Si no se proporciona un ID, estamos creando un nuevo formato
+        $formato = new FormatoVigente();
+    }
+
+    // Actualizar el nombre
+    $formato->nombre = $request->input('nombre');
+
+    // Si se sube un nuevo archivo, reemplazar el existente
+    if ($request->hasFile('archivo')) {
+        // Guardar el archivo en el sistema de archivos
+        $archivoSubido = $request->file('archivo');
+        $nombreArchivo = $archivoSubido->getClientOriginalName();
+        $rutaArchivo = $archivoSubido->storeAs('public/armonia/operacionymantenimiento/formatosvigentes/' . $formato->nombre, $nombreArchivo);
+
+        // Actualizar la ruta del archivo
+        $formato->rutadoc = str_replace('public/', '', $rutaArchivo);
+    }
+
+    // Guardar los cambios
+    $formato->save();
+
+    return redirect()->route('listar.anexo30')->with('success', 'Formato guardado correctamente');
+}
+
+
+
 
 
     public function ListarAnexo30()

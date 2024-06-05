@@ -76,8 +76,12 @@ class ArchivosDicController extends Controller
      */
     public function store(Request $request)
     {
+
         // Obtener el ID del dictamen de la URL
         $dictamenId = $request->dictamen_id;
+
+        // Si se proporciona un ID, estamos editando un formato existente
+        $dictamen = DictamenOp::find($dictamenId);
 
         // Obtener el ID del usuario autenticado
         $usuarioId = auth()->id();
@@ -94,7 +98,7 @@ class ArchivosDicController extends Controller
 
         // Guardar el archivo en el sistema de archivos en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
-        $rutaArchivo = $archivoSubido->store('public/armonia');
+        $rutaArchivo = $archivoSubido->store('public/armonia/operacionymantenimiento/servicios/' . $dictamen->nombre);
         $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
 
         // Asignar el dictamen_id obtenido de la URL

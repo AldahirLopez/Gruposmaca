@@ -75,7 +75,13 @@ class SeederTablaPermisos extends Seeder
             'ver-servicio',
             'crear-servicio',
             'editar-servicio',
-            'borrar-servicio'
+            'borrar-servicio',
+
+            //Tabla Formatos
+            'ver-formato',
+            'crear-formato',
+            'editar-formato',
+            'borrar-formato'
 
 
 

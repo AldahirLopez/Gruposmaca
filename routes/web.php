@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
     Route::resource('anexo', AnexoController::class);
-    Route::resource('servicio_anexo', ServicioAnexoController::class);
+    Route::resource('servicio_anexo', ServicioAnexoController::class); 
     Route::resource('servicio_operacion', ServicioOperacionController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
 
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
-    Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivos.create');
+    Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
     Route::get('/armonia/formatos/anexo30/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.edit');
 
     Route::post('/armonia/formatos/anexo30/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');

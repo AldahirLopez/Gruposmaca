@@ -11,15 +11,9 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-clipboard-check"></i><span>Formatos Vigentes</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-clipboard-check"></i><span>Formatos Vigentes</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('roles.index') }}">
-                        <i class="bi bi-circle"></i><span>Operacion y Mantenimiento</span>
-                    </a>
-                </li>
-            </ul>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ route('listar.anexo30') }}">
@@ -27,7 +21,7 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> 
 
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
