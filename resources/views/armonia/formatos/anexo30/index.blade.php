@@ -57,7 +57,7 @@
                                                 @endcan
                                             </td>
                                         @endif
-                                        <td scope="row">{{ $archivo->created_at->format('Y-m-d') }}</td>
+                                        <td scope="row">{{ $archivo->created_at->format('d-m-Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
