@@ -28,10 +28,11 @@ class FormatosController extends Controller
             $formatoHistorico->rutadoc = $formato->rutadoc;
 
             // Mover el archivo del formato vigente a la carpeta de historial
-            $rutaAntigua = 'public/armonia/operacionymantenimiento/formatos/' . $formato->nombre;
-            $nuevaRutaHistorial = 'public/armonia/operacionymantenimiento/historialformatos/' . $formato->nombre;
-            Storage::move($rutaAntigua, $nuevaRutaHistorial);
-
+            $rutaAntigua = 'public/armonia/operacionymantenimiento/formatos/' . $formato->rutadoc;
+            $nuevaRutaHistorial = 'public/armonia/operacionymantenimiento/historialformatos/' . $formato->rutadoc;
+            if (Storage::exists($rutaAntigua)) {
+                Storage::move($rutaAntigua, $nuevaRutaHistorial);
+            }
             $formatoHistorico->save();
 
         } else {
