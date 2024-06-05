@@ -8,7 +8,7 @@
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
-
+        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-clipboard-check"></i><span>Formatos Vigentes</span><i
@@ -22,6 +22,7 @@
                 </li>
             </ul>
         </li> 
+        @endif
 
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
