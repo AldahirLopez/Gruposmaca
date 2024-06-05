@@ -11,22 +11,24 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('home') }}"class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="{{ route('home') }}" class="btn btn-danger"><i
+                                    class="bi bi-arrow-return-left"></i></a>
                             @can('crear-formato')
                                 <a class="btn btn-success" href="{{ route('archivosanexo.create') }}">Nuevo</a>
                             @endcan
                         </div>
                         <table class="table table-striped">
-                            <thead>
+                            <thead style="text-align: center;">
                                 <tr>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Documento</th>
                                     @if(auth()->check() && auth()->user()->hasRole('Administrador'))
                                         <th scope="col">Acciones</th>
                                     @endif
+                                    <th scope="col">Fecha de Actualizacion</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="text-align: center;">
                                 @foreach($archivos as $archivo)
                                     <tr>
                                         <td scope="row">{{ $archivo->nombre }}</td>
@@ -55,6 +57,7 @@
                                                 @endcan
                                             </td>
                                         @endif
+                                        <td scope="row">{{ $archivo->created_at->format('Y-m-d') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
