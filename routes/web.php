@@ -6,6 +6,7 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArchivosAnexoController;
 use App\Http\Controllers\ArchivosDicController;
 use App\Http\Controllers\EstacionesAnexoController;
+use App\Http\Controllers\FormatoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ServicioAnexoController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
+use App\Http\Controllers\FormatosController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -50,7 +52,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
 
+    Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
+    Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivos.create');
+    Route::get('/armonia/formatos/anexo30/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.edit');
 
+    Route::post('/armonia/formatos/anexo30/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');
+    Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.destroy');
 
 
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->boolean('pending_deletion')->nullable();;
-            $table->boolean('eliminated_at')->nullable();;
+            $table->dateTime('eliminated_at')->nullable();
             $table->unsignedBigInteger('usuario_id');
             $table->timestamps();
             
