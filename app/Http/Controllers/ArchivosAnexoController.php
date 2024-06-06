@@ -73,21 +73,19 @@ class ArchivosAnexoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
+        // Validar datos del formulario
         $data = $request->validate([
-            'razon_social' => 'required|string|max:255',
+            'razonsocial' => 'required|string|max:255',
         ]);
 
-        // Cargar la plantilla de Word con marcadores de posición
+        // Cargar la plantilla de Word
         $templatePath = storage_path('app/templates/ORDEN DE TRABAJO.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
 
         // Reemplazar los marcadores de posición con los datos del formulario
-        foreach ($data as $key => $value) {
-            $templateProcessor->setValue($key, $value);
-        }
+        $templateProcessor->setValue('razonsocial', $data['razonsocial']);
 
-        // Guardar el documento generado
+        // Guardar el documento como un archivo .docx
         $fileName = 'formato_rellenado.docx';
         $filePath = storage_path($fileName);
         $templateProcessor->saveAs($filePath);

@@ -32,8 +32,8 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="razon_social">Razon Social</label>
-                                        <input type="text" name="razon_social" class="form-control"
+                                        <label for="razonsocial">Razon Social</label>
+                                        <input type="text" name="razonsocial" class="form-control"
                                             value="{{ $archivoAnexo ? $archivoAnexo->Razon_Social : '' }}">
                                     </div>
                                     <div class="form-group">
