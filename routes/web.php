@@ -7,6 +7,7 @@ use App\Http\Controllers\ArchivosAnexoController;
 use App\Http\Controllers\ArchivosDicController;
 use App\Http\Controllers\EstacionesAnexoController;
 use App\Http\Controllers\FormatoController;
+use App\Http\Controllers\FormatosHistorialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -47,6 +48,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
+    Route::resource('historialformatos', FormatosHistorialController::class);
+    Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
+
     Route::resource('archivos_anexo', ArchivosAnexoController::class);
     Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 

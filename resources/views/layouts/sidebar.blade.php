@@ -24,6 +24,22 @@
             </li>
         @endif
 
+        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#formshistori-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-clipboard-check"></i><span>Formatos Historial</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="formshistori-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('historialformatos.index') }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
+
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#usuarios-nav" data-bs-toggle="collapse" href="#">
