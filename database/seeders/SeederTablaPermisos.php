@@ -81,7 +81,7 @@ class SeederTablaPermisos extends Seeder
             'ver-formato',
             'crear-formato',
             'editar-formato',
-            'borrar-formato'
+            'borrar-formato',
 
 
 

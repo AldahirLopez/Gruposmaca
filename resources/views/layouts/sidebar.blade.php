@@ -9,19 +9,19 @@
             </a>
         </li><!-- End Dashboard Nav -->
         @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-clipboard-check"></i><span>Formatos Vigentes</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('listar.anexo30') }}">
-                        <i class="bi bi-circle"></i><span>Anexo 30</span>
-                    </a>
-                </li>
-            </ul>
-        </li> 
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-clipboard-check"></i><span>Formatos Vigentes</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.anexo30') }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         @endif
 
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
@@ -37,9 +37,7 @@
                     </li>
                 </ul>
             </li>
-        @endif
 
-        @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#roles-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-shield-lock-fill"></i><span>Roles</span><i class="bi bi-chevron-down ms-auto"></i>
