@@ -24,7 +24,7 @@
             </li>
         @endif
 
-        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
+        @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#formshistori-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-calendar-week-fill"></i><span>Formatos Historial</span><i
