@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
     Route::resource('archivos_anexo', ArchivosAnexoController::class);
+    Route::post('/generate-word', [ArchivosAnexoController::class, 'generateWord'])->name('generate.word');
     Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');

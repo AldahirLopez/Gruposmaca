@@ -23,12 +23,12 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('archivos_anexo.store', ['servicio_anexo_id' => $servicio_anexo_id]) }}"
+                        <form action="{{ route('generate.word', ['servicio_anexo_id' => $servicio_anexo_id]) }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
 
-                                <input type="hidden" name="servicio_anexo_id" value="{{ $servicio_anexo_id }}">
+                                <input type="hidden" name="servicio_anexo_id" value="{{ $estacion->nomenclatura }}">
 
                                 <div class="col-md-6">
                                     <div class="form-group">
