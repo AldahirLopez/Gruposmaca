@@ -107,8 +107,8 @@ class ArchivosAnexoController extends Controller
 
         // Guardar los documentos generados
         // Generar nombres de archivo basados en el nombre del servicio anexo
-        $fileName = "ORDEN DE TRABAJO.docx";
-        $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx";
+        $fileName = "ORDEN DE TRABAJO_RELLENADO.docx";
+        $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
         $filePath = storage_path("app/public/$fileName");
         $filePath1 = storage_path("app/public/$fileName1");
         $templateProcessor->saveAs($filePath);
