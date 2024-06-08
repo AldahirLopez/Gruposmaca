@@ -27,12 +27,12 @@
         /* Ajusta el tamaño según sea necesario */
     }
 </style>
-
+ 
 
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="#" class="logo d-flex align-items-center flex-column flex-lg-row">
+        <a href="{{ route('home') }}" class="logo d-flex align-items-center flex-column flex-lg-row">
             <img src="{{ asset('assets/img/logoarmonia.png') }}" alt="">
             <div class="d-flex flex-column text-center text-lg-start">
                 <span class="d-none d-lg-block">Armonia y Contraste</span>
