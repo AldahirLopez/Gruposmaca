@@ -33,7 +33,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="#" class="logo d-flex align-items-center flex-column flex-lg-row">
-            <img src="{{ asset('assets/img/logoarmonia.png') }}" alt=""> 
+            <img src="{{ asset('assets/img/logoarmonia.png') }}" alt="">
             <div class="d-flex flex-column text-center text-lg-start">
                 <span class="d-none d-lg-block">Armonia y Contraste</span>
                 <span class="d-none d-lg-block">Ambiental S.A. DE C.V.</span>
@@ -87,12 +87,16 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center"
-                            href="{{ route('usuarios.showchangepasswordform', ['id' => Auth::user()->id]) }}">
-                            <i class="bi bi-person"></i>
-                            <span>Cambiar Contraseña</span>
-                        </a>
+                        @if (Auth::check() && Route::has('usuarios.showchangepasswordform'))
+                            <a class="dropdown-item d-flex align-items-center"
+                                href="{{ route('usuarios.showchangepasswordform', ['id' => Auth::user()->id]) }}">
+                                <i class="bi bi-person"></i>
+                                <span>Cambiar Contraseña</span>
+                            </a>
+                        @endif
                     </li>
+
+
 
                     <li>
                         <hr class="dropdown-divider">

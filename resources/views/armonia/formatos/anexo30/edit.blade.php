@@ -29,12 +29,13 @@
                             {!! Form::label('archivo', 'Archivo (dejar en blanco para mantener el actual)') !!}
                             {!! Form::file('archivo', ['class' => 'form-control']) !!}
                         </div>
-                        <div class="form-group">
-                            {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
+                        <div style="margin-top: 15px;">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <a href="{{ route('listar.anexo30') }}" class="btn btn-danger">Cancelar</a>
+                            </div>
                         </div>
                         {!! Form::close() !!}
-
-                        <a href="{{ route('listar.anexo30') }}" class="btn btn-secondary">Volver</a>
                     </div>
                 </div>
             </div>

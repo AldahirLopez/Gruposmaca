@@ -56,10 +56,10 @@ class ArchivosAnexoController extends Controller
         ];
 
         $servicio_anexo_id = $request->servicio_anexo_id;
-        $estacion=ServicioAnexo::find($servicio_anexo_id);
+        $estacion = ServicioAnexo::find($servicio_anexo_id);
         $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
-        return view('armonia.anexo.servicio_anexo.archivos_anexo.index', compact('archivoAnexo', 'estados', 'servicio_anexo_id','estacion'));
+        return view('armonia.anexo.servicio_anexo.archivos_anexo.index', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion'));
     }
 
 
@@ -76,40 +76,62 @@ class ArchivosAnexoController extends Controller
     public function generateWord(Request $request)
     {
         // Validar los datos del formulario
-    $data = $request->validate([
-        'servicio_anexo_id' => 'required',
-        'razonsocial' => 'required|string|max:255',
-        'rfc' => 'required|string|max:255',
-        'domicilio_fiscal' => 'required|string|max:255',
-        'telefono' => 'required|string|max:255',
-        'correo' => 'required|string|email|max:255',
-        'fecha_recepcion' => 'required',
-        'cre' => 'required|string|max:255',
-        'constancia' => 'nullable|string|max:255',
-        'domicilio_estacion' => 'required|string|max:255',
-        'estado' => 'required',
-        'contacto' => 'required|string|max:255',
-        'nom_repre' => 'required|string|max:255',
-        'fecha_inspeccion' => 'required',
-    ]);
+        $data = $request->validate([
+            'servicio_anexo_id' => 'required',
+            'razonsocial' => 'required|string|max:255',
+            'rfc' => 'required|string|max:255',
+            'domicilio_fiscal' => 'required|string|max:255',
+            'telefono' => 'required|string|max:255',
+            'correo' => 'required|string|email|max:255',
+            'fecha_recepcion' => 'required',
+            'cre' => 'required|string|max:255',
+            'constancia' => 'nullable|string|max:255',
+            'domicilio_estacion' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+            'contacto' => 'required|string|max:255',
+            'nom_repre' => 'required|string|max:255',
+            'fecha_inspeccion' => 'required',
+        ]);
 
-    // Cargar la plantilla de Word con marcadores de posición
-    $templatePath = storage_path('app/templates/ORDEN DE TRABAJO.docx');
-    $templateProcessor = new TemplateProcessor($templatePath);
+        // Cargar las plantillas de Word
+        $templatePath = storage_path('app/templates/ORDEN DE TRABAJO.docx');
+        $templatePath1 = storage_path('app/templates/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
+        $templateProcessor = new TemplateProcessor($templatePath);
+        $templateProcessor1 = new TemplateProcessor($templatePath1);
 
-    // Reemplazar los marcadores de posición con los datos del formulario
-    foreach ($data as $key => $value) {
-        $templateProcessor->setValue($key, $value);
+        // Reemplazar los marcadores de posición con los datos del formulario
+        foreach ($data as $key => $value) {
+            $templateProcessor->setValue($key, $value);
+            $templateProcessor1->setValue($key, $value);
+        }
+
+        // Guardar los documentos generados
+        $fileName = 'formato_rellenado.docx';
+        $fileName1 = 'formato_rellenado2.docx';
+        $filePath = storage_path("app/public/$fileName");
+        $filePath1 = storage_path("app/public/$fileName1");
+        $templateProcessor->saveAs($filePath);
+        $templateProcessor1->saveAs($filePath1);
+
+        // Comprimir ambos archivos en un solo ZIP para descarga
+        $zipFileName = 'documentos_rellenados.zip';
+        $zipFilePath = storage_path("app/public/$zipFileName");
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            $zip->addFile($filePath, $fileName);
+            $zip->addFile($filePath1, $fileName1);
+            $zip->close();
+        }
+
+        // Eliminar los archivos individuales ya que están en el ZIP
+        unlink($filePath);
+        unlink($filePath1);
+
+        // Descargar el archivo ZIP y eliminar después de enviar
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
     }
 
-    // Guardar el documento generado
-    $fileName = 'formato_rellenado.docx';
-    $filePath = storage_path($fileName);
-    $templateProcessor->saveAs($filePath);
-
-    // Descargar el archivo
-    return response()->download($filePath)->deleteFileAfterSend(true);
-    }
 
     /**
      * Display the specified resource.

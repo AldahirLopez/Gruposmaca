@@ -118,23 +118,6 @@
                             </center>
                         </form>
                     </div>
-                    <table class="table table-striped">
-                        <thead style="text-align: center;">
-                            <tr>
-                                <th scope="col">Documento</th>
-                                <th scope="col">Archivos</th>
-                            </tr>
-                        </thead>
-                        <tbody style="text-align: center;">
-                            <tr>
-                                <td scope="row">Orden de Trabajo</td>
-                                <td scope="row">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modal"><i class="bi bi-file-pdf-fill"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
