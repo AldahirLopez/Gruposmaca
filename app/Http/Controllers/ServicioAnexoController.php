@@ -173,7 +173,8 @@ class ServicioAnexoController extends Controller
 
         // Asigna otros campos al servicio
         $servicio->save();
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');;
+        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
+        ;
     }
 
     /**
@@ -301,7 +302,11 @@ class ServicioAnexoController extends Controller
         $direccion_estacion = $request->input('direccion_estacion');
         $estado_estacion = $request->input('estado_estacion');
         $costo = $request->input('costo');
-        $iva = $request->input('iva');
+        // Obtener el costo desde la solicitud
+        $costo = $request->input('costo');
+
+        // Calcular el 16% de IVA
+        $iva = $costo * 0.16;
 
         // Obtener la fecha actual en el formato deseado (día de mes de año)
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
@@ -313,26 +318,6 @@ class ServicioAnexoController extends Controller
 
         // Guardar el PDF en el almacenamiento de Laravel
         $pdfPath = 'public/temp/report.pdf'; // Ruta donde se guardará el PDF
-        Storage::put($pdfPath, $pdf->output());
-
-        // Obtener la URL pública del PDF
-        $pdfUrl = Storage::url($pdfPath);
-
-        // Devolver la URL del PDF como respuesta
-        return response()->json(['pdf_url' => $pdfUrl]);
-    }
-
-    public function generarpdfot()
-    {
-        // Establecer la configuración regional en español
-        app()->setLocale('es');
-
-        // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
-        $html = view('armonia.anexo.servicio_anexo.formatos_anexo.orden_trabajo')->render();
-        $pdf = PDF::loadHTML($html);
-
-        // Guardar el PDF en el almacenamiento de Laravel
-        $pdfPath = 'public/temp/ot.pdf'; // Ruta donde se guardará el PDF
         Storage::put($pdfPath, $pdf->output());
 
         // Obtener la URL pública del PDF

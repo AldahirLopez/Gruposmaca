@@ -96,10 +96,10 @@ class ArchivosAnexoController extends Controller
         ]);
 
         // Cargar las plantillas de Word
-        $templatePath = storage_path('app/templates/ORDEN DE TRABAJO.docx');
-        $templatePath1 = storage_path('app/templates/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
-        $templatePath2 = storage_path('app/templates/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
-        $templatePath3 = storage_path('app/templates/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
+        $templatePath = storage_path('app/templates/formatos_anexo30/ORDEN DE TRABAJO.docx');
+        $templatePath1 = storage_path('app/templates/formatos_anexo30/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
+        $templatePath2 = storage_path('app/templates/formatos_anexo30/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
+        $templatePath3 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
         $templateProcessor1 = new TemplateProcessor($templatePath1);
         $templateProcessor2 = new TemplateProcessor($templatePath2);
@@ -118,10 +118,10 @@ class ArchivosAnexoController extends Controller
         $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
         $fileName2 = "FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD_RELLENADO.docx";
         $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx";
-        $filePath = storage_path("app/public/$fileName");
-        $filePath1 = storage_path("app/public/$fileName1");
-        $filePath2 = storage_path("app/public/$fileName2");
-        $filePath3 = storage_path("app/public/$fileName3");
+        $filePath = storage_path("app/public/formatos_anexo30_rellenados/$fileName");
+        $filePath1 = storage_path("app/public/formatos_anexo30_rellenados/$fileName1");
+        $filePath2 = storage_path("app/public/formatos_anexo30_rellenados/$fileName2");
+        $filePath3 = storage_path("app/public/formatos_anexo30_rellenados/$fileName3");
         $templateProcessor->saveAs($filePath);
         $templateProcessor1->saveAs($filePath1);
         $templateProcessor2->saveAs($filePath2);
@@ -131,19 +131,19 @@ class ArchivosAnexoController extends Controller
         $generatedFiles = [
             [
                 'name' => $fileName,
-                'url' => asset("storage/$fileName"),
+                'url' => asset("storage/formatos_anexo30_rellenados/$fileName"),
             ],
             [
                 'name' => $fileName1,
-                'url' => asset("storage/$fileName1"),
+                'url' => asset("storage/formatos_anexo30_rellenados/$fileName1"),
             ],
             [
                 'name' => $fileName2,
-                'url' => asset("storage/$fileName2"),
+                'url' => asset("storage/formatos_anexo30_rellenados/$fileName2"),
             ],
             [
                 'name' => $fileName3,
-                'url' => asset("storage/$fileName3"),
+                'url' => asset("storage/formatos_anexo30_rellenados/$fileName3"),
             ]
         ];
 

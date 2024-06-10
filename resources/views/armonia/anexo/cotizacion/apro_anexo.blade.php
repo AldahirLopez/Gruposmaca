@@ -95,10 +95,6 @@
                         <label for="costo">Costo</label>
                         <input type="text" name="costo" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="iva">IVA</label>
-                        <input type="text" name="iva" class="form-control">
-                    </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary"
                             style="background-color: #002855; border-color: #002855;">Guardar</button>
