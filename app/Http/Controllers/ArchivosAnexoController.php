@@ -9,6 +9,7 @@ use App\Models\ServicioAnexo;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
+use Illuminate\Support\Facades\Storage;
 
 class ArchivosAnexoController extends Controller
 {
@@ -100,10 +101,12 @@ class ArchivosAnexoController extends Controller
         $templatePath1 = storage_path('app/templates/formatos_anexo30/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
         $templatePath2 = storage_path('app/templates/formatos_anexo30/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
         $templatePath3 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
-        $templateProcessor = new TemplateProcessor($templatePath);
-        $templateProcessor1 = new TemplateProcessor($templatePath1);
-        $templateProcessor2 = new TemplateProcessor($templatePath2);
-        $templateProcessor3 = new TemplateProcessor($templatePath3);
+
+        // Crear los procesadores de plantillas
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+        $templateProcessor1 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath1);
+        $templateProcessor2 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath2);
+        $templateProcessor3 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath3);
 
         // Reemplazar los marcadores de posición con los datos del formulario
         foreach ($data as $key => $value) {
@@ -113,43 +116,49 @@ class ArchivosAnexoController extends Controller
             $templateProcessor3->setValue($key, $value);
         }
 
-        // Guardar los documentos generados
+        // Definir la carpeta de destino dentro de 'public/storage'
+        $customFolderPath = "formatos_rellenados_anexo30/{$data['servicio_anexo_id']}";
+
+        // Crear la carpeta si no existe
+        Storage::disk('public')->makeDirectory($customFolderPath);
+
+        // Definir los nombres de los archivos y sus rutas completas dentro de 'public/storage'
         $fileName = "ORDEN DE TRABAJO_RELLENADO.docx";
         $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
         $fileName2 = "FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD_RELLENADO.docx";
-        $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx";
-        $filePath = storage_path("app/public/formatos_anexo30_rellenados/$fileName");
-        $filePath1 = storage_path("app/public/formatos_anexo30_rellenados/$fileName1");
-        $filePath2 = storage_path("app/public/formatos_anexo30_rellenados/$fileName2");
-        $filePath3 = storage_path("app/public/formatos_anexo30_rellenados/$fileName3");
-        $templateProcessor->saveAs($filePath);
-        $templateProcessor1->saveAs($filePath1);
-        $templateProcessor2->saveAs($filePath2);
-        $templateProcessor3->saveAs($filePath3);
+        $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS_RELLENADO.docx";
 
-        // Crear la lista de archivos generados
+        // Guardar los archivos generados
+        $templateProcessor->saveAs(storage_path("app/public/$customFolderPath/$fileName"));
+        $templateProcessor1->saveAs(storage_path("app/public/$customFolderPath/$fileName1"));
+        $templateProcessor2->saveAs(storage_path("app/public/$customFolderPath/$fileName2"));
+        $templateProcessor3->saveAs(storage_path("app/public/$customFolderPath/$fileName3"));
+
+        // Crear la lista de archivos generados con sus URLs
         $generatedFiles = [
             [
                 'name' => $fileName,
-                'url' => asset("storage/formatos_anexo30_rellenados/$fileName"),
+                'url' => Storage::url("$customFolderPath/$fileName"),
             ],
             [
                 'name' => $fileName1,
-                'url' => asset("storage/formatos_anexo30_rellenados/$fileName1"),
+                'url' => Storage::url("$customFolderPath/$fileName1"),
             ],
             [
                 'name' => $fileName2,
-                'url' => asset("storage/formatos_anexo30_rellenados/$fileName2"),
+                'url' => Storage::url("$customFolderPath/$fileName2"),
             ],
             [
                 'name' => $fileName3,
-                'url' => asset("storage/formatos_anexo30_rellenados/$fileName3"),
+                'url' => Storage::url("$customFolderPath/$fileName3"),
             ]
         ];
 
         // Retornar respuesta JSON con los archivos generados
         return response()->json(['generatedFiles' => $generatedFiles]);
     }
+
+
 
 
 
