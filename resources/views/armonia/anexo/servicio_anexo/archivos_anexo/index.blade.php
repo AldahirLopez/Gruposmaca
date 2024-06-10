@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Agregar una Datos Servicio</h3>
+        <h3 class="page__heading">Generar Formatos de {{$estacion->nombre_estacion}}</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -28,15 +28,18 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <input type="hidden" name="servicio_anexo_id" value="{{ $estacion->nomenclatura }}">
+                                <input type="hidden" name="servicio_anexo_id"
+                                    value="{{ strtoupper($estacion->nomenclatura) }}">
+                                <input type="hidden" name="id_usuario"
+                                    value="{{ strtoupper($estacion->usuario->name) }}">
+                                <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
+
+                                <input type="hidden" name="razonsocial"
+                                    value="{{ strtoupper($estacion->nombre_estacion) }}">
+
                                 <!-- Input fields aquí -->
                                 <div class="col-md-6">
                                     <!-- Campos del formulario -->
-                                    <div class="form-group">
-                                        <label for="razonsocial">Razon Social</label>
-                                        <input type="text" name="razonsocial" class="form-control"
-                                            value="{{ $archivoAnexo ? $archivoAnexo->Razon_Social : '' }}">
-                                    </div>
                                     <div class="form-group">
                                         <label for="rfc">RFC</label>
                                         <input type="text" name="rfc" class="form-control"
@@ -111,9 +114,9 @@
                                 <center>
                                     <div style="margin-top: 15px;">
                                         <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                            <button type="submit" class="btn btn-primary">Generar</button>
                                             <a href="{{ route('servicio_anexo.index') }}"
-                                                class="btn btn-danger">Regresar</a>
+                                                class="btn btn-danger">Cancelar</a>
                                         </div>
                                     </div>
                                 </center>

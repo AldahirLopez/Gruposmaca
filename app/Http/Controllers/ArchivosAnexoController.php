@@ -78,6 +78,8 @@ class ArchivosAnexoController extends Controller
         // Validar los datos del formulario
         $data = $request->validate([
             'servicio_anexo_id' => 'required',
+            'id_usuario' => 'required',
+            'fecha_actual' => 'required',
             'razonsocial' => 'required|string|max:255',
             'rfc' => 'required|string|max:255',
             'domicilio_fiscal' => 'required|string|max:255',
@@ -96,22 +98,34 @@ class ArchivosAnexoController extends Controller
         // Cargar las plantillas de Word
         $templatePath = storage_path('app/templates/ORDEN DE TRABAJO.docx');
         $templatePath1 = storage_path('app/templates/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
+        $templatePath2 = storage_path('app/templates/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
+        $templatePath3 = storage_path('app/templates/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
         $templateProcessor1 = new TemplateProcessor($templatePath1);
+        $templateProcessor2 = new TemplateProcessor($templatePath2);
+        $templateProcessor3 = new TemplateProcessor($templatePath3);
 
         // Reemplazar los marcadores de posición con los datos del formulario
         foreach ($data as $key => $value) {
             $templateProcessor->setValue($key, $value);
             $templateProcessor1->setValue($key, $value);
+            $templateProcessor2->setValue($key, $value);
+            $templateProcessor3->setValue($key, $value);
         }
 
         // Guardar los documentos generados
-        $fileName = "ORDEN_DE_TRABAJO_RELLENADO.docx";
-        $fileName1 = "CONTRATO_SERVICIOS_INSPECCIÓN_ANEXOS_RELLENADO.docx";
+        $fileName = "ORDEN DE TRABAJO_RELLENADO.docx";
+        $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
+        $fileName2 = "FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD_RELLENADO.docx";
+        $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx";
         $filePath = storage_path("app/public/$fileName");
         $filePath1 = storage_path("app/public/$fileName1");
+        $filePath2 = storage_path("app/public/$fileName2");
+        $filePath3 = storage_path("app/public/$fileName3");
         $templateProcessor->saveAs($filePath);
         $templateProcessor1->saveAs($filePath1);
+        $templateProcessor2->saveAs($filePath2);
+        $templateProcessor3->saveAs($filePath3);
 
         // Crear la lista de archivos generados
         $generatedFiles = [
@@ -122,6 +136,14 @@ class ArchivosAnexoController extends Controller
             [
                 'name' => $fileName1,
                 'url' => asset("storage/$fileName1"),
+            ],
+            [
+                'name' => $fileName2,
+                'url' => asset("storage/$fileName2"),
+            ],
+            [
+                'name' => $fileName3,
+                'url' => asset("storage/$fileName3"),
             ]
         ];
 
