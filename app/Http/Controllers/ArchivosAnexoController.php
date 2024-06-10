@@ -106,32 +106,29 @@ class ArchivosAnexoController extends Controller
         }
 
         // Guardar los documentos generados
-        // Generar nombres de archivo basados en el nombre del servicio anexo
-        $fileName = "ORDEN DE TRABAJO_RELLENADO.docx";
-        $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
+        $fileName = "ORDEN_DE_TRABAJO_RELLENADO.docx";
+        $fileName1 = "CONTRATO_SERVICIOS_INSPECCIÓN_ANEXOS_RELLENADO.docx";
         $filePath = storage_path("app/public/$fileName");
         $filePath1 = storage_path("app/public/$fileName1");
         $templateProcessor->saveAs($filePath);
         $templateProcessor1->saveAs($filePath1);
 
-        // Comprimir ambos archivos en un solo ZIP para descarga
-        $zipFileName = 'documentos_rellenados.zip';
-        $zipFilePath = storage_path("app/public/$zipFileName");
+        // Crear la lista de archivos generados
+        $generatedFiles = [
+            [
+                'name' => $fileName,
+                'url' => asset("storage/$fileName"),
+            ],
+            [
+                'name' => $fileName1,
+                'url' => asset("storage/$fileName1"),
+            ]
+        ];
 
-        $zip = new \ZipArchive();
-        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-            $zip->addFile($filePath, $fileName);
-            $zip->addFile($filePath1, $fileName1);
-            $zip->close();
-        }
-
-        // Eliminar los archivos individuales ya que están en el ZIP
-        unlink($filePath);
-        unlink($filePath1);
-
-        // Descargar el archivo ZIP y eliminar después de enviar
-        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        // Retornar respuesta JSON con los archivos generados
+        return response()->json(['generatedFiles' => $generatedFiles]);
     }
+
 
 
     /**

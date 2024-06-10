@@ -10,7 +10,6 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-
                         @if ($errors->any())
                             <div class="alert alert-dark alert-dismissible fade show" role="alert">
                                 <strong>¡Revise los campos!</strong>
@@ -23,14 +22,16 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('generate.word', ['servicio_anexo_id' => $servicio_anexo_id]) }}"
+                        <!-- Formulario con soporte AJAX -->
+                        <form id="generateWordForm"
+                            action="{{ route('generate.word', ['servicio_anexo_id' => $servicio_anexo_id]) }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-
                                 <input type="hidden" name="servicio_anexo_id" value="{{ $estacion->nomenclatura }}">
-
+                                <!-- Input fields aquí -->
                                 <div class="col-md-6">
+                                    <!-- Campos del formulario -->
                                     <div class="form-group">
                                         <label for="razonsocial">Razon Social</label>
                                         <input type="text" name="razonsocial" class="form-control"
@@ -106,21 +107,81 @@
                                             value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Inspeccion : '' }}">
                                     </div>
                                 </div>
-                            </div>
-                            <center>
-                                <div style="margin-top: 15px;">
-                                    <div class="col-xs-12 col-sm-12 col-md-12">
-                                        <button type="submit" class="btn btn-primary">Guardar</button>
-                                        <a href="{{ route('servicio_anexo.index') }}"
-                                            class="btn btn-danger">Regresar</a>
+                                <!-- Asegúrate de que todos los campos estén aquí -->
+                                <center>
+                                    <div style="margin-top: 15px;">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                            <a href="{{ route('servicio_anexo.index') }}"
+                                                class="btn btn-danger">Regresar</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </center>
+                                </center>
+                            </div>
                         </form>
+
+                        <!-- Contenedor para la tabla de archivos generados -->
+                        <div id="generatedFilesTable" style="margin-top: 30px;">
+                            <!-- Spinner de carga -->
+                            <div id="loadingSpinner" class="justify-content-center align-items-center"
+                                style="display: none;">
+                                <div class="spinner-border text-primary" role="status">
+                                </div>
+                            </div>
+                            <!-- La tabla se actualizará aquí -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
+
+<!-- Incluir jQuery y el script de AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#generateWordForm').on('submit', function (e) {
+            e.preventDefault(); // Evitar la recarga de la página
+
+            // Ocultar la tabla
+            $('#generatedFilesTable').hide();
+
+            // Mostrar el spinner de carga dentro de la tabla
+            $('#loadingSpinner').addClass('d-flex');
+
+            // Deshabilitar el botón para evitar múltiples envíos
+            $('#generateWordForm button[type="submit"]').prop('disabled', true);
+
+            // Enviar los datos del formulario usando AJAX
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Crear el HTML para la tabla
+                    let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
+                    response.generatedFiles.forEach(file => {
+                        tableHtml += `<tr><td>${file.name}</td><td><a href="${file.url}" class="btn btn-info" download>Descargar</a></td></tr>`;
+                    });
+                    tableHtml += '</tbody></table>';
+                    // Actualizar el contenedor de la tabla y mostrarla
+                    $('#generatedFilesTable').html(tableHtml).show();
+                },
+                error: function (xhr, status, error) {
+                    alert('Ocurrió un error al generar los documentos.');
+                },
+                complete: function () {
+                    // Ocultar el spinner de carga después de que se complete la solicitud (ya sea con éxito o error)
+                    $('#loadingSpinner').removeClass('d-flex');
+                    // Rehabilitar el botón
+                    $('#generateWordForm button[type="submit"]').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 </section>
 @endsection
