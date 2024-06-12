@@ -13,7 +13,6 @@ use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role;
 
 
-
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 class ServicioAnexoController extends Controller
@@ -321,7 +320,9 @@ class ServicioAnexoController extends Controller
 
         // Ruta de la carpeta donde se guardarán los PDFs
         $folderPath = "public/servicios_anexo30/{$nomenclatura}";
-        $pdfPath = "{$folderPath}/cotizacion/{$nomenclatura}.pdf"; // Ruta completa del PDF
+        $pdfPath = "{$folderPath}/{$nomenclatura}.pdf"; // Ruta completa del PDF
+
+        
 
         // Verificar si la carpeta existe, si no, crearla
         if (!Storage::exists($folderPath)) {
