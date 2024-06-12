@@ -319,8 +319,8 @@ class ServicioAnexoController extends Controller
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
         // Ruta de la carpeta donde se guardarán los PDFs
-        $folderPath = "public/servicios_anexo30/{$nomenclatura}";
-        $pdfPath = "{$folderPath}/cotizacion/{$nomenclatura}.pdf"; // Ruta completa del PDF
+        $folderPath = "public/servicios_anexo30/{$nomenclatura}/cotizacion";
+        $pdfPath = "{$folderPath}/{$nomenclatura}.pdf"; // Ruta completa del PDF
 
         
 
