@@ -146,11 +146,17 @@
             fetch('{{ route("pdf.cotizacion") }}', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
                 },
                 body: formData
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('La solicitud no pudo completarse correctamente.');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.pdf_url) {
                         // Decodificar la URL si es necesario y abrir el PDF en una nueva ventana
@@ -166,6 +172,7 @@
         });
     });
 </script>
+
 
 
 
