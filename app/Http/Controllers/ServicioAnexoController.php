@@ -305,7 +305,7 @@ class ServicioAnexoController extends Controller
         // Establecer la configuración regional en español
         app()->setLocale('es');
 
-        // Obtener la información del servicio y los datos del formulario
+        // Obtener los datos del formulario
         $nomenclatura = $request->input('nomenclatura');
         $nombre_estacion = $request->input('nombre_estacion');
         $direccion_estacion = $request->input('direccion_estacion');
@@ -318,28 +318,29 @@ class ServicioAnexoController extends Controller
         // Obtener la fecha actual en el formato deseado (día de mes de año)
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
-        // Ruta de la carpeta donde se guardarán los PDFs
+        // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
         $folderPath = "servicios_anexo30/{$nomenclatura}";
-        $pdfPath = "{$folderPath}/{$nomenclatura}.pdf"; // Ruta completa del PDF
+        $subFolderPath = "{$folderPath}/cotizacion";
 
-        // Verificar si la carpeta principal existe
-        if (Storage::disk('public')->exists($folderPath)) {
-            // La carpeta principal existe, crear una subcarpeta dentro de ella
-            $subFolderPath = "{$folderPath}/cotizacion";
-
-            if (!Storage::disk('public')->exists($subFolderPath)) {
-                // Crear la subcarpeta
-                Storage::disk('public')->makeDirectory($subFolderPath);
-            }
+        // Verificar y crear la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
         }
 
-        
+        // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($subFolderPath)) {
+            Storage::disk('public')->makeDirectory($subFolderPath);
+        }
+
+        // Definir la ruta completa del PDF
+        $pdfPath = "{$subFolderPath}/{$nomenclatura}.pdf";
+
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
         $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
         // Guardar el PDF en el almacenamiento de Laravel
-        Storage::put($pdfPath, $pdf->output());
+        Storage::disk('public')->put($pdfPath, $pdf->output());
 
         // Obtener la URL pública del PDF
         $pdfUrl = Storage::url($pdfPath);
@@ -347,5 +348,6 @@ class ServicioAnexoController extends Controller
         // Devolver la URL del PDF como respuesta
         return response()->json(['pdf_url' => $pdfUrl]);
     }
+
 
 }
