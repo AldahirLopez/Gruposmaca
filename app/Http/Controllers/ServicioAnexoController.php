@@ -326,7 +326,7 @@ class ServicioAnexoController extends Controller
 
         // Verificar si la carpeta existe, si no, crearla
         if (!Storage::exists($folderPath)) {
-            Storage::makeDirectory($folderPath);
+            Storage::disk('public')->makeDirectory($folderPath);
         }
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
