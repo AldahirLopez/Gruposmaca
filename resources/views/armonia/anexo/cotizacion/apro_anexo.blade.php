@@ -11,7 +11,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('anexo.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="{{ route('anexo.index') }}" class="btn btn-danger"><i
+                                    class="bi bi-arrow-return-left"></i></a>
                         </div>
                         <table class="table table-striped">
                             <thead>
@@ -38,7 +39,10 @@
                                                             class="bi bi-file-pdf-fill"></i></button>
                                                 @else
                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modal"><i class="bi bi-file-pdf-fill"></i></button>
+                                                        data-bs-target="#modal" data-id="{{ $servicio->id }}">
+                                                        <i class="bi bi-file-pdf-fill"></i>
+                                                    </button>
+
                                                 @endif
                                             </center>
                                         </td>
@@ -87,10 +91,10 @@
             <div class="modal-body">
                 <form class="row g-3" action="{{ route('pdf.cotizacion') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="nomenclatura" value="{{ $servicio->nomenclatura }}">
-                    <input type="hidden" name="nombre_estacion" value="{{ $servicio->nombre_estacion }}">
-                    <input type="hidden" name="direccion_estacion" value="{{ $servicio->direccion_estacion }}">
-                    <input type="hidden" name="estado_estacion" value="{{ $servicio->estado_estacion }}">
+                    <input type="hidden" name="nomenclatura" value="">
+                    <input type="hidden" name="nombre_estacion" value="">
+                    <input type="hidden" name="direccion_estacion" value="">
+                    <input type="hidden" name="estado_estacion" value="">
                     <div class="form-group">
                         <label for="costo">Costo</label>
                         <input type="text" name="costo" class="form-control">
@@ -100,6 +104,7 @@
                             style="background-color: #002855; border-color: #002855;">Guardar</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -107,6 +112,28 @@
 <!-- End Vertically centered Modal -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('modal');
+
+        modal.addEventListener('shown.bs.modal', function (event) {
+            // Botón que disparó el modal
+            var button = event.relatedTarget;
+            // Obtener el id del servicio desde el atributo data-id del botón
+            var serviceId = button.getAttribute('data-id');
+
+            // Obtener datos del servicio en la tabla según el id
+            var row = button.closest('tr');
+            var nomenclatura = row.querySelector('td:nth-child(1)').textContent.trim();
+            var nombreEstacion = row.querySelector('td:nth-child(2)').textContent.trim();
+            var direccionEstacion = row.querySelector('td:nth-child(3)').textContent.trim();
+            var estadoEstacion = row.querySelector('td:nth-child(4)').textContent.trim();
+
+            // Llenar los campos ocultos del formulario del modal con los datos del servicio
+            modal.querySelector('input[name="nomenclatura"]').value = nomenclatura;
+            modal.querySelector('input[name="nombre_estacion"]').value = nombreEstacion;
+            modal.querySelector('input[name="direccion_estacion"]').value = direccionEstacion;
+            modal.querySelector('input[name="estado_estacion"]').value = estadoEstacion;
+        });
+
         var formularioCotizacion = document.querySelector('#modal form');
 
         formularioCotizacion.addEventListener('submit', function (event) {
@@ -125,7 +152,13 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    window.open(data.pdf_url, '_blank'); // Abrir el PDF en una nueva ventana
+                    if (data.pdf_url) {
+                        // Decodificar la URL si es necesario y abrir el PDF en una nueva ventana
+                        var pdfUrl = data.pdf_url.replace(/\\/g, '');
+                        window.open(pdfUrl, '_blank'); // Abrir el PDF en una nueva ventana
+                    } else {
+                        console.error('URL de PDF no encontrada en la respuesta.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -133,6 +166,8 @@
         });
     });
 </script>
+
+
 
 
 @endsection

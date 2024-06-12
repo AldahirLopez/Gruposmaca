@@ -172,7 +172,15 @@ class ServicioAnexoController extends Controller
 
 
         // Asigna otros campos al servicio
+
         $servicio->save();
+
+        // Definir la carpeta de destino dentro de 'public/storage'
+        $customFolderPath = "servicios_anexo30/{$nomenclatura}";
+
+        // Crear la carpeta si no existe
+        Storage::disk('public')->makeDirectory($customFolderPath);
+
         return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
         ;
     }
@@ -296,13 +304,12 @@ class ServicioAnexoController extends Controller
     {
         // Establecer la configuración regional en español
         app()->setLocale('es');
+
         // Obtener la información del servicio y los datos del formulario
         $nomenclatura = $request->input('nomenclatura');
         $nombre_estacion = $request->input('nombre_estacion');
         $direccion_estacion = $request->input('direccion_estacion');
         $estado_estacion = $request->input('estado_estacion');
-        $costo = $request->input('costo');
-        // Obtener el costo desde la solicitud
         $costo = $request->input('costo');
 
         // Calcular el 16% de IVA
@@ -311,13 +318,20 @@ class ServicioAnexoController extends Controller
         // Obtener la fecha actual en el formato deseado (día de mes de año)
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
+        // Ruta de la carpeta donde se guardarán los PDFs
+        $folderPath = "public/servicios_anexo30/{$nomenclatura}";
+        $pdfPath = "{$folderPath}/cotizacion/{$nomenclatura}.pdf"; // Ruta completa del PDF
+
+        // Verificar si la carpeta existe, si no, crearla
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
         $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
         // Guardar el PDF en el almacenamiento de Laravel
-        $pdfPath = 'public/temp/report.pdf'; // Ruta donde se guardará el PDF
         Storage::put($pdfPath, $pdf->output());
 
         // Obtener la URL pública del PDF
@@ -326,4 +340,5 @@ class ServicioAnexoController extends Controller
         // Devolver la URL del PDF como respuesta
         return response()->json(['pdf_url' => $pdfUrl]);
     }
+
 }

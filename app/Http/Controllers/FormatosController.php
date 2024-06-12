@@ -39,7 +39,7 @@ class FormatosController extends Controller
         $nombreArchivoAntiguo = basename($rutaAntigua);
         $timestamp = now()->format('YmdHis');
         $nuevoNombreArchivo = pathinfo($nombreArchivoAntiguo, PATHINFO_FILENAME) . '_' . $timestamp . '.' . pathinfo($nombreArchivoAntiguo, PATHINFO_EXTENSION);
-        $nuevaRutaHistorial = 'public/armonia/operacionymantenimiento/historialformatos/' . $formato->nombre . '/' . $nuevoNombreArchivo;
+        $nuevaRutaHistorial = 'public/armonia/anexo_30/historialformatos/' . $formato->nombre . '/' . $nuevoNombreArchivo;
 
         if (Storage::exists($rutaAntigua)) {
             Storage::move($rutaAntigua, $nuevaRutaHistorial);
@@ -61,7 +61,7 @@ class FormatosController extends Controller
         // Guardar el archivo en el sistema de archivos
         $archivoSubido = $request->file('archivo');
         $nombreArchivo = $archivoSubido->getClientOriginalName();
-        $rutaArchivo = $archivoSubido->storeAs('public/armonia/operacionymantenimiento/formatosvigentes/' . $formato->nombre, $nombreArchivo);
+        $rutaArchivo = $archivoSubido->storeAs('public/armonia/anexo_30/formatosvigentes/' . $formato->nombre, $nombreArchivo);
 
         // Actualizar la ruta del archivo
         $formato->rutadoc = str_replace('public/', '', $rutaArchivo);
@@ -93,7 +93,7 @@ class FormatosController extends Controller
         $formato = FormatoVigente::findOrFail($id);
 
         // Eliminar el archivo del sistema de archivos
-        Storage::delete('public/armonia/operacionymantenimiento/formatosvigentes/' . $formato->rutadoc);
+        Storage::delete('public/armonia/anexo_30/formatosvigentes/' . $formato->rutadoc);
 
         // Eliminar el registro de la base de datos
         $formato->delete();
