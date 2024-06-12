@@ -320,7 +320,7 @@ class ServicioAnexoController extends Controller
 
         // Ruta de la carpeta donde se guardarán los PDFs
         $folderPath = "public/servicios_anexo30/{$nomenclatura}";
-        $pdfPath = "{$folderPath}/{$nomenclatura}.pdf"; // Ruta completa del PDF
+        $pdfPath = "{$folderPath}/cotizacion/{$nomenclatura}.pdf"; // Ruta completa del PDF
 
         
 
