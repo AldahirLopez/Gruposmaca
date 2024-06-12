@@ -319,16 +319,21 @@ class ServicioAnexoController extends Controller
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
         // Ruta de la carpeta donde se guardarán los PDFs
-        $folderPath = "public/servicios_anexo30/{$nomenclatura}/cotizacion";
+        $folderPath = "servicios_anexo30/{$nomenclatura}";
         $pdfPath = "{$folderPath}/{$nomenclatura}.pdf"; // Ruta completa del PDF
 
-        
+        // Verificar si la carpeta principal existe
+        if (Storage::disk('public')->exists($folderPath)) {
+            // La carpeta principal existe, crear una subcarpeta dentro de ella
+            $subFolderPath = "{$folderPath}/cotizacion";
 
-        // Verificar si la carpeta existe, si no, crearla
-        if (!Storage::exists($folderPath)) {
-            Storage::disk('public')->makeDirectory($folderPath);
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                // Crear la subcarpeta
+                Storage::disk('public')->makeDirectory($subFolderPath);
+            }
         }
 
+        
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
         $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
