@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\ApprovalController;
-use App\Http\Controllers\ArchivosAnexoController;
+use App\Http\Controllers\DatosServicioAnexoController;
 use App\Http\Controllers\ArchivosDicController;
 use App\Http\Controllers\EstacionesAnexoController;
 use App\Http\Controllers\FormatoController;
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
     Route::resource('anexo', AnexoController::class);
-    Route::resource('servicio_anexo', ServicioAnexo30Controller::class); 
+    Route::resource('servicio_anexo', ServicioAnexo30Controller::class);
     Route::resource('servicio_operacion', ServicioOperacionController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
@@ -51,8 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('historialformatos', FormatosHistorialController::class);
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
-    Route::resource('archivos_anexo', ArchivosAnexoController::class);
-    Route::post('/generate-word', [ArchivosAnexoController::class, 'generateWord'])->name('generate.word');
+    Route::resource('archivos_anexo', DatosServicioAnexoController::class);
+    Route::post('/generate-word', [DatosServicioAnexoController::class, 'generateWord'])->name('generate.word');
     Route::get('/obtener-servicios', [ServicioAnexo30Controller::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexo30Controller::class, 'AproAnexo'])->name('apro.anexo');
@@ -70,7 +70,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
-    Route::post('/approval/{id}/approve', [ApprovalController::class, 'approveDeletion'])->name('approval.approve');
+    Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\TuControlador@approveDictamenDeletion')
+        ->name('approve.dictamen.deletion');
+
+    Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\TuControlador@approveServicioDeletion')
+        ->name('approve.servicio.deletion');
+
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
 
     //ruta cambio de contraseña

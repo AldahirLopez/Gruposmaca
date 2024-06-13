@@ -33,12 +33,15 @@
                                 <input type="hidden" name="id_usuario"
                                     value="{{ strtoupper($estacion->usuario->name) }}">
                                 <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
-                                <input type="hidden" name="razonsocial"
-                                    value="{{ strtoupper($estacion->nombre_estacion) }}">
 
                                 <!-- Input fields aquí -->
                                 <div class="col-md-6">
                                     <!-- Campos del formulario -->
+                                    <div class="form-group">
+                                        <label for="razonsocial">Razon Social</label>
+                                        <input type="text" name="razonsocial" class="form-control"
+                                            value="{{ $archivoAnexo ? $archivoAnexo->razonsocial : '' }}">
+                                    </div>
                                     <div class="form-group">
                                         <label for="rfc">RFC</label>
                                         <input type="text" name="rfc" class="form-control"

@@ -11,7 +11,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
 
-class ArchivosAnexoController extends Controller
+class DatosServicioAnexoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -77,7 +77,7 @@ class ArchivosAnexoController extends Controller
             }
         }
 
-        return view('armonia.anexo.servicio_anexo.archivos_anexo.index', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.index', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
     }
 
 

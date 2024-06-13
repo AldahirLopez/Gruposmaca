@@ -61,7 +61,7 @@
                                         <tr>
                                             <td scope="row">{{ $servicio->nomenclatura }}</td>
                                             <td scope="row">
-                                                @if(!$servicio->estado)
+                                                @if($servicio->pending_deletion_servicio)
                                                     <center>
                                                         <button class="btn btn-primary" disabled><i
                                                                 class="bi bi-file-earmark-excel-fill"></i></button>
@@ -74,14 +74,19 @@
                                                 @endif
                                             </td>
                                             <td scope="row">
-                                                <a href="{{ route('archivos_anexo.index', ['servicio_anexo_id' => $servicio->id]) }}"
-                                                    class="btn btn-primary">
-                                                    <i class="bi bi-folder-fill"></i>
-                                                </a>
+                                                @if($servicio->pending_deletion_servicio)
+                                                    <button class="btn btn-primary" disabled><i
+                                                            class="bi bi-folder-fill"></i></button>
+                                                @else
+                                                    <a href="{{ route('archivos_anexo.index', ['servicio_anexo_id' => $servicio->id]) }}"
+                                                        class="btn btn-primary">
+                                                        <i class="bi bi-folder-fill"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                             <td scope="row">
                                                 @can('editar-servicio')
-                                                    @if(!$servicio->estado)
+                                                    @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-primary" disabled><i
                                                                 class="bi bi-pencil-square"></i></button>
                                                     @else
@@ -92,7 +97,7 @@
                                                     @endif
                                                 @endcan
                                                 @can('borrar-servicio')
-                                                    @if($servicio->pending_deletion)
+                                                    @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-danger" disabled>(pendiente)</button>
                                                     @else
                                                         {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}

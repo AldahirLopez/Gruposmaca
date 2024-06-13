@@ -10,7 +10,7 @@ class Datos_Servicio extends Model
     use HasFactory;
 
     protected $connection = 'segunda_db';
-    protected $table = 'datos_archivos';
+    protected $table = 'datos_servicio_anexo_30';
 
     protected $fillable = [
         'Razon_Social',

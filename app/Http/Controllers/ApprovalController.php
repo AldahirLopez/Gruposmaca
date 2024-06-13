@@ -36,12 +36,10 @@ class ApprovalController extends Controller
         return view('notificaciones.show', compact('variable'));
     }
 
-    public function approveDeletion(Request $request, $id)
+    public function approveDictamenDeletion(Request $request, $id)
     {
-
         try {
             // Intenta encontrar el dictamen en la primera tabla
-            // Buscar el dictamen por su ID
             $dictamen = DictamenOp::findOrFail($id);
 
             // Obtener los archivos relacionados
@@ -60,15 +58,36 @@ class ApprovalController extends Controller
 
             return redirect()->route('notificaciones.index')->with('success', 'Dictamen eliminado exitosamente');
         } catch (ModelNotFoundException $e) {
-            // Si no se encuentra en la primera tabla, busca en la segunda tabla
-            $servicio = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
-
-            // Eliminar el dictamen
-            $servicio->delete();
-
-            return redirect()->route('notificaciones.index')->with('success', 'Dictamen eliminado exitosamente');
+            // Manejar la excepción si no se encuentra en la primera tabla
+            return redirect()->back()->with('error', 'Dictamen no encontrado en la primera tabla.');
         }
     }
+
+    public function approveServicioDeletion(Request $request, $id)
+    {
+        try {
+            // Intenta encontrar el servicio en la segunda tabla
+            $servicio = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
+
+            // Obtener la nomenclatura para la carpeta de archivos
+            $nomenclatura = $servicio->nomenclatura;
+            $customFolderPath = "servicios_anexo30/{$nomenclatura}";
+
+            // Eliminar la carpeta de archivos si existe
+            if (Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->deleteDirectory($customFolderPath);
+            }
+
+            // Eliminar el servicio
+            $servicio->delete();
+
+            return redirect()->route('notificaciones.index')->with('success', 'Servicio eliminado exitosamente');
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción si no se encuentra el servicio
+            return redirect()->back()->with('error', 'Servicio no encontrado.');
+        }
+    }
+
     public function cancelDeletion($id)
     {
 
@@ -82,7 +101,7 @@ class ApprovalController extends Controller
             // Si no se encuentra en la primera tabla, busca en la segunda tabla
             $servicio = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
             // Marcar el dictamen como pendiente de eliminación
-            $servicio->pending_deletion = false;
+            $servicio->pending_deletion_servicio = false;
             $servicio->save();
         }
 

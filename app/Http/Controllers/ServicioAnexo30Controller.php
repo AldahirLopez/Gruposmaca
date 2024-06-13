@@ -312,12 +312,12 @@ class ServicioAnexo30Controller extends Controller
 
         // Obtener los datos del formulario
         $nomenclatura = $request->input('nomenclatura');
-        $nombre_estacion = $request->input('nombre_estacion');
-        $direccion_estacion = $request->input('direccion_estacion');
-        $estado_estacion = $request->input('estado_estacion');
+        $nombre_estacion = $request->input('razon_social');
+        $direccion_estacion = $request->input('direccion');
+        $estado_estacion = $request->input('estado');
         $costo = $request->input('costo');
 
-        // Calcular el 16% de IVA
+        // Calcular el 16% de IVA 
         $iva = $costo * 0.16;
 
         // Obtener la fecha actual en el formato deseado (día de mes de año)

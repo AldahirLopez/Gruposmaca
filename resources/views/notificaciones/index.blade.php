@@ -37,7 +37,7 @@
                                             @csrf
                                             <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
                                         </form>
-                                        <form action="{{ route('approval.approve', $dictamen->id) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('approve.dictamen.deletion', $dictamen->id) }}" method="POST" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                         </form>
@@ -81,7 +81,7 @@
                                             @csrf
                                             <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
                                         </form>
-                                        <form action="{{ route('approval.approve', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('approve.servicio.deletion', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                         </form>
