@@ -33,11 +33,11 @@ class AppServiceProvider extends ServiceProvider
                 $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
                 $pendingDeletionsServicio = ServicioAnexo::where('pending_apro_servicio', 0)
                     ->where(function ($query) {
-                        $query->where('date_pending_deletion', 0)
-                            ->orWhereNull('date_pending_deletion');
+                        $query->where('pending_deletion_servicio', 0)
+                            ->orWhereNull('pending_deletion_servicio');
                     })
                     ->get();
-                $pendingDeletionsServicioAn = ServicioAnexo::where('date_pending_deletion', 1)->get();
+                $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion_servicio', 1)->get();
             }
 
             $view->with('pendingDeletionsDictamen', $pendingDeletionsDictamen);

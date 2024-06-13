@@ -12,15 +12,15 @@ class NotificationController extends Controller
     {
         // Obtener servicios con estado 0 aprobacion
         $pendingDeletionsServicio = ServicioAnexo::where([
-            ['estado', '=', 0],
-            ['pending_deletion', '=', 0]
+            ['pending_apro_servicio', '=', 0],
+            ['pending_deletion_servicio', '=', 0]
         ])->get();
 
         // Obtener dictamenes con estado 0 eliminacion
         $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
 
         // Obtener servicios con estado 0 eliminacion
-        $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion', 1)->get();
+        $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion_servicio', 1)->get();
 
         return view('partials.notifications-servicios', compact('pendingDeletionsServicio', 'pendingDeletionsDictamen', 'pendingDeletionsServicioAn'));
     }

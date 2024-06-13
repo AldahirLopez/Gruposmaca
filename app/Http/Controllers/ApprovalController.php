@@ -17,7 +17,7 @@ class ApprovalController extends Controller
     {
         // Obtener todos los dictámenes pendientes de aprobación para eliminar
         $dictamenes = DictamenOp::where('pending_deletion', true)->get();
-        $servicios = ServicioAnexo::where('pending_deletion', true)->get();
+        $servicios = ServicioAnexo::where('pending_deletion_servicio', true)->get();
 
         return view('notificaciones.index', compact('dictamenes', 'servicios'));
     }

@@ -18,9 +18,6 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Numero de servicio</th>
-                                    <th scope="col">Estacion de servicio</th>
-                                    <th scope="col">Direccion</th>
-                                    <th scope="col">Estado</th>
                                     <th scope="col">Cotizacion</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
@@ -29,26 +26,21 @@
                                 @foreach($servicios as $servicio)
                                     <tr>
                                         <td scope="row">{{$servicio->nomenclatura}}</td>
-                                        <td scope="row">{{$servicio->nombre_estacion}}</td>
-                                        <td scope="row">{{$servicio->direccion_estacion}}</td>
-                                        <td scope="row">{{$servicio->estado_estacion}}</td>
                                         <td scope="row">
-                                            <center>
-                                                @if($servicio->pending_deletion)
-                                                    <button class="btn btn-primary" disabled><i
-                                                            class="bi bi-file-pdf-fill"></i></button>
-                                                @else
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modal" data-id="{{ $servicio->id }}">
-                                                        <i class="bi bi-file-pdf-fill"></i>
-                                                    </button>
+                                            @if($servicio->pending_deletion_servicio)
+                                                <button class="btn btn-primary" disabled><i
+                                                        class="bi bi-file-pdf-fill"></i></button>
+                                            @else
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#modal" data-id="{{ $servicio->id }}">
+                                                    <i class="bi bi-file-pdf-fill"></i>
+                                                </button>
 
-                                                @endif
-                                            </center>
+                                            @endif
                                         </td>
                                         <td scope="row">
                                             @can('editar-servicio')
-                                                @if($servicio->pending_deletion)
+                                                @if($servicio->pending_deletion_servicio)
                                                     <button class="btn btn-primary" disabled><i
                                                             class="bi bi-pencil-square"></i></button>
                                                 @else
@@ -58,9 +50,9 @@
                                                 @endif
                                             @endcan
                                             @can('borrar-servicio')
-                                                @if($servicio->pending_deletion)
+                                                @if($servicio->pending_deletion_servicio)
                                                     <button class="btn btn-danger" disabled><i
-                                                            class="bi bi-trash-fill"></i></button>
+                                                            class="bi bi-trash-fill">Eliminando</i></button>
                                                 @else
                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                     {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}

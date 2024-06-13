@@ -10,27 +10,38 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <!-- Botones de acción -->
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('anexo.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="{{ route('anexo.index') }}" class="btn btn-danger">
+                                <i class="bi bi-arrow-return-left"></i>
+                            </a>
+
                             @can('crear-servicio')
-                            <a class="btn btn-success" href="{{ route('servicio_anexo.create') }}">Nuevo</a>
+                                <form action="{{ route('servicio_anexo.store') }}" method="POST" style="display: inline;">
+                                    @csrf <!-- Agrega el token CSRF para protección -->
+                                    <button type="submit" class="btn btn-success">Generar Nuevo Servicio</button>
+                                </form>
                             @endcan
                         </div>
+
+                        <!-- Filtro de usuario si el usuario es Administrador o Auditor -->
                         @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Auditor'))
-                        <div style="margin-top: 15px;">
-                            <label for="filtroUsuario">Filtrar por Usuario:</label>
-                            <select id="filtroUsuario" class="form-control">
-                                <option value="">Todos los usuarios</option>
-                                @foreach($usuarios as $usuario)
-                                <option value="{{ $usuario->id}}">{{$usuario->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <div style="margin-top: 15px;">
+                                <label for="filtroUsuario">Filtrar por Usuario:</label>
+                                <select id="filtroUsuario" class="form-control">
+                                    <option value="">Todos los usuarios</option>
+                                    @foreach($usuarios as $usuario)
+                                        <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Mostrar servicios -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -40,53 +51,62 @@
                                 <thead style="text-align: center;">
                                     <tr>
                                         <th scope="col">Numero de servicio</th>
-                                        <th scope="col">Estacion de servicio</th>
-                                        <th scope="col">Direccion</th>
-                                        <th scope="col">Estado</th>
                                         <th scope="col">Cotizacion</th>
                                         <th scope="col">Archivos</th>
                                         <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center;">
-                                    @foreach($servicios as $servicio)
-                                    <tr>
-                                        <td scope="row">{{ $servicio->nomenclatura }}</td>
-                                        <td scope="row">{{ $servicio->nombre_estacion }}</td>
-                                        <td scope="row">{{ $servicio->direccion_estacion }}</td>
-                                        <td scope="row">{{ $servicio->estado_estacion }}</td>
-                                        <td scope="row">
-                                            @if(!$servicio->estado)
-                                            <center>
-                                                <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
-                                            </center>
-                                            @else
-                                            <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-primary"><i class="bi bi-file-earmark-check-fill"></i></a>
-                                            @endif
-                                        </td>
-                                        <td scope="row">
-                                            <a href="{{ route('archivos_anexo.index', ['servicio_anexo_id' => $servicio->id]) }}" class="btn btn-primary"><i class="bi bi-folder-fill"></i></a>
-                                        </td>
-                                        <td scope="row">
-                                            @can('editar-servicio')
-                                            @if(!$servicio->estado)
-                                            <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
-                                            @else
-                                            <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->id) }}"><i class="bi bi-pencil-square"></i></a>
-                                            @endif
-                                            @endcan
-                                            @can('borrar-servicio')
-                                            @if($servicio->pending_deletion)
-                                            <button class="btn btn-danger" disabled>(pendiente)</button>
-                                            @else
-                                            {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
-                                            {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
-                                            {!! Form::close() !!}
-                                            @endif
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                    @forelse($servicios as $servicio)
+                                        <tr>
+                                            <td scope="row">{{ $servicio->nomenclatura }}</td>
+                                            <td scope="row">
+                                                @if(!$servicio->estado)
+                                                    <center>
+                                                        <button class="btn btn-primary" disabled><i
+                                                                class="bi bi-file-earmark-excel-fill"></i></button>
+                                                    </center>
+                                                @else
+                                                    <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}"
+                                                        class="btn btn-primary">
+                                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td scope="row">
+                                                <a href="{{ route('archivos_anexo.index', ['servicio_anexo_id' => $servicio->id]) }}"
+                                                    class="btn btn-primary">
+                                                    <i class="bi bi-folder-fill"></i>
+                                                </a>
+                                            </td>
+                                            <td scope="row">
+                                                @can('editar-servicio')
+                                                    @if(!$servicio->estado)
+                                                        <button class="btn btn-primary" disabled><i
+                                                                class="bi bi-pencil-square"></i></button>
+                                                    @else
+                                                        <a class="btn btn-primary"
+                                                            href="{{ route('servicio_anexo.edit', $servicio->id) }}">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                    @endif
+                                                @endcan
+                                                @can('borrar-servicio')
+                                                    @if($servicio->pending_deletion)
+                                                        <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                    @else
+                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                        {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                                        {!! Form::close() !!}
+                                                    @endif
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">No se encontraron servicios para mostrar.</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -97,13 +117,14 @@
     </div>
 </section>
 
+<!-- Script para el filtro de usuario -->
 <script>
-    document.getElementById('filtroUsuario').addEventListener('change', function() {
+    document.getElementById('filtroUsuario').addEventListener('change', function () {
         var usuarioId = this.value;
         // Realizar una solicitud AJAX
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '{{ route("servicio_anexo.obtenerServicios") }}?usuario_id=' + usuarioId, true);
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 // Actualizar el contenido de la tabla con los servicios obtenidos
                 document.getElementById('tablaServicios').innerHTML = xhr.responseText;

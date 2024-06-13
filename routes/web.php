@@ -13,7 +13,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\OperacionController;
 use App\Http\Controllers\PagosAnexoController;
-use App\Http\Controllers\ServicioAnexoController;
+use App\Http\Controllers\ServicioAnexo30Controller;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
@@ -34,8 +34,8 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
-    Route::post('/pdf_cotizacion', [ServicioAnexoController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
-    Route::post('/pdf_ot', [ServicioAnexoController::class, 'generarpdfot'])->name('pdf.ot');
+    Route::post('/pdf_cotizacion', [ServicioAnexo30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+    Route::post('/pdf_ot', [ServicioAnexo30Controller::class, 'generarpdfot'])->name('pdf.ot');
     Route::view('/', 'home')->name('home');
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
     Route::resource('anexo', AnexoController::class);
-    Route::resource('servicio_anexo', ServicioAnexoController::class); 
+    Route::resource('servicio_anexo', ServicioAnexo30Controller::class); 
     Route::resource('servicio_operacion', ServicioOperacionController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
@@ -53,9 +53,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('archivos_anexo', ArchivosAnexoController::class);
     Route::post('/generate-word', [ArchivosAnexoController::class, 'generateWord'])->name('generate.word');
-    Route::get('/obtener-servicios', [ServicioAnexoController::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
+    Route::get('/obtener-servicios', [ServicioAnexo30Controller::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
-    Route::get('/apro_anexo', [ServicioAnexoController::class, 'AproAnexo'])->name('apro.anexo');
+    Route::get('/apro_anexo', [ServicioAnexo30Controller::class, 'AproAnexo'])->name('apro.anexo');
 
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
     Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');

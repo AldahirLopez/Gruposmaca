@@ -15,7 +15,7 @@ use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
-class ServicioAnexoController extends Controller
+class ServicioAnexo30Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,35 +33,51 @@ class ServicioAnexoController extends Controller
 
     public function index(Request $request)
     {
-        // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
-        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
+        // Inicializar colecciones y variables necesarias
+        $usuarios = collect();
+        $servicios = collect();
+        $warnings = [];
 
-        // Obtener los usuarios correspondientes a esos IDs
-        $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+        // Obtener el rol "Verificador Anexo 30"
+        $rolVerificador = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first();
 
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
+        // Verificar si el rol existe y obtener los usuarios asociados
+        if ($rolVerificador) {
+            // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
+            $usuariosConRol = $rolVerificador->users()->pluck('id');
 
-        // Verificar si se envió un usuario seleccionado en la solicitud
-        $usuarioSeleccionado = $request->input('usuario_id');
-
-        // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
-        if ($usuarioSeleccionado) {
-            $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
-        } else {
-            // Verificar si el usuario es administrador
-            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-                // Si es administrador, obtener todos los servicios
-                $servicios = ServicioAnexo::all();
-            } else {
-                // Si no es administrador, obtener solo los servicios del usuario autenticado
-                $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            // Si hay usuarios con el rol, obtenerlos
+            if ($usuariosConRol->isNotEmpty()) {
+                $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
             }
         }
 
-        // Pasar los servicios y usuarios a la vista
+        // Verificar si el usuario está autenticado
+        $usuario = Auth::user();
+
+        if ($usuario) {
+            // Verificar si se envió un usuario seleccionado en la solicitud
+            $usuarioSeleccionado = $request->input('usuario_id');
+
+            // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
+            if ($usuarioSeleccionado) {
+                $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
+            } else {
+                // Verificar si el usuario es administrador
+                if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                    // Si es administrador, obtener todos los servicios
+                    $servicios = ServicioAnexo::all();
+                } else {
+                    // Si no es administrador, obtener solo los servicios del usuario autenticado
+                    $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+                }
+            }
+        }
+
+        // Siempre retornar la vista, incluso si no se encuentran usuarios o servicios
         return view('armonia.anexo.servicio_anexo.index', compact('servicios', 'usuarios'));
     }
+
 
     public function obtenerServicios(Request $request)
     {
@@ -148,12 +164,6 @@ class ServicioAnexoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
-        $request->validate([
-            'nombre' => 'required',
-            'direccion' => 'required',
-            'estado' => 'required',
-        ]);
 
         $usuario = Auth::user(); // O el método que uses para obtener el usuario
         $nomenclatura = $this->generarNomenclatura($usuario);
@@ -162,14 +172,10 @@ class ServicioAnexoController extends Controller
 
         // Establecer los valores de los campos
 
-        $servicio->nombre_estacion = $request->nombre;
-        $servicio->direccion_estacion = $request->direccion;
-        $servicio->estado_estacion = $request->estado;
         $servicio->nomenclatura = $nomenclatura;
-        $servicio->estado = false;
+        $servicio->pending_apro_servicio = false;
+        $servicio->pending_deletion_servicio = false;
         $servicio->usuario_id = $usuario->id;
-
-
 
         // Asigna otros campos al servicio
 
@@ -182,7 +188,6 @@ class ServicioAnexoController extends Controller
         Storage::disk('public')->makeDirectory($customFolderPath);
 
         return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
-        ;
     }
 
     /**
@@ -221,7 +226,7 @@ class ServicioAnexoController extends Controller
         $servicio = ServicioAnexo::findOrFail($id);
 
         // Marcar el dictamen como pendiente de eliminación
-        $servicio->pending_deletion = true;
+        $servicio->pending_deletion_servicio = true;
 
         // Obtener la fecha y hora actuales
         $fechaHoraActual = Carbon::now();
@@ -230,7 +235,7 @@ class ServicioAnexoController extends Controller
         $fechaHoraFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
 
         // Asignar la fecha y hora formateadas al modelo
-        $servicio->eliminated_at = $fechaHoraFormateada;
+        $servicio->date_eliminated_at = $fechaHoraFormateada;
 
         $servicio->save();
 
