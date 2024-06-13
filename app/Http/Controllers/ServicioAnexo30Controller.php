@@ -284,9 +284,8 @@ class ServicioAnexo30Controller extends Controller
         return strtoupper($iniciales);
     }
 
-    public function AproAnexo()
+    public function apro_servicio_anexo()
     {
-
         // Obtener el usuario autenticado
         $usuario = Auth::user();
 
@@ -300,7 +299,7 @@ class ServicioAnexo30Controller extends Controller
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.anexo.cotizacion.apro_anexo', compact('servicios'));
+        return view('armonia.anexo.cotizacion.index', compact('servicios'));
     }
 
 
@@ -352,6 +351,24 @@ class ServicioAnexo30Controller extends Controller
 
         // Devolver la URL del PDF como respuesta
         return response()->json(['pdf_url' => $pdfUrl]);
+    }
+
+    public function apro($id)
+    {
+        try {
+            // Buscar el servicio por su ID
+            $servicio = ServicioAnexo::findOrFail($id);
+
+            // Establecer pending_apro_servicio como true
+            $servicio->pending_apro_servicio = true;
+            $servicio->save();
+
+            // Redireccionar con un mensaje de éxito
+            return view('armonia.anexo.cotizacion.apro_anexo')->with('success', 'Servicio aprobado correctamente.');
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción si el servicio no se encuentra
+            return view('armonia.anexo.cotizacion.apro_anexo')>with('error', 'Servicio no encontrado.');
+        }
     }
 
 

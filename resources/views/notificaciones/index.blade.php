@@ -23,27 +23,33 @@
                             </thead>
                             <tbody>
                                 @foreach($dictamenes as $dictamen)
-                                <tr>
-                                    <td scope="row">{{$dictamen->nombre}}</td>
-                                    <td scope="row">
-                                        <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}" class="btn btn-info">Listar Archivos</a>
-                                    </td>
-                                    <td scope="row">
-                                        @can('editar-operacion')
-                                        <a class="btn btn-primary" href="{{ route('operacion.edit', $dictamen->id) }}">Editar</a>
-                                        @endcan
-                                        @can('borrar-operacion')
-                                        <form action="{{ route('approval.cancel', $dictamen->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
-                                        </form>
-                                        <form action="{{ route('approve.dictamen.deletion', $dictamen->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                                        </form>
-                                        @endcan
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td scope="row">{{$dictamen->nombre}}</td>
+                                        <td scope="row">
+                                            <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}"
+                                                class="btn btn-info">Listar Archivos</a>
+                                        </td>
+                                        <td scope="row">
+                                            @can('editar-operacion')
+                                                <a class="btn btn-primary"
+                                                    href="{{ route('operacion.edit', $dictamen->id) }}">Editar</a>
+                                            @endcan
+                                            @can('borrar-operacion')
+                                                <form action="{{ route('approval.cancel', $dictamen->id) }}" method="POST"
+                                                    style="display: inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
+                                                </form>
+                                                <form action="{{ route('approve.dictamen.deletion', $dictamen->id) }}"
+                                                    method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                            @endcan
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -56,38 +62,39 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Identificador</th>
-                                    <th scope="col">Direccion</th>
-                                    <th scope="col">Estado</th>
                                     <th scope="col">Archivos</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($servicios as $servicio)
-                                <tr>
-                                    <td scope="row">{{$servicio->nomenclatura}}</td>
-                                    <td scope="row">{{$servicio->direccion_estacion}}</td>
-                                    <td scope="row">{{$servicio->estado_estacion}}</td>
-                                    <td scope="row">
-                                        <a href="{{ route('archivos.index', ['servicio_nomenclatura' => $servicio->nomenclatura]) }}" class="btn btn-info">Listar Archivos</a>
-                                    </td>
-                                    </td>
-                                    <td scope="row">
-                                        @can('editar-servicio')
-                                        <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Editar</a>
-                                        @endcan
-                                        @can('borrar-servicio')
-                                        <form action="{{ route('approval.cancel', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
-                                        </form>
-                                        <form action="{{ route('approve.servicio.deletion', $servicio->nomenclatura) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                                        </form>
-                                        @endcan
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td scope="row">{{$servicio->nomenclatura}}</td>
+                                        <td scope="row">
+                                            <a href="{{ route('archivos.index', ['servicio_nomenclatura' => $servicio->nomenclatura]) }}"
+                                                class="btn btn-info">Listar Archivos</a>
+                                        </td>
+                                        <td scope="row">
+                                            @can('editar-servicio')
+                                                <a class="btn btn-primary"
+                                                    href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Editar</a>
+                                            @endcan
+                                            @can('borrar-servicio')
+                                                <form action="{{ route('approval.cancel', $servicio->nomenclatura) }}"
+                                                    method="POST" style="display: inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
+                                                </form>
+                                                <form action="{{ route('approve.servicio.deletion', $servicio->nomenclatura) }}"
+                                                    method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                            @endcan
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

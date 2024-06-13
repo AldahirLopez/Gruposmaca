@@ -107,4 +107,6 @@ class ApprovalController extends Controller
 
         return redirect()->route('notificaciones.index')->with('success', 'Eliminación del dictamen cancelada correctamente');
     }
+
+    
 }

@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/generate-word', [DatosServicioAnexoController::class, 'generateWord'])->name('generate.word');
     Route::get('/obtener-servicios', [ServicioAnexo30Controller::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
-    Route::get('/apro_anexo', [ServicioAnexo30Controller::class, 'AproAnexo'])->name('apro.anexo');
+    Route::get('/apro_anexo', [ServicioAnexo30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
 
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
     Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
@@ -70,10 +70,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
-    Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\TuControlador@approveDictamenDeletion')
+    Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveDictamenDeletion')
         ->name('approve.dictamen.deletion');
 
-    Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\TuControlador@approveServicioDeletion')
+    Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioDeletion')
         ->name('approve.servicio.deletion');
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
@@ -82,4 +82,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'showChangePasswordForm'])->name('usuarios.showchangepasswordform');
 
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
+
+    Route::get('servicio_anexo/apro/{id}', [ServicioAnexo30Controller::class, 'apro'])->name('servicio_anexo.apro');
+
 });
