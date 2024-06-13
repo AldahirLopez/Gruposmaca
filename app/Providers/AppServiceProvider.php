@@ -31,13 +31,13 @@ class AppServiceProvider extends ServiceProvider
 
             if ($user && $user->hasRole('Administrador')) {
                 $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
-                $pendingDeletionsServicio = ServicioAnexo::where('estado', 0)
+                $pendingDeletionsServicio = ServicioAnexo::where('pending_apro_servicio', 0)
                     ->where(function ($query) {
-                        $query->where('pending_deletion', 0)
-                            ->orWhereNull('pending_deletion');
+                        $query->where('date_pending_deletion', 0)
+                            ->orWhereNull('date_pending_deletion');
                     })
                     ->get();
-                $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion', 1)->get();
+                $pendingDeletionsServicioAn = ServicioAnexo::where('date_pending_deletion', 1)->get();
             }
 
             $view->with('pendingDeletionsDictamen', $pendingDeletionsDictamen);

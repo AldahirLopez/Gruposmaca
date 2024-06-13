@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('segunda_db')->create('datos_archivos', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('datos_servicio_anexo_30', function (Blueprint $table) {
             $table->id();
             $table->string('Razon_Social');
             $table->string('RFC');
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
 
             //Referencia al numero de dictamen 1 dictamen puede tener varios archivos 
-            $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo');
+            $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo_30');
         });
     }
 
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('datos_archivos');
+        Schema::dropIfExists('datos_servicio_aneo_30');
     }
 };

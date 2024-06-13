@@ -10,7 +10,7 @@ class ServicioAnexo extends Model
     use HasFactory;
 
     protected $connection = 'segunda_db';
-    protected $table = 'servicio_anexo';
+    protected $table = 'servicio_anexo_30';
 
     // Relación con el modelo User
     public function usuario()

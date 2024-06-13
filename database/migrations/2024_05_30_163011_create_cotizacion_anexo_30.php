@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('segunda_db')->create('archivos_anexo', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('cotizacion_anexo_30', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('rutadoc');
+            $table->string('comentarios');
+            $table->string('rutadoc_cotizacion');
             $table->unsignedBigInteger('servicio_anexo_id');
             $table->timestamps(); 
             //Referencia al numero de dictamen 1 dictamen puede tener varios archivos 
-            $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo');
+            $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo_30');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('archivos_anexo');
+        Schema::dropIfExists('archivos_anexo_30');
     }
 };

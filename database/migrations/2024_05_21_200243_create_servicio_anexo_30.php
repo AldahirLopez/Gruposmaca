@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('segunda_db')->create('servicio_anexo', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('servicio_anexo_30', function (Blueprint $table) {
             $table->id(); // ID autoincremental
             $table->string('nomenclatura')->unique()->nullable(); // Nomenclatura única, inicialmente null
-            $table->string('nombre_estacion'); // Nombre de la estación
-            $table->string('direccion_estacion'); // Dirección de la estación
-            $table->string('estado_estacion'); // Dirección de la estación
-            $table->boolean('estado')->nullable();; // Aprobacion de la estacion
-            $table->boolean('pending_apro_estacion')->nullable();// Aprobacion de la estacion
-            $table->boolean('pending_deletion')->nullable(); // Pendiente de Eliminacion
-            $table->dateTime('eliminated_at')->nullable();// Fecha de eliminacion
+            $table->boolean('pending_apro_servicio')->nullable();// Aprobacion de la estacion
+            $table->boolean('date_pending_deletion')->nullable(); // Pendiente de Eliminacion
+            $table->dateTime('date_eliminated_at')->nullable();// Fecha de eliminacion
             $table->unsignedBigInteger('usuario_id'); // Relación con usuario
             
             $table->timestamps(); // Timestamps
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('segunda_db')->dropIfExists('servicio_anexo');
+        Schema::connection('segunda_db')->dropIfExists('servicio_anexo_30');
     }
 };
