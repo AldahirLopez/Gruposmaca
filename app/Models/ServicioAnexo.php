@@ -17,4 +17,9 @@ class ServicioAnexo extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id', 'mysql');
     }
+
+    public function cotizacion()
+    {
+        return $this->hasOne(Cotizacion_Servicio_Anexo30::class, 'servicio_anexo_id');
+    }
 }

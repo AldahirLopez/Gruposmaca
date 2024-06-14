@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Cotizacion_Servicio_Anexo30;
 use App\Models\ServicioAnexo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -299,7 +300,7 @@ class ServicioAnexo30Controller extends Controller
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.anexo.cotizacion.index', compact('servicios'));
+        return view('armonia.anexo.aprobacion_servicio.index', compact('servicios'));
     }
 
 
@@ -310,6 +311,7 @@ class ServicioAnexo30Controller extends Controller
         app()->setLocale('es');
 
         // Obtener los datos del formulario
+        $id_servicio = $request->input('id_servicio');
         $nomenclatura = $request->input('nomenclatura');
         $nombre_estacion = $request->input('razon_social');
         $direccion_estacion = $request->input('direccion');
@@ -349,9 +351,49 @@ class ServicioAnexo30Controller extends Controller
         // Obtener la URL pública del PDF
         $pdfUrl = Storage::url($pdfPath);
 
+        // Verificar si ya existe una cotización con este id_servicio
+        $cotizacion = Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $id_servicio)->first();
+
+        if ($cotizacion) {
+            // Si ya existe, actualiza el registro existente
+            $cotizacion->rutadoc_cotizacion = $pdfUrl;
+            $cotizacion->save();
+        } else {
+            // Si no existe, crea un nuevo registro
+            $cotizacion = new Cotizacion_Servicio_Anexo30();
+            $cotizacion->rutadoc_cotizacion = $pdfUrl;
+            $cotizacion->servicio_anexo_id = $id_servicio;
+            // Asigna otros campos si es necesario
+            $cotizacion->save();
+        }
+
         // Devolver la URL del PDF como respuesta
         return response()->json(['pdf_url' => $pdfUrl]);
     }
+
+
+    public function mostrarCotizacion($servicio_id)
+    {
+        // Encuentra la cotización por ID
+        $cotizacion_servicio = Cotizacion_Servicio_Anexo30::findOrFail($servicio_id);
+
+        // Verifica si la ruta del PDF está presente
+        if (!$cotizacion_servicio->rutadoc_cotizacion) {
+            return redirect()->back()->withErrors('No se encontró la ruta del PDF para el servicio especificado.');
+        }
+
+        // Obtiene la ruta completa del archivo PDF
+        $pdf_path = storage_path('app/' . $cotizacion_servicio->rutadoc_cotizacion);
+
+        // Verifica si el archivo existe
+        if (!file_exists($pdf_path)) {
+            return redirect()->back()->withErrors('El archivo PDF no existe en la ruta especificada.');
+        }
+
+        // Retorna el archivo para mostrarlo en el navegador
+        return response()->file($pdf_path);
+    }
+
 
     public function apro($id)
     {
@@ -364,12 +406,10 @@ class ServicioAnexo30Controller extends Controller
             $servicio->save();
 
             // Redireccionar con un mensaje de éxito
-            return view('armonia.anexo.cotizacion.apro_anexo')->with('success', 'Servicio aprobado correctamente.');
+            return redirect()->route('apro.anexo')->with('success', 'Servicio aprobado correctamente.');
         } catch (ModelNotFoundException $e) {
             // Manejar la excepción si el servicio no se encuentra
-            return view('armonia.anexo.cotizacion.apro_anexo')>with('error', 'Servicio no encontrado.');
+            return redirect()->route('apro.anexo') > with('error', 'Servicio no encontrado.');
         }
     }
-
-
 }

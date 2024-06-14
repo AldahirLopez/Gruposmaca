@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // ID autoincremental
             $table->string('nomenclatura')->unique()->nullable(); // Nomenclatura única, inicialmente null
             $table->boolean('pending_apro_servicio')->nullable();// Aprobacion de la estacion
-            $table->boolean('date_pending_deletion')->nullable(); // Pendiente de Eliminacion
+            $table->boolean('pending_deletion_servicio')->nullable(); // Pendiente de Eliminacion
             $table->dateTime('date_eliminated_at')->nullable();// Fecha de eliminacion
             $table->unsignedBigInteger('usuario_id'); // Relación con usuario
             

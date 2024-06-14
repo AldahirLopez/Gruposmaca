@@ -97,6 +97,7 @@
                 <form class="row g-3" action="{{ route('pdf.cotizacion') }}" method="POST" id="cotizacionForm">
                     @csrf
                     <input type="hidden" name="nomenclatura" value="{{$servicio->nomenclatura}}">
+                    <input type="hidden" name="id_servicio" value="{{$servicio->id}}">
                     <div class="form-group col-md-6">
                         <label for="razon_social">Razón Social</label>
                         <input type="text" name="razon_social" class="form-control">

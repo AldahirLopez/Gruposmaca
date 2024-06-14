@@ -65,7 +65,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.destroy');
 
 
-
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);
 
     // Rutas para las notificaciones

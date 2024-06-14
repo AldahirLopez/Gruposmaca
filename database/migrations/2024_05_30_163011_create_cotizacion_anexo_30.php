@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::connection('segunda_db')->create('cotizacion_anexo_30', function (Blueprint $table) {
             $table->id();
-            $table->string('comentarios');
             $table->string('rutadoc_cotizacion');
             $table->unsignedBigInteger('servicio_anexo_id');
             $table->timestamps(); 
