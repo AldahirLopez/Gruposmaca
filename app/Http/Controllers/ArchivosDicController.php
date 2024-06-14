@@ -100,7 +100,7 @@ class ArchivosDicController extends Controller
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
         $folderPath = "armonia/operacionymantenimiento/{$dictamen->nombre}";
-        $subFolderPath = "{$folderPath}/{$request->input('nombre')}";
+        $subFolderPath = "{$folderPath}/archivos";
 
         // Verificar y crear la carpeta principal si no existe
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -116,8 +116,8 @@ class ArchivosDicController extends Controller
         $nombreArchivo = uniqid() . '_' . $archivoSubido->getClientOriginalName();
         $pdfPath = "{$subFolderPath}/{$nombreArchivo}";
 
-        // Guardar el archivo en el sistema de archivos
-        Storage::disk('public')->putFileAs($subFolderPath, $archivoSubido, $nombreArchivo);
+        // Guardar el archivo en el sistema de archivos usando put
+        Storage::disk('public')->put($pdfPath, file_get_contents($archivoSubido));
 
         // Obtener la URL pública del PDF
         $pdfUrl = Storage::url($pdfPath);
