@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('rutadoc_cotizacion');
             $table->unsignedBigInteger('servicio_anexo_id');
-            $table->timestamps(); 
-            //Referencia al numero de dictamen 1 dictamen puede tener varios archivos 
-            $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo_30');
+            $table->timestamps();
+
+            // Referencia con eliminación en cascada
+            $table->foreign('servicio_anexo_id')
+                ->references('id')->on('armonia.servicio_anexo_30')
+                ->onDelete('cascade'); // Esto permite eliminar en cascada
+
         });
     }
 
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('archivos_anexo_30');
+        Schema::dropIfExists('cotizacion_anexo_30');
     }
 };
