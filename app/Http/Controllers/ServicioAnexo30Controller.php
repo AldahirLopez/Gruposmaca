@@ -325,7 +325,7 @@ class ServicioAnexo30Controller extends Controller
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
-        $folderPath = "servicios_anexo30/{$nomenclatura}";
+        $folderPath = "armonia/servicios_anexo30/{$nomenclatura}";
         $subFolderPath = "{$folderPath}/cotizacion";
 
         // Verificar y crear la carpeta principal si no existe

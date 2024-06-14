@@ -76,7 +76,6 @@ class ArchivosDicController extends Controller
      */
     public function store(Request $request)
     {
-
         // Obtener el ID del dictamen de la URL
         $dictamenId = $request->dictamen_id;
 
@@ -98,8 +97,33 @@ class ArchivosDicController extends Controller
 
         // Guardar el archivo en el sistema de archivos en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
-        $rutaArchivo = $archivoSubido->store('public/armonia/operacionymantenimiento/servicios/' . $dictamen->nombre);
-        $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
+
+        // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
+        $folderPath = "armonia/operacionymantenimiento/{$dictamen->nombre}";
+        $subFolderPath = "{$folderPath}/{$request->input('nombre')}";
+
+        // Verificar y crear la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
+        }
+
+        // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($subFolderPath)) {
+            Storage::disk('public')->makeDirectory($subFolderPath);
+        }
+
+        // Generar un nombre único para el archivo PDF
+        $nombreArchivo = uniqid() . '_' . $archivoSubido->getClientOriginalName();
+        $pdfPath = "{$subFolderPath}/{$nombreArchivo}";
+
+        // Guardar el archivo en el sistema de archivos
+        Storage::disk('public')->putFileAs($subFolderPath, $archivoSubido, $nombreArchivo);
+
+        // Obtener la URL pública del PDF
+        $pdfUrl = Storage::url($pdfPath);
+
+        // Guardar la ruta del archivo en la base de datos
+        $archivo->rutadoc = $pdfUrl;
 
         // Asignar el dictamen_id obtenido de la URL
         $archivo->numdicop_id = $dictamenId;
@@ -110,6 +134,7 @@ class ArchivosDicController extends Controller
         // Redirigir al usuario a la página de lista de archivos con el dictamen_id en la URL
         return redirect()->route('archivos.index', ['dictamen_id' => $dictamenId])->with('success', 'Documento creado exitosamente');
     }
+
 
     /**
      * Display the specified resource.

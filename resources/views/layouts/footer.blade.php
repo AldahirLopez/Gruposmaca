@@ -27,32 +27,3 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
 <!-- Script para manejar el envío del formulario -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.enviarCotizacion').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const precio = document.getElementById(`precio${id}`).value;
-                const iva = document.getElementById(`iva${id}`).value;
-
-                if (precio && iva) {
-                    const nomenclatura = this.getAttribute('data-nomenclatura');
-                    const nombre_estacion = this.getAttribute('data-nombre-estacion');
-                    const direccion_estacion = this.getAttribute('data-direccion-estacion');
-                    const estado_estacion = this.getAttribute('data-estado-estacion');
-
-                    const url = `{{ route('pdf.cotizacion', ['nomenclatura' => ':nomenclatura', 'nombre_estacion' => ':nombre_estacion', 'direccion_estacion' => ':direccion_estacion', 'estado_estacion' => ':estado_estacion']) }}`
-                        .replace(':nomenclatura', nomenclatura)
-                        .replace(':nombre_estacion', nombre_estacion)
-                        .replace(':direccion_estacion', direccion_estacion)
-                        .replace(':estado_estacion', estado_estacion);
-                    const finalUrl = `${url}&precio=${precio}&iva=${iva}`;
-
-                    window.open(finalUrl, '_blank');
-                } else {
-                    alert('Por favor, complete todos los campos.');
-                }
-            });
-        });
-    });
-</script>

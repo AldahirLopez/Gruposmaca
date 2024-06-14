@@ -32,7 +32,7 @@
                                 <tr>
                                     <td scope="row">{{$archivo->nombre}}</td>
                                     <td scope="row">
-                                        <a href="#" class="btn btn-info" onclick="mostrarArchivo('{{ Storage::url($archivo->rutadoc) }}')">Mostrar
+                                        <a href="#" class="btn btn-info" onclick="mostrarArchivo('{{ $archivo->rutadoc }}')">Mostrar
                                             Archivo</a>
                                         <script>
                                             function mostrarArchivo(url) {
