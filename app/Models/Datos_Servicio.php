@@ -28,4 +28,10 @@ class Datos_Servicio extends Model
         'Fecha_Inspeccion',
         'servicio_anexo_id',
     ];
-}
+
+    // Define la relación inversa con el servicio
+    public function servicio()
+    {
+        return $this->belongsTo(ServicioAnexo::class, 'servicio_id', 'servicio_id');
+    }
+} 

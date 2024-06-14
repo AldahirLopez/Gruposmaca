@@ -95,7 +95,8 @@ class DatosServicioAnexoController extends Controller
     {
         // Validar los datos del formulario
         $data = $request->validate([
-            'servicio_anexo_id' => 'required',
+            'nomenclatura' => 'required',
+            'id_servicio' => 'required',
             'id_usuario' => 'required',
             'fecha_actual' => 'required',
             'razonsocial' => 'required|string|max:255',
@@ -112,6 +113,8 @@ class DatosServicioAnexoController extends Controller
             'nom_repre' => 'required|string|max:255',
             'fecha_inspeccion' => 'required',
         ]);
+
+
 
         // Cargar las plantillas de Word
         $templatePath = storage_path('app/templates/formatos_anexo30/ORDEN DE TRABAJO.docx');
@@ -134,7 +137,7 @@ class DatosServicioAnexoController extends Controller
         }
 
         // Definir la carpeta de destino dentro de 'public/storage'
-        $customFolderPath = "servicios_anexo30/{$data['servicio_anexo_id']}";
+        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
 
         // Verificar si la carpeta principal existe
         if (Storage::disk('public')->exists($customFolderPath)) {
@@ -179,7 +182,49 @@ class DatosServicioAnexoController extends Controller
             ]
         ];
 
-        
+        // Buscar el registro existente por servicio_anexo_id
+        $datosServicio = Datos_Servicio::where('servicio_anexo_id', $data['id_servicio'])->first();
+
+        if ($datosServicio) {
+
+            // Crear una instancia del modelo y asignar cada campo individualmente
+            $datosServicio->Razon_Social = $data['razonsocial'];
+            $datosServicio->RFC = $data['rfc'];
+            $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
+            $datosServicio->Telefono = $data['telefono'];
+            $datosServicio->Correo = $data['correo'];
+            $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
+            $datosServicio->Num_CRE = $data['cre'];
+            $datosServicio->Num_Constancia = $data['constancia'];
+            $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
+            $datosServicio->Contacto = $data['contacto'];
+            $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
+            $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
+            $datosServicio->servicio_anexo_id = $data['id_servicio'];
+
+        } else {
+
+            // Crear una instancia del modelo y asignar cada campo individualmente
+            $datosServicio = new Datos_Servicio();
+            $datosServicio->Razon_Social = $data['razonsocial'];
+            $datosServicio->RFC = $data['rfc'];
+            $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
+            $datosServicio->Telefono = $data['telefono'];
+            $datosServicio->Correo = $data['correo'];
+            $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
+            $datosServicio->Num_CRE = $data['cre'];
+            $datosServicio->Num_Constancia = $data['constancia'];
+            $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
+            $datosServicio->Contacto = $data['contacto'];
+            $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
+            $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
+            $datosServicio->servicio_anexo_id = $data['id_servicio'];
+
+        }
+        // Guardar el objeto en la base de datos
+        $datosServicio->save();
+
+
 
         // Retornar respuesta JSON con los archivos generados
         return response()->json(['generatedFiles' => $generatedFiles]);

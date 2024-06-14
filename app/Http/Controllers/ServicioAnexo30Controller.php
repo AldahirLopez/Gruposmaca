@@ -294,6 +294,7 @@ class ServicioAnexo30Controller extends Controller
         if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador, obtener todos los dictámenes
             $servicios = ServicioAnexo::all();
+
         } else {
             // Si no es administrador, obtener solo los dictámenes del usuario autenticado
             $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
@@ -313,9 +314,8 @@ class ServicioAnexo30Controller extends Controller
         // Obtener los datos del formulario
         $id_servicio = $request->input('id_servicio');
         $nomenclatura = $request->input('nomenclatura');
-        $nombre_estacion = $request->input('razon_social');
-        $direccion_estacion = $request->input('direccion');
-        $estado_estacion = $request->input('estado');
+        $nombre_estacion = strtoupper($request->input('razon_social'));
+        $direccion_estacion = strtoupper($request->input('direccion'));
         $costo = $request->input('costo');
 
         // Calcular el 16% de IVA 
@@ -342,7 +342,7 @@ class ServicioAnexo30Controller extends Controller
         $pdfPath = "{$subFolderPath}/{$nomenclatura}.pdf";
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
-        $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'estado_estacion', 'costo', 'iva', 'fecha_actual'))->render();
+        $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'costo', 'iva', 'fecha_actual'))->render();
         $pdf = PDF::loadHTML($html);
 
         // Guardar el PDF en el almacenamiento de Laravel
@@ -412,4 +412,6 @@ class ServicioAnexo30Controller extends Controller
             return redirect()->route('apro.anexo') > with('error', 'Servicio no encontrado.');
         }
     }
+
+
 }

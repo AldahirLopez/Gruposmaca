@@ -18,6 +18,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Numero de servicio</th>
+                                    <th scope="col">Razon Social</th>
+                                    <th scope="col">Direccion</th>
                                     <th scope="col">Cotizacion</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
@@ -25,7 +27,9 @@
                             <tbody>
                                 @foreach($servicios as $servicio)
                                     <tr>
-                                        <td scope="row">{{$servicio->nomenclatura}}</td>
+                                        <td scope="row">{{ $servicio->nomenclatura }}</td>
+                                        <td scope="row">{{ $servicio->datos->Razon_Social }}</td>
+                                        <td scope="row">{{ $servicio->datos->Domicilio_Estacion_Servicio }}</td>
                                         <td scope="row">
                                             @if(!$servicio->pending_apro_servicio)
 
@@ -100,15 +104,11 @@
                     <input type="hidden" name="id_servicio" value="{{$servicio->id}}">
                     <div class="form-group col-md-6">
                         <label for="razon_social">Razón Social</label>
-                        <input type="text" name="razon_social" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="estado">Estado</label>
-                        <input type="text" name="estado" class="form-control">
+                        <input type="text" name="razon_social" class="form-control" value="{{ $servicio->datos->Razon_Social }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="direccion">Dirección</label>
-                        <input type="text" name="direccion" class="form-control">
+                        <input type="text" name="direccion" class="form-control"  value="{{ $servicio->datos->Domicilio_Estacion_Servicio }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="costo">Costo</label>

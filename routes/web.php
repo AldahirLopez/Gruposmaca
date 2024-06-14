@@ -83,5 +83,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
 
     Route::get('servicio_anexo/apro/{id}', [ServicioAnexo30Controller::class, 'apro'])->name('servicio_anexo.apro');
+    
 
 });

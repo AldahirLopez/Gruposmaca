@@ -22,4 +22,10 @@ class ServicioAnexo extends Model
     {
         return $this->hasOne(Cotizacion_Servicio_Anexo30::class, 'servicio_anexo_id');
     }
+
+    public function datos()
+    {
+        return $this->hasOne(Datos_Servicio::class, 'servicio_anexo_id');
+    }
+
 }

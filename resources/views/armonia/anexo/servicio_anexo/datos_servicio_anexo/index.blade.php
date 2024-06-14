@@ -28,8 +28,10 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <input type="hidden" name="servicio_anexo_id"
+                                <input type="hidden" name="nomenclatura"
                                     value="{{ strtoupper($estacion->nomenclatura) }}">
+                                    <input type="hidden" name="id_servicio"
+                                    value="{{ strtoupper($estacion->id) }}">
                                 <input type="hidden" name="id_usuario"
                                     value="{{ strtoupper($estacion->usuario->name) }}">
                                 <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
@@ -40,7 +42,7 @@
                                     <div class="form-group">
                                         <label for="razonsocial">Razon Social</label>
                                         <input type="text" name="razonsocial" class="form-control"
-                                            value="{{ $archivoAnexo ? $archivoAnexo->razonsocial : '' }}">
+                                            value="{{ $archivoAnexo ? $archivoAnexo->Razon_Social : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="rfc">RFC</label>
