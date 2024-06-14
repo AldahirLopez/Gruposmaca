@@ -93,10 +93,12 @@ class ArchivosDicController extends Controller
 
         // Guardar el archivo en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
+        // Guardar el archivo en la carpeta "armonia"
+        $nombre = $request->file('nombre');
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
         $folderPath = "armonia/operacionymantenimiento/{$dictamen->nombre}";
-        $subFolderPath = "{$folderPath}/archivos";
+        $subFolderPath = "{$folderPath}/$nombre";
 
         // Verificar y crear la carpeta principal si no existe
         if (!Storage::disk('public')->exists($folderPath)) {
