@@ -91,11 +91,7 @@ class ArchivosDicController extends Controller
             'archivo' => 'required|file', // Validar que se haya subido un archivo
         ]);
 
-        // Crear una nueva instancia del modelo Archivos
-        $archivo = new ArchivosOp();
-        $archivo->nombre = $request->input('nombre'); // Asignar el nombre
-
-        // Guardar el archivo en el sistema de archivos en la carpeta "armonia"
+        // Guardar el archivo en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
@@ -112,28 +108,26 @@ class ArchivosDicController extends Controller
             Storage::disk('public')->makeDirectory($subFolderPath);
         }
 
-        // Generar un nombre único para el archivo PDF
-        $nombreArchivo = uniqid() . '_' . $archivoSubido->getClientOriginalName();
-        $pdfPath = "{$subFolderPath}/{$nombreArchivo}";
+        // Definir la ruta completa del archivo
+        $pdfPath = "{$subFolderPath}/{$archivoSubido->getClientOriginalName()}";
 
         // Guardar el archivo en el sistema de archivos usando put
         Storage::disk('public')->put($pdfPath, file_get_contents($archivoSubido));
 
-        // Obtener la URL pública del PDF
+        // Obtener la URL pública del archivo
         $pdfUrl = Storage::url($pdfPath);
 
-        // Guardar la ruta del archivo en la base de datos
-        $archivo->rutadoc = $pdfUrl;
-
-        // Asignar el dictamen_id obtenido de la URL
-        $archivo->numdicop_id = $dictamenId;
-
-        // Guardar la nueva entrada en la base de datos
-        $archivo->save();
+        // Crear una nueva instancia del modelo Archivos
+        $archivo = new ArchivosOp();
+        $archivo->nombre = $request->input('nombre'); // Asignar el nombre del archivo
+        $archivo->rutadoc = $pdfUrl; // Guardar la URL del archivo en la base de datos
+        $archivo->numdicop_id = $dictamenId; // Asignar el dictamen_id obtenido de la URL
+        $archivo->save(); // Guardar la nueva entrada en la base de datos
 
         // Redirigir al usuario a la página de lista de archivos con el dictamen_id en la URL
         return redirect()->route('archivos.index', ['dictamen_id' => $dictamenId])->with('success', 'Documento creado exitosamente');
     }
+
 
 
     /**
