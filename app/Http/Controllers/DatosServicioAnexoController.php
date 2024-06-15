@@ -17,7 +17,7 @@ class DatosServicioAnexoController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(Request $request)
+    public function expediente_anexo30(Request $request)
     {
         // Lista de estados de México
         $estados = [
@@ -77,7 +77,16 @@ class DatosServicioAnexoController extends Controller
             }
         }
 
-        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.index', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+    }
+
+    public function listas_anexo30(Request $request)
+    {
+        // Lista de estados de México
+        $servicio_anexo_id = $request->servicio_anexo_id;
+        $estacion = ServicioAnexo::find($servicio_anexo_id);
+
+        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.listas', compact('servicio_anexo_id', 'estacion'));
     }
 
 
@@ -121,12 +130,14 @@ class DatosServicioAnexoController extends Controller
         $templatePath1 = storage_path('app/templates/formatos_anexo30/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
         $templatePath2 = storage_path('app/templates/formatos_anexo30/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
         $templatePath3 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
+        $templatePath4 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION.docx');
 
         // Crear los procesadores de plantillas
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
         $templateProcessor1 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath1);
         $templateProcessor2 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath2);
         $templateProcessor3 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath3);
+        $templateProcessor4 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath4);
 
         // Reemplazar los marcadores de posición con los datos del formulario
         foreach ($data as $key => $value) {
@@ -134,6 +145,7 @@ class DatosServicioAnexoController extends Controller
             $templateProcessor1->setValue($key, $value);
             $templateProcessor2->setValue($key, $value);
             $templateProcessor3->setValue($key, $value);
+            $templateProcessor4->setValue($key, $value);
         }
 
         // Definir la carpeta de destino dentro de 'public/storage'
@@ -155,12 +167,14 @@ class DatosServicioAnexoController extends Controller
         $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
         $fileName2 = "FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD_RELLENADO.docx";
         $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS_RELLENADO.docx";
+        $fileName4 = "PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION_RELLENADO.docx";
 
         // Guardar los archivos generados
         $templateProcessor->saveAs(storage_path("app/public/$subFolderPath/$fileName"));
         $templateProcessor1->saveAs(storage_path("app/public/$subFolderPath/$fileName1"));
         $templateProcessor2->saveAs(storage_path("app/public/$subFolderPath/$fileName2"));
         $templateProcessor3->saveAs(storage_path("app/public/$subFolderPath/$fileName3"));
+        $templateProcessor4->saveAs(storage_path("app/public/$subFolderPath/$fileName4"));
 
         // Crear la lista de archivos generados con sus URLs
         $generatedFiles = [
@@ -179,6 +193,10 @@ class DatosServicioAnexoController extends Controller
             [
                 'name' => $fileName3,
                 'url' => Storage::url("$subFolderPath/$fileName3"),
+            ],
+            [
+                'name' => $fileName4,
+                'url' => Storage::url("$subFolderPath/$fileName4"),
             ]
         ];
 

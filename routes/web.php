@@ -34,8 +34,7 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
-    Route::post('/pdf_cotizacion', [ServicioAnexo30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
-    Route::post('/pdf_ot', [ServicioAnexo30Controller::class, 'generarpdfot'])->name('pdf.ot');
+
     Route::view('/', 'home')->name('home');
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
@@ -51,7 +50,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('historialformatos', FormatosHistorialController::class);
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
-    Route::resource('archivos_anexo', DatosServicioAnexoController::class);
+    //Generar PDF cotizacion anexo 30 
+    Route::post('/pdf_cotizacion', [ServicioAnexo30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+    Route::post('/pdf_ot', [ServicioAnexo30Controller::class, 'generarpdfot'])->name('pdf.ot');
+
+    //Listas de Inspeccion y Expedientes Anexo 30
+    //Route::resource('archivos_anexo', DatosServicioAnexoController::class);
+    Route::get('/expediente_anexo30', [DatosServicioAnexoController::class, 'expediente_anexo30'])->name('expediente.anexo30');
+    Route::get('/listas_anexo30', [DatosServicioAnexoController::class, 'listas_anexo30'])->name('listas.anexo30');
     Route::post('/generate-word', [DatosServicioAnexoController::class, 'generateWord'])->name('generate.word');
     Route::get('/obtener-servicios', [ServicioAnexo30Controller::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
