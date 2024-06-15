@@ -1,5 +1,8 @@
+# Ignorar todos los archivos y carpetas en el directorio raíz
 *
-!public/
+
 # Permitir la carpeta 'templates' dentro de 'app'
-!templates/
+!/app/templates/
+
+# Permitir el archivo .gitignore en el directorio raíz
 !.gitignore
