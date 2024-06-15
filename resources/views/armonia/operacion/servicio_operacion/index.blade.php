@@ -13,7 +13,7 @@
                         <div style="margin-top: 15px;">
                             <a href="{{ route('operacion.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
                             @can('crear-operacion')
-                                <a class="btn btn-success" href="{{ route('servicio_operacion.create') }}">Nuevo</a>
+                            <a class="btn btn-success" href="{{ route('servicio_operacion.create') }}">Nuevo</a>
                             @endcan
                         </div>
                         <table class="table table-striped">
@@ -24,39 +24,41 @@
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($dictamenes as $dictamen)
-                                    <tr>
-                                        <td scope="row">{{$dictamen->nombre}}</td>
-                                        <td scope="row">
-                                            @if($dictamen->pending_deletion)
-                                                <button class="btn btn-primary" disabled>Ver Archivos</button>
-                                            @else
-                                                <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}"
-                                                    class="btn btn-info">Listar Archivos</a>
-                                            @endif
-                                        </td>
-                                        <td scope="row">
-                                            @can('editar-operacion')
-                                                @if($dictamen->pending_deletion)
-                                                    <button class="btn btn-primary" disabled>Editar</button>
-                                                @else 
-                                                    <a class="btn btn-primary"
-                                                        href="{{ route('servicio_operacion.edit', $dictamen->id) }}">Editar</a>
-                                                @endif
-                                            @endcan
-                                            @can('borrar-operacion')
-                                                @if($dictamen->pending_deletion)
-                                                    <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
-                                                @else
-                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $dictamen->id], 'style' => 'display:inline']) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
-                                                    {!! Form::close() !!}
-                                                @endif
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            <tbody style="text-align: center;">
+                                @forelse($dictamenes as $dictamen)
+                                <tr>
+                                    <td scope="row">{{$dictamen->nombre}}</td>
+                                    <td scope="row">
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-primary" disabled>Ver Archivos</button>
+                                        @else
+                                        <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}" class="btn btn-info">Listar Archivos</a>
+                                        @endif
+                                    </td>
+                                    <td scope="row">
+                                        @can('editar-operacion')
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-primary" disabled>Editar</button>
+                                        @else
+                                        <a class="btn btn-primary" href="{{ route('servicio_operacion.edit', $dictamen->id) }}">Editar</a>
+                                        @endif
+                                        @endcan
+                                        @can('borrar-operacion')
+                                        @if($dictamen->pending_deletion)
+                                        <button class="btn btn-danger" disabled>(pendiente de aprobación)</button>
+                                        @else
+                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $dictamen->id], 'style' => 'display:inline']) !!}
+                                        {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                        {!! Form::close() !!}
+                                        @endif
+                                        @endcan
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="7">No se encontraron servicios para mostrar.</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
