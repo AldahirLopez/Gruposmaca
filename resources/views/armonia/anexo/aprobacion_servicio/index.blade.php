@@ -41,7 +41,7 @@
                                         <button class="btn btn-primary" disabled><i class="bi bi-file-pdf-fill"></i></button>
 
                                         @else
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" data-id="{{ $servicio->nomenclatura }}">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" data-id="{{ $servicio->nomenclatura }}" data-razon-social="{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}" data-direccion="{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}">
                                             <i class="bi bi-file-pdf-fill"></i>
                                         </button>
                                         @endif
@@ -123,46 +123,43 @@
     document.addEventListener('DOMContentLoaded', function() {
         var modal = document.getElementById('modal');
 
-        modal.addEventListener('shown.bs.modal', function(event) {
+        modal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
-            var serviceId = button.getAttribute('data-id');
+            var servicioId = button.getAttribute('data-id');
+            var razonSocial = button.getAttribute('data-razon-social') || 'Sin datos';
+            var direccion = button.getAttribute('data-direccion') || 'Sin datos';
+
+            // Llenar los campos del formulario con los datos del servicio seleccionado
+            document.querySelector('input[name="razon_social"]').value = razonSocial;
+            document.querySelector('input[name="direccion"]').value = direccion;
         });
 
-        var formularioCotizacion = document.querySelector('#modal form');
+        var formularioCotizacion = document.querySelector('#cotizacionForm');
 
         formularioCotizacion.addEventListener('submit', function(event) {
             event.preventDefault();
-
             var formData = new FormData(formularioCotizacion);
 
             fetch('{{ route("pdf.cotizacion") }}', {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     body: formData
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('La solicitud no pudo completarse correctamente.');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.pdf_url) {
-                        var pdfUrl = data.pdf_url.replace(/\\/g, '');
-                        window.open(pdfUrl, '_blank');
+                        window.open(data.pdf_url, '_blank');
                     } else {
                         console.error('URL de PDF no encontrada en la respuesta.');
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>
+
 
 
 @endsection

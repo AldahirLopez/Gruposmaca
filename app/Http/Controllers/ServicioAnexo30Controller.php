@@ -363,6 +363,7 @@ class ServicioAnexo30Controller extends Controller
             $cotizacion = new Cotizacion_Servicio_Anexo30();
             $cotizacion->rutadoc_cotizacion = $pdfUrl;
             $cotizacion->servicio_anexo_id = $id_servicio;
+            $cotizacion->estado_cotizacion = true;
             // Asigna otros campos si es necesario
             $cotizacion->save();
         }

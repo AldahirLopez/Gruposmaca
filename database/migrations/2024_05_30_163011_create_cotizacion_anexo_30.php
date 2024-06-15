@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('rutadoc_cotizacion');
             $table->unsignedBigInteger('servicio_anexo_id');
+            $table->boolean('estado_cotizacion')->nullable();;
             $table->timestamps();
 
             // Referencia con eliminación en cascada

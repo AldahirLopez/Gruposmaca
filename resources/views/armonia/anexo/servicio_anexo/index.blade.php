@@ -62,7 +62,7 @@
                                         <tr>
                                             <td scope="row">{{ $servicio->nomenclatura }}</td>
                                             <td scope="row">
-                                                @if(!$servicio->pending_apro_servicio)
+                                                @if(!optional($servicio->cotizacion)->estado_cotizacion)
                                                     <center>
                                                         <button class="btn btn-primary" disabled><i
                                                                 class="bi bi-file-earmark-excel-fill"></i></button>
