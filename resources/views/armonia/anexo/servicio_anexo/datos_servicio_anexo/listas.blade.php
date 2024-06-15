@@ -63,7 +63,7 @@
                                     <!-- Aquí se generarán dinámicamente los formularios para los tanques -->
 
                                 </div>
-                                <div id="tanques_container"></div>
+                                <div id="tanques_container" class="row mb-3"></div>
                             </div>
                         </form>
                     </div>
@@ -98,29 +98,29 @@
                 for (let i = 1; i <= numeroTanques; i++) {
                     // Crear un div para cada tanque
                     const tanqueDiv = document.createElement('div');
-                    tanqueDiv.classList.add('form-group'); // Clase de fila para Bootstrap
+                    tanqueDiv.classList.add('form-group', 'd-flex'); // Clase de fila para Bootstrap
 
                     // Crear el campo de texto para el nombre del tanque
                     const divNombre = document.createElement('div');
-                    divNombre.classList.add('col-sm-2'); // Columna de 6
+                    divNombre.classList.add('mb-3'); // Columna de 6 y margen inferior
+                    divNombre.style.margin = '0rem 1rem 1rem 0rem';
                     const labelNombre = document.createElement('label');
-                    labelNombre.textContent = `Tanque ${i} Nombre:`;
-                    labelNombre.classList.add('sr-only'); // Ocultar visualmente la etiqueta (accesibilidad)
+                    labelNombre.textContent = `Tanque ${i} Nombre:`;    
                     const inputNombre = document.createElement('input');
                     inputNombre.type = 'text';
                     inputNombre.name = `tanque_nombre_${i}`;
-                    inputNombre.classList.add('form-control'); // Clase de control de formulario y margen inferior
+                    inputNombre.classList.add('form-control'); // Clase de control de formulario
 
                     // Crear el campo de texto para la capacidad del tanque
                     const divCapacidad = document.createElement('div');
-                    divCapacidad.classList.add('col-md-6'); // Columna de 6
+                    divCapacidad.classList.add('mb-3'); // Columna de 6 y margen inferior
+                    divCapacidad.style.margin = '0rem 1rem 1rem 0rem'; // Aplicar el margen especificado
                     const labelCapacidad = document.createElement('label');
                     labelCapacidad.textContent = `Tanque ${i} Capacidad (en litros):`;
-                    labelCapacidad.classList.add('sr-only'); // Ocultar visualmente la etiqueta (accesibilidad)
                     const inputCapacidad = document.createElement('input');
                     inputCapacidad.type = 'number';
                     inputCapacidad.name = `tanque_capacidad_${i}`;
-                    inputCapacidad.classList.add('form-control'); // Clase de control de formulario y margen inferior
+                    inputCapacidad.classList.add('form-control'); // Clase de control de formulario
 
                     // Agregar los elementos al div de nombre y capacidad
                     divNombre.appendChild(labelNombre);
