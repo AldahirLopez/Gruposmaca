@@ -10,6 +10,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 class DatosServicioAnexoController extends Controller
 {
@@ -55,29 +56,76 @@ class DatosServicioAnexoController extends Controller
             'Zacatecas'
         ];
 
-        $servicio_anexo_id = $request->servicio_anexo_id;
-        $estacion = ServicioAnexo::find($servicio_anexo_id);
-        $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+        // Verificar si el usuario está autenticado
+        $usuario = Auth::user();
+        if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
 
-        // Ruta de la carpeta donde se guardan los archivos generados
-        $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
-        $existingFiles = [];
+            //Si es administrador o auditor puede ver todo y editar todo 
+            $servicio_anexo_id = $request->servicio_anexo_id;
+            $estacion = ServicioAnexo::find($servicio_anexo_id);
+            $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
-        // Verificar si la carpeta existe
-        if (Storage::disk('public')->exists($folderPath)) {
-            // Obtener los archivos existentes en la carpeta
-            $files = Storage::disk('public')->files($folderPath);
+            // Ruta de la carpeta donde se guardan los archivos generados
+            $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+            $existingFiles = [];
 
-            // Construir la lista de archivos con su URL
-            foreach ($files as $file) {
-                $existingFiles[] = [
-                    'name' => basename($file),
-                    'url' => Storage::url($file)
-                ];
+            // Verificar si la carpeta existe
+            if (Storage::disk('public')->exists($folderPath)) {
+                // Obtener los archivos existentes en la carpeta
+                $files = Storage::disk('public')->files($folderPath);
+
+                // Construir la lista de archivos con su URL
+                foreach ($files as $file) {
+                    $existingFiles[] = [
+                        'name' => basename($file),
+                        'url' => Storage::url($file)
+                    ];
+                }
             }
+
+            return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+
+        } else {
+
+            //Si es administrador o auditor puede ver todo y editar todo 
+            $servicio_anexo_id = $request->servicio_anexo_id;
+            $estacion = ServicioAnexo::find($servicio_anexo_id);
+            $validar_servicio = ($estacion->usuario_id == $usuario->id);
+            //$validar_usuario =  User::where('usuario_id',)
+
+            if ($validar_servicio) {
+                $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+                //Si es administrador o auditor puede ver todo y editar todo 
+                $servicio_anexo_id = $request->servicio_anexo_id;
+                $estacion = ServicioAnexo::find($servicio_anexo_id);
+                $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+
+                // Ruta de la carpeta donde se guardan los archivos generados
+                $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+                $existingFiles = [];
+
+                // Verificar si la carpeta existe
+                if (Storage::disk('public')->exists($folderPath)) {
+                    // Obtener los archivos existentes en la carpeta
+                    $files = Storage::disk('public')->files($folderPath);
+
+                    // Construir la lista de archivos con su URL
+                    foreach ($files as $file) {
+                        $existingFiles[] = [
+                            'name' => basename($file),
+                            'url' => Storage::url($file)
+                        ];
+                    }
+                }
+                return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+            } else {
+
+                return redirect()->route('servicio_anexo.index')->with('error', 'Servicio no valido');
+            }
+
         }
 
-        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+
     }
 
     public function listas_anexo30(Request $request)

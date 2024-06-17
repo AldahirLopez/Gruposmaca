@@ -41,7 +41,7 @@
                                         <button class="btn btn-primary" disabled><i class="bi bi-file-pdf-fill"></i></button>
 
                                         @else
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" data-id="{{ $servicio->nomenclatura }}" data-razon-social="{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}" data-direccion="{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" data-servicio_id="{{ $servicio->id }}" data-id="{{ $servicio->nomenclatura }}" data-razon-social="{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}" data-direccion="{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}">
                                             <i class="bi bi-file-pdf-fill"></i>
                                         </button>
                                         @endif
@@ -97,15 +97,15 @@
             <div class="modal-body">
                 <form class="row g-3" action="{{ route('pdf.cotizacion') }}" method="POST" id="cotizacionForm">
                     @csrf
-                    <input type="hidden" name="nomenclatura" value="{{$servicio->nomenclatura ?? 'Sin datos'}}">
-                    <input type="hidden" name="id_servicio" value="{{$servicio->id ?? 'Sin datos'}}">
+                    <input type="hidden" name="nomenclatura">
+                    <input type="hidden" name="id_servicio">
                     <div class="form-group col-md-6">
                         <label for="razon_social">Razón Social</label>
-                        <input type="text" name="razon_social" class="form-control" value="{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}">
+                        <input type="text" name="razon_social" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="direccion">Dirección</label>
-                        <input type="text" name="direccion" class="form-control" value="{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}">
+                        <input type="text" name="direccion" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="costo">Costo</label>
@@ -125,6 +125,7 @@
 
         modal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
+            var servicioIdestacion = button.getAttribute('data-servicio_id');
             var servicioId = button.getAttribute('data-id');
             var razonSocial = button.getAttribute('data-razon-social') || 'Sin datos';
             var direccion = button.getAttribute('data-direccion') || 'Sin datos';
@@ -132,6 +133,8 @@
             // Llenar los campos del formulario con los datos del servicio seleccionado
             document.querySelector('input[name="razon_social"]').value = razonSocial;
             document.querySelector('input[name="direccion"]').value = direccion;
+            document.querySelector('input[name="id_servicio"]').value = servicioIdestacion;
+            document.querySelector('input[name="nomenclatura"]').value = servicioId;
         });
 
         var formularioCotizacion = document.querySelector('#cotizacionForm');

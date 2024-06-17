@@ -101,7 +101,7 @@ class ServicioAnexo30Controller extends Controller
             // Verificar si el usuario es administrador
             if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
                 // Si es administrador, obtener todos los servicios
-                $servicios = ServicioAnexo::all();
+                $servicios = ServicioAnexo::all(); 
             } else {
                 // Si no es administrador, obtener solo los servicios del usuario autenticado
                 $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
@@ -325,7 +325,7 @@ class ServicioAnexo30Controller extends Controller
         $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
-        $folderPath = "armonia/servicios_anexo30/{$nomenclatura}";
+        $folderPath = "servicios_anexo30/{$nomenclatura}";
         $subFolderPath = "{$folderPath}/cotizacion";
 
         // Verificar y crear la carpeta principal si no existe

@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/armonia/formatos/anexo30/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');
     Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.destroy');
 
-
+ 
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);
 
     // Rutas para las notificaciones

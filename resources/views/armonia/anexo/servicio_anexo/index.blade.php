@@ -173,7 +173,7 @@
             }
         };
         xhr.send();
-    });
+    }); 
 </script>
 
 @endsection

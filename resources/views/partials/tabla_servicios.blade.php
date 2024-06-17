@@ -3,46 +3,81 @@
     <thead style="text-align: center;">
         <tr>
             <th scope="col">Numero de servicio</th>
-            <th scope="col">Estacion de servicio</th>
-            <th scope="col">Direccion</th>
-            <th scope="col">Estado</th>
             <th scope="col">Cotizacion</th>
-            <th scope="col">Archivos</th>
+            <th scope="col">Expediente</th>
+            <th scope="col">Listas de Inspeccion</th>
             <th scope="col">Acciones</th>
         </tr>
     </thead>
     <tbody style="text-align: center;">
-        @foreach($servicios as $servicio)
+        @forelse($servicios as $servicio)
             <tr>
                 <td scope="row">{{ $servicio->nomenclatura }}</td>
-                <td scope="row">{{ $servicio->nombre_estacion }}</td>
-                <td scope="row">{{ $servicio->direccion_estacion }}</td>
-                <td scope="row">{{ $servicio->estado_estacion }}</td>
                 <td scope="row">
-                    @if(!$servicio->estado)
+                    @if(!optional($servicio->cotizacion)->estado_cotizacion)
+                        <center>
+                            <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
+                        </center>
+                    @elseif($servicio->pending_deletion_servicio)
                         <center>
                             <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
                         </center>
                     @else
-                        <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}" class="btn btn-primary"><i
-                                class="bi bi-file-earmark-check-fill"></i></a>
+                        <a href="{{ $servicio->cotizacion ? $servicio->cotizacion->ruta_doc_url : '#' }}" target="_blank"
+                            class="btn btn-primary btn-generar-pdf">
+                            <i class="bi bi-file-earmark-check-fill"></i>
+                        </a>
                     @endif
                 </td>
                 <td scope="row">
-                    <a href="{{ route('archivos_anexo.index', ['servicio_anexo_id' => $servicio->id]) }}"
-                        class="btn btn-primary"><i class="bi bi-folder-fill"></i></a>
+                    @if(!$servicio->pending_apro_servicio)
+                        <center>
+                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
+                        </center>
+                    @elseif($servicio->pending_deletion_servicio)
+                        <center>
+                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
+                        </center>
+                    @else
+                        <a href="{{ route('expediente.anexo30', ['servicio_anexo_id' => $servicio->id]) }}"
+                            class="btn btn-primary">
+                            <i class="bi bi-folder-fill"></i>
+                        </a>
+                    @endif
                 </td>
                 <td scope="row">
-                    @can('editar-servicio')
-                        @if(!$servicio->estado)
-                            <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
-                        @else
-                            <a class="btn btn-primary" href="{{ route('servicio_anexo.edit', $servicio->id) }}"><i
-                                    class="bi bi-pencil-square"></i></a>
-                        @endif
-                    @endcan
+                    @if(!$servicio->pending_apro_servicio)
+                        <center>
+                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
+                        </center>
+                    @elseif($servicio->pending_deletion_servicio)
+                        <center>
+                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
+                        </center>
+                    @else
+                        <a href="{{ route('listas.anexo30', ['servicio_anexo_id' => $servicio->id]) }}" class="btn btn-primary">
+                            <i class="bi bi-folder-fill"></i>
+                        </a>
+                    @endif
+                </td>
+                <td scope="row">
+                    @if(!$servicio->pending_apro_servicio)
+
+                        <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
+
+                    @elseif($servicio->pending_deletion_servicio)
+
+                        <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
+
+                    @else
+                        <!-- Modifica tu botón para usar la clase 'btn-generar-pdf' -->
+                        <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}"
+                            class="btn btn-primary btn-generar-pdf">
+                            <i class="bi bi-file-earmark-check-fill"></i>
+                        </a>
+                    @endif
                     @can('borrar-servicio')
-                        @if($servicio->pending_deletion)
+                        @if($servicio->pending_deletion_servicio)
                             <button class="btn btn-danger" disabled>(pendiente)</button>
                         @else
                             {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
@@ -52,6 +87,10 @@
                     @endcan
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="7">No se encontraron servicios para mostrar.</td>
+            </tr>
+        @endforelse
     </tbody>
 </table>
