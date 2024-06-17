@@ -32,7 +32,7 @@
 
                                 <div class="row mb-3">
                                     <div class="form-group">
-                                        <label for="nombre">Numero de dictamen</label>
+                                        <label for="nombre">Nombre</label>
                                         <input type="text" name="nombre" class="form-control">
                                     </div>
                                 </div>

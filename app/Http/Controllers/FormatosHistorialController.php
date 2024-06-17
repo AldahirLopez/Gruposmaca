@@ -30,16 +30,35 @@ class FormatosHistorialController extends Controller
 
     public function destroy($id)
     {
-        // Intentar encontrar el formato vigente
+        // Intentar encontrar el formato histórico por su ID
         $formato = HistorialFormato::findOrFail($id);
 
-        // Eliminar el archivo del sistema de archivos
-        Storage::delete('public/armonia/operacionymantenimiento/historialformatos/' . $formato->rutadoc);
+        // Obtener la ruta del archivo almacenada en el campo rutadoc
+        $rutaDoc = $formato->rutadoc;
+
+        // Verificar si el archivo existe en el sistema de almacenamiento
+        if (Storage::disk('public')->exists($rutaDoc)) {
+            // Eliminar el archivo del sistema de almacenamiento
+            Storage::disk('public')->delete($rutaDoc);
+        } else {
+            // Registrar un mensaje de advertencia si no se encuentra el archivo
+            \Log::warning('Archivo no encontrado para eliminar: ' . $rutaDoc);
+        }
+
+        // Obtener el directorio donde se guarda el archivo
+        $carpeta = pathinfo($rutaDoc, PATHINFO_DIRNAME);
+
+        // Verificar si la carpeta está vacía
+        if (Storage::disk('public')->allFiles($carpeta) === []) {
+            // Si la carpeta está vacía, eliminarla
+            Storage::disk('public')->deleteDirectory($carpeta);
+        }
 
         // Eliminar el registro de la base de datos
         $formato->delete();
 
-        return redirect()->route('armonia.historialformatos.anexo30.index')->with('success', 'Formato Historico eliminado correctamente');
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('historialformatos.anexo30.index')->with('success', 'Formato Histórico eliminado correctamente');
     }
 
     public function filtrarArchivos(Request $request)

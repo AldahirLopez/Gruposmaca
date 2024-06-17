@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
     Route::resource('historialformatos', FormatosHistorialController::class);
+    Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'index'])->name('historialformatos.anexo30.index');
+
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
     //Generar PDF cotizacion anexo 30 
@@ -65,10 +67,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
     Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
-    Route::get('/armonia/formatos/anexo30/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.edit');
+    Route::get('/armonia/formatos/anexo30/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.anexo.edit');
 
     Route::post('/armonia/formatos/anexo30/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');
-    Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.destroy');
+    Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.anexo.destroy');
 
  
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);

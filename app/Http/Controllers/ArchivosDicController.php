@@ -94,10 +94,10 @@ class ArchivosDicController extends Controller
         // Guardar el archivo en la carpeta "armonia"
         $archivoSubido = $request->file('archivo');
         // Guardar el archivo en la carpeta "armonia"
-        $nombre = $request->file('nombre');
+        $nombre = $request->nombre;
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
-        $folderPath = "armonia/operacionymantenimiento/{$dictamen->nombre}";
+        $folderPath = "NOM-005/{$dictamen->nombre}";
         $subFolderPath = "{$folderPath}/$nombre";
 
         // Verificar y crear la carpeta principal si no existe
@@ -166,33 +166,58 @@ class ArchivosDicController extends Controller
             'archivo' => 'file', // El archivo es opcional en la actualización
         ]);
 
-        // Buscar el plano por su ID
+        // Buscar el archivo por su ID
         $archivo = ArchivosOp::findOrFail($id);
 
-        // Actualizar los campos
+        // Actualizar los campos básicos
         $archivo->nombre = $request->nombre;
 
         // Verificar si se proporcionó un nuevo archivo
         if ($request->hasFile('archivo')) {
-            // Obtener la ruta del archivo anterior
-            $rutaArchivoAnterior = storage_path('app/public/' . $archivo->rutadoc);
+            // Obtener la ruta del archivo anterior desde la base de datos
+            $rutaDocAnterior = str_replace('/storage/', '', $archivo->rutadoc);
 
             // Verificar si el archivo anterior existe y eliminarlo
-            if (file_exists($rutaArchivoAnterior)) {
-                unlink($rutaArchivoAnterior); // Eliminar el archivo anterior del sistema de archivos
+            if (Storage::disk('public')->exists($rutaDocAnterior)) {
+                Storage::disk('public')->delete($rutaDocAnterior);
             }
 
             // Guardar el nuevo archivo en el sistema de archivos
             $archivoSubido = $request->file('archivo');
-            $rutaArchivo = $archivoSubido->store('public/archivos');
-            $archivo->rutadoc = str_replace('public/', '', $rutaArchivo); // Guardar la ruta del archivo en la base de datos
+
+            // Definir la carpeta principal y la subcarpeta donde se guardará el nuevo archivo
+            $folderPath = "NOM-005/{$archivo->numdicop_id}";
+            $subFolderPath = "{$folderPath}/{$request->nombre}";
+
+            // Verificar y crear la carpeta principal si no existe
+            if (!Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->makeDirectory($folderPath);
+            }
+
+            // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                Storage::disk('public')->makeDirectory($subFolderPath);
+            }
+
+            // Definir la ruta completa del nuevo archivo
+            $pdfPath = "{$subFolderPath}/{$archivoSubido->getClientOriginalName()}";
+
+            // Guardar el archivo en el sistema de archivos
+            Storage::disk('public')->put($pdfPath, file_get_contents($archivoSubido));
+
+            // Obtener la URL pública del nuevo archivo
+            $pdfUrl = Storage::url($pdfPath);
+
+            // Actualizar la ruta del archivo en la base de datos
+            $archivo->rutadoc = $pdfUrl;
         }
 
         // Guardar los cambios en la base de datos
         $archivo->save();
 
-        // Redirigir al usuario a la página de lista de planos
-        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])->with('success', 'Archivo actualizado exitosamente');
+        // Redirigir al usuario a la página de lista de archivos con un mensaje de éxito
+        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])
+            ->with('success', 'Archivo actualizado exitosamente');
     }
 
     /**
@@ -200,22 +225,35 @@ class ArchivosDicController extends Controller
      */
     public function destroy(string $id)
     {
-        // Buscar el plano por su ID
+        // Buscar el archivo por su ID
         $archivo = ArchivosOp::findOrFail($id);
 
+        // Obtener la ruta del archivo asociado al registro
+        $rutaDoc = $archivo->rutadoc;
 
-        // Obtener la ruta del archivo asociado al plano
-        $rutaArchivo = storage_path('app/public/' . $archivo->rutadoc);
+        // Extraer la ruta relativa dentro del disco 'public'
+        // Asumiendo que la ruta guardada en la BD es de la forma "/storage/NOM-005/..."
+        $relativePath = str_replace('/storage/', '', $rutaDoc);
 
-        // Verificar si el archivo existe y eliminarlo
-        if (file_exists($rutaArchivo)) {
-            unlink($rutaArchivo); // Eliminar el archivo del sistema de archivos
+        // Eliminar el archivo específico si existe
+        if (Storage::disk('public')->exists($relativePath)) {
+            Storage::disk('public')->delete($relativePath);
         }
 
-        // Eliminar el plano de la base de datos
+        // Intentar eliminar la carpeta contenedora si está vacía
+        // La ruta de la carpeta sería todo hasta el nombre del archivo
+        $folderPath = dirname($relativePath);
+
+        if (Storage::disk('public')->exists($folderPath) && count(Storage::disk('public')->files($folderPath)) == 0) {
+            Storage::disk('public')->deleteDirectory($folderPath);
+        }
+
+        // Eliminar el registro de la base de datos
         $archivo->delete();
 
-        // Redirigir al usuario a la página de lista de planos
-        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])->with('success', 'Documento eliminado exitosamente');
+        // Redirigir al usuario a la página de lista de archivos con un mensaje de éxito
+        return redirect()->route('archivos.index', ['dictamen_id' => $archivo->numdicop_id])
+            ->with('success', 'Documento eliminado exitosamente');
     }
+
 }

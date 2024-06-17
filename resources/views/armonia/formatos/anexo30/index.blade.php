@@ -47,11 +47,11 @@
                                             <td scope="row">
                                                 @can('editar-formato')
                                                     <a class="btn btn-primary"
-                                                        href="{{ route('archivos.edit', $archivo->id) }}">Editar</a>
+                                                        href="{{ route('archivos.anexo.edit', $archivo->id) }}">Editar</a>
                                                 @endcan
 
                                                 @can('borrar-formato')
-                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['archivos.destroy', $archivo->id], 'style' => 'display:inline']) !!}
+                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['archivos.anexo.destroy', $archivo->id], 'style' => 'display:inline']) !!}
                                                     {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
                                                     {!! Form::close() !!}
                                                 @endcan

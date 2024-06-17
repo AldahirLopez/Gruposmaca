@@ -85,10 +85,17 @@ class ServicioOperacionController extends Controller
 
         // Guardar la nueva entrada en la base de datos
         $NumDictamen->save();
+
+        // Definir la carpeta de destino dentro de 'public/storage'
+        $customFolderPath = "NOM-005/{$request->numero_dictamen}";
+
+        // Crear la carpeta si no existe
+        Storage::disk('public')->makeDirectory($customFolderPath);
+
         session()->flash('success', 'Dictamen creado exitosamente');
         $dictamenes = DictamenOp::all();
         return redirect()->route('servicio_operacion.index', compact('dictamenes'));
-    }
+    } 
 
     /**
      * Display the specified resource.

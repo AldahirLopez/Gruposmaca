@@ -18,18 +18,61 @@ class FormatosController extends Controller
         $this->middleware('permission:borrar-formato', ['only' => ['destroy']]);
     }
     public function save(Request $request, $id = null)
-{
-    // Validar los datos del formulario
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'archivo' => 'nullable|file', // El archivo es opcional para la edición
-    ]);
+    {
+        // Validar los datos del formulario
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'archivo' => 'nullable|file', // El archivo es opcional para la edición
+        ]);
 
-    if ($id) {
-        // Si se proporciona un ID, estamos editando un formato existente
-        $formato = FormatoVigente::findOrFail($id);
+        if ($id) {
+            // Si se proporciona un ID, estamos editando un formato existente
+            $formato = FormatoVigente::findOrFail($id);
 
-        // Guardar el formato actual en el historial
+            // Guardar el formato actual en el historial (opcional)
+            $this->guardarHistorialFormato($formato);
+        } else {
+            // Si no se proporciona un ID, estamos creando un nuevo formato
+            $formato = new FormatoVigente();
+        }
+
+        // Actualizar el nombre
+        $formato->nombre = $data['nombre'];
+
+        // Si se sube un nuevo archivo, reemplazar el existente
+        if ($request->hasFile('archivo')) {
+            // Obtener el archivo subido
+            $archivoSubido = $request->file('archivo');
+            $nombreArchivo = $archivoSubido->getClientOriginalName();
+
+            // Definir la carpeta de destino dentro de 'public/storage'
+            $customFolderPath = "armonia/anexo_30/formatosvigentes/{$formato->nombre}";
+
+            // Verificar si la carpeta principal existe, si no, crearla
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            // Guardar el archivo en el sistema de archivos
+            $rutaArchivo = $archivoSubido->storeAs(
+                "public/{$customFolderPath}",
+                $nombreArchivo
+            );
+
+            // Actualizar la ruta del archivo en la base de datos
+            $formato->rutadoc = str_replace('public/', '', $rutaArchivo);
+        }
+
+        // Guardar los cambios en el formato
+        $formato->save();
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('listar.anexo30')->with('success', 'Formato guardado correctamente');
+    }
+
+    // Método para guardar el formato actual en el historial (opcional)
+    private function guardarHistorialFormato($formato)
+    {
         $formatoHistorico = new HistorialFormato();
         $formatoHistorico->formato_id = $formato->id;
         $formatoHistorico->nombre = $formato->nombre;
@@ -48,30 +91,7 @@ class FormatosController extends Controller
         // Actualizar la ruta del documento en el historial
         $formatoHistorico->rutadoc = str_replace('public/', '', $nuevaRutaHistorial);
         $formatoHistorico->save();
-    } else {
-        // Si no se proporciona un ID, estamos creando un nuevo formato
-        $formato = new FormatoVigente();
     }
-
-    // Actualizar el nombre
-    $formato->nombre = $request->input('nombre');
-
-    // Si se sube un nuevo archivo, reemplazar el existente
-    if ($request->hasFile('archivo')) {
-        // Guardar el archivo en el sistema de archivos
-        $archivoSubido = $request->file('archivo');
-        $nombreArchivo = $archivoSubido->getClientOriginalName();
-        $rutaArchivo = $archivoSubido->storeAs('public/armonia/anexo_30/formatosvigentes/' . $formato->nombre, $nombreArchivo);
-
-        // Actualizar la ruta del archivo
-        $formato->rutadoc = str_replace('public/', '', $rutaArchivo);
-    }
-
-    // Guardar los cambios
-    $formato->save();
-
-    return redirect()->route('listar.anexo30')->with('success', 'Formato guardado correctamente');
-}
 
 
 
@@ -87,19 +107,39 @@ class FormatosController extends Controller
         return view('armonia.formatos.anexo30.index', ['archivos' => $archivos]);
     }
 
-    public function destroy($id)
+     public function destroy($id)
     {
-        // Intentar encontrar el formato vigente
+        // Buscar el formato vigente por su ID
         $formato = FormatoVigente::findOrFail($id);
 
-        // Eliminar el archivo del sistema de archivos
-        Storage::delete('public/armonia/anexo_30/formatosvigentes/' . $formato->rutadoc);
+        // Obtener la ruta del archivo almacenada en la base de datos
+        $rutaDoc = $formato->rutadoc;
+
+        // Verificar si el archivo existe en el sistema de almacenamiento
+        if (Storage::disk('public')->exists($rutaDoc)) {
+            // Eliminar el archivo del sistema de almacenamiento
+            Storage::disk('public')->delete($rutaDoc);
+        } else {
+            // Registrar un mensaje de advertencia si no se encuentra el archivo
+            \Log::warning('Archivo no encontrado para eliminar: ' . $rutaDoc);
+        }
+
+        // Obtener el directorio donde se guarda el archivo
+        $carpeta = pathinfo($rutaDoc, PATHINFO_DIRNAME);
+
+        // Verificar si la carpeta está vacía
+        if (Storage::disk('public')->allFiles($carpeta) === []) {
+            // Si la carpeta está vacía, eliminarla
+            Storage::disk('public')->deleteDirectory($carpeta);
+        }
 
         // Eliminar el registro de la base de datos
         $formato->delete();
 
+        // Redirigir con un mensaje de éxito
         return redirect()->route('listar.anexo30')->with('success', 'Formato eliminado correctamente');
     }
+
 
     public function create()
     {
