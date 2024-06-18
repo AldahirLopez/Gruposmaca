@@ -164,14 +164,14 @@ class DatosServicioAnexoController extends Controller
                 'domicilio_fiscal' => 'required|string|max:255',
                 'telefono' => 'required|string|max:255',
                 'correo' => 'required|string|email|max:255',
-                'fecha_recepcion' => 'required|date_format:Y-m-d',
+                'fecha_recepcion' => 'required',
                 'cre' => 'required|string|max:255',
                 'constancia' => 'nullable|string|max:255',
                 'domicilio_estacion' => 'required|string|max:255',
                 'estado' => 'required|string|max:255',
                 'contacto' => 'required|string|max:255',
                 'nom_repre' => 'required|string|max:255',
-                'fecha_inspeccion' => 'required|date_format:Y-m-d',
+                'fecha_inspeccion' => 'required',
             ]);
 
             // Convertir las fechas al formato deseado para almacenamiento y manipularlas
