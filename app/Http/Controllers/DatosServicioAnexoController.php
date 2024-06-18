@@ -11,6 +11,8 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
+use Carbon\Carbon;
+
 
 class DatosServicioAnexoController extends Controller
 {
@@ -150,153 +152,99 @@ class DatosServicioAnexoController extends Controller
      */
     public function generateWord(Request $request)
     {
-        // Validar los datos del formulario
-        $data = $request->validate([
-            'nomenclatura' => 'required',
-            'id_servicio' => 'required',
-            'id_usuario' => 'required',
-            'fecha_actual' => 'required',
-            'razonsocial' => 'required|string|max:255',
-            'rfc' => 'required|string|max:255',
-            'domicilio_fiscal' => 'required|string|max:255',
-            'telefono' => 'required|string|max:255',
-            'correo' => 'required|string|email|max:255',
-            'fecha_recepcion' => 'required',
-            'cre' => 'required|string|max:255',
-            'constancia' => 'nullable|string|max:255',
-            'domicilio_estacion' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'contacto' => 'required|string|max:255',
-            'nom_repre' => 'required|string|max:255',
-            'fecha_inspeccion' => 'required',
-        ]);
+        try {
+            // Validar los datos del formulario
+            $data = $request->validate([
+                'nomenclatura' => 'required',
+                'id_servicio' => 'required',
+                'id_usuario' => 'required',
+                'fecha_actual' => 'required',
+                'razonsocial' => 'required|string|max:255',
+                'rfc' => 'required|string|max:255',
+                'domicilio_fiscal' => 'required|string|max:255',
+                'telefono' => 'required|string|max:255',
+                'correo' => 'required|string|email|max:255',
+                'fecha_recepcion' => 'required|date_format:Y-m-d',
+                'cre' => 'required|string|max:255',
+                'constancia' => 'nullable|string|max:255',
+                'domicilio_estacion' => 'required|string|max:255',
+                'estado' => 'required|string|max:255',
+                'contacto' => 'required|string|max:255',
+                'nom_repre' => 'required|string|max:255',
+                'fecha_inspeccion' => 'required|date_format:Y-m-d',
+            ]);
 
+            // Convertir las fechas al formato deseado para almacenamiento y manipularlas
+            $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
+            $fechaRecepcion = Carbon::createFromFormat('Y-m-d', $data['fecha_recepcion'])->format('d-m-Y');
+            $fechaInspeccionAumentada = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->addYear()->format('d-m-Y');
 
+            // Cargar las plantillas de Word
+            $templatePaths = [
+                'ORDEN DE TRABAJO.docx',
+                'FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx',
+                'FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx',
+                'PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx',
+                'PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION.docx',
+                'DICTAMEN TECNICO DE PROGRAMAS INFORMATICOS.docx',
+                'DICTAMEN TECNICO DE SISTEMAS DE MEDICION.docx',
+                'COMPROBANTE DE TRASLADO.docx',
+                'REPORTE FOTOGRAFICO.docx',
+            ];
 
-        // Cargar las plantillas de Word
-        $templatePath = storage_path('app/templates/formatos_anexo30/ORDEN DE TRABAJO.docx');
-        $templatePath1 = storage_path('app/templates/formatos_anexo30/FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024.docx');
-        $templatePath2 = storage_path('app/templates/formatos_anexo30/FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx');
-        $templatePath3 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx');
-        $templatePath4 = storage_path('app/templates/formatos_anexo30/PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION.docx');
-
-        // Crear los procesadores de plantillas
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
-        $templateProcessor1 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath1);
-        $templateProcessor2 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath2);
-        $templateProcessor3 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath3);
-        $templateProcessor4 = new \PhpOffice\PhpWord\TemplateProcessor($templatePath4);
-
-        // Reemplazar los marcadores de posición con los datos del formulario
-        foreach ($data as $key => $value) {
-            $templateProcessor->setValue($key, $value);
-            $templateProcessor1->setValue($key, $value);
-            $templateProcessor2->setValue($key, $value);
-            $templateProcessor3->setValue($key, $value);
-            $templateProcessor4->setValue($key, $value);
-        }
-
-        // Definir la carpeta de destino dentro de 'public/storage'
-        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
-
-        // Verificar si la carpeta principal existe
-        if (Storage::disk('public')->exists($customFolderPath)) {
-            // La carpeta principal existe, crear una subcarpeta dentro de ella
-            $subFolderPath = "{$customFolderPath}/formatos_rellenados_anexo30";
-
-            if (!Storage::disk('public')->exists($subFolderPath)) {
-                // Crear la subcarpeta
-                Storage::disk('public')->makeDirectory($subFolderPath);
+            // Definir la carpeta de destino dentro de 'public/storage'
+            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
             }
+
+            // Reemplazar marcadores en todas las plantillas
+            foreach ($templatePaths as $templatePath) {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
+
+                // Reemplazar todos los marcadores con los datos del formulario
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                    // Reemplazar fechas formateadas específicas
+                    $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
+                    $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
+                    $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada); // Para las plantillas que necesitan la fecha aumentada
+                }
+
+                // Guardar la plantilla procesada
+                $fileName = str_replace('.docx', "_RELLENADO.docx", $templatePath); // Cambiar el nombre del archivo según tus necesidades
+                $templateProcessor->saveAs(storage_path("app/public/{$customFolderPath}/{$fileName}"));
+            }
+
+            // Buscar el registro existente por servicio_anexo_id
+            $datosServicio = Datos_Servicio::where('servicio_anexo_id', $data['id_servicio'])->first();
+
+            if ($datosServicio) {
+                // Actualizar los datos existentes
+                $datosServicio->update($data);
+            } else {
+                // Crear un nuevo registro si no existe
+                Datos_Servicio::create($data);
+            }
+
+            // Crear la lista de archivos generados con sus URLs
+            $generatedFiles = array_map(function ($templatePath) use ($customFolderPath) {
+                $fileName = str_replace('.docx', "_RELLENADO.docx", $templatePath);
+                return [
+                    'name' => $fileName,
+                    'url' => Storage::url("{$customFolderPath}/{$fileName}"),
+                ];
+            }, $templatePaths);
+
+            // Retornar respuesta JSON con los archivos generados
+            return response()->json(['generatedFiles' => $generatedFiles]);
+
+        } catch (\Exception $e) {
+            // Capturar y registrar cualquier excepción ocurrida
+            \Log::error("Error al generar documentos: " . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
-
-        // Definir los nombres de los archivos y sus rutas completas dentro de 'public/storage'
-        $fileName = "ORDEN DE TRABAJO_RELLENADO.docx";
-        $fileName1 = "FORMATO PARA CONTRATO DE PRESTACIÓN DE SERVICIOS DE INSPECCIÓN DE LOS ANEXOS 30 Y 31 RESOLUCIÓN MISCELÁNEA FISCAL PARA 2024_RELLENADO.docx";
-        $fileName2 = "FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD_RELLENADO.docx";
-        $fileName3 = "PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS_RELLENADO.docx";
-        $fileName4 = "PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION_RELLENADO.docx";
-
-        // Guardar los archivos generados
-        $templateProcessor->saveAs(storage_path("app/public/$subFolderPath/$fileName"));
-        $templateProcessor1->saveAs(storage_path("app/public/$subFolderPath/$fileName1"));
-        $templateProcessor2->saveAs(storage_path("app/public/$subFolderPath/$fileName2"));
-        $templateProcessor3->saveAs(storage_path("app/public/$subFolderPath/$fileName3"));
-        $templateProcessor4->saveAs(storage_path("app/public/$subFolderPath/$fileName4"));
-
-        // Crear la lista de archivos generados con sus URLs
-        $generatedFiles = [
-            [
-                'name' => $fileName,
-                'url' => Storage::url("$subFolderPath/$fileName"),
-            ],
-            [
-                'name' => $fileName1,
-                'url' => Storage::url("$subFolderPath/$fileName1"),
-            ],
-            [
-                'name' => $fileName2,
-                'url' => Storage::url("$subFolderPath/$fileName2"),
-            ],
-            [
-                'name' => $fileName3,
-                'url' => Storage::url("$subFolderPath/$fileName3"),
-            ],
-            [
-                'name' => $fileName4,
-                'url' => Storage::url("$subFolderPath/$fileName4"),
-            ]
-        ];
-
-        // Buscar el registro existente por servicio_anexo_id
-        $datosServicio = Datos_Servicio::where('servicio_anexo_id', $data['id_servicio'])->first();
-
-        if ($datosServicio) {
-
-            // Crear una instancia del modelo y asignar cada campo individualmente
-            $datosServicio->Razon_Social = $data['razonsocial'];
-            $datosServicio->RFC = $data['rfc'];
-            $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
-            $datosServicio->Telefono = $data['telefono'];
-            $datosServicio->Correo = $data['correo'];
-            $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
-            $datosServicio->Num_CRE = $data['cre'];
-            $datosServicio->Num_Constancia = $data['constancia'];
-            $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
-            $datosServicio->Contacto = $data['contacto'];
-            $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
-            $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
-            $datosServicio->servicio_anexo_id = $data['id_servicio'];
-
-        } else {
-
-            // Crear una instancia del modelo y asignar cada campo individualmente
-            $datosServicio = new Datos_Servicio();
-            $datosServicio->Razon_Social = $data['razonsocial'];
-            $datosServicio->RFC = $data['rfc'];
-            $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
-            $datosServicio->Telefono = $data['telefono'];
-            $datosServicio->Correo = $data['correo'];
-            $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
-            $datosServicio->Num_CRE = $data['cre'];
-            $datosServicio->Num_Constancia = $data['constancia'];
-            $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
-            $datosServicio->Contacto = $data['contacto'];
-            $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
-            $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
-            $datosServicio->servicio_anexo_id = $data['id_servicio'];
-
-        }
-        // Guardar el objeto en la base de datos
-        $datosServicio->save();
-
-
-
-        // Retornar respuesta JSON con los archivos generados
-        return response()->json(['generatedFiles' => $generatedFiles]);
     }
-
-
 
 
 
