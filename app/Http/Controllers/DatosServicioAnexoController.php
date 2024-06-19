@@ -178,10 +178,6 @@ class DatosServicioAnexoController extends Controller
                 'FORMATO DE DETECCIÓN DE RIESGOS A LA IMPARCIALIDAD.docx',
                 'PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx',
                 'PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION.docx',
-                'DICTAMEN TECNICO DE PROGRAMAS INFORMATICOS.docx',
-                'DICTAMEN TECNICO DE SISTEMAS DE MEDICION.docx',
-                'COMPROBANTE DE TRASLADO.docx',
-                'REPORTE FOTOGRAFICO.docx',
             ];
 
             // Definir la carpeta de destino dentro de 'public/storage'
