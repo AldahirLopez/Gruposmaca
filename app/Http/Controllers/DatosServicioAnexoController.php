@@ -194,8 +194,15 @@ class DatosServicioAnexoController extends Controller
 
             // Definir la carpeta de destino dentro de 'public/storage'
             $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+            $subFolderPath = "{$customFolderPath}/documentos_rellenados/";
+
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                Storage::disk('public')->makeDirectory($subFolderPath);
             }
 
             // Reemplazar marcadores en todas las plantillas
@@ -213,7 +220,7 @@ class DatosServicioAnexoController extends Controller
 
                 // Guardar la plantilla procesada
                 $fileName = str_replace('.docx', "_RELLENADO.docx", $templatePath); // Cambiar el nombre del archivo según tus necesidades
-                $templateProcessor->saveAs(storage_path("app/public/{$customFolderPath}/{$fileName}"));
+                $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
 
             $datosServicio = Datos_Servicio::where('servicio_anexo_id', $data['id_servicio'])->first();
@@ -260,11 +267,11 @@ class DatosServicioAnexoController extends Controller
             $datosServicio->save();
 
             // Crear la lista de archivos generados con sus URLs
-            $generatedFiles = array_map(function ($templatePath) use ($customFolderPath) {
-                $fileName = str_replace('.docx', "_RELLENADO.docx", $templatePath);
+            $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
+                $fileName = str_replace('.docx', "_{$data['nomenclatura']}.docx", $templatePath);
                 return [
                     'name' => $fileName,
-                    'url' => Storage::url("{$customFolderPath}/{$fileName}"),
+                    'url' => Storage::url("{$subFolderPath}/{$fileName}"),
                 ];
             }, $templatePaths);
 
@@ -277,7 +284,6 @@ class DatosServicioAnexoController extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
-
 
 
     /**

@@ -326,7 +326,7 @@ class ServicioAnexo30Controller extends Controller
 
         // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
         $folderPath = "servicios_anexo30/{$nomenclatura}";
-        $subFolderPath = "{$folderPath}/cotizacion";
+        $subFolderPath = "{$folderPath}/cotizacion"; 
 
         // Verificar y crear la carpeta principal si no existe
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -339,7 +339,7 @@ class ServicioAnexo30Controller extends Controller
         }
 
         // Definir la ruta completa del PDF
-        $pdfPath = "{$subFolderPath}/{$nomenclatura}.pdf";
+        $pdfPath = "{$subFolderPath}/Cotizacion_{$nomenclatura}.pdf";
 
         // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
         $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'costo', 'iva', 'fecha_actual'))->render();
