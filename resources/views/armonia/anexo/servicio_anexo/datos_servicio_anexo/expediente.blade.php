@@ -30,8 +30,7 @@
                             <div class="row">
                                 <input type="hidden" name="nomenclatura"
                                     value="{{ strtoupper($estacion->nomenclatura) }}">
-                                    <input type="hidden" name="id_servicio"
-                                    value="{{ strtoupper($estacion->id) }}">
+                                <input type="hidden" name="id_servicio" value="{{ strtoupper($estacion->id) }}">
                                 <input type="hidden" name="id_usuario"
                                     value="{{ strtoupper($estacion->usuario->name) }}">
                                 <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
@@ -66,7 +65,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="fecha_recepcion">Fecha de Recepcion de Solicitud</label>
-                                        <input type="text" name="fecha_recepcion" class="form-control"
+                                        <input type="date" name="fecha_recepcion" class="form-control"
                                             value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Recepcion_Solicitud : '' }}">
                                     </div>
                                 </div>
@@ -93,7 +92,8 @@
                                             aria-label="Default select example">
                                             @foreach($estados as $estado)
                                                 <option value="{{ $estado }}" {{ $archivoAnexo && $archivoAnexo->Direccion_Estado == $estado ? 'selected' : '' }}>
-                                                    {{ $estado }}</option>
+                                                    {{ $estado }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -109,9 +109,10 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="fecha_inspeccion">Fecha Programada de la Inspeccion</label>
-                                        <input type="text" name="fecha_inspeccion" class="form-control"
-                                            value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Inspeccion : '' }}">
+                                        <input type="date" name="fecha_inspeccion" class="form-control"
+                                            value="{{ old('fecha_inspeccion', isset($archivoAnexo) ? \Carbon\Carbon::parse($archivoAnexo->Fecha_Inspeccion)->format('Y-m-d') : '') }}">
                                     </div>
+
                                 </div>
                                 <!-- Asegúrate de que todos los campos estén aquí -->
                                 <center>

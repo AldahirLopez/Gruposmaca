@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('Num_CRE');
             $table->string('Num_Constancia')->nullable();
             $table->string('Domicilio_Estacion_Servicio');
+            $table->string('Estado_Estacion');
             $table->string('Contacto');
             $table->string('Nombre_Representante_Legal');
             $table->string('Fecha_Inspeccion');
