@@ -139,14 +139,6 @@ class DatosServicioAnexoController extends Controller
         return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.listas', compact('servicio_anexo_id', 'estacion'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -218,57 +210,38 @@ class DatosServicioAnexoController extends Controller
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada); // Para las plantillas que necesitan la fecha aumentada
                 }
 
+                // Crear un nombre de archivo basado en la nomenclatura
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+
                 // Guardar la plantilla procesada
-                $fileName = str_replace('.docx', "_RELLENADO.docx", $templatePath); // Cambiar el nombre del archivo según tus necesidades
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
 
-            $datosServicio = Datos_Servicio::where('servicio_anexo_id', $data['id_servicio'])->first();
+            // Recuperar o crear el registro en Datos_Servicio
+            $datosServicio = Datos_Servicio::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
 
-            if ($datosServicio) {
+            // Asignar los datos del formulario al modelo
+            $datosServicio->Razon_Social = $data['razonsocial'];
+            $datosServicio->RFC = $data['rfc'];
+            $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
+            $datosServicio->Telefono = $data['telefono'];
+            $datosServicio->Correo = $data['correo'];
+            $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
+            $datosServicio->Num_CRE = $data['cre'];
+            $datosServicio->Num_Constancia = $data['constancia'];
+            $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
+            $datosServicio->Estado_Estacion = $data['estado'];
+            $datosServicio->Contacto = $data['contacto'];
+            $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
+            $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
+            $datosServicio->servicio_anexo_id = $data['id_servicio'];
 
-                // Crear una instancia del modelo y asignar cada campo individualmente
-                $datosServicio->Razon_Social = $data['razonsocial'];
-                $datosServicio->RFC = $data['rfc'];
-                $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
-                $datosServicio->Telefono = $data['telefono'];
-                $datosServicio->Correo = $data['correo'];
-                $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
-                $datosServicio->Num_CRE = $data['cre'];
-                $datosServicio->Num_Constancia = $data['constancia'];
-                $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
-                $datosServicio->Estado_Estacion = $data['estado'];
-                $datosServicio->Contacto = $data['contacto'];
-                $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
-                $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
-                $datosServicio->servicio_anexo_id = $data['id_servicio'];
-
-            } else {
-
-                // Crear una instancia del modelo y asignar cada campo individualmente
-                $datosServicio = new Datos_Servicio();
-                $datosServicio->Razon_Social = $data['razonsocial'];
-                $datosServicio->RFC = $data['rfc'];
-                $datosServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
-                $datosServicio->Telefono = $data['telefono'];
-                $datosServicio->Correo = $data['correo'];
-                $datosServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'];
-                $datosServicio->Num_CRE = $data['cre'];
-                $datosServicio->Num_Constancia = $data['constancia'];
-                $datosServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
-                $datosServicio->Estado_Estacion = $data['estado'];
-                $datosServicio->Contacto = $data['contacto'];
-                $datosServicio->Nombre_Representante_Legal = $data['nom_repre'];
-                $datosServicio->Fecha_Inspeccion = $data['fecha_inspeccion'];
-                $datosServicio->servicio_anexo_id = $data['id_servicio'];
-
-            }
             // Guardar el objeto en la base de datos
             $datosServicio->save();
 
             // Crear la lista de archivos generados con sus URLs
             $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
-                $fileName = str_replace('.docx', "_{$data['nomenclatura']}.docx", $templatePath);
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
                 return [
                     'name' => $fileName,
                     'url' => Storage::url("{$subFolderPath}/{$fileName}"),
@@ -285,36 +258,19 @@ class DatosServicioAnexoController extends Controller
         }
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function listGeneratedFiles($nomenclatura)
     {
-        //
+        $folderPath = "servicios_anexo30/{$nomenclatura}/documentos_rellenados/";
+        $files = Storage::disk('public')->files($folderPath);
+
+        $generatedFiles = array_map(function ($filePath) {
+            return [
+                'name' => basename($filePath),
+                'url' => Storage::url($filePath),
+            ];
+        }, $files);
+
+        return response()->json(['generatedFiles' => $generatedFiles]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

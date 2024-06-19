@@ -61,6 +61,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/expediente_anexo30', [DatosServicioAnexoController::class, 'expediente_anexo30'])->name('expediente.anexo30');
     Route::get('/listas_anexo30', [DatosServicioAnexoController::class, 'listas_anexo30'])->name('listas.anexo30');
     Route::post('/generate-word', [DatosServicioAnexoController::class, 'generateWord'])->name('generate.word');
+    Route::get('/list-generated-files/{nomenclatura}', [DatosServicioAnexoController::class, 'listGeneratedFiles']);
+
     Route::get('/obtener-servicios', [ServicioAnexo30Controller::class, 'obtenerServicios'])->name('servicio_anexo.obtenerServicios');
 
     Route::get('/apro_anexo', [ServicioAnexo30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');

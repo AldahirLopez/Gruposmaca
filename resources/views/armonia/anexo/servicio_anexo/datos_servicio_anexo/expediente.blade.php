@@ -28,7 +28,7 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <input type="hidden" name="nomenclatura"
+                                <input type="hidden" id="nomenclatura" name="nomenclatura"
                                     value="{{ strtoupper($estacion->nomenclatura) }}">
                                 <input type="hidden" name="id_servicio" value="{{ strtoupper($estacion->id) }}">
                                 <input type="hidden" name="id_usuario"
@@ -163,6 +163,37 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Función para cargar los archivos generados
+        function loadGeneratedFiles() {
+            // Obtén la nomenclatura de algún lugar, puede ser un input oculto o una variable en JavaScript
+            let nomenclatura = $('#nomenclatura').val(); // Asegúrate de tener este input en tu HTML
+
+            $.ajax({
+                url: `/list-generated-files/${nomenclatura}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.generatedFiles && Array.isArray(response.generatedFiles)) {
+                        // Crear el HTML para la tabla
+                        let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
+                        response.generatedFiles.forEach(file => {
+                            tableHtml += `<tr><td>${file.name}</td><td><a href="${file.url}" class="btn btn-info" download>Descargar</a></td></tr>`;
+                        });
+                        tableHtml += '</tbody></table>';
+                        // Actualizar el contenedor de la tabla y mostrarla
+                        $('#generatedFilesTable').html(tableHtml).show();
+                    } else {
+                        $('#generatedFilesTable').html('<p>No se encontraron archivos generados.</p>').show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Ocurrió un error al cargar los documentos generados.');
+                }
+            });
+        }
+
+        // Cargar los archivos generados cuando se carga la página
+        loadGeneratedFiles();
+
         $('#generateWordForm').on('submit', function (e) {
             e.preventDefault(); // Evitar la recarga de la página
 
@@ -170,7 +201,7 @@
             $('#generatedFilesTable').hide();
 
             // Mostrar el spinner de carga dentro de la tabla
-            $('#loadingSpinner').addClass('d-flex');
+            $('#loadingSpinner').addClass('d-flex').removeClass('d-none');
 
             // Deshabilitar el botón para evitar múltiples envíos
             $('#generateWordForm button[type="submit"]').prop('disabled', true);
@@ -201,12 +232,16 @@
                 },
                 complete: function () {
                     // Ocultar el spinner de carga después de que se complete la solicitud (ya sea con éxito o error)
-                    $('#loadingSpinner').removeClass('d-flex');
+                    $('#loadingSpinner').removeClass('d-flex').addClass('d-none');
                     // Rehabilitar el botón
                     $('#generateWordForm button[type="submit"]').prop('disabled', false);
+
+                    // Recargar la lista de archivos generados
+                    loadGeneratedFiles();
                 }
             });
         });
     });
 </script>
+
 @endsection
