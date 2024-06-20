@@ -200,7 +200,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="img-logo">
+            <div class="img-logo"> 
                 <img src="{{ public_path('assets/img/logoarmonia.png') }}">
             </div>
             <div class="header-text">
