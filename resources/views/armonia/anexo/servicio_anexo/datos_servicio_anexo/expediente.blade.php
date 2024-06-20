@@ -800,6 +800,7 @@
         const idServicio = document.getElementById('id_servicio').value;
         verificarExistenciaRegistro(idServicio);
     });
+
 </script>
 
 

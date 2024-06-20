@@ -54,8 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Generar PDF cotizacion anexo 30 
     Route::post('/pdf_cotizacion', [ServicioAnexo30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
-    Route::post('/pdf_ot', [ServicioAnexo30Controller::class, 'generarpdfot'])->name('pdf.ot');
-
+    
     //Listas de Inspeccion y Expedientes Anexo 30
     //Route::resource('archivos_anexo', DatosServicioAnexoController::class);
     Route::get('/expediente_anexo30', [DatosServicioAnexoController::class, 'expediente_anexo30'])->name('expediente.anexo30');
