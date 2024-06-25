@@ -29,59 +29,29 @@ class SeederTablaPermisos extends Seeder
             'editar-usuarios',
             'borrar-usuarios',
 
-            //Tabla Obras
-            'ver-obras',
-            'crear-obras',
-            'editar-obras',
-            'borrar-obras',
-
             //Tabla Operacion y Mantenimiento
-            'ver-operacion',
-            'crear-operacion',
-            'editar-operacion',
-            'borrar-operacion',
+            'ver-servicio_operacion_mantenimiento',
+            'crear-servicio_operacion_mantenimiento',
+            'editar-servicio_operacion_mantenimiento',
+            'borrar-servicio_operacion_mantenimiento',
 
-            //Tabla Archivos
-            'ver-archivos',
-            'crear-archivos',
-            'editar-archivos',
-            'borrar-archivos',
+            //Tabla Servicios Anexo 30
+            'ver-servicio_anexo_30',
+            'crear-servicio_anexo_30',
+            'editar-servicio_anexo_30',
+            'borrar-servicio_anexo_30',
 
-            //Tabla Diseño 
-            'ver-diseño',
-            'crear-diseño',
-            'editar-diseño',
-            'borrar-diseño',
+            //Tabla Formatos Vigentes
+            'ver-formato_vigentes',
+            'crear-formato_vigentes',
+            'editar-formato_vigentes',
+            'borrar-formato_vigentes',
 
-            //Tabla Construccion
-            'ver-construccion',
-            'crear-construccion',
-            'editar-construccion',
-            'borrar-construccion',
-
-            //Tabla Construccion
-            'ver-planos',
-            'crear-planos',
-            'editar-planos',
-            'borrar-planos',
-
-            //Tabla Construccion
-            'ver-anexo',
-            'crear-anexo',
-            'editar-anexo',
-            'borrar-anexo',
-
-            //Tabla Servicios
-            'ver-servicio',
-            'crear-servicio',
-            'editar-servicio',
-            'borrar-servicio',
-
-            //Tabla Formatos
-            'ver-formato',
-            'crear-formato',
-            'editar-formato',
-            'borrar-formato',
+            //Tabla Formatos Historial
+            'ver-formato_historial',
+            'crear-formato_historial',
+            'editar-formato_historial',
+            'borrar-formato_historial',
 
 
 

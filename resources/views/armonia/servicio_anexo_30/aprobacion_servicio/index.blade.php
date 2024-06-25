@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('anexo.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="{{ route('servicio_anexo_30.index') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
                         </div>
                         <table class="table table-striped">
                             <thead>
@@ -65,7 +65,7 @@
                                         @if($servicio->pending_deletion_servicio)
                                         <button class="btn btn-danger" disabled><i class="bi bi-trash-fill">Eliminando</i></button>
                                         @else
-                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_anexo.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                         {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                         {!! Form::close() !!}
                                         @endif

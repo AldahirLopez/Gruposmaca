@@ -519,7 +519,7 @@
                                         <div class="modal-body">
                                             <!-- Formulario de generación de expediente -->
                                             <form id="generateWordForm"
-                                                action="{{ route('generate.word', ['servicio_anexo_id' => $servicio_anexo_id]) }}"
+                                                action="{{ route('generate.word') }}"
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
@@ -757,48 +757,6 @@
                 }
             });
         });
-    });
-
-    // Función para verificar la existencia del registro en el servidor Express
-    async function verificarExistenciaRegistro(idServicio) {
-        try {
-            const response = await fetch(`http://localhost:8000/api/verificar-registro?id_servicio=${idServicio}`);
-            if (!response.ok) {
-                throw new Error('Error al verificar el registro');
-            }
-            const data = await response.json();
-            const existeRegistro = data.existe;
-
-            // Mostrar u ocultar las tarjetas según la existencia del registro
-            const dictamenesCards = document.querySelectorAll('.dictamenes-card');
-            dictamenesCards.forEach(card => {
-                if (existeRegistro) {
-                    card.style.display = 'block'; // Mostrar la tarjeta
-                } else {
-                    card.style.display = 'none'; // Ocultar la tarjeta
-                }
-            });
-        } catch (error) {
-            console.error('Error al verificar la existencia del registro:', error);
-        }
-    }
-
-    // Evento que se dispara cuando se envía el formulario
-    document.getElementById('generateWordForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
-
-        // Obtener el id_servicio del campo oculto en el formulario
-        const idServicio = document.getElementById('id_servicio').value;
-
-        // Llamar a la función para verificar la existencia del registro
-        await verificarExistenciaRegistro(idServicio);
-    });
-
-    // Evento que se dispara cuando se carga la página
-    document.addEventListener('DOMContentLoaded', function () {
-        // Llamada inicial para mostrar u ocultar las tarjetas según la existencia del registro
-        const idServicio = document.getElementById('id_servicio').value;
-        verificarExistenciaRegistro(idServicio);
     });
 
 </script>

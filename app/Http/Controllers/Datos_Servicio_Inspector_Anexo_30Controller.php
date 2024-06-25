@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -14,13 +13,14 @@ use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 use Carbon\Carbon;
 
 
-class DatosServicioAnexoController extends Controller
+
+class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 {
     /**
      * Display a listing of the resource.
      */
 
-    public function expediente_anexo30(Request $request)
+    public function ExpedienteInspectorAnexo30($slug)
     {
         // Lista de estados de México
         $estados = [
@@ -63,7 +63,7 @@ class DatosServicioAnexoController extends Controller
         if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
 
             //Si es administrador o auditor puede ver todo y editar todo 
-            $servicio_anexo_id = $request->servicio_anexo_id;
+            $servicio_anexo_id = $slug;
             $estacion = ServicioAnexo::find($servicio_anexo_id);
             $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
@@ -85,12 +85,12 @@ class DatosServicioAnexoController extends Controller
                 }
             }
 
-            return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+            return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
 
         } else {
 
             //Si es administrador o auditor puede ver todo y editar todo 
-            $servicio_anexo_id = $request->servicio_anexo_id;
+            $servicio_anexo_id = $slug;
             $estacion = ServicioAnexo::find($servicio_anexo_id);
             $validar_servicio = ($estacion->usuario_id == $usuario->id);
             //$validar_usuario =  User::where('usuario_id',)
@@ -98,7 +98,7 @@ class DatosServicioAnexoController extends Controller
             if ($validar_servicio) {
                 $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
                 //Si es administrador o auditor puede ver todo y editar todo 
-                $servicio_anexo_id = $request->servicio_anexo_id;
+                $servicio_anexo_id = $slug;
                 $estacion = ServicioAnexo::find($servicio_anexo_id);
                 $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
@@ -119,29 +119,15 @@ class DatosServicioAnexoController extends Controller
                         ];
                     }
                 }
-                return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
             } else {
 
-                return redirect()->route('servicio_anexo.index')->with('error', 'Servicio no valido');
+                return redirect()->route('servicio_anexo_30.datos_servicio_anexo.index')->with('error', 'Servicio no valido');
             }
 
         }
-
-
     }
 
-    public function listas_anexo30(Request $request)
-    {
-        // Lista de estados de México
-        $servicio_anexo_id = $request->servicio_anexo_id;
-        $estacion = ServicioAnexo::find($servicio_anexo_id);
-
-        return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.listas', compact('servicio_anexo_id', 'estacion'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function generateWord(Request $request)
     {
         try {
@@ -268,5 +254,6 @@ class DatosServicioAnexoController extends Controller
 
         return response()->json(['generatedFiles' => $generatedFiles]);
     }
+
 
 }

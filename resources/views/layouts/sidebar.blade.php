@@ -90,7 +90,7 @@
                 </a>
                 <ul id="anexo-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ route('anexo.index') }}">
+                        <a href="{{ route('servicio_anexo_30.index') }}">
                             <i class="bi bi-circle"></i><span>Ver Servicios</span>
                         </a>
                     </li>
@@ -117,7 +117,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('anexo.index') }}">
+                <a class="nav-link collapsed" href="{{ route('servicio_anexo_30.index') }}">
                     <i class="bi bi-folder-check"></i>
                     <span>Anexo 30</span>
                 </a>

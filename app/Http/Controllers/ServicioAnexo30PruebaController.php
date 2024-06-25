@@ -16,7 +16,7 @@ use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
-class ServicioAnexo30Controller extends Controller
+class ServicioAnexo30PruebaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class ServicioAnexo30Controller extends Controller
         // Inicializar colecciones y variables necesarias
         $usuarios = collect();
         $servicios = collect();
-        $warnings = [];
+        $warnings = []; 
 
         // Obtener el rol "Verificador Anexo 30"
         $rolVerificador = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first();
@@ -80,38 +80,7 @@ class ServicioAnexo30Controller extends Controller
     }
 
 
-    public function obtenerServicios(Request $request)
-    {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
-
-        // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
-        $usuariosConRol = Role::on('mysql')->where('name', 'Verificador Anexo 30')->first()->users()->pluck('id');
-
-        // Obtener los usuarios correspondientes a esos IDs
-        $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
-
-        // Verificar si se envió un usuario seleccionado en la solicitud
-        $usuarioSeleccionado = $request->input('usuario_id');
-
-        // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
-        if ($usuarioSeleccionado) {
-            $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
-        } else {
-            // Verificar si el usuario es administrador
-            if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-                // Si es administrador, obtener todos los servicios
-                $servicios = ServicioAnexo::all(); 
-            } else {
-                // Si no es administrador, obtener solo los servicios del usuario autenticado
-                $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
-            }
-        }
-
-        // Pasar los servicios a la vista
-        return view('partials.tabla_servicios', compact('servicios', 'usuarios'));
-    }
-
+   
 
     public function hasAnyRole($roles)
     {
@@ -120,76 +89,9 @@ class ServicioAnexo30Controller extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        // Lista de estados de México
-        $estados = [
-            'Aguascalientes',
-            'Baja California',
-            'Baja California Sur',
-            'Campeche',
-            'Chiapas',
-            'Chihuahua',
-            'Coahuila',
-            'Colima',
-            'Ciudad de México',
-            'Durango',
-            'Guanajuato',
-            'Guerrero',
-            'Hidalgo',
-            'Jalisco',
-            'México',
-            'Michoacán',
-            'Morelos',
-            'Nayarit',
-            'Nuevo León',
-            'Oaxaca',
-            'Puebla',
-            'Querétaro',
-            'Quintana Roo',
-            'San Luis Potosí',
-            'Sinaloa',
-            'Sonora',
-            'Tabasco',
-            'Tamaulipas',
-            'Tlaxcala',
-            'Veracruz',
-            'Yucatán',
-            'Zacatecas'
-        ];
-        return view('armonia.anexo.servicio_anexo.crear', compact('estados'));
-    }
+    
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-
-        $usuario = Auth::user(); // O el método que uses para obtener el usuario
-        $nomenclatura = $this->generarNomenclatura($usuario);
-
-        $servicio = new ServicioAnexo();
-
-        // Establecer los valores de los campos
-
-        $servicio->nomenclatura = $nomenclatura;
-        $servicio->pending_apro_servicio = false;
-        $servicio->pending_deletion_servicio = false;
-        $servicio->usuario_id = $usuario->id;
-
-        // Asigna otros campos al servicio
-
-        $servicio->save();
-
-        // Definir la carpeta de destino dentro de 'public/storage'
-        $customFolderPath = "servicios_anexo30/{$nomenclatura}";
-
-        // Crear la carpeta si no existe
-        Storage::disk('public')->makeDirectory($customFolderPath);
-
-        return redirect()->route('servicio_anexo.index')->with('success', 'servicio creado exitosamente');
-    }
+    
 
     /**
      * Display the specified resource.
@@ -218,92 +120,11 @@ class ServicioAnexo30Controller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //Aca lo que se hara sera mandar el pendiente de borrar a la tabla  de Dictamenop y luego se tiene que notiicar al usuari
-        //administrador que tiene una notificacion pendiente de aprobar para poder eliminar el registro
-        // Buscar el dictamen por su ID
-        //Obetner si es administrador y si si borrarlo de una si no solo lanar el pendiente
-        $servicio = ServicioAnexo::findOrFail($id);
+    
 
-        // Marcar el dictamen como pendiente de eliminación
-        $servicio->pending_deletion_servicio = true;
+    
 
-        // Obtener la fecha y hora actuales
-        $fechaHoraActual = Carbon::now();
-
-        // Formatear la fecha y la hora según tu preferencia
-        $fechaHoraFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
-
-        // Asignar la fecha y hora formateadas al modelo
-        $servicio->date_eliminated_at = $fechaHoraFormateada;
-
-        $servicio->save();
-
-        // No se notifica ya que se tomara el valor de la tabla Notificar al administrador
-
-        // Redireccionar con un mensaje de notificación
-        return redirect()->route('servicio_anexo.index')->with('success', 'Solicitud de eliminación enviada para aprobación.');
-    }
-
-    public function generarNomenclatura($usuario)
-    {
-        $iniciales = $this->obtenerIniciales($usuario);
-        $anio = date('Y');
-        $nomenclatura = '';
-        $numero = 1;
-
-        do {
-            $nomenclatura = "A-$iniciales-$numero-$anio";
-            $existe = ServicioAnexo::where('nomenclatura', $nomenclatura)->exists();
-
-            if ($existe) {
-                $numero++;
-            } else {
-                break;
-            }
-        } while (true);
-
-        return $nomenclatura;
-    }
-
-    private function obtenerIniciales($usuario)
-    {
-        $nombres = explode(' ', $usuario->name); // Suponiendo que el campo de nombres es 'name'
-        $iniciales = '';
-        $contador = 0;
-
-        foreach ($nombres as $nombre) {
-            if ($contador < 3) {
-                $iniciales .= substr($nombre, 0, 1);
-                $contador++;
-            } else {
-                break;
-            }
-        }
-
-        return strtoupper($iniciales);
-    }
-
-    public function apro_servicio_anexo()
-    {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
-
-        // Verificar si el usuario es administrador
-        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador, obtener todos los dictámenes
-            $servicios = ServicioAnexo::all();
-
-        } else {
-            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
-            $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
-        }
-
-        // Pasar los dictámenes a la vista
-        return view('armonia.anexo.aprobacion_servicio.index', compact('servicios'));
-    }
-
+    
 
     //Metodo para generar el pdf de la cotizacion
     public function generarpdfcotizacion(Request $request)
@@ -396,23 +217,7 @@ class ServicioAnexo30Controller extends Controller
     }
 
 
-    public function apro($id)
-    {
-        try {
-            // Buscar el servicio por su ID
-            $servicio = ServicioAnexo::findOrFail($id);
-
-            // Establecer pending_apro_servicio como true
-            $servicio->pending_apro_servicio = true;
-            $servicio->save();
-
-            // Redireccionar con un mensaje de éxito
-            return redirect()->route('apro.anexo')->with('success', 'Servicio aprobado correctamente.');
-        } catch (ModelNotFoundException $e) {
-            // Manejar la excepción si el servicio no se encuentra
-            return redirect()->route('apro.anexo') > with('error', 'Servicio no encontrado.');
-        }
-    }
+    
 
 
 }

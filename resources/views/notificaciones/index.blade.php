@@ -75,10 +75,6 @@
                                                 class="btn btn-info">Listar Archivos</a>
                                         </td>
                                         <td scope="row">
-                                            @can('editar-servicio')
-                                                <a class="btn btn-primary"
-                                                    href="{{ route('servicio_anexo.edit', $servicio->nomenclatura) }}">Editar</a>
-                                            @endcan
                                             @can('borrar-servicio')
                                                 <form action="{{ route('approval.cancel', $servicio->nomenclatura) }}"
                                                     method="POST" style="display: inline;">
