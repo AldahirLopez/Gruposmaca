@@ -683,6 +683,8 @@
         // Obtener el ID del servicio desde el campo oculto
         const id = document.getElementById('id_servicio').value;
         const nomenclatura = document.getElementById('nomenclatura').value;
+        const generatedFilesTable = document.getElementById('generatedFilesTable');
+        const loadingSpinner = document.getElementById('loadingSpinner');
 
         // Función para mostrar u ocultar las cards
         function checkRegistro() {
@@ -696,7 +698,7 @@
                     } else {
                         // Ocultar las cards y mostrar un mensaje si no existe el registro
                         cards.forEach(card => card.style.display = 'none');
-                        //alert('Registro no encontrado');
+                        // alert('Registro no encontrado');
                     }
                 })
                 .catch(error => console.error('Error en la solicitud AJAX:', error));
@@ -707,11 +709,11 @@
             fetch(`/list-generated-files/${nomenclatura}`)
                 .then(response => response.json())
                 .then(data => {
-                    const generatedFilesTable = document.getElementById('generatedFilesTable');
                     if (data && data.generatedFiles && data.generatedFiles.length > 0) {
                         // Construir el HTML para la tabla de archivos generados
                         let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
                         data.generatedFiles.forEach(file => {
+                            // Modificar la línea donde se genera el enlace de descarga
                             tableHtml += `<tr><td>${file.name}</td><td><a href="/descargar-archivo/${encodeURIComponent(file.name)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
                         });
                         tableHtml += '</tbody></table>';
@@ -735,13 +737,9 @@
         function handleFormSubmit(event) {
             event.preventDefault(); // Evitar la recarga de la página
 
-            // Ocultar la tabla de archivos generados y mostrar el spinner de carga
-            const generatedFilesTable = document.getElementById('generatedFilesTable');
-            generatedFilesTable.style.display = 'none';
-
-            // Deshabilitar el botón de enviar para evitar múltiples envíos
-            const submitButton = document.querySelector('#generateWordForm button[type="submit"]');
-            submitButton.disabled = true;
+            // Mostrar el spinner de carga
+            loadingSpinner.classList.remove('d-none');
+            loadingSpinner.classList.add('d-flex');
 
             const formData = new FormData(event.target);
 
@@ -752,17 +750,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.generatedFiles && data.generatedFiles.length > 0) {
-                        // Construir el HTML para la tabla de archivos generados
-                        let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
-                        data.generatedFiles.forEach(file => {
-                            // Modificar la línea donde se genera el enlace de descarga
-                            tableHtml += `<tr><td>${file.name}</td><td><a href="/descargar-archivo/${encodeURIComponent(file.name)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
-                        });
-                        tableHtml += '</tbody></table>';
-
-                        // Actualizar el contenedor de la tabla y mostrarla
-                        generatedFilesTable.innerHTML = tableHtml;
-                        generatedFilesTable.style.display = 'block';
+                        // Recargar la página después de enviar el formulario
+                        location.reload();
                     } else {
                         // Mostrar un mensaje si no se generaron archivos
                         alert('No se generaron archivos. Por favor, revise los datos ingresados.');
@@ -776,12 +765,6 @@
                     // Ocultar el spinner de carga después de completar la solicitud (éxito o error)
                     loadingSpinner.classList.remove('d-flex');
                     loadingSpinner.classList.add('d-none');
-
-                    // Habilitar el botón de enviar nuevamente
-                    submitButton.disabled = false;
-
-                    // Cargar los archivos generados después de completar la generación
-                    loadGeneratedFiles();
                 });
         }
 
@@ -793,5 +776,6 @@
         document.getElementById('generateWordForm').addEventListener('submit', handleFormSubmit);
     });
 </script>
+
 
 @endsection
