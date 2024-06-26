@@ -63,12 +63,14 @@
                                         <tr>
                                             <td scope="row">{{ $servicio->nomenclatura }}</td>
                                             <td scope="row">
-                                                @if(!optional($servicio->cotizacion)->estado_cotizacion || $servicio->pending_deletion_servicio)
-                                                    <button class="btn btn-primary" disabled><i
-                                                            class="bi bi-file-earmark-excel-fill"></i></button>
+                                                @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
+                                                    <button class="btn btn-primary" disabled>
+                                                        <i class="bi bi-file-earmark-excel-fill"></i>
+                                                    </button>
                                                 @else
-                                                    <a href="{{ route('cotizacion.ver', ['id' => optional($servicio->cotizacion)->id]) }}"
-                                                        target="_blank" class="btn btn-primary btn-generar-pdf">
+                                                    <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
+                                                        class="btn btn-primary btn-descargar-pdf"
+                                                        data-carpeta="{{ $servicio->nomenclatura }}">
                                                         <i class="bi bi-file-earmark-check-fill"></i>
                                                     </a>
                                                 @endif
@@ -144,7 +146,31 @@
             }
         };
         xhr.send();
-    }); 
+    });
+
+    $(document).ready(function () {
+        $('.btn-descargar-pdf').click(function (event) {
+            // Prevenir el comportamiento predeterminado del enlace (navegación)
+            event.preventDefault();
+
+            // Obtener la ruta del documento desde el atributo href del enlace
+            var rutaDocumento = $(this).attr('href');
+
+            // Obtener el nombre de la carpeta desde el atributo data-carpeta del enlace
+            var carpeta = $(this).data('carpeta');
+
+            // Construir el nombre de archivo para la descarga
+            var nombreArchivo = 'Cotizacion_' + carpeta + '.pdf';
+
+            // Crear un elemento <a> temporal y simular clic para descargar el archivo
+            var link = document.createElement('a');
+            link.href = rutaDocumento;
+            link.setAttribute('download', nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    });
 </script>
 
 @endsection

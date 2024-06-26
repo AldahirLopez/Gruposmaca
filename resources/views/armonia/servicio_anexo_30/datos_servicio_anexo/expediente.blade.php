@@ -518,8 +518,7 @@
 
                                         <div class="modal-body">
                                             <!-- Formulario de generación de expediente -->
-                                            <form id="generateWordForm"
-                                                action="{{ route('generate.word') }}"
+                                            <form id="generateWordForm" action="{{ route('generate.word') }}"
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
@@ -635,6 +634,11 @@
 
                             <!-- Contenedor para la tabla de archivos generados -->
                             <div id="generatedFilesTable" style="margin-top: 30px;">
+                                <!-- Spinner de carga -->
+                                <div id="loadingSpinner" class="spinner-border text-primary d-none" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+
                                 @if(!empty($existingFiles))
                                     <h4>Archivos Existentes:</h4>
                                     <table class="table table-bordered">
@@ -647,17 +651,21 @@
                                         <tbody>
                                             @foreach($existingFiles as $file)
                                                 <tr>
-                                                    <td>{{ $file['name'] }}</td>
-                                                    <td><a href="{{ $file['url'] }}" class="btn btn-info" download>Descargar</a>
+                                                    <td>{{ basename($file['name']) }}</td>
+                                                    <!-- Mostrar solo el nombre del archivo -->
+                                                    <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}"
+                                                            class="btn btn-info" download>Descargar</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 @else
-
+                                    <!-- Mensaje o contenido alternativo si no hay archivos existentes -->
+                                    <p>No hay archivos existentes.</p>
                                 @endif
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -665,101 +673,125 @@
         </div>
 </section>
 
-<!-- Incluir jQuery y el script de AJAX -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Incluir jQuery y Bootstrap, preferiblemente desde un CDN para aprovechar el caché del navegador -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 
+<!-- Script optimizado -->
 <script>
-    $(document).ready(function () {
-        // Función para cargar los archivos generados
-        function loadGeneratedFiles() {
-            let nomenclatura = $('#nomenclatura').val(); // Obtener la nomenclatura
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener el ID del servicio desde el campo oculto
+        const id = document.getElementById('id_servicio').value;
+        const nomenclatura = document.getElementById('nomenclatura').value;
 
-            // Realizar la petición AJAX para obtener los archivos generados
-            $.ajax({
-                url: `/list-generated-files/${nomenclatura}`,
-                type: 'GET',
-                success: function (response) {
-                    if (response && response.generatedFiles && response.generatedFiles.length > 0) {
-                        // Construir el HTML para la tabla de archivos generados
-                        let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
-                        response.generatedFiles.forEach(file => {
-                            tableHtml += `<tr><td>${file.name}</td><td><a href="${file.url}" class="btn btn-info" download>Descargar</a></td></tr>`;
-                        });
-                        tableHtml += '</tbody></table>';
-
-                        // Actualizar el contenedor de la tabla y mostrarla
-                        $('#generatedFilesTable').html(tableHtml).show();
+        // Función para mostrar u ocultar las cards
+        function checkRegistro() {
+            fetch(`/api/consulta/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const cards = document.querySelectorAll('.dictamenes-card');
+                    if (data.exists) {
+                        // Mostrar las cards si el registro existe
+                        cards.forEach(card => card.style.display = 'block');
                     } else {
-                        // Mostrar un mensaje si no se encontraron archivos generados
-                        $('#generatedFilesTable').html('<p>No se encontraron archivos generados.</p>').show();
+                        // Ocultar las cards y mostrar un mensaje si no existe el registro
+                        cards.forEach(card => card.style.display = 'none');
+                        //alert('Registro no encontrado');
                     }
-                },
-                error: function (xhr, status, error) {
-                    // Mostrar un mensaje de error si falla la solicitud
-                    alert('Ocurrió un error al cargar los documentos generados.');
-                }
-            });
+                })
+                .catch(error => console.error('Error en la solicitud AJAX:', error));
         }
 
-        // Llamar a la función para cargar archivos generados al cargar la página
-        loadGeneratedFiles();
-
-        // Manejar el envío del formulario para generar el expediente
-        $('#generateWordForm').on('submit', function (e) {
-            e.preventDefault(); // Evitar la recarga de la página
-
-            // Ocultar la tabla de archivos generados
-            $('#generatedFilesTable').hide();
-
-            // Mostrar el spinner de carga
-            $('#loadingSpinner').addClass('d-flex').removeClass('d-none');
-
-            // Deshabilitar el botón de enviar para evitar múltiples envíos
-            $('#generateWordForm button[type="submit"]').prop('disabled', true);
-
-            // Enviar los datos del formulario usando AJAX
-            $.ajax({
-                url: $(this).attr('action'),
-                type: $(this).attr('method'),
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response && response.generatedFiles && response.generatedFiles.length > 0) {
+        // Función para cargar los archivos generados
+        function loadGeneratedFiles() {
+            fetch(`/list-generated-files/${nomenclatura}`)
+                .then(response => response.json())
+                .then(data => {
+                    const generatedFilesTable = document.getElementById('generatedFilesTable');
+                    if (data && data.generatedFiles && data.generatedFiles.length > 0) {
                         // Construir el HTML para la tabla de archivos generados
                         let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
-                        response.generatedFiles.forEach(file => {
-                            tableHtml += `<tr><td>${file.name}</td><td><a href="${file.url}" class="btn btn-info" download>Descargar</a></td></tr>`;
+                        data.generatedFiles.forEach(file => {
+                            tableHtml += `<tr><td>${file.name}</td><td><a href="/descargar-archivo/${encodeURIComponent(file.name)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
                         });
                         tableHtml += '</tbody></table>';
 
                         // Actualizar el contenedor de la tabla y mostrarla
-                        $('#generatedFilesTable').html(tableHtml).show();
+                        generatedFilesTable.innerHTML = tableHtml;
+                        generatedFilesTable.style.display = 'block';
+                    } else {
+                        // Mostrar un mensaje si no se encontraron archivos generados
+                        generatedFilesTable.innerHTML = '<p>No se encontraron archivos generados.</p>';
+                        generatedFilesTable.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar los documentos generados:', error);
+                    alert('Ocurrió un error al cargar los documentos generados.');
+                });
+        }
+
+        // Función para manejar el envío del formulario
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Evitar la recarga de la página
+
+            // Ocultar la tabla de archivos generados y mostrar el spinner de carga
+            const generatedFilesTable = document.getElementById('generatedFilesTable');
+            generatedFilesTable.style.display = 'none';
+
+            // Deshabilitar el botón de enviar para evitar múltiples envíos
+            const submitButton = document.querySelector('#generateWordForm button[type="submit"]');
+            submitButton.disabled = true;
+
+            const formData = new FormData(event.target);
+
+            fetch(event.target.action, {
+                method: event.target.method,
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.generatedFiles && data.generatedFiles.length > 0) {
+                        // Construir el HTML para la tabla de archivos generados
+                        let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
+                        data.generatedFiles.forEach(file => {
+                            // Modificar la línea donde se genera el enlace de descarga
+                            tableHtml += `<tr><td>${file.name}</td><td><a href="/descargar-archivo/${encodeURIComponent(file.name)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
+                        });
+                        tableHtml += '</tbody></table>';
+
+                        // Actualizar el contenedor de la tabla y mostrarla
+                        generatedFilesTable.innerHTML = tableHtml;
+                        generatedFilesTable.style.display = 'block';
                     } else {
                         // Mostrar un mensaje si no se generaron archivos
                         alert('No se generaron archivos. Por favor, revise los datos ingresados.');
                     }
-                },
-                error: function (xhr, status, error) {
-                    // Mostrar un mensaje de error si falla la generación de archivos
+                })
+                .catch(error => {
+                    console.error('Error al generar los documentos:', error);
                     alert('Ocurrió un error al generar los documentos.');
-                },
-                complete: function () {
+                })
+                .finally(() => {
                     // Ocultar el spinner de carga después de completar la solicitud (éxito o error)
-                    $('#loadingSpinner').removeClass('d-flex').addClass('d-none');
+                    loadingSpinner.classList.remove('d-flex');
+                    loadingSpinner.classList.add('d-none');
 
                     // Habilitar el botón de enviar nuevamente
-                    $('#generateWordForm button[type="submit"]').prop('disabled', false);
+                    submitButton.disabled = false;
 
-                    // Llamar a la función para cargar archivos generados después de completar la generación
+                    // Cargar los archivos generados después de completar la generación
                     loadGeneratedFiles();
-                }
-            });
-        });
+                });
+        }
+
+        // Ejecutar las funciones al cargar la página
+        checkRegistro();
+        loadGeneratedFiles();
+
+        // Asignar el manejador de eventos para el formulario
+        document.getElementById('generateWordForm').addEventListener('submit', handleFormSubmit);
     });
-
 </script>
-
 
 @endsection

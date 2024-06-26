@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
 
-    
+
 
     //Servicio Anexo Vista general 
     Route::resource('servicio_anexo_30', Servicio_Anexo_30Controller::class);
@@ -58,6 +58,11 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('approve.servicio.deletion');
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
+
+    //Generar PDF cotizacion anexo 30 
+    Route::post('/pdf_cotizacion', [Servicio_Anexo_30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+
+    Route::get('/descargar-cotizacion-ajax', [Servicio_Anexo_30Controller::class, 'descargarCotizacionAjax'])->name('descargar.cotizacion.ajax');
 
     //Servicios Para Aprobar
     Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
@@ -68,16 +73,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_inspector_anexo_30', Servicio_Inspector_Anexo_30Controller::class);
     Route::get('/obtener-servicios', [Servicio_Inspector_Anexo_30Controller::class, 'obtenerServicios'])->name('servicio_inspector_anexo_30.obtenerServicios');
 
+
     //Ruta para cada inspector para su expediente
     Route::get('/expediente/anexo30/{slug}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ExpedienteInspectorAnexo30'])->name('expediente.anexo30');
 
     Route::post('/generate-word', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generateWord'])->name('generate.word');
+
     Route::get('/list-generated-files/{nomenclatura}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'listGeneratedFiles']);
 
-    //Route::get('/cotizacion/{id}', 'CotizacionController@show')->name('cotizacion.ver');
+    Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
 
-    
-   // Route::get('/listas/anexo30/{slug}', 'ListasInspeccionController@verAnexo30')->name('listas.anexo30');
+    Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
+        ->name('descargar.archivo');
+
+
+
+
+
+    // Route::get('/listas/anexo30/{slug}', 'ListasInspeccionController@verAnexo30')->name('listas.anexo30');
     //  Route::get('/archivos/{slug}', 'ArchivosController@index')->name('archivos.index');
 
 
@@ -103,8 +116,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
-    //Generar PDF cotizacion anexo 30 
-    //Route::post('/pdf_cotizacion', [ServicioAnexo30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
+
 
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
     Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
@@ -130,7 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
 
-    
+
 
 
 });

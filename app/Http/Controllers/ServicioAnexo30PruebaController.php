@@ -82,10 +82,7 @@ class ServicioAnexo30PruebaController extends Controller
 
    
 
-    public function hasAnyRole($roles)
-    {
-        return $this->roles()->whereIn('name', $roles)->exists();
-    }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -126,95 +123,10 @@ class ServicioAnexo30PruebaController extends Controller
 
     
 
-    //Metodo para generar el pdf de la cotizacion
-    public function generarpdfcotizacion(Request $request)
-    {
-        // Establecer la configuración regional en español
-        app()->setLocale('es');
-
-        // Obtener los datos del formulario
-        $id_servicio = $request->input('id_servicio');
-        $nomenclatura = $request->input('nomenclatura');
-        $nombre_estacion = strtoupper($request->input('razon_social'));
-        $direccion_estacion = strtoupper($request->input('direccion'));
-        $costo = $request->input('costo');
-
-        // Calcular el 16% de IVA 
-        $iva = $costo * 0.16;
-
-        // Obtener la fecha actual en el formato deseado (día de mes de año)
-        $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
-
-        // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
-        $folderPath = "servicios_anexo30/{$nomenclatura}";
-        $subFolderPath = "{$folderPath}/cotizacion"; 
-
-        // Verificar y crear la carpeta principal si no existe
-        if (!Storage::disk('public')->exists($folderPath)) {
-            Storage::disk('public')->makeDirectory($folderPath);
-        }
-
-        // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
-        if (!Storage::disk('public')->exists($subFolderPath)) {
-            Storage::disk('public')->makeDirectory($subFolderPath);
-        }
-
-        // Definir la ruta completa del PDF
-        $pdfPath = "{$subFolderPath}/Cotizacion_{$nomenclatura}.pdf";
-
-        // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
-        $html = view('armonia.anexo.cotizacion.cotizacion_pdf.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'costo', 'iva', 'fecha_actual'))->render();
-        $pdf = PDF::loadHTML($html);
-
-        // Guardar el PDF en el almacenamiento de Laravel
-        Storage::disk('public')->put($pdfPath, $pdf->output());
-
-        // Obtener la URL pública del PDF
-        $pdfUrl = Storage::url($pdfPath);
-
-        // Verificar si ya existe una cotización con este id_servicio
-        $cotizacion = Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $id_servicio)->first();
-
-        if ($cotizacion) {
-            // Si ya existe, actualiza el registro existente
-            $cotizacion->rutadoc_cotizacion = $pdfUrl;
-            $cotizacion->save();
-        } else {
-            // Si no existe, crea un nuevo registro
-            $cotizacion = new Cotizacion_Servicio_Anexo30();
-            $cotizacion->rutadoc_cotizacion = $pdfUrl;
-            $cotizacion->servicio_anexo_id = $id_servicio;
-            $cotizacion->estado_cotizacion = true;
-            // Asigna otros campos si es necesario
-            $cotizacion->save();
-        }
-
-        // Devolver la URL del PDF como respuesta
-        return response()->json(['pdf_url' => $pdfUrl]);
-    }
+    
 
 
-    public function mostrarCotizacion($servicio_id)
-    {
-        // Encuentra la cotización por ID
-        $cotizacion_servicio = Cotizacion_Servicio_Anexo30::findOrFail($servicio_id);
-
-        // Verifica si la ruta del PDF está presente
-        if (!$cotizacion_servicio->rutadoc_cotizacion) {
-            return redirect()->back()->withErrors('No se encontró la ruta del PDF para el servicio especificado.');
-        }
-
-        // Obtiene la ruta completa del archivo PDF
-        $pdf_path = storage_path('app/' . $cotizacion_servicio->rutadoc_cotizacion);
-
-        // Verifica si el archivo existe
-        if (!file_exists($pdf_path)) {
-            return redirect()->back()->withErrors('El archivo PDF no existe en la ruta especificada.');
-        }
-
-        // Retorna el archivo para mostrarlo en el navegador
-        return response()->file($pdf_path);
-    }
+    
 
 
     

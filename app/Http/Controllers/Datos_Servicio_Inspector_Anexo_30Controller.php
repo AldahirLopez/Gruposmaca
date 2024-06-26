@@ -255,5 +255,35 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         return response()->json(['generatedFiles' => $generatedFiles]);
     }
 
+    public function validarDatosExpediente($id)
+    {
+        // Busca el registro en la base de datos
+        $registro = Datos_Servicio::where('servicio_anexo_id', $id)->first();
+
+        // Responde con datos JSON
+        if ($registro) {
+            return response()->json(['exists' => true, 'data' => $registro]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    }
+
+    public function descargarWord(Request $request, $archivo, $estacion)
+    {
+        // Ejemplo de construcción de la ruta del archivo
+        $nomenclatura = strtoupper($estacion); // Obtener la nomenclatura desde la ruta
+
+        // Aquí puedes usar $archivo y $nomenclatura para construir la ruta del archivo
+        $rutaArchivo = storage_path("app/public/servicios_anexo30/{$nomenclatura}/documentos_rellenados/{$archivo}");
+
+        // Verificar si el archivo existe antes de proceder
+        if (file_exists($rutaArchivo)) {
+            // Aquí puedes devolver el archivo para descargar o realizar alguna operación con él
+            return response()->download($rutaArchivo);
+        } else {
+            // Manejar el caso en que el archivo no exista
+            abort(404, "El archivo no existe en la ruta especificada.");
+        }
+    }
 
 }
