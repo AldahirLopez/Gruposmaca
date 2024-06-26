@@ -83,7 +83,7 @@
 
 
 
-                            <!-- Modal para Dictámenes Informatico-->
+                            <!-- Modal para Dictámenes Informático -->
                             <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog"
                                 aria-labelledby="dictamenesModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -91,28 +91,22 @@
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                                             <h5 class="modal-title" id="dictamenesModalLabel">TABLA DE CUMPLIMIENTO
-                                                SISTEMA
-                                                INFORMATICO</h5>
-
+                                                SISTEMA INFORMATICO</h5>
                                             <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <table class="table table-sm">
                                                 <!-- Agregada la clase table-sm para hacer la tabla más compacta -->
-
                                                 <thead>
                                                     <tr>
                                                         <th scope="col" style="font-size: 15px;">Especificación o
                                                             requerimiento</th>
-                                                        <th scope="col" style="font-size: 15px;">Opinión de
-                                                            cumplimiento
+                                                        <th scope="col" style="font-size: 15px;">Opinión de cumplimiento
                                                         </th>
-                                                        <th scope="col" style="font-size: 15px;">Detalle de la
-                                                            opinión
+                                                        <th scope="col" style="font-size: 15px;">Detalle de la opinión
                                                             (Hallazgos)</th>
-                                                        <th scope="col" style="font-size: 15px;">Recomendaciones
-                                                        </th>
+                                                        <th scope="col" style="font-size: 15px;">Recomendaciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -123,23 +117,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios1" id="gridRadios1a" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios1a">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios1" id="gridRadios1b"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios1b">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios1" id="gridRadios1c"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios1c">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -154,33 +148,31 @@
                                                                 <li style="font-size: 12px;">a) Datos Generales</li>
                                                                 <li style="font-size: 12px;">b) Registro del volumen
                                                                 </li>
-                                                                <li style="font-size: 12px;">c) Tipo de hidrocarburo
-                                                                    o
+                                                                <li style="font-size: 12px;">c) Tipo de hidrocarburo o
                                                                     petrolífero</li>
-                                                                <li style="font-size: 12px;">d) Información fiscal
-                                                                </li>
+                                                                <li style="font-size: 12px;">d) Información fiscal</li>
                                                             </ul>
                                                         </td>
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios2" id="gridRadios4" value="cumple"
+                                                                    name="gridRadios2" id="gridRadios2a" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios4">Cumple</label>
+                                                                    for="gridRadios2a">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios2" id="gridRadios5"
+                                                                    name="gridRadios2" id="gridRadios2b"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios5">No
+                                                                <label class="form-check-label" for="gridRadios2b">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios2" id="gridRadios6"
+                                                                    name="gridRadios2" id="gridRadios2c"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios6">No
+                                                                <label class="form-check-label" for="gridRadios2c">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -194,23 +186,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios3" id="gridRadios3a" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios3a">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios3" id="gridRadios3b"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios3b">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios3" id="gridRadios3c"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios3c">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -219,30 +211,30 @@
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <h6>Requerimientos del procesamiento de la información y
-                                                                de la
-                                                                generación de reportes</h6>
+                                                            <h6>Requerimientos del procesamiento de la información y de
+                                                                la generación de
+                                                                reportes</h6>
                                                         </td>
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios4" id="gridRadios4a" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios4a">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios4" id="gridRadios4b"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios4b">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios4" id="gridRadios4c"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios4c">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -256,23 +248,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios5" id="gridRadios5a" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios5a">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios5" id="gridRadios5b"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios5b">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios5" id="gridRadios5c"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios5c">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -290,6 +282,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <!-- Modal para Dictámenes Medicion -->
@@ -403,23 +396,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios3" id="gridRadios7" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios7">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios3" id="gridRadios8"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios8">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios3" id="gridRadios9"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios9">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -435,23 +428,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios4" id="gridRadios10" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios10">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios4" id="gridRadios11"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios11">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios4" id="gridRadios13"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios13">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -465,23 +458,23 @@
                                                         <td>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios1" value="cumple"
+                                                                    name="gridRadios5" id="gridRadios14" value="cumple"
                                                                     checked>
                                                                 <label class="form-check-label"
-                                                                    for="gridRadios1">Cumple</label>
+                                                                    for="gridRadios14">Cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios2"
+                                                                    name="gridRadios5" id="gridRadios15"
                                                                     value="no_cumple">
-                                                                <label class="form-check-label" for="gridRadios2">No
+                                                                <label class="form-check-label" for="gridRadios15">No
                                                                     cumple</label>
                                                             </div>
                                                             <div class="form-check" style="font-size: 13px;">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios1" id="gridRadios3"
+                                                                    name="gridRadios5" id="gridRadios16"
                                                                     value="no_aplica">
-                                                                <label class="form-check-label" for="gridRadios3">No
+                                                                <label class="form-check-label" for="gridRadios16">No
                                                                     aplica</label>
                                                             </div>
                                                         </td>
@@ -696,7 +689,7 @@
                         // Mostrar las cards si el registro existe
                         cards.forEach(card => card.style.display = 'block');
                     } else {
-                        // Ocultar las cards y mostrar un mensaje si no existe el registro
+                        // Ocultar las cards si no existe el registro
                         cards.forEach(card => card.style.display = 'none');
                         // alert('Registro no encontrado');
                     }
@@ -721,10 +714,16 @@
                         // Actualizar el contenedor de la tabla y mostrarla
                         generatedFilesTable.innerHTML = tableHtml;
                         generatedFilesTable.style.display = 'block';
+
+                        // Después de cargar los archivos, verificar el registro
+                        checkRegistro();
                     } else {
                         // Mostrar un mensaje si no se encontraron archivos generados
                         generatedFilesTable.innerHTML = '<p>No se encontraron archivos generados.</p>';
                         generatedFilesTable.style.display = 'block';
+
+                        // Después de mostrar el mensaje, verificar el registro
+                        checkRegistro();
                     }
                 })
                 .catch(error => {
@@ -769,13 +768,10 @@
         }
 
         // Ejecutar las funciones al cargar la página
-        checkRegistro();
         loadGeneratedFiles();
 
         // Asignar el manejador de eventos para el formulario
         document.getElementById('generateWordForm').addEventListener('submit', handleFormSubmit);
     });
 </script>
-
-
 @endsection
