@@ -1,4 +1,3 @@
-<!-- resources/views/partials/tabla_servicios.blade.php -->
 <table class="table table-striped">
     <thead style="text-align: center;">
         <tr>
@@ -14,68 +13,36 @@
             <tr>
                 <td scope="row">{{ $servicio->nomenclatura }}</td>
                 <td scope="row">
-                    @if(!optional($servicio->cotizacion)->estado_cotizacion)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
-                        </center>
-                    @elseif($servicio->pending_deletion_servicio)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-file-earmark-excel-fill"></i></button>
-                        </center>
+                    @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
+                        <button class="btn btn-primary" disabled>
+                            <i class="bi bi-file-earmark-excel-fill"></i>
+                        </button>
                     @else
-                        <a href="{{ $servicio->cotizacion ? $servicio->cotizacion->ruta_doc_url : '#' }}" target="_blank"
-                            class="btn btn-primary btn-generar-pdf">
+                        <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
+                            class="btn btn-primary btn-descargar-pdf" data-carpeta="{{ $servicio->nomenclatura }}">
                             <i class="bi bi-file-earmark-check-fill"></i>
                         </a>
                     @endif
                 </td>
                 <td scope="row">
-                    @if(!$servicio->pending_apro_servicio)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
-                        </center>
-                    @elseif($servicio->pending_deletion_servicio)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
-                        </center>
+                    @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
+                        <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
                     @else
-                        <a href="{{ route('expediente.anexo30', ['servicio_anexo_id' => $servicio->id]) }}"
-                            class="btn btn-primary">
+                        <a href="{{ route('expediente.anexo30', ['slug' => $servicio->id]) }}" class="btn btn-primary">
                             <i class="bi bi-folder-fill"></i>
                         </a>
                     @endif
                 </td>
                 <td scope="row">
-                    @if(!$servicio->pending_apro_servicio)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
-                        </center>
-                    @elseif($servicio->pending_deletion_servicio)
-                        <center>
-                            <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
-                        </center>
+                    @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
+                        <button class="btn btn-primary" disabled><i class="bi bi-folder-fill"></i></button>
                     @else
-                        <a href="{{ route('listas.anexo30', ['servicio_anexo_id' => $servicio->id]) }}" class="btn btn-primary">
+                        <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}" class="btn btn-primary">
                             <i class="bi bi-folder-fill"></i>
                         </a>
                     @endif
                 </td>
                 <td scope="row">
-                    @if(!$servicio->pending_apro_servicio)
-
-                        <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
-
-                    @elseif($servicio->pending_deletion_servicio)
-
-                        <button class="btn btn-primary" disabled><i class="bi bi-pencil-square"></i></button>
-
-                    @else
-                        <!-- Modifica tu botón para usar la clase 'btn-generar-pdf' -->
-                        <a href="{{ route('archivos.index', ['servicio_id' => $servicio->id]) }}"
-                            class="btn btn-primary btn-generar-pdf">
-                            <i class="bi bi-file-earmark-check-fill"></i>
-                        </a>
-                    @endif
                     @can('borrar-servicio')
                         @if($servicio->pending_deletion_servicio)
                             <button class="btn btn-danger" disabled>(pendiente)</button>
@@ -89,7 +56,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="7">No se encontraron servicios para mostrar.</td>
+                <td colspan="5">No se encontraron servicios para mostrar.</td>
             </tr>
         @endforelse
     </tbody>
