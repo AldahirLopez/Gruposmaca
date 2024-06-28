@@ -2,13 +2,22 @@
 
 @section('content')
 <section class="section">
+
     <div class="section-header">
+
         <h3 class="page__heading">Generar Expediente de ({{$estacion->nomenclatura}})</h3>
+    </div>
+    <div class="section-header" style="margin: 5px 5px 15px 5px;">
+        <a href="{{ route('servicio_inspector_anexo_30.index') }}" class="btn btn-danger">
+            <i class="bi bi-arrow-return-left"></i> Volver
+        </a>
     </div>
     <div class="section-body">
         <div class="row">
             <div class="col-lg-12">
+
                 <div class="card">
+
                     <div class="card-body">
                         @if ($errors->any())
                             <div class="alert alert-dark alert-dismissible fade show" role="alert">
@@ -23,6 +32,7 @@
                         @endif
 
                         <div class="container">
+
                             <div class="row">
                                 <!-- Tarjeta 1 -->
                                 <div class="col-md-4">
