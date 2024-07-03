@@ -52,6 +52,7 @@
                                 <thead style="text-align: center;">
                                     <tr>
                                         <th scope="col">Numero de servicio</th>
+                                        <th scope="col">Pago</th>
                                         <th scope="col">Cotizacion</th>
                                         <th scope="col">Expediente</th>
                                         <th scope="col">Listas de Inspeccion</th>
@@ -62,6 +63,7 @@
                                     @forelse($servicios as $servicio)
                                         <tr>
                                             <td scope="row">{{ $servicio->nomenclatura }}</td>
+                                            <td scope="row">Anexar Pago</td>
                                             <td scope="row">
                                                 @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
                                                     <button class="btn btn-primary" disabled>

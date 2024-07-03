@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cotizacion_Servicio_Anexo30;
 use App\Models\Datos_Servicio;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -86,6 +87,9 @@ class ApprovalController extends Controller
         try {
             // Intenta encontrar el servicio en la segunda tabla
             $servicio = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
+
+            // Eliminar registros relacionados en cotizacion_anexo_30
+            Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
 
             // Eliminar primero la referencia en la tabla datos_servicio_anexo_30 si existe
             Datos_Servicio::where('servicio_anexo_id', $servicio->id)->delete();
