@@ -17,10 +17,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('servicio_anexo_id');
             $table->timestamps();
 
-            // Referencia con eliminación en cascada
+            // Agrega la clave foránea correctamente
             $table->foreign('servicio_anexo_id')
                 ->references('id')->on('armonia.servicio_anexo_30')
-                ->onDelete('cascade'); // Esto permite eliminar en cascada
+                ->onDelete('cascade'); // Eliminación en cascada para mantener la integridad referencial
         });
     }
 

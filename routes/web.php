@@ -28,6 +28,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
 use App\Http\Controllers\FormatosController;
+use App\Http\Controllers\EstacionesDeServicioController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -65,7 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/descargar-cotizacion-ajax', [Servicio_Anexo_30Controller::class, 'descargarCotizacionAjax'])->name('descargar.cotizacion.ajax');
 
     //Servicios Para Aprobar
-    Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
+    Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo'); 
 
     Route::get('servicio_anexo/apro/{id}', [Servicio_Anexo_30Controller::class, 'apro'])->name('servicio_anexo.apro');
 
@@ -86,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
         ->name('descargar.archivo');
 
+    Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
 
 
@@ -99,6 +101,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
+
+
+    Route::resource('estaciones', EstacionesDeServicioController::class);
 
 
 

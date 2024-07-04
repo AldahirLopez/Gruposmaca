@@ -92,7 +92,6 @@ class ApprovalController extends Controller
             Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
 
             // Eliminar primero la referencia en la tabla datos_servicio_anexo_30 si existe
-            Datos_Servicio::where('servicio_anexo_id', $servicio->id)->delete();
 
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;

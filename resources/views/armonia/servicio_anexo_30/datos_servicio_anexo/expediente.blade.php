@@ -528,16 +528,32 @@
                                                     <input type="hidden" id="nomenclatura" name="nomenclatura"
                                                         value="{{ strtoupper($estacion->nomenclatura) }}">
                                                     <input type="hidden" id="id_servicio" name="id_servicio"
-                                                        value="{{ strtoupper($estacion->id) }}">
+                                                        value="{{ $estacion->id }}">
                                                     <input type="hidden" name="id_usuario"
-                                                        value="{{ strtoupper($estacion->usuario->name) }}">
+                                                        value="{{ $estacion->usuario->id }}">
                                                     <input type="hidden" name="fecha_actual"
                                                         value="{{ date('d/m/Y') }}">
-
-                                                    <!-- Campos del formulario aquí -->
+                                                    <!-- Select dentro del formulario -->
+                                                    <div class="form-group">
+                                                        <label for="selectEstaciones">Selecciona una estación:</label>
+                                                        <select class="form-select" id="selectEstaciones">
+                                                            <option value="">Selecciona una estación</option>
+                                                            @foreach ($estaciones as $estacion)
+                                                                <option value="{{ $estacion->id }}">
+                                                                    {{ $estacion->Razon_Social }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                     <div class="col-md-6">
+
                                                         <div class="form-group">
-                                                            <label for="razonsocial">Razon Social</label>
+                                                            <label for="numestacion">Numero de estacion </label>
+                                                            <input type="text" name="numestacion" class="form-control"
+                                                                value="{{ $archivoAnexo ? $archivoAnexo->Num_Estacion : '' }}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="razonsocial">Razón Social</label>
                                                             <input type="text" name="razonsocial" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Razon_Social : '' }}">
                                                         </div>
@@ -553,17 +569,17 @@
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Fiscal : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="telefono">Telefono</label>
+                                                            <label for="telefono">Teléfono</label>
                                                             <input type="text" name="telefono" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Telefono : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="correo">Correo Electronico</label>
+                                                            <label for="correo">Correo Electrónico</label>
                                                             <input type="text" name="correo" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Correo : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="fecha_recepcion">Fecha de Recepcion de
+                                                            <label for="fecha_recepcion">Fecha de Recepción de
                                                                 Solicitud</label>
                                                             <input type="date" name="fecha_recepcion"
                                                                 class="form-control"
@@ -572,23 +588,20 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="cre">Num. de Permiso de la comision
-                                                                reguladora de
-                                                                energia</label>
+                                                            <label for="cre">Num. de Permiso de la Comisión Reguladora
+                                                                de Energía</label>
                                                             <input type="text" name="cre" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Num_CRE : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="constancia">Num. de la Constancia de tramite
-                                                                o
-                                                                estacion de servicio</label>
+                                                            <label for="constancia">Num. de Constancia de Trámite o
+                                                                Estación de Servicio</label>
                                                             <input type="text" name="constancia" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Num_Constancia : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="domicilio_estacion">Domicilio de la estacion
-                                                                de
-                                                                servicio</label>
+                                                            <label for="domicilio_estacion">Domicilio de la Estación de
+                                                                Servicio</label>
                                                             <input type="text" name="domicilio_estacion"
                                                                 class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Estacion_Servicio : '' }}">
@@ -598,7 +611,7 @@
                                                             <select name="estado" class="form-select" id="estado"
                                                                 aria-label="Default select example">
                                                                 @foreach($estados as $estado)
-                                                                    <option value="{{ $estado }}" {{ $archivoAnexo && $archivoAnexo->Direccion_Estado == $estado ? 'selected' : '' }}>
+                                                                    <option value="{{ $estado }}" {{ $archivoAnexo && $archivoAnexo->Estado_Republica_Estacion == $estado ? 'selected' : '' }}>
                                                                         {{ $estado }}
                                                                     </option>
                                                                 @endforeach
@@ -610,17 +623,17 @@
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Contacto : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="nom_repre">Nombre del representante
-                                                                legal</label>
+                                                            <label for="nom_repre">Nombre del Representante
+                                                                Legal</label>
                                                             <input type="text" name="nom_repre" class="form-control"
                                                                 value="{{ $archivoAnexo ? $archivoAnexo->Nombre_Representante_Legal : '' }}">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="fecha_inspeccion">Fecha Programada de la
-                                                                Inspeccion</label>
+                                                            <label for="fecha_inspeccion">Fecha Programada de
+                                                                Inspección</label>
                                                             <input type="date" name="fecha_inspeccion"
                                                                 class="form-control"
-                                                                value="{{ old('fecha_inspeccion', isset($archivoAnexo) ? \Carbon\Carbon::parse($archivoAnexo->Fecha_Inspeccion)->format('Y-m-d') : '') }}">
+                                                                value="{{ $archivoAnexo ? \Carbon\Carbon::parse($archivoAnexo->Fecha_Inspeccion)->format('Y-m-d') : '' }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center"
@@ -630,6 +643,7 @@
                                                     </div>
                                                 </div>
                                             </form>
+
                                         </div>
                                     </div>
                                 </div>
@@ -682,6 +696,55 @@
 
 <!-- Script optimizado -->
 <script>
+    $(document).ready(function () {
+        $('#selectEstaciones').change(function () {
+            var estacionId = $(this).val();
+            if (estacionId) {
+                $.ajax({
+                    url: '/obtener-datos-estacion/' + estacionId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data); // Muestra la respuesta JSON en la consola
+                        $('input[name="numestacion"]').val(data.numestacion);
+                        $('input[name="razonsocial"]').val(data.razonsocial);
+                        $('input[name="rfc"]').val(data.rfc);
+                        $('input[name="domicilio_fiscal"]').val(data.domicilio_fiscal);
+                        $('input[name="telefono"]').val(data.telefono);
+                        $('input[name="correo"]').val(data.correo);
+                        $('input[name="fecha_recepcion"]').val(data.fecha_recepcion);
+                        $('input[name="cre"]').val(data.cre);
+                        $('input[name="constancia"]').val(data.constancia);
+                        $('input[name="domicilio_estacion"]').val(data.domicilio_estacion);
+                        $('select[name="estado"]').val(data.estado).change();
+                        $('input[name="contacto"]').val(data.contacto);
+                        $('input[name="nom_repre"]').val(data.nom_repre);
+                        $('input[name="fecha_inspeccion"]').val(data.fecha_inspeccion);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error al obtener los datos de la estación:', error);
+                    }
+                });
+            } else {
+                // Limpiar todos los campos del formulario si no se selecciona ninguna estación
+                $('input[name="id_servicio"]').val('');
+                $('input[name="numestacion"]').val('');
+                $('input[name="razonsocial"]').val('');
+                $('input[name="rfc"]').val('');
+                $('input[name="domicilio_fiscal"]').val('');
+                $('input[name="telefono"]').val('');
+                $('input[name="correo"]').val('');
+                $('input[name="fecha_recepcion"]').val('');
+                $('input[name="cre"]').val('');
+                $('input[name="constancia"]').val('');
+                $('input[name="domicilio_estacion"]').val('');
+                $('select[name="estado"]').val('').change();
+                $('input[name="contacto"]').val('');
+                $('input[name="nom_repre"]').val('');
+                $('input[name="fecha_inspeccion"]').val('');
+            }
+        });
+    });
     document.addEventListener('DOMContentLoaded', function () {
         // Obtener el ID del servicio desde el campo oculto
         const id = document.getElementById('id_servicio').value;
@@ -783,5 +846,6 @@
         // Asignar el manejador de eventos para el formulario
         document.getElementById('generateWordForm').addEventListener('submit', handleFormSubmit);
     });
+
 </script>
 @endsection

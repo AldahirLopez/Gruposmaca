@@ -12,20 +12,16 @@ class ServicioAnexo extends Model
     protected $connection = 'segunda_db';
     protected $table = 'servicio_anexo_30';
 
-    // Relación con el modelo User
+    // Relación con el modelo User (uno a muchos inversa)
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_id', 'id', 'mysql');
+        return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
 
+    // Relación con la cotización (uno a uno)
     public function cotizacion()
     {
         return $this->hasOne(Cotizacion_Servicio_Anexo30::class, 'servicio_anexo_id');
-    }
-
-    public function datos()
-    {
-        return $this->hasOne(Datos_Servicio::class, 'servicio_anexo_id');
     }
 
 }

@@ -131,7 +131,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('notificaciones.index') }}">
+                <a class="nav-link collapsed" href="{{ route('estaciones.index') }}">
                     <i class="bi bi-folder-check"></i>
                     <span>Estaciones de servicio</span>
                 </a>

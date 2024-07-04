@@ -27,9 +27,8 @@
                                 @forelse($servicios as $servicio)
                                 <tr>
                                     <td scope="row">{{ $servicio->nomenclatura }}</td>
-                                    <td scope="row">{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}</td>
-                                    <td scope="row">{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}
-                                    </td>
+                                    <td>{{ $servicio->estacion_servicio->Razon_Social ?? 'Sin datos' }}</td>
+                                    <td>{{ $servicio->estacion_servicio->Domicilio_Estacion_Servicio ?? 'Sin datos' }}</td>
 
                                     <td scope="row">
                                         @if(!$servicio->pending_apro_servicio)
