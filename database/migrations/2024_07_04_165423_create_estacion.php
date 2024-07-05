@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('num_cre')->nullable();
             $table->string('num_constancia')->nullable();   
             $table->string('telefono')->nullable();
-            $table->string('correo')->nullable();
+            $table->string('correo_electronico')->nullable();
             $table->string('contacto')->nullable();
             $table->string('nombre_representante_legal')->nullable();
             $table->unsignedBigInteger('usuario_id')->nullable();

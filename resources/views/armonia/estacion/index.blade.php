@@ -15,7 +15,7 @@
                             @can('crear-servicio')
                                 <!-- Botón que abre el modal -->
                                 <button type="button" class="btn btn-success" data-toggle="modal"
-                                    data-target="#generarExpedienteModal">
+                                    data-target="#generarEstacionModal">
                                     Generar Nueva Estacion
                                 </button>
                             @endcan
@@ -34,13 +34,13 @@
                                     <th scope="col">Documentos</th>
                                 </tr>
                             </thead>
-                            <tbody style="text-align: center;" id="tablaEstaciones">
+                            <tbody id="tablaEstaciones">
                                 @foreach($estaciones as $estacion)
                                     <tr>
-                                        <td>{{ $estacion->Num_Estacion }}</td>
-                                        <td>{{ $estacion->Razon_Social }}</td>
-                                        <td>{{ $estacion->Domicilio_Estacion_Servicio }}</td>
-                                        <td>{{ $estacion->Estado_Republica_Estacion }}</td>
+                                        <td>{{ $estacion->num_estacion }}</td>
+                                        <td>{{ $estacion->razon_social }}</td>
+                                        <td>{{ $estacion->domicilio_estacion_servicio }}</td>
+                                        <td>{{ $estacion->estado_republica_estacion }}</td>
                                         <td><!-- Agregar servicios --></td>
                                         <td><!-- Agregar documentos --></td>
                                     </tr>
@@ -56,19 +56,18 @@
 </section>
 
 <!-- Modal para generar nueva estación -->
-<div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="generarEstacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+            <div class="modal-header" style="background-color: #005503  ; color: #ffffff;">
                 <h5 class="modal-title" id="exampleModalLabel">Generar Nueva Estación</h5>
                 <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!-- Formulario de generación de expediente -->
-                <form id="generateWordForm" action="{{ route('estaciones.store') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form action="{{ route('estacion.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <input type="hidden" name="id_usuario" value="{{ strtoupper($usuario->id) }}">
@@ -92,6 +91,9 @@
                                 <label for="domicilio_fiscal">Domicilio Fiscal</label>
                                 <input type="text" name="domicilio_fiscal" class="form-control">
                             </div>
+
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="telefono">Telefono</label>
                                 <input type="text" name="telefono" class="form-control">
@@ -99,16 +101,6 @@
                             <div class="form-group">
                                 <label for="correo">Correo Electronico</label>
                                 <input type="text" name="correo" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="cre">Num. de Permiso de la Comision Reguladora de Energia</label>
-                                <input type="text" name="cre" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="constancia">Num. de la Constancia de tramite o estacion de servicio</label>
-                                <input type="text" name="constancia" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="domicilio_estacion">Domicilio de la Estacion de Servicio</label>
@@ -123,19 +115,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="contacto">Contacto</label>
-                                <input type="text" name="contacto" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="nom_repre">Nombre del Representante Legal</label>
-                                <input type="text" name="nom_repre" class="form-control">
-                            </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 10px;">
-                            <button type="submit" class="btn btn-primary btn-generar">Generar</button>
+                        <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 20px;">
+                            <button type="submit" class="btn btn-success btn-generar">Generar</button>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -145,20 +128,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 <script>
-        $(document).ready(function () {
-            $('#buscarEstacion').keyup(function () {
-                var searchText = $(this).val().toLowerCase();
-                $('#tablaEstaciones tr').each(function () {
-                    var found = false;
-                    $(this).each(function () {
-                        if ($(this).text().toLowerCase().indexOf(searchText) >= 0) {
-                            found = true;
-                            return false;
-                        }
-                    });
-                    found ? $(this).show() : $(this).hide();
+    $(document).ready(function () {
+        $('#buscarEstacion').keyup(function () {
+            var searchText = $(this).val().toLowerCase();
+            $('#tablaEstaciones tr').each(function () {
+                var found = false;
+                $(this).each(function () {
+                    if ($(this).text().toLowerCase().indexOf(searchText) >= 0) {
+                        found = true;
+                        return false;
+                    }
                 });
+                found ? $(this).show() : $(this).hide();
             });
         });
-    </script>
+    });
+</script>
 @endsection

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EstacionServicio extends Model
+class Estacion extends Model
 {
     use HasFactory;
 
@@ -13,29 +13,22 @@ class EstacionServicio extends Model
     protected $connection = 'segunda_db';
 
     // Especificar la tabla asociada al modelo
-    protected $table = 'estaciones_de_servicio';
+    protected $table = 'estacion';
 
     // Definir los campos que pueden ser asignados masivamente
     protected $fillable = [
-        'Num_Estacion',
-        'Razon_Social',
-        'RFC',
-        'Domicilio_Fiscal',
-        'Telefono',
-        'Correo',
-        'Num_CRE',
-        'Num_Constancia',
-        'Domicilio_Estacion_Servicio',
-        'Estado_Republica_Estacion',
-        'Contacto',
-        'Nombre_Representante_Legal',
-        'Fecha_Recepcion_Solicitud',
-        'Fecha_Inspeccion',
+        'num_estacion',
+        'razon_social',
+        'rfc',
+        'domicilio_fiscal',
+        'domicilio_estacion_servicio',
+        'estado_republica_estacion',
+        'num_cre',
+        'num_constancia',
+        'correo_electronico',
+        'contacto',
+        'nombre_representante_legal',
         'usuario_id',
-        'servicio_anexo_id',
-        'servicio_operacion_id',
-        'servicio_diseño_id',
-        'servicio_construccion_id',
     ];
 
     // Relaciones con otros modelos

@@ -15,10 +15,8 @@ use App\Http\Controllers\Datos_Servicio_Inspector_Anexo_30Controller;
 use App\Http\Controllers\ApprovalController;
 
 use App\Http\Controllers\ArchivosDicController;
-use App\Http\Controllers\EstacionesAnexoController;
-use App\Http\Controllers\FormatoController;
+use App\Http\Controllers\EstacionController;
 use App\Http\Controllers\FormatosHistorialController;
-use App\Models\Cotizacion_Servicio_Anexo30;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -28,7 +26,6 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
 use App\Http\Controllers\FormatosController;
-use App\Http\Controllers\EstacionesDeServicioController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -84,10 +81,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
 
-    Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
-        ->name('descargar.archivo');
+    //Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
+       // ->name('descargar.archivo');
 
-    Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
+   // Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
 
 
@@ -103,7 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::resource('estaciones', EstacionesDeServicioController::class);
+    Route::resource('estacion', EstacionController::class);
 
 
 
@@ -114,7 +111,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('servicio_operacion', ServicioOperacionController::class);
     Route::resource('pago_anexo', PagosAnexoController::class);
-    Route::resource('estacion_anexo', EstacionesAnexoController::class);
+    //Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
     Route::resource('historialformatos', FormatosHistorialController::class);
     Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'index'])->name('historialformatos.anexo30.index');
