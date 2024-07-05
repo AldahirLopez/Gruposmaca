@@ -41,8 +41,8 @@
                                         <td>{{ $estacion->razon_social }}</td>
                                         <td>{{ $estacion->domicilio_estacion_servicio }}</td>
                                         <td>{{ $estacion->estado_republica_estacion }}</td>
-                                        <td><!-- Agregar servicios --></td>
-                                        <td><!-- Agregar documentos --></td>
+                                        <td>Boton a servicios</td>
+                                        <td>Boton a documentos</td>
                                     </tr>
                                 @endforeach
                             </tbody>
