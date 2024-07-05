@@ -117,7 +117,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
         $customFolderPath = "servicios_anexo30/{$nomenclatura}";
 
         // Crear la carpeta si no existe
-        Storage::disk('public')->makeDirectory($customFolderPath);
+        Storage::disk('public')->makeDirectory($customFolderPath); 
 
         return redirect()->route('servicio_inspector_anexo_30.index')->with('success', 'Servicio creado exitosamente');
 
