@@ -10,13 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        // Tabla intermedia para la relación muchos a muchos con servicio_anexo_30
-        Schema::connection('segunda_db')->create('estacion_servicio_anexo_30', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('certificado_anexo_30', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('estacion_id');
+            $table->string('rutadoc');
+            $table->unsignedBigInteger('usuario_id');
             $table->unsignedBigInteger('servicio_anexo_id');
+            $table->timestamps();
 
-            $table->foreign('estacion_id')->references('id')->on('armonia.estaciones_de_servicio')->onDelete('cascade');
+            // Agregar la clave foránea
+            $table->foreign('usuario_id')->references('id')->on('gruposmaca.users');
+            // Agregar la clave foránea
             $table->foreign('servicio_anexo_id')->references('id')->on('armonia.servicio_anexo_30')->onDelete('cascade');
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('estacion_servicio_anexo_30');
+        Schema::dropIfExists('certificado_anexo_30');
     }
 };

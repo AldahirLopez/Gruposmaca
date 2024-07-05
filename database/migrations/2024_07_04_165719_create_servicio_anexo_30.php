@@ -17,6 +17,9 @@ return new class extends Migration
             $table->boolean('pending_apro_servicio')->nullable();// Aprobacion de la estacion
             $table->boolean('pending_deletion_servicio')->nullable(); // Pendiente de Eliminacion
             $table->dateTime('date_eliminated_at')->nullable();// Fecha de eliminacion
+            $table->dateTime('date_recepcion_at')->nullable();// Fecha de eliminacion
+            $table->dateTime('date_inspeccion_at')->nullable();// Fecha de eliminacion
+            
             $table->unsignedBigInteger('usuario_id'); // Relación con usuario
             
             $table->timestamps(); // Timestamps
