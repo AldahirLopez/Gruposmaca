@@ -17,11 +17,10 @@
                             </a>
 
                             @can('crear-servicio')
-                                <form action="{{ route('servicio_inspector_anexo_30.store') }}" method="POST"
-                                    style="display: inline;">
-                                    @csrf <!-- Agrega el token CSRF para protección -->
-                                    <button type="submit" class="btn btn-success">Generar Nuevo Servicio</button>
-                                </form>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-target="#generarServicioModal">
+                                    Generar Nuevo Servicio
+                                </button>
                             @endcan
                         </div>
 
@@ -113,7 +112,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5">No se encontraron servicios para mostrar.</td>
+                                            <td colspan="6">No se encontraron servicios para mostrar.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -124,9 +123,57 @@
             </div>
         </div>
     </div>
+
+    <!-- Formulario con soporte AJAX -->
+    <div class="modal fade" id="generarServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                    <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar
+                        Servicio Anexo 30</h5>
+                    <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
+                        aria-label="Close"></button>
+
+                </div>
+
+
+                <div class="modal-body">
+                    <!-- Formulario de generación de expediente -->
+                    <form id="generateWordForm" action="{{ route('servicio_inspector_anexo_30.store') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <h5 class="modal-title" style="padding-top: 10px;">Seleccione una estacion a la cual se le
+                            anexara su servicio</h5>
+                        <div class="row">
+                            <!-- Select dentro del formulario -->
+                            <div class="form-group" style="padding-top: 10px;">
+                                <select name="estacion" class="form-select" id="estacion">
+                                    <option value="">Selecciona una estación</option>
+                                    @foreach ($estaciones as $estacion)
+                                        <option value="{{ $estacion->id }}">
+                                            {{ $estacion->razon_social }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 10px;">
+                            <button type="submit" class="btn btn-primary btn-generar">Generar</button>
+                        </div>
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    </div>
 </section>
 
 <!-- Script para el filtro de usuario -->
+<!-- Incluir jQuery y Bootstrap, preferiblemente desde un CDN para aprovechar el caché del navegador -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 <script>
     document.getElementById('filtroUsuario').addEventListener('change', function () {
         var usuarioId = this.value;

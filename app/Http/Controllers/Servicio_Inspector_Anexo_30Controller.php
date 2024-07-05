@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Datos_Servicio;
+use App\Models\Estacion;
+use App\Models\Estacion_Servicio;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Cotizacion_Servicio_Anexo30;
@@ -76,8 +78,9 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
             }
         }
 
+        $estaciones = Estacion::all();
         // Siempre retornar la vista, incluso si no se encuentran usuarios o servicios
-        return view('armonia.servicio_anexo_30.datos_servicio_anexo.index', compact('servicios', 'usuarios'));
+        return view('armonia.servicio_anexo_30.datos_servicio_anexo.index', compact('servicios', 'usuarios', 'estaciones'));
     }
 
     /**
@@ -86,21 +89,29 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
     public function store(Request $request)
     {
 
+        $estacionId = $request->input('estacion');
+
         $usuario = Auth::user(); // O el método que uses para obtener el usuario
         $nomenclatura = $this->generarNomenclatura($usuario);
 
+        // Crear instancia de ServicioAnexo y guardar datos
         $servicio = new ServicioAnexo();
-
-        // Establecer los valores de los campos
-
         $servicio->nomenclatura = $nomenclatura;
         $servicio->pending_apro_servicio = false;
         $servicio->pending_deletion_servicio = false;
         $servicio->usuario_id = $usuario->id;
-
-        // Asigna otros campos al servicio
-
+        // Asigna otros campos al servicio según sea necesario
         $servicio->save();
+
+        // Obtener el ID del servicio anexo creado
+        $servicio_anexo_id = $servicio->id;
+
+        // Crear instancia de Estacion_Servicio y guardar la relación
+        $estacionServicio = new Estacion_Servicio();
+        $estacionServicio->servicio_anexo_id = $servicio_anexo_id;
+        $estacionServicio->estacion_id = $estacionId;
+        // Asigna otros campos a Estacion_Servicio si es necesario
+        $estacionServicio->save();
 
         // Definir la carpeta de destino dentro de 'public/storage'
         $customFolderPath = "servicios_anexo30/{$nomenclatura}";
@@ -108,7 +119,8 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
         // Crear la carpeta si no existe
         Storage::disk('public')->makeDirectory($customFolderPath);
 
-        return redirect()->route('servicio_inspector_anexo_30.index')->with('success', 'servicio creado exitosamente');
+        return redirect()->route('servicio_inspector_anexo_30.index')->with('success', 'Servicio creado exitosamente');
+
     }
 
     public function generarNomenclatura($usuario)
