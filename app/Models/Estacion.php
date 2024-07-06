@@ -38,4 +38,15 @@ class Estacion extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
+    // Definir la relación con el modelo ServicioAnexo a través de la tabla pivote estacion_servicio
+    public function servicioAnexo()
+    {
+        return $this->belongsToMany(ServicioAnexo::class, 'estacion_servicio', 'estacion_id', 'servicio_anexo_id');
+    }
+
+    // Relación con la tabla pivote estacion_servicio
+    public function estacionServicios()
+    {
+        return $this->hasMany(Estacion_Servicio::class, 'estacion_id');
+    }
 }

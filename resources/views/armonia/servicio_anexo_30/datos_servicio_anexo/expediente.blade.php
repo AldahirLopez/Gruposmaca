@@ -5,7 +5,7 @@
 
     <div class="section-header">
 
-        <h3 class="page__heading">Generar Expediente de ({{$estacion->nomenclatura}})</h3>
+        <h3 class="page__heading">Generar Expediente de ({{$servicioAnexo->nomenclatura}})</h3>
     </div>
     <div class="section-header" style="margin: 5px 5px 15px 5px;">
         <a href="{{ route('servicio_inspector_anexo_30.index') }}" class="btn btn-danger">
@@ -504,151 +504,127 @@
                                 </div>
                             </div>
 
-                            <!-- Formulario con soporte AJAX -->
+                            <!-- Modal para generar expediente -->
                             <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                                             <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar
-                                                Expediente de
-                                                ({{$estacion->nomenclatura}})</h5>
+                                                Expediente de ({{$servicioAnexo->nomenclatura}})</h5>
                                             <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
                                                 aria-label="Close"></button>
-
                                         </div>
-
-
                                         <div class="modal-body">
-                                            <!-- Formulario de generación de expediente -->
+                                            <!-- Formulario de generación de expediente con soporte AJAX -->
                                             <form id="generateWordForm" action="{{ route('generate.word') }}"
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
                                                     <input type="hidden" id="nomenclatura" name="nomenclatura"
-                                                        value="{{ strtoupper($estacion->nomenclatura) }}">
+                                                        value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                    <input type="hidden" id="idestacion" name="idestacion"
+                                                        value="{{ strtoupper($estacion->id) }}">
                                                     <input type="hidden" id="id_servicio" name="id_servicio"
-                                                        value="{{ $estacion->id }}">
+                                                        value="{{ $servicioAnexo->id }}">
                                                     <input type="hidden" name="id_usuario"
                                                         value="{{ $estacion->usuario->id }}">
                                                     <input type="hidden" name="fecha_actual"
                                                         value="{{ date('d/m/Y') }}">
-                                                    <!-- Select dentro del formulario -->
-                                                    <div class="form-group">
-                                                        <label for="selectEstaciones">Selecciona una estación:</label>
-                                                        <select class="form-select" id="selectEstaciones">
-                                                            <option value="">Selecciona una estación</option>
-                                                            @foreach ($estaciones as $estacion)
-                                                                <option value="{{ $estacion->id }}">
-                                                                    {{ $estacion->Razon_Social }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                    <input type="hidden" type="text" name="numestacion" id="numestacion"
+                                                        class="form-control" value="{{ $estacion->num_estacion }}">
+
                                                     <div class="col-md-6">
+                                                        <!-- Campos del formulario que se llenarán automáticamente -->
 
                                                         <div class="form-group">
-                                                            <label for="numestacion">Numero de estacion </label>
-                                                            <input type="text" name="numestacion" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Num_Estacion : '' }}">
-                                                        </div>
-                                                        <div class="form-group">
                                                             <label for="razonsocial">Razón Social</label>
-                                                            <input type="text" name="razonsocial" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Razon_Social : '' }}">
+                                                            <input type="text" name="razonsocial" id="razonsocial"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="rfc">RFC</label>
-                                                            <input type="text" name="rfc" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->RFC : '' }}">
+                                                            <input type="text" name="rfc" id="rfc" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="domicilio_fiscal">Domicilio Fiscal</label>
                                                             <input type="text" name="domicilio_fiscal"
-                                                                class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Fiscal : '' }}">
+                                                                id="domicilio_fiscal" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="telefono">Teléfono</label>
-                                                            <input type="text" name="telefono" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Telefono : '' }}">
+                                                            <input type="text" name="telefono" id="telefono"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="correo">Correo Electrónico</label>
-                                                            <input type="text" name="correo" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Correo : '' }}">
+                                                            <input type="email" name="correo" id="correo"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="fecha_recepcion">Fecha de Recepción de
                                                                 Solicitud</label>
                                                             <input type="date" name="fecha_recepcion"
-                                                                class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Fecha_Recepcion_Solicitud : '' }}">
+                                                                id="fecha_recepcion" class="form-control">
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="cre">Num. de Permiso de la Comisión Reguladora
                                                                 de Energía</label>
-                                                            <input type="text" name="cre" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Num_CRE : '' }}">
+                                                            <input type="text" name="cre" id="cre" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="constancia">Num. de Constancia de Trámite o
                                                                 Estación de Servicio</label>
-                                                            <input type="text" name="constancia" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Num_Constancia : '' }}">
+                                                            <input type="text" name="constancia" id="constancia"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="domicilio_estacion">Domicilio de la Estación de
                                                                 Servicio</label>
                                                             <input type="text" name="domicilio_estacion"
-                                                                class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Domicilio_Estacion_Servicio : '' }}">
+                                                                id="domicilio_estacion" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="estado">Estado</label>
-                                                            <select name="estado" class="form-select" id="estado"
-                                                                aria-label="Default select example">
+                                                            <select name="estado" id="estado" class="form-select">
                                                                 @foreach($estados as $estado)
-                                                                    <option value="{{ $estado }}" {{ $archivoAnexo && $archivoAnexo->Estado_Republica_Estacion == $estado ? 'selected' : '' }}>
-                                                                        {{ $estado }}
-                                                                    </option>
+                                                                    <option value="{{ $estado }}">{{ $estado }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="contacto">Contacto</label>
-                                                            <input type="text" name="contacto" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Contacto : '' }}">
+                                                            <input type="text" name="contacto" id="contacto"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="nom_repre">Nombre del Representante
                                                                 Legal</label>
-                                                            <input type="text" name="nom_repre" class="form-control"
-                                                                value="{{ $archivoAnexo ? $archivoAnexo->Nombre_Representante_Legal : '' }}">
+                                                            <input type="text" name="nom_repre" id="nom_repre"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="fecha_inspeccion">Fecha Programada de
                                                                 Inspección</label>
                                                             <input type="date" name="fecha_inspeccion"
-                                                                class="form-control"
-                                                                value="{{ $archivoAnexo ? \Carbon\Carbon::parse($archivoAnexo->Fecha_Inspeccion)->format('Y-m-d') : '' }}">
+                                                                id="fecha_inspeccion" class="form-control">
                                                         </div>
                                                     </div>
+
                                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center"
                                                         style="padding-top: 10px;">
-                                                        <button type="submit"
+                                                        <button type="submitButton"
                                                             class="btn btn-primary btn-generar">Generar</button>
                                                     </div>
                                                 </div>
                                             </form>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Contenedor para la tabla de archivos generados -->
                             <div id="generatedFilesTable" style="margin-top: 30px;">
                                 <!-- Spinner de carga -->
@@ -656,6 +632,7 @@
                                     <span class="visually-hidden">Cargando...</span>
                                 </div>
 
+                                <!-- Incluir la estructura HTML de tu vista actual para archivos existentes -->
                                 @if(!empty($existingFiles))
                                     <h4>Archivos Existentes:</h4>
                                     <table class="table table-bordered">
@@ -671,8 +648,7 @@
                                                     <td>{{ basename($file['name']) }}</td>
                                                     <!-- Mostrar solo el nombre del archivo -->
                                                     <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}"
-                                                            class="btn btn-info" download>Descargar</a>
-                                                    </td>
+                                                            class="btn btn-info" download>Descargar</a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -683,6 +659,7 @@
                                 @endif
                             </div>
 
+
                         </div>
                     </div>
                 </div>
@@ -690,91 +667,20 @@
         </div>
 </section>
 
-<!-- Incluir jQuery y Bootstrap, preferiblemente desde un CDN para aprovechar el caché del navegador -->
+<!-- Incluir jQuery y Bootstrap desde un CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 
 <!-- Script optimizado -->
 <script>
     $(document).ready(function () {
-        $('#selectEstaciones').change(function () {
-            var estacionId = $(this).val();
-            if (estacionId) {
-                $.ajax({
-                    url: '/obtener-datos-estacion/' + estacionId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data); // Muestra la respuesta JSON en la consola
-                        $('input[name="numestacion"]').val(data.numestacion);
-                        $('input[name="razonsocial"]').val(data.razonsocial);
-                        $('input[name="rfc"]').val(data.rfc);
-                        $('input[name="domicilio_fiscal"]').val(data.domicilio_fiscal);
-                        $('input[name="telefono"]').val(data.telefono);
-                        $('input[name="correo"]').val(data.correo);
-                        $('input[name="fecha_recepcion"]').val(data.fecha_recepcion);
-                        $('input[name="cre"]').val(data.cre);
-                        $('input[name="constancia"]').val(data.constancia);
-                        $('input[name="domicilio_estacion"]').val(data.domicilio_estacion);
-                        $('select[name="estado"]').val(data.estado).change();
-                        $('input[name="contacto"]').val(data.contacto);
-                        $('input[name="nom_repre"]').val(data.nom_repre);
-                        $('input[name="fecha_inspeccion"]').val(data.fecha_inspeccion);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error al obtener los datos de la estación:', error);
-                    }
-                });
-            } else {
-                // Limpiar todos los campos del formulario si no se selecciona ninguna estación
-                $('input[name="id_servicio"]').val('');
-                $('input[name="numestacion"]').val('');
-                $('input[name="razonsocial"]').val('');
-                $('input[name="rfc"]').val('');
-                $('input[name="domicilio_fiscal"]').val('');
-                $('input[name="telefono"]').val('');
-                $('input[name="correo"]').val('');
-                $('input[name="fecha_recepcion"]').val('');
-                $('input[name="cre"]').val('');
-                $('input[name="constancia"]').val('');
-                $('input[name="domicilio_estacion"]').val('');
-                $('select[name="estado"]').val('').change();
-                $('input[name="contacto"]').val('');
-                $('input[name="nom_repre"]').val('');
-                $('input[name="fecha_inspeccion"]').val('');
-            }
-        });
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        // Obtener el ID del servicio desde el campo oculto
-        const id = document.getElementById('id_servicio').value;
-        const nomenclatura = document.getElementById('nomenclatura').value;
-        const generatedFilesTable = document.getElementById('generatedFilesTable');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-
-        // Función para mostrar u ocultar las cards
-        function checkRegistro() {
-            fetch(`/api/consulta/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    const cards = document.querySelectorAll('.dictamenes-card');
-                    if (data.exists) {
-                        // Mostrar las cards si el registro existe
-                        cards.forEach(card => card.style.display = 'block');
-                    } else {
-                        // Ocultar las cards si no existe el registro
-                        cards.forEach(card => card.style.display = 'none');
-                        // alert('Registro no encontrado');
-                    }
-                })
-                .catch(error => console.error('Error en la solicitud AJAX:', error));
-        }
-
         // Función para cargar los archivos generados
         function loadGeneratedFiles() {
-            fetch(`/list-generated-files/${nomenclatura}`)
+            const nomenclatura = $('#nomenclatura').val();
+            fetch(`/list-generated-files/${encodeURIComponent(nomenclatura)}`)  // Codificar la nomenclatura
                 .then(response => response.json())
                 .then(data => {
+                    const generatedFilesTable = $('#generatedFilesTable');
                     if (data && data.generatedFiles && data.generatedFiles.length > 0) {
                         // Construir el HTML para la tabla de archivos generados
                         let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
@@ -784,16 +690,14 @@
                         });
                         tableHtml += '</tbody></table>';
 
-                        // Actualizar el contenedor de la tabla y mostrarla
-                        generatedFilesTable.innerHTML = tableHtml;
-                        generatedFilesTable.style.display = 'block';
+                        // Actualizar el contenedor de la tabla de archivos generados y mostrarla
+                        generatedFilesTable.html(tableHtml).show();
 
                         // Después de cargar los archivos, verificar el registro
                         checkRegistro();
                     } else {
                         // Mostrar un mensaje si no se encontraron archivos generados
-                        generatedFilesTable.innerHTML = '<p>No se encontraron archivos generados.</p>';
-                        generatedFilesTable.style.display = 'block';
+                        generatedFilesTable.html('<p>No se encontraron archivos generados.</p>').show();
 
                         // Después de mostrar el mensaje, verificar el registro
                         checkRegistro();
@@ -810,8 +714,8 @@
             event.preventDefault(); // Evitar la recarga de la página
 
             // Mostrar el spinner de carga
-            loadingSpinner.classList.remove('d-none');
-            loadingSpinner.classList.add('d-flex');
+            const loadingSpinner = $('#loadingSpinner');
+            loadingSpinner.removeClass('d-none').addClass('d-flex');
 
             const formData = new FormData(event.target);
 
@@ -835,17 +739,73 @@
                 })
                 .finally(() => {
                     // Ocultar el spinner de carga después de completar la solicitud (éxito o error)
-                    loadingSpinner.classList.remove('d-flex');
-                    loadingSpinner.classList.add('d-none');
+                    loadingSpinner.removeClass('d-flex').addClass('d-none');
                 });
         }
 
-        // Ejecutar las funciones al cargar la página
+        // Función para cargar los datos de la estación al cargar la página
+        function cargarDatosEstacion() {
+            var estacionId = $('#idestacion').val();
+            if (estacionId) {
+                $.ajax({
+                    url: '/obtener-datos-estacion/' + estacionId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // Iterar sobre cada input y select del formulario
+                        $('#generateWordForm input, #generateWordForm select').each(function () {
+                            var nombreCampo = $(this).attr('name');
+                            var valor = data[nombreCampo];
+
+                            // Verificar si el campo tiene un valor asignado
+                            if (valor !== undefined && valor !== null) {
+                                // Rellenar el campo con el valor y desactivarlo
+                                $(this).val(valor).prop('disabled', true);
+                                // Cambiar el estilo del borde del campo
+                                $(this).addClass(valor ? 'border-success' : 'border-danger');
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error al obtener los datos de la estación:', error);
+                    }
+                });
+            } else {
+                console.error('No se ha proporcionado un ID de estación válido.');
+            }
+        }
+
+        // Función para verificar si existe un registro y mostrar u ocultar cards
+        function checkRegistro() {
+            const id = $('#id_servicio').val();
+            fetch(`/api/consulta/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const cards = $('.dictamenes-card');
+                    if (data.exists) {
+                        // Mostrar las cards si el registro existe
+                        cards.show();
+                    } else {
+                        // Ocultar las cards si no existe el registro
+                        cards.hide();
+                        // alert('Registro no encontrado');
+                    }
+                })
+                .catch(error => console.error('Error en la solicitud AJAX:', error));
+        }
+
+        // Llamar a la función para cargar los archivos generados al cargar la página
         loadGeneratedFiles();
 
-        // Asignar el manejador de eventos para el formulario
-        document.getElementById('generateWordForm').addEventListener('submit', handleFormSubmit);
-    });
+        // Asignar el manejador de eventos para el botón de envío del formulario
+        $('#submitButton').on('click', function () {
+            $('#generateWordForm').submit();
+        });
 
+        // Llamar a la función para cargar los datos de la estación al cargar la página
+        cargarDatosEstacion();
+    });
 </script>
+
+
 @endsection

@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::connection('segunda_db')->create('expediente_servicio_anexo_30', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
             $table->string('rutadoc_estacion');
             $table->unsignedBigInteger('servicio_anexo_id');
             $table->unsignedBigInteger('usuario_id');
