@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\EstacionServicio;
+use App\Models\Estacion;
+use App\Models\Estacion_Servicio;
+use App\Models\Expediente_Servicio_Anexo_30;
 use App\Models\ServicioAnexo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\DB;
 
 class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 {
@@ -59,11 +62,15 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador o auditor puede ver todo y editar todo 
             $servicio_anexo_id = $slug;
-            $estacion = ServicioAnexo::find($servicio_anexo_id);
-            $archivoAnexo = EstacionServicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+            $servicioAnexo = ServicioAnexo::find($servicio_anexo_id);
+
+            // Obtener la estación relacionada con el servicio anexo
+            $estacion = Estacion::whereHas('estacionServicios', function ($query) use ($servicio_anexo_id) {
+                $query->where('servicio_anexo_id', $servicio_anexo_id);
+            })->first();
 
             // Ruta de la carpeta donde se guardan los archivos generados
-            $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+            $folderPath = "servicios_anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
             $existingFiles = [];
 
             // Verificar si la carpeta existe
@@ -80,19 +87,22 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 }
             }
 
-            $estaciones = EstacionServicio::all();
-            return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles', 'estaciones'));
+            $estaciones = Estacion::all();
+            return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('estacion', 'estados', 'servicio_anexo_id', 'servicioAnexo', 'existingFiles', 'estaciones'));
         } else {
             // Verificar si el usuario tiene acceso al servicio
             $servicio_anexo_id = $slug;
-            $estacion = ServicioAnexo::find($servicio_anexo_id);
-            $validar_servicio = ($estacion->usuario_id == $usuario->id);
+            $servicioAnexo = ServicioAnexo::find($servicio_anexo_id);
+            $validar_servicio = ($servicioAnexo->usuario_id == $usuario->id);
 
             if ($validar_servicio) {
-                $archivoAnexo = EstacionServicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+                // Obtener la estación relacionada con el servicio anexo
+                $estacion = Estacion::whereHas('estacionServicios', function ($query) use ($servicio_anexo_id) {
+                    $query->where('servicio_anexo_id', $servicio_anexo_id);
+                })->first();
 
                 // Ruta de la carpeta donde se guardan los archivos generados
-                $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+                $folderPath = "servicios_anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
                 $existingFiles = [];
 
                 // Verificar si la carpeta existe
@@ -109,7 +119,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     }
                 }
 
-                return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('estacion', 'estados', 'servicio_anexo_id', 'servicioAnexo', 'existingFiles'));
             } else {
                 return redirect()->route('servicio_anexo_30.datos_servicio_anexo.index')->with('error', 'Servicio no válido');
             }
@@ -118,28 +128,40 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     public function generateWord(Request $request)
     {
+
         try {
-            // Validar los datos del formulario
-            $data = $request->validate([
-                'numestacion' => 'required',
-                'nomenclatura' => 'required',
+            // Obtener el ID de la estación desde la solicitud
+            $idEstacion = $request->input('idestacion');
+
+            // Buscar la estación por su ID y obtener los datos necesarios
+            $estacion = Estacion::findOrFail($idEstacion);
+
+            // Definir las reglas de validación
+            $rules = [
+                'nomenclatura' => 'required|string',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
-                'fecha_actual' => 'required',
-                'razonsocial' => 'required|string|max:255',
-                'rfc' => 'required|string|max:255',
-                'domicilio_fiscal' => 'required|string|max:255',
-                'telefono' => 'required|string|max:255',
-                'correo' => 'required|string|email|max:255',
-                'fecha_recepcion' => 'required',
-                'cre' => 'required|string|max:255',
-                'constancia' => 'nullable|string|max:255',
-                'domicilio_estacion' => 'required|string|max:255',
-                'estado' => 'required|string|max:255',
-                'contacto' => 'required|string|max:255',
-                'nom_repre' => 'required|string|max:255',
-                'fecha_inspeccion' => 'required',
-            ]);
+                'fecha_recepcion' => 'required|date',
+                'cre' => 'required|string',
+                'contacto' => 'required|string',
+                'nom_repre' => 'required|string',
+                'fecha_inspeccion' => 'required|date',
+            ];
+
+            // Validar los datos del formulario
+            $data = $request->validate($rules);
+
+            // Completar los datos necesarios para el procesamiento
+            $data['numestacion'] = $estacion->num_estacion;
+            $data['fecha_actual'] = Carbon::now()->format('d/m/Y');
+            $data['razonsocial'] = $estacion->razon_social;
+            $data['rfc'] = $estacion->rfc;
+            $data['domicilio_fiscal'] = $estacion->domicilio_fiscal;
+            $data['domicilio_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['estado'] = $estacion->estado_republica_estacion;
+            $data['telefono'] = $estacion->telefono;
+            $data['correo'] = $estacion->correo_electronico;
+            // dd($data);
 
             // Convertir las fechas al formato deseado
             $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
@@ -157,8 +179,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Definir la carpeta de destino
             $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
-            $subFolderPath = "{$customFolderPath}/documentos_rellenados/";
+            $subFolderPath = "{$customFolderPath}/documentos_rellenados";
 
+            // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
             }
@@ -181,40 +204,23 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
                 }
 
-
-
                 // Crear un nombre de archivo basado en la nomenclatura
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
 
-                // Guardar la plantilla procesada
+                // Guardar la plantilla procesada en la carpeta de destino
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
 
-            // Recuperar o crear el registro en EstacionServicio basado en 'servicio_anexo_id'
-            $estacionServicio = EstacionServicio::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
+            $servicio = ServicioAnexo::firstOrNew(['id' => $data['id_servicio']]);
+            $servicio->date_recepcion_at = $data['fecha_recepcion'];
+            $servicio->date_inspeccion_at = $data['fecha_inspeccion'];
+            $servicio->save();
 
-            // Asignar los datos del formulario al modelo
-            $estacionServicio->Num_Estacion = $data['numestacion'];
-            $estacionServicio->Razon_Social = $data['razonsocial'];
-            $estacionServicio->RFC = $data['rfc'];
-            $estacionServicio->Domicilio_Fiscal = $data['domicilio_fiscal'];
-            $estacionServicio->Telefono = $data['telefono'];
-            $estacionServicio->Correo = $data['correo'];
-            $estacionServicio->Fecha_Recepcion_Solicitud = $data['fecha_recepcion'] ?? null;
-            $estacionServicio->Num_CRE = $data['cre'];
-            $estacionServicio->Num_Constancia = $data['constancia'] ?? null;
-            $estacionServicio->Domicilio_Estacion_Servicio = $data['domicilio_estacion'];
-            $estacionServicio->Estado_Republica_Estacion = $data['estado'];
-            $estacionServicio->Contacto = $data['contacto'];
-            $estacionServicio->Nombre_Representante_Legal = $data['nom_repre'];
-            $estacionServicio->Fecha_Inspeccion = $data['fecha_inspeccion'] ?? null;
-
-            // Asignar las claves foráneas
-            $estacionServicio->usuario_id = $data['id_usuario'];
-            $estacionServicio->servicio_anexo_id = $data['id_servicio'];
-
-            // Guardar el objeto en la base de datos
-            $estacionServicio->save();
+            $expediente = Expediente_Servicio_Anexo_30::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
+            $expediente->rutadoc_estacion = $subFolderPath;
+            $expediente->servicio_anexo_id = $data['id_servicio'];
+            $expediente->usuario_id = $data['id_usuario'];
+            $expediente->save();
 
             // Crear la lista de archivos generados con sus URLs
             $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
@@ -226,7 +232,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             }, $templatePaths);
 
             // Retornar respuesta JSON con los archivos generados
-            return response()->json(['generatedFiles' => $generatedFiles]);
+            // Redireccionar a la vista con los archivos generados
+            // Redireccionar a una ruta específica con los archivos generados
+            // Redirigir a la vista deseada con los archivos generados
+            return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
+                ->with('generatedFiles', $generatedFiles);
+
 
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
@@ -252,21 +263,29 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     public function validarDatosExpediente($id)
     {
-        // Busca el registro en la base de datos
-        $registro = EstacionServicio::where('servicio_anexo_id', $id)->first();
+        try {
+            // Cambiar la conexión a la base de datos 'segunda_db' y verificar la existencia de expedientes
+            $existeExpediente = DB::connection('segunda_db')
+                ->table('servicio_anexo_30')
+                ->where('id', $id)
+                ->exists();
 
-        // Responde con datos JSON
-        if ($registro) {
-            return response()->json(['exists' => true, 'data' => $registro]);
-        } else {
-            return response()->json(['exists' => false]);
+            return response()->json([
+                'exists' => $existeExpediente,
+                'message' => $existeExpediente ? 'Expediente encontrado.' : 'No se encontró expediente.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Ocurrió un error al consultar el expediente.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function descargarWord(Request $request, $archivo, $estacion)
+    public function descargarWord(Request $request, $archivo, $nomenclatura)
     {
         // Ejemplo de construcción de la ruta del archivo
-        $nomenclatura = strtoupper($estacion); // Obtener la nomenclatura desde la ruta
+        $nomenclatura = strtoupper($nomenclatura); // Obtener la nomenclatura desde la ruta
 
         // Construir la ruta del archivo
         $rutaArchivo = storage_path("app/public/servicios_anexo30/{$nomenclatura}/documentos_rellenados/{$archivo}");
@@ -281,27 +300,26 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
+
+    // Método para obtener los datos de una estación de servicio por su ID
     public function obtenerDatosEstacion($id)
     {
         try {
-            $estacion = EstacionServicio::findOrFail($id);
+            $estacion = Estacion::findOrFail($id);
 
             $datosEstacion = [
-                'id_estacion' => $estacion->id,
-                'razonsocial' => $estacion->Razon_Social,
-                'rfc' => $estacion->RFC,
-                'numestacion' => $estacion->Num_Estacion,
-                'domicilio_fiscal' => $estacion->Domicilio_Fiscal,
-                'telefono' => $estacion->Telefono,
-                'correo' => $estacion->Correo,
-                'fecha_recepcion' => $estacion->Fecha_Recepcion_Solicitud,
-                'cre' => $estacion->Num_CRE,
-                'constancia' => $estacion->Num_Constancia,
-                'domicilio_estacion' => $estacion->Domicilio_Estacion_Servicio,
-                'estado' => $estacion->Estado_Republica_Estacion,
-                'contacto' => $estacion->Contacto,
-                'nom_repre' => $estacion->Nombre_Representante_Legal,
-                'fecha_inspeccion' => $estacion->Fecha_Inspeccion,
+                'numestacion' => $estacion->num_estacion,
+                'razonsocial' => $estacion->razon_social,
+                'rfc' => $estacion->rfc,
+                'domicilio_fiscal' => $estacion->domicilio_fiscal,
+                'telefono' => $estacion->telefono,
+                'correo' => $estacion->correo_electronico,
+                'cre' => $estacion->num_cre,
+                'constancia' => $estacion->num_constancia,
+                'domicilio_estacion' => $estacion->domicilio_estacion_servicio,
+                'estado' => $estacion->estado_republica_estacion,
+                'contacto' => $estacion->contacto,
+                'nom_repre' => $estacion->nombre_representante_legal,
                 // Agrega más campos según sea necesario
             ];
 
@@ -310,4 +328,5 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return response()->json(['error' => 'Error al obtener los datos de la estación.'], 500);
         }
     }
+
 }
