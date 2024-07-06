@@ -179,7 +179,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Definir la carpeta de destino
             $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
-            $subFolderPath = "{$customFolderPath}/documentos_rellenados";
+            $subFolderPath = "{$customFolderPath}/expediente";
 
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
