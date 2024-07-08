@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/descargar-cotizacion-ajax', [Servicio_Anexo_30Controller::class, 'descargarCotizacionAjax'])->name('descargar.cotizacion.ajax');
 
     //Servicios Para Aprobar
-    Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo'); 
+    Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
 
     Route::get('servicio_anexo/apro/{id}', [Servicio_Anexo_30Controller::class, 'apro'])->name('servicio_anexo.apro');
 
@@ -83,11 +83,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
 
     Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
-    ->name('descargar.archivo');
+        ->name('descargar.archivo');
 
-   Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
+    Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
-  
+    // En web.php (o routes.php)
+    Route::post('/guardar-dictamenes', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenes'])->name('guardar.dictamenes');
+
+
 
 
 

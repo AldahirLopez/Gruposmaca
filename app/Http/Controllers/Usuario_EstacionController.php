@@ -86,4 +86,14 @@ class Usuario_EstacionController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        // Buscar la relación por su ID y eliminarla
+        $relacion = Usuario_Estacion::findOrFail($id);
+        $relacion->delete();
+
+        // Redirigir de vuelta a la vista index con un mensaje de éxito
+        return redirect()->route('usuario_estacion.index')->with('success', 'Relación eliminada correctamente.');
+    }
+
 }

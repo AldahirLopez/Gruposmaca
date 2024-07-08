@@ -28,18 +28,23 @@
                                 <tr>
                                     <th scope="col">ID Usuario</th>
                                     <th scope="col">ID Estacion</th>
-                                    <th scope="col">Razon Social</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaEstaciones">
-                                @foreach($UsuarioEstaciones as $UsuarioEstacione)
+                                @foreach($UsuarioEstaciones as $UsuarioEstacion)
                                     <tr>
-                                        <td>{{ $UsuarioEstacione->usuario_id }}</td>
-                                        <td>{{ $UsuarioEstacione->estacion_id }}</td>
-                                        <td></td>
-                                        <td>{{ $UsuarioEstacione->estado_republica_estacion }}</td>
+                                        <td>{{ $UsuarioEstacion->usuario_id }}</td>
+                                        <td>{{ $UsuarioEstacion->estacion_id }}</td>
+                                        <td scope="row">
+                                            @can('borrar-servicio_anexo_30')
 
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['usuario_estacion.destroy', $UsuarioEstacion->id], 'style' => 'display:inline']) !!}
+                                                {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                                {!! Form::close() !!}
+
+                                            @endcan
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
