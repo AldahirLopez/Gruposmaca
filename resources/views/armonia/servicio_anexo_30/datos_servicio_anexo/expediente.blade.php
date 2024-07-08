@@ -163,26 +163,27 @@
                                                         <tr>
                                                             <td>Requerimientos de almacenaje de información</td>
                                                             <td>
+                                                                <!-- Opción 2 -->
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
-                                                                        name="gridRadios2" id="gridRadios2a"
+                                                                        name="opcion2" id="opcion2_cumple"
                                                                         value="cumple" checked>
                                                                     <label class="form-check-label"
-                                                                        for="gridRadios2a">Cumple</label>
+                                                                        for="opcion2_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
-                                                                        name="gridRadios2" id="gridRadios2b"
+                                                                        name="opcion2" id="opcion2_no_cumple"
                                                                         value="no_cumple">
                                                                     <label class="form-check-label"
-                                                                        for="gridRadios2b">No cumple</label>
+                                                                        for="opcion2_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
-                                                                        name="gridRadios2" id="gridRadios2c"
+                                                                        name="opcion2" id="opcion2_no_aplica"
                                                                         value="no_aplica">
                                                                     <label class="form-check-label"
-                                                                        for="gridRadios2c">No aplica</label>
+                                                                        for="opcion2_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
                                                             <td><input class="form-control" name="detalleOpinion2"

@@ -346,6 +346,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
             ];
 
             // Validar los datos del formulario
@@ -393,6 +394,28 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                     // Establecer los valores correctos basados en la opción seleccionada
                     switch ($data['opcion1']) {
+                        case 'cumple':
+                            $templateProcessor->setValue('cumple', 'X');
+                            $templateProcessor->setValue('nocumple', ' ');
+                            $templateProcessor->setValue('noaplica', ' ');
+                            break;
+                        case 'no_cumple':
+                            $templateProcessor->setValue('cumple', ' ');
+                            $templateProcessor->setValue('nocumple', 'X');
+                            $templateProcessor->setValue('noaplica', ' ');
+                            break;
+                        case 'no_aplica':
+                            $templateProcessor->setValue('cumple', ' ');
+                            $templateProcessor->setValue('nocumple', ' ');
+                            $templateProcessor->setValue('noaplica', 'X');
+                            break;
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+                    // Establecer los valores correctos basados en la opción seleccionada
+                    switch ($data['opcion2']) {
                         case 'cumple':
                             $templateProcessor->setValue('cumple', 'X');
                             $templateProcessor->setValue('nocumple', ' ');
