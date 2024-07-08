@@ -15,6 +15,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use App\Models\Usuario_Estacion;
 
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -29,10 +31,10 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-servicio|crear-servicio|editar-servicio|borrar-servicio', ['only' => ['index']]);
-        $this->middleware('permission:crear-servicio', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-servicio', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-servicio', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-servicio_anexo_30|editar-servicio_anexo_30|borrar-servicio_anexo_30|crear-servicio_anexo_30', ['only' => ['index']]);
+        $this->middleware('permission:ver-servicio_anexo_30', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-servicio_anexo_30', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-servicio_anexo_30', ['only' => ['destroy']]);
     }
 
     public function index(Request $request)
@@ -71,14 +73,35 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
                 if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
                     // Si es administrador, obtener todos los servicios
                     $servicios = ServicioAnexo::all();
+                    $estaciones = Estacion::all();
                 } else {
                     // Si no es administrador, obtener solo los servicios del usuario autenticado
                     $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+                    $estacionesDirectas = Estacion::where('usuario_id', $usuario->id)->get();
+                    // Inicializar una colección para las estaciones relacionadas
+                    $estacionesRelacionadas = collect();
+
+                    // Verificar si el usuario no es administrador para buscar relaciones
+                    if (!$usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                        // Obtener las relaciones de usuario a estación
+                        $relaciones = Usuario_Estacion::where('usuario_id', $usuario->id)->get();
+
+                        // Recorrer las relaciones para obtener las estaciones relacionadas
+                        foreach ($relaciones as $relacion) {
+                            // Obtener la estación relacionada y añadirla a la colección
+                            $estacionRelacionada = Estacion::find($relacion->estacion_id);
+                            if ($estacionRelacionada) {
+                                $estacionesRelacionadas->push($estacionRelacionada);
+                            }
+                        }
+                    }
+                    // Combinar estaciones directas y relacionadas y eliminar duplicados
+                    $estaciones = $estacionesDirectas->merge($estacionesRelacionadas)->unique('id');
                 }
             }
         }
 
-        $estaciones = Estacion::all();
+
         // Siempre retornar la vista, incluso si no se encuentran usuarios o servicios
         return view('armonia.servicio_anexo_30.datos_servicio_anexo.index', compact('servicios', 'usuarios', 'estaciones'));
     }
@@ -117,7 +140,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
         $customFolderPath = "servicios_anexo30/{$nomenclatura}";
 
         // Crear la carpeta si no existe
-        Storage::disk('public')->makeDirectory($customFolderPath); 
+        Storage::disk('public')->makeDirectory($customFolderPath);
 
         return redirect()->route('servicio_inspector_anexo_30.index')->with('success', 'Servicio creado exitosamente');
 

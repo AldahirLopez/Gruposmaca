@@ -17,6 +17,7 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ArchivosDicController;
 use App\Http\Controllers\EstacionController;
 use App\Http\Controllers\FormatosHistorialController;
+use App\Http\Controllers\Usuario_EstacionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -86,6 +87,8 @@ Route::group(['middleware' => ['auth']], function () {
 
    Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
+  
+
 
 
 
@@ -101,6 +104,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('estacion', EstacionController::class);
+
+    Route::resource('usuario_estacion', Usuario_EstacionController::class);
+    Route::post('/asignar-usuarios', [Usuario_EstacionController::class, 'AsignarEstacion'])->name('asignar-usuarios.AsignarEstacion');
 
 
 

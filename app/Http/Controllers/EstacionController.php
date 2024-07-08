@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Estacion;
 use App\Http\Controllers\Controller;
+use App\Models\Usuario_Estacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -17,6 +19,8 @@ class EstacionController extends Controller
     {
         // Obtener el usuario autenticado
         $usuario = Auth::user();
+
+        // Lista de estados
         $estados = [
             'Aguascalientes',
             'Baja California',
@@ -52,10 +56,38 @@ class EstacionController extends Controller
             'Zacatecas'
         ];
 
-        $estaciones = Estacion::all();
+        // Inicializar la variable para almacenar las estaciones
+        $estaciones = [];
+
+        if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            // Mostrar todas las estaciones si el usuario es administrador o auditor
+            $estaciones = Estacion::all();
+        } else {
+            $estacionesDirectas = Estacion::where('usuario_id', $usuario->id)->get();
+            // Inicializar una colección para las estaciones relacionadas
+            $estacionesRelacionadas = collect();
+
+            // Verificar si el usuario no es administrador para buscar relaciones
+            if (!$usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                // Obtener las relaciones de usuario a estación
+                $relaciones = Usuario_Estacion::where('usuario_id', $usuario->id)->get();
+
+                // Recorrer las relaciones para obtener las estaciones relacionadas
+                foreach ($relaciones as $relacion) {
+                    // Obtener la estación relacionada y añadirla a la colección
+                    $estacionRelacionada = Estacion::find($relacion->estacion_id);
+                    if ($estacionRelacionada) {
+                        $estacionesRelacionadas->push($estacionRelacionada);
+                    }
+                }
+            }
+            // Combinar estaciones directas y relacionadas y eliminar duplicados
+            $estaciones = $estacionesDirectas->merge($estacionesRelacionadas)->unique('id');
+        }
+
+        // Pasar los datos a la vista
         return view('armonia.estacion.index', compact('usuario', 'estados', 'estaciones'));
     }
-
     public function store(Request $request)
     {
         // Mostrar todos los datos enviados desde el formulario

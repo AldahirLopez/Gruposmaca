@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Role; 
 
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -22,10 +22,10 @@ class Servicio_Anexo_30Controller extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-anexo|crear-anexo|editar-anexo|borrar-anexo', ['only' => ['index']]);
-        $this->middleware('permission:crear-anexo', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-anexo', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-anexo', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-servicio_anexo_30|editar-servicio_anexo_30|borrar-servicio_anexo_30|crear-servicio_anexo_30', ['only' => ['index']]);
+        $this->middleware('permission:ver-servicio_anexo_30', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-servicio_anexo_30', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-servicio_anexo_30', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.

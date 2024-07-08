@@ -22,6 +22,12 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('estacion.index') }}">
+                    <i class="bi bi-folder-check"></i>
+                    <span>Estaciones de servicio</span>
+                </a>
+            </li>
         @endif
 
         @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
@@ -134,6 +140,13 @@
                 <a class="nav-link collapsed" href="{{ route('estacion.index') }}">
                     <i class="bi bi-folder-check"></i>
                     <span>Estaciones de servicio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('usuario_estacion.index') }}">
+                    <i class="bi bi-folder-check"></i>
+                    <span>Estaciones por usuario</span>
                 </a>
             </li>
             <!-- End Profile Page Nav -->
