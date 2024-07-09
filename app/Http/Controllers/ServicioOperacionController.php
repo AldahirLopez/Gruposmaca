@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Estacion;
+use App\Models\Estacion_Operacion;
+use App\Models\ServicioOperacion;
+use App\Models\Usuario_Estacion;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -12,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Role;
 
 class ServicioOperacionController extends Controller
 {
@@ -33,22 +38,71 @@ class ServicioOperacionController extends Controller
         return $this->roles()->whereIn('name', $roles)->exists();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
+        // Inicializar colecciones y variables necesarias
+        $usuarios = collect();
+        $servicios = collect();
+        $warnings = [];
 
-        // Verificar si el usuario es administrador
-        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador o auditor, obtener todos los dictámenes
-            $dictamenes = DictamenOp::all();
-        } else {
-            // Si no es administrador o auditor, obtener solo los dictámenes del usuario autenticado
-            $dictamenes = DictamenOp::where('usuario_id', $usuario->id)->get();
+        // Obtener el rol "Verificador Anexo 30"
+        $rolVerificador = Role::on('mysql')->where('name', 'Operacion y Mantenimiento')->first();
+
+        // Verificar si el rol existe y obtener los usuarios asociados
+        if ($rolVerificador) {
+            // Obtener los IDs de los usuarios que tienen el rol "Verificador Anexo 30"
+            $usuariosConRol = $rolVerificador->users()->pluck('id');
+
+            // Si hay usuarios con el rol, obtenerlos
+            if ($usuariosConRol->isNotEmpty()) {
+                $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+            }
         }
 
-        // Pasar los dictámenes a la vista
-        return view('armonia.operacion.servicio_operacion.index', compact('dictamenes'));
+        // Verificar si el usuario está autenticado
+        $usuario = Auth::user();
+
+        if ($usuario) {
+            // Verificar si se envió un usuario seleccionado en la solicitud
+            $usuarioSeleccionado = $request->input('usuario_id');
+
+            // Si se seleccionó un usuario, filtrar los servicios por ese usuario, de lo contrario, obtener todos los servicios
+            if ($usuarioSeleccionado) {
+                $servicios = ServicioOperacion::where('usuario_id', $usuarioSeleccionado)->get();
+            } else {
+                // Verificar si el usuario es administrador
+                if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                    // Si es administrador, obtener todos los servicios
+                    $servicios = ServicioOperacion::all();
+                    $estaciones = Estacion::all();
+                } else {
+                    // Si no es administrador, obtener solo los servicios del usuario autenticado
+                    $servicios = ServicioOperacion::where('usuario_id', $usuario->id)->get();
+                    $estacionesDirectas = Estacion::where('usuario_id', $usuario->id)->get();
+                    // Inicializar una colección para las estaciones relacionadas
+                    $estacionesRelacionadas = collect();
+
+                    // Verificar si el usuario no es administrador para buscar relaciones
+                    if (!$usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                        // Obtener las relaciones de usuario a estación
+                        $relaciones = Usuario_Estacion::where('usuario_id', $usuario->id)->get();
+
+                        // Recorrer las relaciones para obtener las estaciones relacionadas
+                        foreach ($relaciones as $relacion) {
+                            // Obtener la estación relacionada y añadirla a la colección
+                            $estacionRelacionada = Estacion::find($relacion->estacion_id);
+                            if ($estacionRelacionada) {
+                                $estacionesRelacionadas->push($estacionRelacionada);
+                            }
+                        }
+                    }
+                    // Combinar estaciones directas y relacionadas y eliminar duplicados
+                    $estaciones = $estacionesDirectas->merge($estacionesRelacionadas)->unique('id');
+                }
+            }
+        }
+        // Siempre retornar la vista, incluso si no se encuentran usuarios o servicios
+        return view('armonia.operacion.servicio_operacion.index', compact('servicios', 'usuarios', 'estaciones'));
     }
 
     /**
@@ -60,7 +114,7 @@ class ServicioOperacionController extends Controller
      */
     public function create()
     {
-        return view('armonia.operacion.servicio_operacion.crear');
+
     }
 
     /**
@@ -68,34 +122,78 @@ class ServicioOperacionController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
-        $request->validate([
-            'numero_dictamen' => 'required',
-        ]);
+        $estacionId = $request->input('estacion');
 
-        //Obtener el Usuario logeado 
-        $usuario = auth()->user();
+        $usuario = Auth::user(); // O el método que uses para obtener el usuario
+        $nomenclatura = $this->generarNomenclatura($usuario);
 
-        // Crear una nueva instancia del modelo Obras
-        $NumDictamen = new DictamenOp();
+        // Crear instancia de ServicioAnexo y guardar datos
+        $servicio = new ServicioOperacion();
+        $servicio->nomenclatura = $nomenclatura;
+        $servicio->pending_apro_servicio = false;
+        $servicio->pending_deletion_servicio = false;
+        $servicio->usuario_id = $usuario->id;
+        // Asigna otros campos al servicio según sea necesario
+        $servicio->save();
 
-        // Establecer los valores de los campos
-        $NumDictamen->nombre = $request->numero_dictamen;
-        $NumDictamen->usuario_id = $usuario->id;
+        // Obtener el ID del servicio anexo creado
+        $servicio_op_id = $servicio->id;
 
-        // Guardar la nueva entrada en la base de datos
-        $NumDictamen->save();
+        // Crear instancia de Estacion_Servicio y guardar la relación
+        $estacionServicio = new Estacion_Operacion();
+        $estacionServicio->servicio_operacion_id = $servicio_op_id;
+        $estacionServicio->estacion_id = $estacionId;
+        // Asigna otros campos a Estacion_Servicio si es necesario
+        $estacionServicio->save();
 
         // Definir la carpeta de destino dentro de 'public/storage'
-        $customFolderPath = "NOM-005/{$request->numero_dictamen}";
+        $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}";
 
         // Crear la carpeta si no existe
         Storage::disk('public')->makeDirectory($customFolderPath);
 
-        session()->flash('success', 'Dictamen creado exitosamente');
-        $dictamenes = DictamenOp::all();
-        return redirect()->route('servicio_operacion.index', compact('dictamenes'));
-    } 
+        return redirect()->route('servicio_operacion.index')->with('success', 'Servicio creado exitosamente');
+    }
+
+    public function generarNomenclatura($usuario)
+    {
+        $iniciales = $this->obtenerIniciales($usuario);
+        $anio = date('Y');
+        $nomenclatura = '';
+        $numero = 1;
+
+        do {
+            $nomenclatura = "OP-$iniciales-$numero-$anio";
+            $existe = ServicioOperacion::where('nomenclatura', $nomenclatura)->exists();
+
+            if ($existe) {
+                $numero++;
+            } else {
+                break;
+            }
+        } while (true);
+
+        return $nomenclatura;
+    }
+
+    private function obtenerIniciales($usuario)
+    {
+        $nombres = explode(' ', $usuario->name); // Suponiendo que el campo de nombres es 'name'
+        $iniciales = '';
+        $contador = 0;
+
+        foreach ($nombres as $nombre) {
+            if ($contador < 3) {
+                $iniciales .= substr($nombre, 0, 1);
+                $contador++;
+            } else {
+                break;
+            }
+        }
+
+        return strtoupper($iniciales);
+    }
+
 
     /**
      * Display the specified resource.
