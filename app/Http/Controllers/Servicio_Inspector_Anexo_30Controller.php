@@ -326,7 +326,11 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
     //Obtener Servicios por inspector
     public function obtenerServicios(Request $request)
     {
-        try {
+        $usuarioSeleccionado = $request->input('usuario_id');
+        $estadoSeleccionado=$request->input('estado');
+        $yearSeleccionado=$request->input('year');
+      
+    
             // Obtener el usuario autenticado
             $usuario = Auth::user();
 
@@ -347,37 +351,33 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
             // Obtener los usuarios correspondientes a esos IDs
             $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
 
-            // Verificar el usuario seleccionado en la solicitud
-            $usuarioSeleccionado = $request->input('usuario_id');
-
-            // Filtrar los servicios según el usuario seleccionado
-            if (!empty($usuarioSeleccionado)) {
-                if ($usuarioSeleccionado == 'todos') {
-                    // Obtener todos los servicios si se selecciona "Todos los usuarios"
-                    $servicios = ServicioAnexo::all();
-                } else {
-                    // Filtrar por el usuario seleccionado específicamente
-                    $servicios = ServicioAnexo::where('usuario_id', $usuarioSeleccionado)->get();
-                }
-            } else {
-                // Obtener servicios según el rol del usuario autenticado
-                if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-                    // Si es administrador o auditor, obtener todos los servicios
-                    $servicios = ServicioAnexo::whereIn('usuario_id', $usuariosConRol)->get();
-                } else {
-                    // Obtener servicios del usuario autenticado
-                    $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
-                }
+            if($usuarioSeleccionado==="todos"){
+                $servicios=ServicioAnexo::all();
             }
 
-            // Pasar los datos a la vista
-            return view('partials.tabla_servicios', compact('servicios', 'usuarios'));
+         
+            $servicios = ServicioAnexo::query()
+            ->join('estacion_servicio', 'servicio_anexo_30.id', '=', 'estacion_servicio.servicio_anexo_id')
+            ->join('estacion', 'estacion.id', '=', 'estacion_servicio.estacion_id')
+            ->select('servicio_anexo_30.*')
+            ->when($usuarioSeleccionado != 'todos', function ($query) use ($usuarioSeleccionado) {
+                return $query->where('servicio_anexo_30.usuario_id', $usuarioSeleccionado);
+            })
+            ->when($yearSeleccionado, function ($query) use ($yearSeleccionado) {
+                return $query->whereYear('servicio_anexo_30.created_at', $yearSeleccionado);
+            })
+            ->when($estadoSeleccionado, function ($query) use ($estadoSeleccionado) {
+                return $query->where('estacion.estado_republica_estacion', $estadoSeleccionado);
+            })
+            ->get();
+          
 
-        } catch (\Exception $e) {
-            // Manejar cualquier excepción lanzada durante el proceso
-            Log::error('Error en obtenerServicios: ' . $e->getMessage());
-            return response()->view('errors.500', [], 500); // Devolver vista de error 500
-        }
+           
+            // Pasar los datos a la vista
+           return redirect()->route('servicio_inspector_anexo_30.index')->with(['servicios' => $servicios,'año'=>$yearSeleccionado,'estado'=>$estadoSeleccionado,'usuario'=>$usuario]);
+          
+
+        
     }
 
 
