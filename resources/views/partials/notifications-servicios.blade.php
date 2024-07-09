@@ -26,7 +26,7 @@
                 <a href="{{ route('approval.show', $dictamen->id) }}" class="btn btn-primary">Ver detalles</a>
             </div>
         </li>
-        <li>
+        <li> 
             <hr class="dropdown-divider">
         </li>
         @endforeach

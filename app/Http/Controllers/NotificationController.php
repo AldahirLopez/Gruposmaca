@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServicioOperacion;
 use Illuminate\Http\Request;
 use App\Models\ServicioAnexo;
 use App\Models\DictamenOp;
@@ -17,7 +18,7 @@ class NotificationController extends Controller
         ])->get();
 
         // Obtener dictamenes con estado 0 eliminacion
-        $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
+        $pendingDeletionsDictamen = ServicioOperacion::where('pending_deletion_servicio', 1)->get();
 
         // Obtener servicios con estado 0 eliminacion
         $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion_servicio', 1)->get();
