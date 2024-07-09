@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cotizacion_Servicio_Anexo30;
 use App\Models\Datos_Servicio;
+use App\Models\ServicioOperacion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\DictamenOp;
@@ -18,7 +19,7 @@ class ApprovalController extends Controller
     public function index()
     {
         // Obtener todos los dictámenes pendientes de aprobación para eliminar
-        $dictamenes = DictamenOp::where('pending_deletion', true)->get();
+        $dictamenes = ServicioOperacion::where('pending_deletion_servicio', true)->get();
         $servicios = ServicioAnexo::where('pending_deletion_servicio', true)->get();
 
         return view('notificaciones.index', compact('dictamenes', 'servicios'));
@@ -28,7 +29,7 @@ class ApprovalController extends Controller
     {
         try {
             // Intenta encontrar el dictamen en la primera tabla
-            $variable = DictamenOp::findOrFail($id);
+            $variable = ServicioOperacion::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             // Si no se encuentra en la primera tabla, busca en la segunda tabla
             $variable = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
@@ -42,7 +43,7 @@ class ApprovalController extends Controller
     {
         try {
             // Intenta encontrar el dictamen en la primera tabla
-            $dictamen = DictamenOp::findOrFail($id);
+            $dictamen = ServicioOperacion::findOrFail($id);
 
             // Obtener los archivos relacionados
             $archivos = $dictamen->dicarchivos;
@@ -61,7 +62,7 @@ class ApprovalController extends Controller
 
             // Obtener la nomenclatura para la carpeta de archivos
             $nombre = $dictamen->nombre;
-            $customFolderPath = "NOM-005/{$nombre}";
+            $customFolderPath = "OperacionyMantenimiento/{$nombre}";
 
             // Eliminar la carpeta de archivos si existe
             if (Storage::disk('public')->exists($customFolderPath)) {
@@ -117,9 +118,9 @@ class ApprovalController extends Controller
 
         try {
             // Intenta encontrar el dictamen en la primera tabla
-            $dictamen = DictamenOp::findOrFail($id);
+            $dictamen = ServicioOperacion::findOrFail($id);
             // Marcar el dictamen como pendiente de eliminación
-            $dictamen->pending_deletion = false;
+            $dictamen->pending_deletion_servicio = false;
             $dictamen->save();
         } catch (ModelNotFoundException $e) {
             // Si no se encuentra en la primera tabla, busca en la segunda tabla
