@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ServicioOperacion;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\DictamenOp;
@@ -30,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             $pendingDeletionsServicioAn = collect();
 
             if ($user && $user->hasRole('Administrador')) {
-                $pendingDeletionsDictamen = DictamenOp::where('pending_deletion', 1)->get();
+                $pendingDeletionsDictamen = ServicioOperacion::where('pending_deletion_servicio', 1)->get();
                 $pendingDeletionsServicio = ServicioAnexo::where('pending_apro_servicio', 0)
                     ->where(function ($query) {
                         $query->where('pending_deletion_servicio', 0)

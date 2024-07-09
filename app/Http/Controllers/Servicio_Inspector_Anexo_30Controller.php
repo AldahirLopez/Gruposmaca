@@ -230,7 +230,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
             //Si es administrador o auditor puede ver todo y editar todo 
             $servicio_anexo_id = $request->servicio_anexo_id;
             $estacion = ServicioAnexo::find($servicio_anexo_id);
-            $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+           // $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
             // Ruta de la carpeta donde se guardan los archivos generados
             $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
@@ -250,7 +250,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
                 }
             }
 
-            return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+            return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
 
         } else {
 
@@ -261,11 +261,11 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
             //$validar_usuario =  User::where('usuario_id',)
 
             if ($validar_servicio) {
-                $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+              //  $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
                 //Si es administrador o auditor puede ver todo y editar todo 
                 $servicio_anexo_id = $request->servicio_anexo_id;
                 $estacion = ServicioAnexo::find($servicio_anexo_id);
-                $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
+                //$archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
                 // Ruta de la carpeta donde se guardan los archivos generados
                 $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
@@ -284,7 +284,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
                         ];
                     }
                 }
-                return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('archivoAnexo', 'estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
+                return view('armonia.anexo.servicio_anexo.datos_servicio_anexo.expediente', compact('estados', 'servicio_anexo_id', 'estacion', 'existingFiles'));
             } else {
 
                 return redirect()->route('servicio_anexo.index')->with('error', 'Servicio no valido');

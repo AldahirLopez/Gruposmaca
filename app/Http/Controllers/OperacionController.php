@@ -28,20 +28,8 @@ class OperacionController extends Controller
      */
     public function index()
     {
-        // Obtener el usuario autenticado
-        $usuario = Auth::user();
-
-        // Verificar si el usuario es administrador
-        if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador o auditor, obtener todos los dictámenes
-            $dictamenes = DictamenOp::all();
-        } else {
-            // Si no es administrador o auditor, obtener solo los dictámenes del usuario autenticado
-            $dictamenes = DictamenOp::where('usuario_id', $usuario->id)->get();
-        }
-
         // Pasar los dictámenes a la vista
-        return view('armonia.operacion.index', compact('dictamenes'));
+        return view('armonia.operacion.index'   );
     }
 
     
