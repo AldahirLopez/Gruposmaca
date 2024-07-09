@@ -354,7 +354,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
             if($usuarioSeleccionado==="todos"){
                 $servicios=ServicioAnexo::all();
             }
-
+            $usuario=User::find($usuarioSeleccionado);
          
             $servicios = ServicioAnexo::query()
             ->join('estacion_servicio', 'servicio_anexo_30.id', '=', 'estacion_servicio.servicio_anexo_id')
