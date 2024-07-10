@@ -16,7 +16,7 @@
                                 <i class="bi bi-arrow-return-left"></i> Volver
                             </a>
 
-                            @can('crear-servicio_anexo_30')
+                            @can('crear-servicio_operacion_mantenimiento')
                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                     data-target="#generarServicioModal">
                                     Generar Nuevo Servicio
