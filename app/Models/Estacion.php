@@ -52,7 +52,7 @@ class Estacion extends Model
 
     public function estacionServicioOperacionMantenimiento()
     {
-        return $this->hasMany(Estacion_Operacion::class,'servicio_operacion_id');
+        return $this->hasMany(Estacion_Operacion::class,'estacion_id');
     }
 
     public function usuarios()
