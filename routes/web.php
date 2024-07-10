@@ -108,6 +108,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('estacion', EstacionController::class);
 
+    Route::post('/documento', [EstacionController::class, 'storedocumentoestacion'])->name('documento.store');
+
+
     Route::resource('usuario_estacion', Usuario_EstacionController::class);
     Route::post('/asignar-usuarios', [Usuario_EstacionController::class, 'AsignarEstacion'])->name('asignar-usuarios.AsignarEstacion');
 

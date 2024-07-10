@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Documento_Estacion;
 use App\Models\Estacion;
 use App\Http\Controllers\Controller;
 use App\Models\Usuario_Estacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -90,9 +92,6 @@ class EstacionController extends Controller
     }
     public function store(Request $request)
     {
-        // Mostrar todos los datos enviados desde el formulario
-        // dd($request->all());
-
         try {
             // Validar los datos del formulario
             $data = $request->validate([
@@ -106,9 +105,6 @@ class EstacionController extends Controller
                 'domicilio_estacion' => 'required|string|max:255',
                 'estado' => 'required|string|max:255',
             ]);
-
-            // Mostrar los datos validados
-            //dd($data);
 
             // Crear una nueva instancia del modelo Estacion
             $estacionServicio = new Estacion();
@@ -124,6 +120,15 @@ class EstacionController extends Controller
             $estacionServicio->estado_republica_estacion = $data['estado'];
             $estacionServicio->usuario_id = $data['id_usuario'];
 
+            // Definir la carpeta de destino dentro de 'public/storage'
+            $razonSocial = str_replace([' ', '.'], '_', $data['razonsocial']); // Eliminar espacios y puntos en la razón social
+            $customFolderPath = "armonia/estaciones/{$razonSocial}";
+
+            // Crear la carpeta si no existe
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
             // Guardar el objeto en la base de datos
             $estacionServicio->save();
 
@@ -136,5 +141,98 @@ class EstacionController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        try {
+            $estacion = Estacion::findOrFail($id);
+            $estacion->delete();
+
+            return redirect()->route('estacion.index')->with('success', 'Estación eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('estacion.index')->with('error', 'Error al eliminar la estación.');
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'numestacion' => 'required',
+            'razonsocial' => 'required',
+            'rfc' => 'required',
+            'domicilio_fiscal' => 'required',
+            'telefono' => 'required',
+            'correo' => 'required|email',
+            'domicilio_estacion' => 'required',
+            'estado' => 'required'
+        ]);
+
+        try {
+            $estacion = Estacion::findOrFail($id);
+            $estacion->num_estacion = $request->numestacion;
+            $estacion->razon_social = $request->razonsocial;
+            $estacion->rfc = $request->rfc;
+            $estacion->domicilio_fiscal = $request->domicilio_fiscal;
+            $estacion->telefono = $request->telefono;
+            $estacion->correo_electronico = $request->correo;
+            $estacion->domicilio_estacion_servicio = $request->domicilio_estacion;
+            $estacion->estado_republica_estacion = $request->estado;
+            $estacion->save();
+
+            return redirect()->route('estacion.index')->with('success', 'Estación actualizada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('estacion.index')->with('error', 'Error al actualizar la estación.');
+        }
+    }
+
+    public function storedocumentoestacion(Request $request)
+    {
+        // Validar los datos del formulario
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'rutadoc_estacion' => 'required|file',
+            'estacion_id' => 'required|integer',
+            'usuario_id' => 'required|integer',
+            'razon_social' => 'required|string|max:255',
+        ]);
+
+        try {
+            $documento = new Documento_Estacion();
+
+            // Si se sube un archivo, guardarlo
+            if ($request->hasFile('rutadoc_estacion')) {
+                // Obtener el archivo subido y el nombre especificado por el usuario
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension(); // Nombre personalizado con extensión original
+
+                // Definir la carpeta de destino dentro de 'public/storage'
+                $razonSocial = str_replace([' ', '.'], '_', $data['razon_social']); // Eliminar espacios y puntos en la razón social
+                $customFolderPath = "armonia/estaciones/{$razonSocial}";
+
+                // Verificar si la carpeta principal existe, si no, crearla
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                // Guardar el archivo en el sistema de archivos con el nombre personalizado
+                $rutaArchivo = $archivoSubido->storeAs(
+                    "public/{$customFolderPath}",
+                    $nombreArchivoPersonalizado
+                );
+
+                // Actualizar la ruta del archivo en la base de datos
+                $documento->rutadoc_estacion = str_replace('public/', '', $customFolderPath);
+            }
+
+            $documento->estacion_id = $data['estacion_id'];
+            $documento->usuario_id = $data['usuario_id'];
+            $documento->save();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('estacion.index')->with('success', 'Documento agregado exitosamente.');
+        } catch (\Exception $e) {
+            // Capturar y manejar cualquier excepción
+            return redirect()->route('estacion.index')->with('error', 'Error al agregar el documento.');
+        }
+    }
 
 }
