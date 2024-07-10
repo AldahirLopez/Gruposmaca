@@ -30,6 +30,10 @@ class ServicioOperacionController extends Controller
         $this->middleware('permission:crear-operacion', ['only' => ['create', 'store']]);
         $this->middleware('permission:editar-operacion', ['only' => ['edit', 'update']]);
         $this->middleware('permission:borrar-operacion', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-servicio_operacion_mantenimiento|crear-servicio_operacion_mantenimiento|editar-servicio_operacion_mantenimiento|borrar-servicio_operacion_mantenimiento', ['only' => ['index']]);
+        $this->middleware('permission:crear-servicio_operacion_mantenimiento', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-servicio_operacion_mantenimiento', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-servicio_operacion_mantenimiento', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -73,7 +77,7 @@ class ServicioOperacionController extends Controller
                 $servicios = ServicioOperacion::where('usuario_id', $usuarioSeleccionado)->get();
             } else {
                 // Verificar si el usuario es administrador
-                if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                if ($usuario->hasAnyRole(['Administrador', 'Operacion y Mantenimiento'])) {
                     // Si es administrador, obtener todos los servicios
                     $servicios = ServicioOperacion::all();
                     $estaciones = Estacion::all();
@@ -85,7 +89,7 @@ class ServicioOperacionController extends Controller
                     $estacionesRelacionadas = collect();
 
                     // Verificar si el usuario no es administrador para buscar relaciones
-                    if (!$usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+                    if (!$usuario->hasAnyRole(['Administrador', 'Operacion y Mantenimiento'])) {
                         // Obtener las relaciones de usuario a estación
                         $relaciones = Usuario_Estacion::where('usuario_id', $usuario->id)->get();
 

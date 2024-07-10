@@ -12,11 +12,11 @@
                     <div class="card-body">
                         <!-- Botones de acción -->
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('servicio_operacion.index') }}" class="btn btn-danger">
+                            <a href="{{ route('operacion.index') }}" class="btn btn-danger">
                                 <i class="bi bi-arrow-return-left"></i> Volver
                             </a>
 
-                            @can('crear-servicio_anexo_30')
+                            @can('crear-servicio_operacion_mantenimiento')
                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                     data-target="#generarServicioModal">
                                     Generar Nuevo Servicio
@@ -25,22 +25,103 @@
                         </div>
 
                         <!-- Filtro de usuario si el usuario es Administrador o Auditor -->
-                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Auditor'))
-                            <div style="margin-top: 15px;">
-                                <label for="filtroUsuario">Filtrar por Usuario:</label>
-                                <select id="filtroUsuario" class="form-control">
-                                    <option value="todos">Todos los usuarios</option>
-                                    @foreach($usuarios as $usuario)
-                                        <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                                    @endforeach
-                                </select>
+                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Operación y Mantenimiento'))
+                        <form action="{{ route('servicio-operacion.obtenerServicios') }}" method="GET" class="container mt-4">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="filtroUsuario" class="form-label">Usuario</label>
+                                    <select id="filtroUsuario" class="form-select" name="usuario_id">
+                                        <option value="todos">Todos los usuarios</option>
+                                        @foreach($usuarios as $usuario)
+                                            <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="filtroAño" class="form-label">Año</label>
+                                    <select id="filtroAño" class="form-select" name="year">
+                                        <option value="selecciona" disabled selected>Selecciona un año</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="filtroEstado" class="form-label">Estado</label>
+                                    <select id="filtroEstado" class="form-select" name="estado">
+                                        <option value="selecciona" disabled selected>Selecciona un estado</option>
+                                        <option value="Aguascalientes">Aguascalientes</option>
+                                        <option value="Baja California">Baja California</option>
+                                        <option value="Baja California Sur">Baja California Sur</option>
+                                        <option value="Campeche">Campeche</option>
+                                        <option value="Chiapas">Chiapas</option>
+                                        <option value="Chihuahua">Chihuahua</option>
+                                        <option value="Ciudad de México">Ciudad de México</option>
+                                        <option value="Coahuila">Coahuila</option>
+                                        <option value="Colima">Colima</option>
+                                        <option value="Durango">Durango</option>
+                                        <option value="Estado de México">Estado de México</option>
+                                        <option value="Guanajuato">Guanajuato</option>
+                                        <option value="Guerrero">Guerrero</option>
+                                        <option value="Hidalgo">Hidalgo</option>
+                                        <option value="Jalisco">Jalisco</option>
+                                        <option value="Michoacán">Michoacán</option>
+                                        <option value="Morelos">Morelos</option>
+                                        <option value="Nayarit">Nayarit</option>
+                                        <option value="Nuevo León">Nuevo León</option>
+                                        <option value="Oaxaca">Oaxaca</option>
+                                        <option value="Puebla">Puebla</option>
+                                        <option value="Querétaro">Querétaro</option>
+                                        <option value="Quintana Roo">Quintana Roo</option>
+                                        <option value="San Luis Potosí">San Luis Potosí</option>
+                                        <option value="Sinaloa">Sinaloa</option>
+                                        <option value="Sonora">Sonora</option>
+                                        <option value="Tabasco">Tabasco</option>
+                                        <option value="Tamaulipas">Tamaulipas</option>
+                                        <option value="Tlaxcala">Tlaxcala</option>
+                                        <option value="Veracruz">Veracruz</option>
+                                        <option value="Yucatán">Yucatán</option>
+                                        <option value="Zacatecas">Zacatecas</option>
+                                    </select>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                                </div>
+                            </div>
+                        </form>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
 
+
+
+        @if (session('servicios'))
+            @if (session('año') || session('estado') || session('usuario'))
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    Datos del Filtro
+                </div>
+                <div class="card-body">
+                    @if(session('usuario'))
+                        <p><strong>Usuario:</strong> {{ session('usuario')->name }}</p>
+                    @endif
+                    @if(session('año'))
+                        <p><strong>Año:</strong> {{ session('año') }}</p>
+                    @endif
+                    @if(session('estado'))
+                        <p><strong>Estado:</strong> {{ session('estado') }}</p>
+                    @endif
+                </div>
+            </div>
+            @endif
+    @endif
+        
+        @if (auth()->user()->hasRole('Operacion y Mantenimiento'))
         <!-- Mostrar servicios -->
         <div class="row">
             <div class="col-lg-12">
@@ -124,6 +205,8 @@
         </div>
     </div>
 
+    @endif
+
     <!-- Formulario con soporte AJAX -->
     <div class="modal fade" id="generarServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -175,28 +258,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 <script>
-    document.getElementById('filtroUsuario').addEventListener('change', function () {
-        var usuarioId = this.value;
-        var url = '{{ route("servicio_inspector_anexo_30.obtenerServicios") }}';
-
-        // Realizar una solicitud AJAX
-        var xhr = new XMLHttpRequest();
-
-        // Construir la URL de la solicitud AJAX
-        if (usuarioId !== '') {
-            url += '?usuario_id=' + usuarioId;
-        }
-
-        xhr.open('GET', url, true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                // Actualizar el contenido de la tabla con los servicios obtenidos
-                document.getElementById('tablaServicios').innerHTML = xhr.responseText;
-            }
-        };
-        xhr.send();
-    });
-
+   
     $(document).ready(function () {
         $('.btn-descargar-pdf').click(function (event) {
             // Prevenir el comportamiento predeterminado del enlace (navegación)

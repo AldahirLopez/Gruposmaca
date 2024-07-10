@@ -76,6 +76,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/obtener-servicios', [Servicio_Inspector_Anexo_30Controller::class, 'obtenerServicios'])->name('servicio_inspector_anexo_30.obtenerServicios');
 
 
+    //Servicio operacion y mantenimiento
+
+    Route::get('/obtener-servicios-operacion', [OperacionController::class, 'obtenerServicios'])->name('servicio-operacion.obtenerServicios');
+
     //Ruta para cada inspector para su expediente
     Route::get('/expediente/anexo30/{slug}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ExpedienteInspectorAnexo30'])->name('expediente.anexo30');
     //Ruta para cada inspector para su expediente en servicios de operacion y mantenimiento

@@ -103,7 +103,7 @@
             </li>
         @endif
         <!-- End Components Nav -->
-        @if(auth()->check() && auth()->user()->hasRole('Administrador'))
+        @if(auth()->check() && auth()->user()->hasAnyRole(['Operacion y Mantenimiento','Administrador']))
             <li class="nav-heading">Paginas</li>
 
             <li class="nav-item">
@@ -122,7 +122,7 @@
                 </a>
             </li>
 
-
+     
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('operacion.index') }}">
                     <i class="bi bi-hammer"></i>

@@ -13,7 +13,7 @@ use App\Models\Expediente_Operacion;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use Spatie\Permission\Models\Role;
 //Este controlador se va utilizar para la parte del administrador donde aprueba los servicios de operacion y mantenimiento
 
 class OperacionController extends Controller
@@ -34,7 +34,7 @@ class OperacionController extends Controller
     public function index()
     {
         // Pasar los dictámenes a la vista
-        return view('armonia.operacion.index'   );
+        return view('armonia.operacion.index');
     }
     public function ExpedienteInspectorOperacion($slug)
     {
@@ -76,7 +76,7 @@ class OperacionController extends Controller
 
         // Verificar si el usuario está autenticado
         $usuario = Auth::user();
-        if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+        if ($usuario->hasAnyRole(['Administrador', 'Operacion y Mantenimiento'])) {
             // Si es administrador o auditor puede ver todo y editar todo 
             $servicio_id = $slug;
             $servicioAnexo = ServicioOperacion::find($servicio_id);
@@ -374,6 +374,65 @@ class OperacionController extends Controller
 
         // Devolver el archivo como una respuesta binaria (blob)
         return response()->file($rutaCompleta);
+    }
+
+
+
+    //Metodo para filtrar por estado ,año y usuario
+    public function obtenerServicios(Request $request)
+    {
+        $usuarioSeleccionado = $request->input('usuario_id');
+        $estadoSeleccionado=$request->input('estado');
+        $yearSeleccionado=$request->input('year');
+      
+    
+            // Obtener el usuario autenticado
+            $usuario = Auth::user();
+
+            // Obtener el rol "Verificador Anexo 30"
+            $rol = Role::on('mysql')->where('name', 'Operacion y Mantenimiento')->first();
+
+            if (!$rol) {
+                throw new \Exception('El rol "Operación y Mantenimiento" no existe.');
+            }
+
+            // Obtener los IDs de los usuarios con el rol específico
+            $usuariosConRol = $rol->users()->pluck('id');
+
+            if ($usuariosConRol->isEmpty()) {
+                throw new \Exception('No hay usuarios con el rol "Operacion y Mantenimiento".');
+            }
+
+            // Obtener los usuarios correspondientes a esos IDs
+            $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+
+            if($usuarioSeleccionado==="todos"){
+                $servicios=ServicioOperacion::all();
+            }
+            $usuario=User::find($usuarioSeleccionado);
+         
+            $servicios = ServicioOperacion::query()
+            ->join('estacion_servicio_operacion_mantenimiento', 'operacion_mantenimiento.id', '=', 'estacion_servicio_operacion_mantenimiento.servicio_operacion_id')
+            ->join('estacion', 'estacion.id', '=', 'estacion_servicio_operacion_mantenimiento.estacion_id')
+            ->select('operacion_mantenimiento.*')
+            ->when($usuarioSeleccionado != 'todos', function ($query) use ($usuarioSeleccionado) {
+                return $query->where('operacion_mantenimiento.usuario_id', $usuarioSeleccionado);
+            })
+            ->when($yearSeleccionado, function ($query) use ($yearSeleccionado) {
+                return $query->whereYear('operacion_mantenimiento.created_at', $yearSeleccionado);
+            })
+            ->when($estadoSeleccionado, function ($query) use ($estadoSeleccionado) {
+                return $query->where('estacion.estado_republica_estacion', $estadoSeleccionado);
+            })
+            ->get();
+          
+
+           
+            // Pasar los datos a la vista
+           return redirect()->route('servicio_inspector_anexo_30.index')->with(['servicios' => $servicios,'año'=>$yearSeleccionado,'estado'=>$estadoSeleccionado,'usuario'=>$usuario]);
+          
+
+        
     }
 
 
