@@ -8,43 +8,6 @@
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
-        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-calendar-check-fill"></i><span>Formatos Vigentes</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ route('listar.anexo30') }}">
-                            <i class="bi bi-circle"></i><span>Anexo 30</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('estacion.index') }}">
-                    <i class="bi bi-folder-check"></i>
-                    <span>Estaciones de servicio</span>
-                </a>
-            </li>
-        @endif
-
-        @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#formshistori-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-calendar-week-fill"></i><span>Formatos Historial</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="formshistori-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ route('historialformatos.index') }}">
-                            <i class="bi bi-circle"></i><span>Anexo 30</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        @endif
 
         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
             <li class="nav-item">
@@ -73,6 +36,42 @@
                 </ul>
             </li>
         @endif
+
+        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-calendar-check-fill"></i><span>Formatos Vigentes</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.anexo30') }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        @endif
+
+        @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#formshistori-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-calendar-week-fill"></i><span>Formatos Historial</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="formshistori-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('historialformatos.index') }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
+
+
+
         @if(auth()->check() && auth()->user()->hasAnyRole(['Operacion y Mantenimiento', 'Auditor']))
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
@@ -108,9 +107,18 @@
             <li class="nav-heading">Paginas</li>
 
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Recordatorios</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('ema.index') }}">
-                    <i class="bi bi-folder-symlink-fill"></i>
-                    <span>Tramites Ema</span>
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                    <span>Tramites Entidad Mexicana de Acreditacion, A.C.</span>
                 </a>
             </li>
 
@@ -129,26 +137,29 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('notificaciones.index') }}">
-                    <i class="bi bi-trash-fill"></i>
-                    <span>Pendientes de eliminacion dictamenes</span>
-                </a>
-            </li>
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('estacion.index') }}">
-                    <i class="bi bi-folder-check"></i>
+                    <i class="bx bxs-data"></i>
                     <span>Estaciones de servicio</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('usuario_estacion.index') }}">
-                    <i class="bi bi-folder-check"></i>
+                    <i class="bi bi-person-plus-fill"></i>
                     <span>Estaciones por usuario</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('notificaciones.index') }}">
+                    <i class="bi bi-trash-fill"></i>
+                    <span>Pendientes de eliminacion dictamenes</span>
+                </a>
+            </li>
+            
             <!-- End Profile Page Nav -->
         @endif
 
