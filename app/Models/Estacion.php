@@ -50,6 +50,11 @@ class Estacion extends Model
         return $this->hasMany(Estacion_Servicio::class, 'estacion_id');
     }
 
+    public function estacionServicioOperacionMantenimiento()
+    {
+        return $this->hasMany(Estacion_Operacion::class,'servicio_operacion_id');
+    }
+
     public function usuarios()
     {
         return $this->belongsToMany(User::class, 'usuario_estacion', 'estacion_id', 'usuario_id');

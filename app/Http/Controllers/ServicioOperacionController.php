@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role;
 
+//Este controlador se va utilizar para la parte cliente donde va ser sus servicios y poder subir sus archivos
+
 class ServicioOperacionController extends Controller
 {
     protected $connection = 'segunda_db';
@@ -287,4 +289,10 @@ class ServicioOperacionController extends Controller
         // Redireccionar con un mensaje de éxito
         return redirect()->route('armonia.operacion.servicio_operacion.index')->with('success', 'Dictamen eliminado exitosamente');
     }
+
+    //PARTE DE LAS APROBACIONES DE LOS SERVICIOS DE OPERACION Y MANTENIMIENTO
+
+   
+
+
 }

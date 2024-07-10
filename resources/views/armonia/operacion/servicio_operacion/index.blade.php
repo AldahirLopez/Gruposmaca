@@ -81,7 +81,7 @@
                                                     <button class="btn btn-primary" disabled><i
                                                             class="bi bi-folder-fill"></i></button>
                                                 @else
-                                                    <a href="{{ route('expediente.anexo30', ['slug' => $servicio->id]) }}"
+                                                    <a href="{{ route('expediente.operacion', ['slug' => $servicio->id]) }}"
                                                         class="btn btn-primary">
                                                         <i class="bi bi-folder-fill"></i>
                                                     </a>

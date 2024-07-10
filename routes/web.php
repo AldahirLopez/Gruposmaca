@@ -65,8 +65,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Servicios Para Aprobar
     Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
-
     Route::get('servicio_anexo/apro/{id}', [Servicio_Anexo_30Controller::class, 'apro'])->name('servicio_anexo.apro');
+    
+    //Servicios para aprobar de operacion
+    Route::get('/apro_operacion_mantenimiento', [OperacionController::class, 'apro_servicio_operacion_mantenimiento'])->name('apro.operacion');
+    Route::get('/operacion_mantenimiento/apro/{id}', [OperacionController::class, 'apro'])->name('servicio_operacion.apro');
 
     //Servicio Inspector Anexo 30
     Route::resource('servicio_inspector_anexo_30', Servicio_Inspector_Anexo_30Controller::class);
@@ -75,15 +78,34 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Ruta para cada inspector para su expediente
     Route::get('/expediente/anexo30/{slug}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ExpedienteInspectorAnexo30'])->name('expediente.anexo30');
+    //Ruta para cada inspector para su expediente en servicios de operacion y mantenimiento
+    Route::get('/expediente/operacion/{slug}', [OperacionController::class, 'ExpedienteInspectorOperacion'])->name('expediente.operacion');
+    
+
 
     Route::post('/generate-word', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generateWord'])->name('generate.word');
+    
+    Route::post('/generate-word-operacion', [OperacionController::class, 'generateWord'])->name('generate.word.operacion');
+
 
     Route::get('/list-generated-files/{nomenclatura}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'listGeneratedFiles']);
+   
+    Route::get('/list-generated-files-operacion/{nomenclatura}', [OperacionController::class, 'listGeneratedFiles']);
+
 
     Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
+    
+    Route::get('/api/consulta/operacion/{id}', [OperacionController::class, 'validarDatosExpediente']);
+   
+
 
     Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
         ->name('descargar.archivo');
+
+
+    Route::get('/descargar-archivo-operacion/{archivo}/{estacion}', [OperacionController::class, 'descargarWord'])
+        ->name('descargar.archivo.operacion');
+
 
     Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
