@@ -23,15 +23,14 @@ class OperacionController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-operacion|crear-operacion|editar-operacion|borrar-operacion', ['only' => ['index']]);
-        $this->middleware('permission:crear-operacion', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-operacion', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-operacion', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-servicio_operacion_mantenimiento|crear-servicio_operacion_mantenimiento|editar-servicio_operacion_mantenimiento|borrar-servicio_operacion_mantenimiento', ['only' => ['index']]);
+        $this->middleware('permission:crear-servicio_operacion_mantenimiento', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-servicio_operacion_mantenimiento', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-servicio_operacion_mantenimiento', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
-     */
-    public function index()
+     */     public function index()
     {
         // Pasar los dictámenes a la vista
         return view('armonia.operacion.index');
