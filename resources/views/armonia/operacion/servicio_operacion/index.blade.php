@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Servicios Operacion Y mantenimiento</h3>
+        <h3 class="page__heading">Servicios operacion y Mantenimiento</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -12,11 +12,11 @@
                     <div class="card-body">
                         <!-- Botones de acción -->
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('operacion.index') }}" class="btn btn-danger">
+                            <a href="{{ route('servicio_anexo_30.index') }}" class="btn btn-danger">
                                 <i class="bi bi-arrow-return-left"></i> Volver
                             </a>
 
-                            @can('crear-servicio_operacion_mantenimiento')
+                            @can('crear-servicio_anexo_30')
                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                     data-target="#generarServicioModal">
                                     Generar Nuevo Servicio
@@ -25,7 +25,7 @@
                         </div>
 
                         <!-- Filtro de usuario si el usuario es Administrador o Auditor -->
-                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Operación y Mantenimiento'))
+                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Auditor'))
                         <form action="{{ route('servicio-operacion.obtenerServicios') }}" method="GET" class="container mt-4">
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -99,30 +99,8 @@
         </div>
 
 
-
-        @if (session('servicios'))
-            @if (session('año') || session('estado') || session('usuario'))
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    Datos del Filtro
-                </div>
-                <div class="card-body">
-                    @if(session('usuario'))
-                        <p><strong>Usuario:</strong> {{ session('usuario')->name }}</p>
-                    @endif
-                    @if(session('año'))
-                        <p><strong>Año:</strong> {{ session('año') }}</p>
-                    @endif
-                    @if(session('estado'))
-                        <p><strong>Estado:</strong> {{ session('estado') }}</p>
-                    @endif
-                </div>
-            </div>
-            @endif
-    @endif
-        
-        @if (auth()->user()->hasRole('Operacion y Mantenimiento'))
-        <!-- Mostrar servicios -->
+        @if (auth()->user()->hasRole('Verificador Anexo 30'))
+              <!-- Mostrar servicios -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -140,6 +118,8 @@
                                     </tr>
                                 </thead>
                                 <tbody style="text-align: center;">
+
+                                                                     
                                     @forelse($servicios as $servicio)
                                         <tr>
                                             <td scope="row">{{ $servicio->nomenclatura }}</td>
@@ -197,6 +177,117 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
+                               
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+      
+        @if (session('servicios'))
+            @if (session('año') || session('estado') || session('usuario'))
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    Datos del Filtro
+                </div>
+                <div class="card-body">
+                    @if(session('usuario'))
+                        <p><strong>Usuario:</strong> {{ session('usuario')->name }}</p>
+                    @endif
+                    @if(session('año'))
+                        <p><strong>Año:</strong> {{ session('año') }}</p>
+                    @endif
+                    @if(session('estado'))
+                        <p><strong>Estado:</strong> {{ session('estado') }}</p>
+                    @endif
+                </div>
+            </div>
+            @endif
+        
+       
+          <!-- Mostrar servicios -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="tablaServicios">
+                            <table class="table table-striped">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th scope="col">Numero de servicio</th>
+                                        <th scope="col">Pago</th>
+                                        <th scope="col">Cotizacion</th>
+                                        <th scope="col">Expediente</th>
+                                        <th scope="col">Listas de Inspeccion</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="text-align: center;">
+
+                                                                     
+                                    @forelse(session('servicios') as $servicio)
+                                        <tr>
+                                            <td scope="row">{{ $servicio->nomenclatura }}</td>
+                                            <td scope="row">Anexar Pago</td>
+                                            <td scope="row">
+                                                @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
+                                                    <button class="btn btn-primary" disabled>
+                                                        <i class="bi bi-file-earmark-excel-fill"></i>
+                                                    </button>
+                                                @else
+                                                    <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
+                                                        class="btn btn-primary btn-descargar-pdf"
+                                                        data-carpeta="{{ $servicio->nomenclatura }}">
+                                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td scope="row">
+                                                @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
+                                                    <button class="btn btn-primary" disabled><i
+                                                            class="bi bi-folder-fill"></i></button>
+                                                @else
+                                                    <a href="{{ route('expediente.anexo30', ['slug' => $servicio->id]) }}"
+                                                        class="btn btn-primary">
+                                                        <i class="bi bi-folder-fill"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td scope="row">
+                                                @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
+                                                    <button class="btn btn-primary" disabled><i
+                                                            class="bi bi-folder-fill"></i></button>
+                                                @else
+                                                    <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}"
+                                                        class="btn btn-primary">
+                                                        <i class="bi bi-folder-fill"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td scope="row">
+                                                @can('borrar-servicio_anexo_30')
+                                                    @if($servicio->pending_deletion_servicio)
+                                                        <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                    @else
+                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                        {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                                        {!! Form::close() !!}
+                                                    @endif
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6">No se encontraron servicios para mostrar.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                               
+
                             </table>
                         </div>
                     </div>
@@ -204,7 +295,6 @@
             </div>
         </div>
     </div>
-
     @endif
 
     <!-- Formulario con soporte AJAX -->
@@ -223,7 +313,7 @@
 
                 <div class="modal-body">
                     <!-- Formulario de generación de expediente -->
-                    <form id="generateWordForm" action="{{ route('servicio_operacion.store') }}" method="POST"
+                    <form id="generateWordForm" action="{{ route('servicio_inspector_anexo_30.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <h5 class="modal-title" style="padding-top: 10px;">Seleccione una estacion a la cual se le
@@ -258,7 +348,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 <script>
-   
+    
     $(document).ready(function () {
         $('.btn-descargar-pdf').click(function (event) {
             // Prevenir el comportamiento predeterminado del enlace (navegación)

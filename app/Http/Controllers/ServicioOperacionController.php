@@ -291,7 +291,7 @@ class ServicioOperacionController extends Controller
         $dictamen->delete();
 
         // Redireccionar con un mensaje de éxito
-        return redirect()->route('armonia.operacion.servicio_operacion.index')->with('success', 'Dictamen eliminado exitosamente');
+        return redirect()->route('armonia.operacion.index')->with('success', 'Dictamen eliminado exitosamente');
     }
 
     //PARTE DE LAS APROBACIONES DE LOS SERVICIOS DE OPERACION Y MANTENIMIENTO

@@ -428,7 +428,7 @@ class OperacionController extends Controller
 
            
             // Pasar los datos a la vista
-           return redirect()->route('servicio_inspector_anexo_30.index')->with(['servicios' => $servicios,'año'=>$yearSeleccionado,'estado'=>$estadoSeleccionado,'usuario'=>$usuario]);
+           return redirect()->route('servicio_operacion.index')->with(['servicios' => $servicios,'año'=>$yearSeleccionado,'estado'=>$estadoSeleccionado,'usuario'=>$usuario]);
           
 
         
