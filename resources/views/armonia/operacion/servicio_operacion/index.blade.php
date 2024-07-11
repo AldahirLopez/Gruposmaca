@@ -129,7 +129,7 @@
                                                     <button class="btn btn-primary" disabled>
                                                         <i class="bi bi-file-earmark-excel-fill"></i>
                                                     </button>
-                                                @else
+                                                @else 
                                                     <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
                                                         class="btn btn-primary btn-descargar-pdf"
                                                         data-carpeta="{{ $servicio->nomenclatura }}">
