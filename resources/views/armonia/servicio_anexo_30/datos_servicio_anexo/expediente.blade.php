@@ -110,6 +110,8 @@
                                                 @csrf
                                                 <input type="hidden" id="nomenclatura" name="nomenclatura"
                                                     value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                    <input type="hidden" id="nom_repre" name="nom_repre"
+                                                    value="{{ strtoupper($estacion->nombre_representante_legal) }}">
                                                 <input type="hidden" id="idestacion" name="idestacion"
                                                     value="{{ strtoupper($estacion->id) }}">
                                                 <input type="hidden" id="id_servicio" name="id_servicio"
@@ -286,6 +288,27 @@
                                                                     rows="1"></input></td>
                                                             <td><input class="form-control" name="recomendaciones5"
                                                                     rows="1"></input></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Resultado de la inspeccion</td>
+                                                            <td>
+                                                                <!-- Opción 2 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion6" id="opcion6_cumple"
+                                                                        value="cumple" checked>
+                                                                    <label class="form-check-label"
+                                                                        for="opcion6_cumple">Cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion6" id="opcion6_no_cumple"
+                                                                        value="no_cumple">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion6_no_cumple">No cumple</label>
+                                                                </div>
+                                                            </td>
                                                         </tr>
 
                                                         <!-- Agregar más filas según sea necesario -->

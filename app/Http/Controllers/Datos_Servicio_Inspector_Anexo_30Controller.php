@@ -8,6 +8,7 @@ use App\Models\Estacion_Servicio;
 use App\Models\Expediente_Servicio_Anexo_30;
 use App\Models\ServicioAnexo;
 use App\Models\Usuario_Estacion;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -345,19 +346,29 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Obtener el ID de servicio desde la solicitud
             $idServicio = $request->input('id_servicio');
 
+            $idUsuario = $request->input('id_usuario');
+
+            $idEstacion = $request->input('idestacion');
+
             // Buscar el servicio anexo por su ID y obtener los datos necesarios
             $servicio = ServicioAnexo::findOrFail($idServicio);
+
+            $usuario = User::findOrFail($idUsuario);
+
+            $estacion = Estacion::findOrFail($idEstacion);
 
             // Definir las reglas de validación
             $rules = [
                 'nomenclatura' => 'required|string',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
+                'nom_repre' => 'required',
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion4' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion5' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion6' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'detalleOpinion1' => 'required', // Texto
                 'recomendaciones1' => 'required', // Texto
                 'detalleOpinion2' => 'required', // Texto
@@ -382,6 +393,11 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['fecha_inspeccion'] = $fechaInspeccion;
             $data['fecha_recepcion'] = $fechaRecepcion;
             $data['fecha_inspeccion_modificada'] = $fechaInspeccionAumentada;
+            $data['nom_verificador'] = $usuario->name;
+            $data['razonsocial'] = $estacion->razon_social;
+            $data['direccion_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['telefono'] = $estacion->telefono;
+            $data['correo'] = $estacion->correo_electronico;
 
             // Cargar las plantillas de Word
             $templatePaths = [
@@ -515,6 +531,20 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                             $templateProcessor->setValue('si5', ' ');
                             $templateProcessor->setValue('no5', ' ');
                             $templateProcessor->setValue('noaplica5', 'X');
+                            break;
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+                    // Establecer los valores correctos basados en la opción seleccionada
+                    switch ($data['opcion6']) {
+                        case 'cumple':
+                            $templateProcessor->setValue('si6', 'X');
+                            $templateProcessor->setValue('no6', ' ');
+                            break;
+                        case 'no_cumple':
+                            $templateProcessor->setValue('si6', ' ');
+                            $templateProcessor->setValue('no6', 'X');
                             break;
                         default:
                             // Manejar cualquier otro caso aquí si es necesario
