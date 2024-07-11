@@ -340,7 +340,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     //Dictamenes
     public function guardarDictamenes(Request $request)
-    {
+    { 
         try {
             // Obtener el ID de servicio desde la solicitud
             $idServicio = $request->input('id_servicio');
@@ -355,6 +355,20 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'id_usuario' => 'required',
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion4' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion5' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'detalleOpinion1' => 'required', // Texto
+                'recomendaciones1' => 'required', // Texto
+                'detalleOpinion2' => 'required', // Texto
+                'recomendaciones2' => 'required', // Texto
+                'detalleOpinion3' => 'required', // Texto
+                'recomendaciones3' => 'required', // Texto
+                'detalleOpinion4' => 'required', // Texto
+                'recomendaciones4' => 'required', // Texto
+                'detalleOpinion5' => 'required', // Texto
+                'recomendaciones5' => 'required', // Texto
+                
             ];
 
             // Validar los datos del formulario
@@ -403,18 +417,18 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     // Establecer los valores correctos basados en la opción seleccionada
                     switch ($data['opcion1']) {
                         case 'cumple':
-                            $templateProcessor->setValue('cumple', 'X');
-                            $templateProcessor->setValue('nocumple', ' ');
+                            $templateProcessor->setValue('si', 'X');
+                            $templateProcessor->setValue('no', ' ');
                             $templateProcessor->setValue('noaplica', ' ');
                             break;
                         case 'no_cumple':
-                            $templateProcessor->setValue('cumple', ' ');
-                            $templateProcessor->setValue('nocumple', 'X');
+                            $templateProcessor->setValue('si', ' ');
+                            $templateProcessor->setValue('no', 'X');
                             $templateProcessor->setValue('noaplica', ' ');
                             break;
                         case 'no_aplica':
-                            $templateProcessor->setValue('cumple', ' ');
-                            $templateProcessor->setValue('nocumple', ' ');
+                            $templateProcessor->setValue('si', ' ');
+                            $templateProcessor->setValue('no', ' ');
                             $templateProcessor->setValue('noaplica', 'X');
                             break;
                         default:
@@ -425,19 +439,82 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     // Establecer los valores correctos basados en la opción seleccionada
                     switch ($data['opcion2']) {
                         case 'cumple':
-                            $templateProcessor->setValue('cumple', 'X');
-                            $templateProcessor->setValue('nocumple', ' ');
-                            $templateProcessor->setValue('noaplica', ' ');
+                            $templateProcessor->setValue('si2', 'X');
+                            $templateProcessor->setValue('no2', ' ');
+                            $templateProcessor->setValue('noaplica2', ' ');
                             break;
                         case 'no_cumple':
-                            $templateProcessor->setValue('cumple', ' ');
-                            $templateProcessor->setValue('nocumple', 'X');
-                            $templateProcessor->setValue('noaplica', ' ');
+                            $templateProcessor->setValue('si2', ' ');
+                            $templateProcessor->setValue('no2', 'X');
+                            $templateProcessor->setValue('noaplica2', ' ');
                             break;
                         case 'no_aplica':
-                            $templateProcessor->setValue('cumple', ' ');
-                            $templateProcessor->setValue('nocumple', ' ');
-                            $templateProcessor->setValue('noaplica', 'X');
+                            $templateProcessor->setValue('si2', ' ');
+                            $templateProcessor->setValue('no2', ' ');
+                            $templateProcessor->setValue('noaplica2', 'X');
+                            break;
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+                    // Establecer los valores correctos basados en la opción seleccionada
+                    switch ($data['opcion3']) {
+                        case 'cumple':
+                            $templateProcessor->setValue('si3', 'X');
+                            $templateProcessor->setValue('no3', ' ');
+                            $templateProcessor->setValue('noaplica3', ' ');
+                            break;
+                        case 'no_cumple':
+                            $templateProcessor->setValue('si3', ' ');
+                            $templateProcessor->setValue('no3', 'X');
+                            $templateProcessor->setValue('noaplica3', ' ');
+                            break;
+                        case 'no_aplica':
+                            $templateProcessor->setValue('si3', ' ');
+                            $templateProcessor->setValue('no3', ' ');
+                            $templateProcessor->setValue('noaplica3', 'X');
+                            break;
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+                    // Establecer los valores correctos basados en la opción seleccionada
+                    switch ($data['opcion4']) {
+                        case 'cumple':
+                            $templateProcessor->setValue('si4', 'X');
+                            $templateProcessor->setValue('no4', ' ');
+                            $templateProcessor->setValue('noaplica4', ' ');
+                            break;
+                        case 'no_cumple':
+                            $templateProcessor->setValue('si4', ' ');
+                            $templateProcessor->setValue('no4', 'X');
+                            $templateProcessor->setValue('noaplica4', ' ');
+                            break;
+                        case 'no_aplica':
+                            $templateProcessor->setValue('si4', ' ');
+                            $templateProcessor->setValue('no4', ' ');
+                            $templateProcessor->setValue('noaplica4', 'X');
+                            break;
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+                    // Establecer los valores correctos basados en la opción seleccionada
+                    switch ($data['opcion5']) {
+                        case 'cumple':
+                            $templateProcessor->setValue('si5', 'X');
+                            $templateProcessor->setValue('no5', ' ');
+                            $templateProcessor->setValue('noaplica5', ' ');
+                            break;
+                        case 'no_cumple':
+                            $templateProcessor->setValue('si5', ' ');
+                            $templateProcessor->setValue('no5', 'X');
+                            $templateProcessor->setValue('noaplica5', ' ');
+                            break;
+                        case 'no_aplica':
+                            $templateProcessor->setValue('si5', ' ');
+                            $templateProcessor->setValue('no5', ' ');
+                            $templateProcessor->setValue('noaplica5', 'X');
                             break;
                         default:
                             // Manejar cualquier otro caso aquí si es necesario

@@ -161,7 +161,7 @@
                                                                     rows="1"></input></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Requerimientos de almacenaje de información</td>
+                                                            <td>Requerimientos de la información</td>
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
@@ -191,6 +191,103 @@
                                                             <td><input class="form-control" name="recomendaciones2"
                                                                     rows="1"></input></td>
                                                         </tr>
+                                                        <tr>
+                                                            <td>Requerimientos de almacenaje de información</td>
+                                                            <td>
+                                                                <!-- Opción 2 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion3" id="opcion3_cumple"
+                                                                        value="cumple" checked>
+                                                                    <label class="form-check-label"
+                                                                        for="opcion3_cumple">Cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion3" id="opcion3_no_cumple"
+                                                                        value="no_cumple">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion3_no_cumple">No cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion3" id="opcion3_no_aplica"
+                                                                        value="no_aplica">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion3_no_aplica">No aplica</label>
+                                                                </div>
+                                                            </td>
+                                                            <td><input class="form-control" name="detalleOpinion3"
+                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones3"
+                                                                    rows="1"></input></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Requerimientos del procesamiento de la información y de
+                                                                la
+                                                                generación de reportes
+                                                            </td>
+                                                            <td>
+                                                                <!-- Opción 2 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion4" id="opcion4_cumple"
+                                                                        value="cumple" checked>
+                                                                    <label class="form-check-label"
+                                                                        for="opcion4_cumple">Cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion4" id="opcion4_no_cumple"
+                                                                        value="no_cumple">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion4_no_cumple">No cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion4" id="opcion4_no_aplica"
+                                                                        value="no_aplica">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion4_no_aplica">No aplica</label>
+                                                                </div>
+                                                            </td>
+                                                            <td><input class="form-control" name="detalleOpinion4"
+                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones4"
+                                                                    rows="1"></input></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Requerimientos de seguridad</td>
+                                                            <td>
+                                                                <!-- Opción 2 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion5" id="opcion5_cumple"
+                                                                        value="cumple" checked>
+                                                                    <label class="form-check-label"
+                                                                        for="opcion5_cumple">Cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion5" id="opcion5_no_cumple"
+                                                                        value="no_cumple">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion5_no_cumple">No cumple</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="opcion5" id="opcion5_no_aplica"
+                                                                        value="no_aplica">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion5_no_aplica">No aplica</label>
+                                                                </div>
+                                                            </td>
+                                                            <td><input class="form-control" name="detalleOpinion5"
+                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones5"
+                                                                    rows="1"></input></td>
+                                                        </tr>
+
                                                         <!-- Agregar más filas según sea necesario -->
                                                     </tbody>
                                                 </table>
