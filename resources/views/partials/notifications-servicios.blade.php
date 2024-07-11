@@ -1,5 +1,5 @@
 <!-- Otros elementos del header -->
-@if(auth()->check() && auth()->user()->hasRole('Administrador') && ($pendingDeletionsDictamen->isNotEmpty() || $pendingDeletionsServicioAn->isNotEmpty()))
+@if(auth()->check() && auth()->user()->hasRole('Administrador'))
 <li class="nav-item dropdown">
     <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
         <i class="bi bi-bell"></i>
@@ -53,7 +53,7 @@
 </li><!-- End Notification Nav -->
 @endif
 
-@if(auth()->check() && auth()->user()->hasRole('Administrador') && $pendingDeletionsServicio->isNotEmpty())
+@if(auth()->check() && auth()->user()->hasRole('Administrador') )
 <li class="nav-item dropdown">
     <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
         <i class="bi bi-bell"></i>
