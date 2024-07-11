@@ -110,7 +110,7 @@
                                                 @csrf
                                                 <input type="hidden" id="nomenclatura" name="nomenclatura"
                                                     value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
-                                                    <input type="hidden" id="nom_repre" name="nom_repre"
+                                                <input type="hidden" id="nom_repre" name="nom_repre"
                                                     value="{{ strtoupper($estacion->nombre_representante_legal) }}">
                                                 <input type="hidden" id="idestacion" name="idestacion"
                                                     value="{{ strtoupper($estacion->id) }}">
@@ -583,12 +583,18 @@
                             var nombreCampo = $(this).attr('name');
                             var valor = data[nombreCampo];
 
-                            // Verificar si el campo tiene un valor asignado
+                            // Rellenar el campo con el valor si está disponible
                             if (valor !== undefined && valor !== null) {
-                                // Rellenar el campo con el valor y desactivarlo
-                                $(this).val(valor).prop('disabled', true);
+                                $(this).val(valor);
                                 // Cambiar el estilo del borde del campo
-                                $(this).addClass(valor ? 'border-success' : 'border-danger');
+                                $(this).addClass('border-success').removeClass('border-danger');
+                                // Desactivar el campo si hay un valor
+                                $(this).prop('disabled', valor !== '');
+                            } else {
+                                // Marcar el borde como peligro si no hay valor
+                                $(this).addClass('border-danger').removeClass('border-success');
+                                // Permitir la edición del campo
+                                $(this).prop('disabled', false);
                             }
                         });
                     },

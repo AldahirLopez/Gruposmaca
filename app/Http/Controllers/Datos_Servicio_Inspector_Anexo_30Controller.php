@@ -130,8 +130,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     public function generateWord(Request $request)
     {
-
         try {
+            // Verificar todos los datos de la solicitud
+            // dd($request->all());
+
             // Obtener el ID de la estación desde la solicitud
             $idEstacion = $request->input('idestacion');
 
@@ -145,10 +147,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'fecha_recepcion' => 'required|date',
-                'cre' => 'required',
-                'contacto' => 'required',
-                'nom_repre' => 'required',
-                'constancia' => 'required',
+                'cre' => 'nullable',
+                'contacto' => 'nullable',
+                'nom_repre' => 'nullable',
+                'constancia' => 'nullable',
                 'fecha_inspeccion' => 'required|date',
             ];
 
@@ -165,7 +167,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['estado'] = $estacion->estado_republica_estacion;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
-            // dd($data);
+
+            // Si algún campo opcional no está en los datos validados, úsalo de la base de datos
+            $data['cre'] = $data['cre'] ?? $estacion->num_cre ?? '';
+            $data['contacto'] = $data['contacto'] ?? $estacion->contacto ?? '';
+            $data['nom_repre'] = $data['nom_repre'] ?? $estacion->nombre_representante_legal ?? '';
+            $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
 
             // Convertir las fechas al formato deseado
             $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
@@ -215,10 +222,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
 
-            $estacion-> num_cre = $data['cre'];
-            $estacion-> num_constancia = $data['constancia'];
-            $estacion-> contacto = $data['contacto'];
-            $estacion-> nombre_representante_legal = $data['nom_repre'];
+            $estacion->num_cre = $data['cre'];
+            $estacion->num_constancia = $data['constancia'];
+            $estacion->contacto = $data['contacto'];
+            $estacion->nombre_representante_legal = $data['nom_repre'];
             $estacion->save();
 
             $servicio = ServicioAnexo::firstOrNew(['id' => $data['id_servicio']]);
@@ -247,7 +254,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles);
-
 
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
@@ -313,7 +319,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     // Método para obtener los datos de una estación de servicio por su ID
     public function obtenerDatosEstacion($id)
-    { 
+    {
         try {
             $estacion = Estacion::findOrFail($id);
 
@@ -329,7 +335,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'domicilio_estacion' => $estacion->domicilio_estacion_servicio,
                 'estado' => $estacion->estado_republica_estacion,
                 'contacto' => $estacion->contacto,
-                'nom_repre' => $estacion->nombre_representante_legal, 
+                'nom_repre' => $estacion->nombre_representante_legal,
                 // Agrega más campos según sea necesario
             ];
 
@@ -341,7 +347,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     //Dictamenes
     public function guardarDictamenes(Request $request)
-    { 
+    {
         try {
             // Obtener el ID de servicio desde la solicitud
             $idServicio = $request->input('id_servicio');
@@ -379,7 +385,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'recomendaciones4' => 'required', // Texto
                 'detalleOpinion5' => 'required', // Texto
                 'recomendaciones5' => 'required', // Texto
-                
+
             ];
 
             // Validar los datos del formulario
