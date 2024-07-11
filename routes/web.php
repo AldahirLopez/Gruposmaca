@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('approve.servicio.deletion');
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
+    
 
     //Generar PDF cotizacion anexo 30 
     Route::post('/pdf_cotizacion', [Servicio_Anexo_30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');

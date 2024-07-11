@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
             $pendingDeletionsDictamen = collect();
             $pendingDeletionsServicio = collect();
             $pendingDeletionsServicioAn = collect();
-
+            $pendingAproServicioOperacion=collect();
+            
             if ($user && $user->hasRole('Administrador')) {
                 $pendingDeletionsDictamen = ServicioOperacion::where('pending_deletion_servicio', 1)->get();
                 $pendingDeletionsServicio = ServicioAnexo::where('pending_apro_servicio', 0)
@@ -39,11 +40,15 @@ class AppServiceProvider extends ServiceProvider
                     })
                     ->get();
                 $pendingDeletionsServicioAn = ServicioAnexo::where('pending_deletion_servicio', 1)->get();
+                $pendingAproServicioOperacion = ServicioOperacion::where('pending_apro_servicio', 0)->get();
             }
 
             $view->with('pendingDeletionsDictamen', $pendingDeletionsDictamen);
             $view->with('pendingDeletionsServicio', $pendingDeletionsServicio);
             $view->with('pendingDeletionsServicioAn', $pendingDeletionsServicioAn);
+            $view->with('pendingAproServicioOperacion', $pendingAproServicioOperacion);
+
+
         });
     }
 }

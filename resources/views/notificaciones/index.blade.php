@@ -24,7 +24,7 @@
                             <tbody>
                                 @foreach($dictamenes as $dictamen)
                                     <tr>
-                                        <td scope="row">{{$dictamen->nombre}}</td>
+                                        <td scope="row">{{$dictamen->nomenclatura}}</td>
                                         <td scope="row">
                                             <a href="{{ route('archivos.index', ['dictamen_id' => $dictamen->id]) }}"
                                                 class="btn btn-info">Listar Archivos</a>

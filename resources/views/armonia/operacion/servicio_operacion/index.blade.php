@@ -164,7 +164,7 @@
                                                     @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-danger" disabled>(pendiente)</button>
                                                     @else
-                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                         {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                         {!! Form::close() !!}
                                                     @endif
@@ -273,7 +273,7 @@
                                                     @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-danger" disabled>(pendiente)</button>
                                                     @else
-                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                         {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                         {!! Form::close() !!}
                                                     @endif

@@ -249,10 +249,10 @@ class ServicioOperacionController extends Controller
         //administrador que tiene una notificacion pendiente de aprobar para poder eliminar el registro
         // Buscar el dictamen por su ID
         //Obetner si es administrador y si si borrarlo de una si no solo lanar el pendiente
-        $dictamen = DictamenOp::findOrFail($id);
+        $servicio_operacion = ServicioOperacion::findOrFail($id);
 
         // Marcar el dictamen como pendiente de eliminación
-        $dictamen->pending_deletion = true;
+        $servicio_operacion->pending_deletion_servicio = true;
         // Obtener la fecha y hora actuales
         $fechaHoraActual = Carbon::now();
 
@@ -260,8 +260,8 @@ class ServicioOperacionController extends Controller
         $fechaHoraFormateada = $fechaHoraActual->format('Y-m-d H:i:s');
 
         // Asignar la fecha y hora formateadas al modelo
-        $dictamen->eliminated_at = $fechaHoraFormateada;
-        $dictamen->save();
+        $servicio_operacion->date_eliminated_at = $fechaHoraFormateada;
+        $servicio_operacion->save();
 
         // No se notifica ya que se tomara el valor de la tabla Notificar al administrador
 
