@@ -23,5 +23,9 @@ class ServicioAnexo extends Model
     {
         return $this->hasOne(Cotizacion_Servicio_Anexo30::class, 'servicio_anexo_id');
     }
-
+    // Definir la relación con el modelo Estacion a través de la tabla pivote estacion_servicio
+    public function estacionServicios()
+    {
+        return $this->belongsToMany(Estacion::class, 'estacion_servicio', 'servicio_anexo_id', 'estacion_id');
+    }
 }

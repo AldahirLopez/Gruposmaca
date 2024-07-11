@@ -139,13 +139,15 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Definir las reglas de validación
             $rules = [
-                'nomenclatura' => 'required|string',
+                'nomenclatura' => 'required',
+                'idestacion' => 'required',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'fecha_recepcion' => 'required|date',
-                'cre' => 'required|string',
-                'contacto' => 'required|string',
-                'nom_repre' => 'required|string',
+                'cre' => 'required',
+                'contacto' => 'required',
+                'nom_repre' => 'required',
+                'constancia' => 'required',
                 'fecha_inspeccion' => 'required|date',
             ];
 
@@ -211,6 +213,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 // Guardar la plantilla procesada en la carpeta de destino
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
+
+            $estacion-> num_cre = $data['cre'];
+            $estacion-> num_constancia = $data['constancia'];
+            $estacion-> contacto = $data['contacto'];
+            $estacion-> nombre_representante_legal = $data['nom_repre'];
+            $estacion->save();
 
             $servicio = ServicioAnexo::firstOrNew(['id' => $data['id_servicio']]);
             $servicio->date_recepcion_at = $data['fecha_recepcion'];
@@ -304,7 +312,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     // Método para obtener los datos de una estación de servicio por su ID
     public function obtenerDatosEstacion($id)
-    {
+    { 
         try {
             $estacion = Estacion::findOrFail($id);
 
@@ -320,7 +328,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'domicilio_estacion' => $estacion->domicilio_estacion_servicio,
                 'estado' => $estacion->estado_republica_estacion,
                 'contacto' => $estacion->contacto,
-                'nom_repre' => $estacion->nombre_representante_legal,
+                'nom_repre' => $estacion->nombre_representante_legal, 
                 // Agrega más campos según sea necesario
             ];
 
