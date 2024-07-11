@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <!-- Botones de acción -->
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('servicio_anexo_30.index') }}" class="btn btn-danger">
+                            <a href="{{ route('operacion.index') }}" class="btn btn-danger">
                                 <i class="bi bi-arrow-return-left"></i> Volver
                             </a>
 
@@ -25,7 +25,7 @@
                         </div>
 
                         <!-- Filtro de usuario si el usuario es Administrador o Auditor -->
-                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador', 'Auditor'))
+                        @if(auth()->check() && auth()->user()->hasAnyRole('Administrador'))
                         <form action="{{ route('servicio-operacion.obtenerServicios') }}" method="GET" class="container mt-4">
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -99,7 +99,7 @@
         </div>
 
 
-        @if (auth()->user()->hasRole('Verificador Anexo 30'))
+        @if (auth()->user()->hasRole('Operacion y Mantenimiento'))
               <!-- Mostrar servicios -->
         <div class="row">
             <div class="col-lg-12">
@@ -304,7 +304,7 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                     <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar
-                        Servicio Anexo 30</h5>
+                        Servicio Operacion y mantenimiento</h5>
                     <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
                         aria-label="Close"></button>
 
@@ -313,7 +313,7 @@
 
                 <div class="modal-body">
                     <!-- Formulario de generación de expediente -->
-                    <form id="generateWordForm" action="{{ route('servicio_inspector_anexo_30.store') }}" method="POST"
+                    <form id="generateWordForm" action="{{ route('servicio_operacion.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <h5 class="modal-title" style="padding-top: 10px;">Seleccione una estacion a la cual se le

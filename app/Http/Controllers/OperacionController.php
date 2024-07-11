@@ -409,7 +409,7 @@ class OperacionController extends Controller
                 $servicios=ServicioOperacion::all();
             }
             $usuario=User::find($usuarioSeleccionado);
-         
+          
             $servicios = ServicioOperacion::query()
             ->join('estacion_servicio_operacion_mantenimiento', 'operacion_mantenimiento.id', '=', 'estacion_servicio_operacion_mantenimiento.servicio_operacion_id')
             ->join('estacion', 'estacion.id', '=', 'estacion_servicio_operacion_mantenimiento.estacion_id')

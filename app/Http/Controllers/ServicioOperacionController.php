@@ -73,7 +73,7 @@ class ServicioOperacionController extends Controller
                 $servicios = ServicioOperacion::where('usuario_id', $usuarioSeleccionado)->get();
             } else {
                 // Verificar si el usuario es administrador
-                if ($usuario->hasAnyRole(['Administrador', 'Operacion y Mantenimiento'])) {
+                if ($usuario->hasAnyRole(['Administrador'])) {
                     // Si es administrador, obtener todos los servicios
                     $servicios = ServicioOperacion::all();
                     $estaciones = Estacion::all();
@@ -103,8 +103,10 @@ class ServicioOperacionController extends Controller
                 }
             }
         }
+
+       
         // Siempre retornar la vista, incluso si no se encuentran usuarios o servicios
-        return view('armonia.operacion.servicio_operacion.index', compact('servicios', 'usuarios', 'estaciones'));
+       return view('armonia.operacion.servicio_operacion.index', compact('servicios', 'usuarios', 'estaciones'));
     }
 
     /**
