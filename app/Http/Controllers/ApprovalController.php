@@ -27,16 +27,19 @@ class ApprovalController extends Controller
 
     public function show($id)
     {
+        $tipo_servicio;
         try {
             // Intenta encontrar el dictamen en la primera tabla
             $variable = ServicioOperacion::findOrFail($id);
+            $tipo_servicio="Operacion";
         } catch (ModelNotFoundException $e) {
             // Si no se encuentra en la primera tabla, busca en la segunda tabla
             $variable = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
+            $tipo_servicio="Anexo";
         }
 
         // Ahora puedes pasar el dictamen encontrado a la vista
-        return view('notificaciones.show', compact('variable'));
+        return view('notificaciones.show', compact('variable','tipo_servicio'));
     }
 
     public function approveDictamenDeletion(Request $request, $id)
@@ -97,6 +100,36 @@ class ApprovalController extends Controller
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;
             $customFolderPath = "servicios_anexo30/{$nomenclatura}";
+
+            // Eliminar la carpeta de archivos si existe
+            if (Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->deleteDirectory($customFolderPath);
+            }
+
+            // Eliminar el servicio
+            $servicio->delete();
+
+            return redirect()->route('notificaciones.index')->with('success', 'Servicio eliminado exitosamente');
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción si no se encuentra el servicio
+            return redirect()->back()->with('error', 'Servicio no encontrado.');
+        }
+    }
+
+    public function approveServicioOperacionDeletion(Request $request, $id)
+    {
+        try {
+            // Intenta encontrar el servicio en la segunda tabla
+            $servicio = ServicioOperacion::where('nomenclatura', $id)->firstOrFail();
+            
+            // Eliminar registros relacionados en cotizacion_anexo_30
+            Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
+
+            // Eliminar primero la referencia en la tabla datos_servicio_anexo_30 si existe
+
+            // Obtener la nomenclatura para la carpeta de archivos
+            $nomenclatura = $servicio->nomenclatura;
+            $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}";
 
             // Eliminar la carpeta de archivos si existe
             if (Storage::disk('public')->exists($customFolderPath)) {

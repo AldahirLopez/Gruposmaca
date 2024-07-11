@@ -171,7 +171,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
-    Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveDictamenDeletion')
+    Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');
 
 

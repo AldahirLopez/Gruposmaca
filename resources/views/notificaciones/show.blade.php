@@ -16,22 +16,27 @@
             @endif
             <p class="card-text">¿Estás seguro de que deseas eliminar?</p>
             <p>Fecha de solicitud: {{ $variable->eliminated_at }}</p>
-
-            @if(isset($variable->nomenclatura))
+            
+            
+            <p>{{$tipo_servicio}}</p>
+            @if($tipo_servicio=="Anexo")
                 <form action="{{ route('approve.servicio.deletion', $variable->nomenclatura) }}" method="POST">
                     @csrf
                     @method('DELETE') <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                     <a href="{{ route('notificaciones.index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
-            @elseif(isset($variable->nombre))
-                <form action="{{ route('approve.dictamen.deletion', $variable->id) }}" method="POST">
+            @endif
+           
+
+            @if($tipo_servicio=="Operacion")
+                <form action="{{ route('approve.dictamen.deletion', $variable->nomenclatura) }}" method="POST">
                     @csrf
                     @method('DELETE') <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
                     <button type="submit" class="btn btn-danger">Eliminar</button>
                     <a href="{{ route('notificaciones.index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
-            @else
+           
                 <!-- Manejar el caso en que ninguna de las variables esté definida -->
             @endif
         </div>
