@@ -18,7 +18,7 @@
             <p>Fecha de solicitud: {{ $variable->eliminated_at }}</p>
             
             
-            <p>{{$tipo_servicio}}</p>
+          
             @if($tipo_servicio=="Anexo")
                 <form action="{{ route('approve.servicio.deletion', $variable->nomenclatura) }}" method="POST">
                     @csrf
