@@ -167,7 +167,7 @@ class ServicioOperacionController extends Controller
         $numero = 1;
 
         do {
-            $nomenclatura = "OP-$iniciales-$numero-$anio";
+            $nomenclatura = "OM-$iniciales-$numero-$anio";
             $existe = ServicioOperacion::where('nomenclatura', $nomenclatura)->exists();
 
             if ($existe) {

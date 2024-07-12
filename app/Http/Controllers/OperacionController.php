@@ -149,6 +149,10 @@ class OperacionController extends Controller
 
         try {
             // Obtener el ID de la estación desde la solicitud
+             // Verificar todos los datos de la solicitud
+            // dd($request->all());
+
+            // Obtener el ID de la estación desde la solicitud
             $idEstacion = $request->input('idestacion');
 
             // Buscar la estación por su ID y obtener los datos necesarios
@@ -156,13 +160,15 @@ class OperacionController extends Controller
 
             // Definir las reglas de validación
             $rules = [
-                'nomenclatura' => 'required|string',
+                'nomenclatura' => 'required',
+                'idestacion' => 'required',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'fecha_recepcion' => 'required|date',
-                'cre' => 'required|string',
-                'contacto' => 'required|string',
-                'nom_repre' => 'required|string',
+                'cre' => 'nullable',
+                'contacto' => 'nullable',
+                'nom_repre' => 'nullable',
+                'constancia' => 'nullable',
                 'fecha_inspeccion' => 'required|date',
             ];
 
@@ -179,6 +185,14 @@ class OperacionController extends Controller
             $data['estado'] = $estacion->estado_republica_estacion;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
+
+            // Si algún campo opcional no está en los datos validados, úsalo de la base de datos
+            $data['cre'] = $data['cre'] ?? $estacion->num_cre ?? '';
+            $data['contacto'] = $data['contacto'] ?? $estacion->contacto ?? '';
+            $data['nom_repre'] = $data['nom_repre'] ?? $estacion->nombre_representante_legal ?? '';
+            $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
+
+
             // dd($data);
 
             // Convertir las fechas al formato deseado
@@ -211,7 +225,7 @@ class OperacionController extends Controller
 
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
-                $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/OperacionyMantenimiento/{$templatePath}"));
 
                 // Reemplazar todos los marcadores con los datos del formulario
                 foreach ($data as $key => $value) {
