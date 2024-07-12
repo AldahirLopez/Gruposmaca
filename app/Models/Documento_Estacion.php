@@ -14,4 +14,10 @@ class Documento_Estacion extends Model
 
     // Especificar la tabla asociada al modelo
     protected $table = 'documentacion_estacion';
+
+    protected $fillable = [
+        'rutadoc_estacion',
+        'estacion_id',
+        'estacion_id',
+    ];
 }

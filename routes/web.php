@@ -15,6 +15,7 @@ use App\Http\Controllers\Datos_Servicio_Inspector_Anexo_30Controller;
 use App\Http\Controllers\ApprovalController;
 
 use App\Http\Controllers\ArchivosDicController;
+use App\Http\Controllers\Documentacion_EstacionController;
 use App\Http\Controllers\EstacionController;
 use App\Http\Controllers\FormatosHistorialController;
 use App\Http\Controllers\Usuario_EstacionController;
@@ -135,7 +136,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('estacion', EstacionController::class);
 
-    Route::post('/documento', [EstacionController::class, 'storedocumentoestacion'])->name('documento.store');
+    Route::resource('documentacion_estacion', Documentacion_EstacionController::class);
 
 
     Route::resource('usuario_estacion', Usuario_EstacionController::class);
