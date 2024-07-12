@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/apro_operacion_mantenimiento', [OperacionController::class, 'apro_servicio_operacion_mantenimiento'])->name('apro.operacion');
     Route::get('/operacion_mantenimiento/apro/{id}', [OperacionController::class, 'apro'])->name('servicio_operacion.apro');
 
+
     //Servicio Inspector Anexo 30
     Route::resource('servicio_inspector_anexo_30', Servicio_Inspector_Anexo_30Controller::class);
     Route::get('/obtener-servicios', [Servicio_Inspector_Anexo_30Controller::class, 'obtenerServicios'])->name('servicio_inspector_anexo_30.obtenerServicios');
@@ -172,6 +173,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
+    
     Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');
 

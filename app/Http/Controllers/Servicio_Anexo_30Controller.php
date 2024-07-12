@@ -11,7 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Role; 
-
+use App\Models\ServicioOperacion;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
@@ -52,14 +52,16 @@ class Servicio_Anexo_30Controller extends Controller
         if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador, obtener todos los dictámenes
             $servicios = ServicioAnexo::all();
+            $operaciones=ServicioOperacion::all();
 
         } else {
             // Si no es administrador, obtener solo los dictámenes del usuario autenticado
             $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            $operaciones = ServicioOperacion::where('usuario_id', $usuario->id)->get();
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.servicio_anexo_30.aprobacion_servicio.index', compact('servicios'));
+        return view('armonia.servicio_anexo_30.aprobacion_servicio.index', compact('servicios','operaciones'));
     }
 
     public function apro($id)

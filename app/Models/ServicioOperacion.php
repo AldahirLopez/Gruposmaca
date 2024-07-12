@@ -19,4 +19,10 @@ class ServicioOperacion extends Model
     }
 
 
+    public function estacionServicios()
+    {
+        return $this->belongsToMany(Estacion::class, 'estacion_servicio_operacion_mantenimiento', 'servicio_operacion_id', 'estacion_id');
+    }
+
+
 }

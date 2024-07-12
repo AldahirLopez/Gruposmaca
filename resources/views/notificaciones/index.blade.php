@@ -40,7 +40,7 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-warning">Cancelar Eliminacion</button>
                                                 </form>
-                                                <form action="{{ route('approve.dictamen.deletion', $dictamen->id) }}"
+                                                <form action="{{ route('approve.dictamen.deletion', $dictamen->nomenclatura) }}"
                                                     method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
