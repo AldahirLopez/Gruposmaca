@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documento_Servicio_Anexo;
 use App\Models\Estacion;
 use App\Models\Estacion_Servicio;
 use App\Models\Expediente_Servicio_Anexo_30;
@@ -584,5 +585,79 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
+
+    public function DocumentacionAnexo(Request $request)
+    {
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioAnexo::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
+
+                $requiredDocuments = [
+                    'PRUEBAS DE HERMETICIDAD',
+                    'PERMISO DE LA CRE',
+                ];
+
+                $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $rutaArchivo = Storage::url($archivo);
+                        $documentos[] = (object) [
+                            'nombre' => $nombreArchivo,
+                            'ruta' => $rutaArchivo
+                        ];
+                    }
+                }
+
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentos', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentos')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+    }
+
+    public function storeanexo(Request $request)
+    {
+        $data = $request->validate([
+            'rutadoc_estacion' => 'required|file',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+            'nombre' => 'required',
+        ]);
+
+        try {
+            $documento = new Documento_Servicio_Anexo();
+
+            if ($request->hasFile('rutadoc_estacion')) {
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $documento->rutadoc_estacion = $rutaArchivo;
+            }
+
+            $documento->servicio_id = $data['servicio_id'];
+            $documento->usuario_id = Auth::id();
+            $documento->save();
+
+            return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+        }
+    } 
 
 }

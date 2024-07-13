@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_inspector_anexo_30', Servicio_Inspector_Anexo_30Controller::class);
     Route::get('/obtener-servicios', [Servicio_Inspector_Anexo_30Controller::class, 'obtenerServicios'])->name('servicio_inspector_anexo_30.obtenerServicios');
 
+    
+
 
     //Servicio operacion y mantenimiento
 
@@ -87,6 +89,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/expediente/anexo30/{slug}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ExpedienteInspectorAnexo30'])->name('expediente.anexo30');
     //Ruta para cada inspector para su expediente en servicios de operacion y mantenimiento
     Route::get('/expediente/operacion/{slug}', [OperacionController::class, 'ExpedienteInspectorOperacion'])->name('expediente.operacion');
+
+    //Documentacion Por servicio
+    Route::get('/documentacion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'DocumentacionAnexo'])->name('documentacion_anexo');
+
+    Route::post('/documentacion-anexo/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeanexo'])->name('documentacion_anexo.store');
     
 
 
@@ -138,7 +145,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('estacion', EstacionController::class);
 
     Route::resource('documentacion_estacion', Documentacion_EstacionController::class);
-    Route::get('/documentacion-operacion', [Documentacion_EstacionController::class, 'DocumentacionOperacion'])->name('documentacion_operacion');
+
     Route::post('/documentacion-operacion/store', [Documentacion_EstacionController::class, 'storeoperacion'])->name('documentacion_operacion.store');
 
 

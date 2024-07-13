@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('segunda_db')->create('documentacion_estacion_operacion', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('documentacion_servicio_operacion', function (Blueprint $table) {
             $table->id();
             $table->string('rutadoc_estacion');
-            $table->unsignedBigInteger('estacion_id');
+            $table->unsignedBigInteger('servicio_id');
             $table->unsignedBigInteger('usuario_id');
             $table->timestamps();
 
             // Agregar la clave foránea
             $table->foreign('usuario_id')->references('id')->on('gruposmaca.users');
             // Agregar la clave foránea
-            $table->foreign('estacion_id')->references('id')->on('armonia.estacion');
+            $table->foreign('servicio_id')->references('id')->on('armonia.estacion_servicio_operacion_mantenimiento');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documentacion_estacion_operacion');
+        Schema::dropIfExists('documentacion_servicio_operacion');
     }
 };
