@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Documento_Estacion extends Model
+class Documento_Estacion_Operacion extends Model
 {
     use HasFactory;
 
@@ -13,7 +13,7 @@ class Documento_Estacion extends Model
     protected $connection = 'segunda_db';
 
     // Especificar la tabla asociada al modelo
-    protected $table = 'documentacion_estacion';
+    protected $table = 'documentacion_estacion_operacion';
 
     protected $fillable = [
         'rutadoc_estacion',
