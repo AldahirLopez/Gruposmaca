@@ -156,6 +156,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('estacion', EstacionController::class);
 
+    Route::get('/seleccion-estacion', [EstacionController::class, 'seleccionestacion'])->name('estacion.selecccion');
+
+    Route::get('/estaciones_usuario', [EstacionController::class, 'estacion_usuario'])->name('estaciones.usuario');
+
+    Route::get('/estaciones_generales', [EstacionController::class, 'estacion_generales'])->name('estaciones.generales');
+
     Route::resource('documentacion_estacion', Documentacion_EstacionController::class);
 
     Route::post('/documentacion-operacion/store', [Documentacion_EstacionController::class, 'storeoperacion'])->name('documentacion_operacion.store');

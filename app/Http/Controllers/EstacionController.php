@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Documento_Estacion;
@@ -17,7 +18,13 @@ class EstacionController extends Controller
 {
 
     protected $connection = 'segunda_db';
-    public function index()
+
+    public function seleccionestacion()
+    {
+
+        return view('armonia.estacion.seleccion');
+    }
+    public function estacion_usuario()
     {
         // Obtener el usuario autenticado
         $usuario = Auth::user();
@@ -88,8 +95,19 @@ class EstacionController extends Controller
         }
 
         // Pasar los datos a la vista
-        return view('armonia.estacion.index', compact('usuario', 'estados', 'estaciones'));
+        return view('armonia.estacion.estaciones_usuario', compact('usuario', 'estados', 'estaciones'));
     }
+
+    public function estacion_generales()
+    {
+        // Mostrar todas las estaciones si el usuario es administrador o auditor
+        $estaciones = Estacion::all();
+
+
+        // Pasar los datos a la vista
+        return view('armonia.estacion.estaciones_generales', compact('estaciones'));
+    }
+
     public function store(Request $request)
     {
         try {
@@ -234,5 +252,4 @@ class EstacionController extends Controller
             return redirect()->route('estacion.index')->with('error', 'Error al agregar el documento.');
         }
     }
-
 }

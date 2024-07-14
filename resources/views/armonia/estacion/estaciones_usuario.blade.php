@@ -7,11 +7,11 @@
     </div>
     <div class="section-body">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12"> 
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="#" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="{{ route('estacion.selecccion') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
 
                             <!-- Botón que abre el modal para generar nueva estación -->
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#generarEstacionModal">

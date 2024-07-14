@@ -16,7 +16,7 @@
                                 <i class="bi bi-arrow-return-left"></i> Volver
                             </a>
 
-                            @can('crear-servicio_anexo_30')
+                            @can('crear-servicio_operacion_mantenimiento')
                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                     data-target="#generarServicioModal">
                                     Generar Nuevo Servicio
@@ -160,7 +160,7 @@
                                                 @endif
                                             </td>
                                             <td scope="row">
-                                                @can('borrar-servicio_anexo_30')
+                                                @can('borrar-servicio_operacion_mantenimiento')
                                                     @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-danger" disabled>(pendiente)</button>
                                                     @else
@@ -268,7 +268,7 @@
                                                     </form>
                                             </td><!--FIN BOTON DE DOCUMENTACION-->
                                             <td scope="row">
-                                                @can('borrar-servicio_anexo_30')
+                                                @can('borrar-servicio_operacion_mantenimiento')
                                                     @if($servicio->pending_deletion_servicio)
                                                         <button class="btn btn-danger" disabled>(pendiente)</button>
                                                     @else
