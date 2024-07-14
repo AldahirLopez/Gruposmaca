@@ -693,8 +693,9 @@ class OperacionController extends Controller
         ]);
 
         try {
-            $documento = new Documento_Servicio_operacion();
-
+            $documento =Documento_Servicio_operacion::firstOrNew(['servicio_id' => $data['servicio_id']]);
+        
+            
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
                 $nombreArchivoPersonalizado = $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension();
