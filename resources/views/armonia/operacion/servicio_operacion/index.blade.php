@@ -113,7 +113,7 @@
                                         <th scope="col">Pago</th>
                                         <th scope="col">Cotizacion</th>
                                         <th scope="col">Expediente</th>
-                                        <th scope="col">Listas de Inspeccion</th>
+                                        <th scope="col">Documentacion</th>
                                         <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
@@ -222,7 +222,7 @@
                                         <th scope="col">Pago</th>
                                         <th scope="col">Cotizacion</th>
                                         <th scope="col">Expediente</th>
-                                        <th scope="col">Listas de Inspeccion</th>
+                                        <th scope="col">Documentacion</th>
                                         <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
@@ -257,17 +257,16 @@
                                                     </a>
                                                 @endif
                                             </td>
+                                            <!--BOTON DE DOCUMENTACION-->
                                             <td scope="row">
-                                                @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
-                                                    <button class="btn btn-primary" disabled><i
-                                                            class="bi bi-folder-fill"></i></button>
-                                                @else
-                                                    <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}"
-                                                        class="btn btn-primary">
-                                                        <i class="bi bi-folder-fill"></i>
-                                                    </a>
-                                                @endif
-                                            </td>
+                                                    <form action="{{ route('documentacion_operacion') }}" method="GET"
+                                                        style="display:inline;">
+                                                        <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="bi bi-folder-fill"></i>
+                                                        </button>
+                                                    </form>
+                                            </td><!--FIN BOTON DE DOCUMENTACION-->
                                             <td scope="row">
                                                 @can('borrar-servicio_anexo_30')
                                                     @if($servicio->pending_deletion_servicio)

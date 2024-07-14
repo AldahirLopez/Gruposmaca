@@ -33,27 +33,31 @@
 
                         <div class="container">
 
-                            <div class="row">
+                        <div class="row">
                                 <!-- Tarjeta 1 -->
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Expediente</h5>
                                             <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">ORDEN DE TRABAJO</li>
+                                                <li class="list-group-item">COMPROBANTE DE TRASLADO</li>
                                                 <li class="list-group-item">CONTRATO</li>
-                                                <li class="list-group-item">DETECCION DE RIESGOS A LA IMPARCIALIDAD</li>
-                                                <li class="list-group-item">PLAN DE INSPECCION DE PROGRAMAS INFORMATICOS
+                                                <li class="list-group-item">DETEC. R.I</li>
+                                                <li class="list-group-item">PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO
                                                 </li>
-                                                <li class="list-group-item">PLAN DE INSPECCION DE LOS SISTEMAS DE
-                                                    MEDICION</li>
+                                                <li class="list-group-item">PROCEDIMIENTO P REVISION V 3</li>
+                                                <li class="list-group-item">ORDEN DE TRABAJO</li>
+                                                <li class="list-group-item">REPORTE FOTOGRAFICO</li>
+
                                             </ol>
                                             <a href="#" class="btn btn-primary" id="generateExpedienteButton"
-                                                data-toggle="modal" data-target="#generarExpedienteModal"
+                                                data-toggle="modal" data-target="#generarExpedienteOperacionModal"
                                                 style="margin-top: 10px;">Generar</a>
                                         </div>
                                     </div>
                                 </div>
+
+                            
 
                                 <!-- Tarjeta 2 - Dictámenes Informáticos -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
@@ -92,30 +96,7 @@
                             </div>
 
 
-                            <div class="row">
-                                <!-- Tarjeta 1 -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Expediente</h5>
-                                            <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">COMPROBANTE DE TRASLADO</li>
-                                                <li class="list-group-item">CONTRATO</li>
-                                                <li class="list-group-item">DETEC. R.I</li>
-                                                <li class="list-group-item">PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO
-                                                </li>
-                                                <li class="list-group-item">PROCEDIMIENTO P REVISION V 3</li>
-                                                <li class="list-group-item">ORDEN DE TRABAJO</li>
-                                                <li class="list-group-item">REPORTE FOTOGRAFICO</li>
-
-                                            </ol>
-                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton"
-                                                data-toggle="modal" data-target="#generarExpedienteOperacionModal"
-                                                style="margin-top: 10px;">Generar</a>
-                                        </div>
-                                    </div>
-                                </div>
-
+                           
 
                             <!-- Modal para Dictámenes Informático -->
                             <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog"

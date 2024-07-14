@@ -94,8 +94,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/documentacion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'DocumentacionAnexo'])->name('documentacion_anexo');
 
     Route::post('/documentacion-anexo/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeanexo'])->name('documentacion_anexo.store');
-    
+   
+    //Docuemtnacion para servicio de operacion 
 
+    Route::get('/documentacion-operacion', [OperacionController::class, 'DocumentacionOperacion'])->name('documentacion_operacion');
+
+    Route::post('/documentacion-operacion-archivos/store', [OperacionController::class, 'storeDocumenctacionOperacion'])->name('documentacion_operacion_archivos.store');
+
+    //Descargar la documentacion de operacion
+    Route::post('/descargar-documentacion-operacion/{documento}', [OperacionController::class,'descargardocumentacion'])->name('descargar.documentos.operacion');
+
+ 
 
     Route::post('/generate-word', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generateWord'])->name('generate.word');
 

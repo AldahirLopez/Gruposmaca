@@ -10,6 +10,7 @@ use App\Models\ServicioOperacion;
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 use App\Models\Estacion;
 use App\Models\Expediente_Operacion;
+use App\Models\Documento_Servicio_operacion;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -644,5 +645,102 @@ class OperacionController extends Controller
     }
 
 
-    
+
+    public function DocumentacionOperacion(Request $request)
+    {
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioOperacion::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+                $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}/documentacion";
+
+                $requiredDocuments = [
+                    'PRUEBAS DE HERMETICIDAD',
+                    'PERMISO DE LA CRE',
+                ];
+
+                $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $rutaArchivo = Storage::url($archivo);
+                        $documentos[] = (object) [
+                            'nombre' => $nombreArchivo,
+                            'ruta' => $rutaArchivo
+                        ];
+                    }
+                }
+
+                return view('armonia.operacion.servicio_operacion.datos_servicio_operacion.documentos', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.operacion.servicio_operacion.datos_servicio_operacion.documentos')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+    }
+
+    public function storeDocumenctacionOperacion(Request $request)
+    {
+       
+        $data = $request->validate([
+            'rutadoc_estacion' => 'required|file',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+            'nombre' => 'required',
+        ]);
+
+        try {
+            $documento = new Documento_Servicio_operacion();
+
+            if ($request->hasFile('rutadoc_estacion')) {
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}/documentacion";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $documento->rutadoc_estacion = $rutaArchivo;
+            }
+
+            $documento->servicio_id = $data['servicio_id'];
+            $documento->usuario_id = Auth::id();
+            $documento->save();
+
+            return redirect()->route('documentacion_operacion', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('documentacion_operacion', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+        }
+    } 
+
+    public function descargardocumentacion(Request $request,$documento){
+       
+        
+
+        $nomenclatura = strtoupper($request->input('nomenclatura')); // Obtener la nomenclatura desde la ruta
+       
+        // Construir la ruta del archivo
+        $rutaArchivo = storage_path("app/public/OperacionyMantenimiento/{$nomenclatura}/documentacion/{$documento}");
+
+        // Verificar si el archivo existe antes de proceder
+        if (file_exists($rutaArchivo)) {
+            // Devolver el archivo para descargar
+            return response()->download($rutaArchivo);
+        } else {
+            // Manejar el caso en que el archivo no exista
+            abort(404, "El archivo no existe en la ruta especificada.");
+        }
+
+
+
+    }
+   
 }
