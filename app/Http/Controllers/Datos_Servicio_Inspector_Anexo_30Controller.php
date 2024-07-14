@@ -632,7 +632,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         ]);
 
         try {
-            $documento = new Documento_Servicio_Anexo();
+            $documento =Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
