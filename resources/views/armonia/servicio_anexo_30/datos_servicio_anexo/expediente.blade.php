@@ -20,15 +20,15 @@
 
                     <div class="card-body">
                         @if ($errors->any())
-                            <div class="alert alert-dark alert-dismissible fade show" role="alert">
-                                <strong>¡Revise los campos!</strong>
-                                @foreach ($errors->all() as $error)
-                                    <span class="badge badge-danger">{{ $error }}</span>
-                                @endforeach
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+                        <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                            <strong>¡Revise los campos!</strong>
+                            @foreach ($errors->all() as $error)
+                            <span class="badge badge-danger">{{ $error }}</span>
+                            @endforeach
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         @endif
 
                         <div class="container">
@@ -48,9 +48,7 @@
                                                 <li class="list-group-item">PLAN DE INSPECCION DE LOS SISTEMAS DE
                                                     MEDICION</li>
                                             </ol>
-                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton"
-                                                data-toggle="modal" data-target="#generarExpedienteModal"
-                                                style="margin-top: 10px;">Generar</a>
+                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton" data-toggle="modal" data-target="#generarExpedienteModal" style="margin-top: 10px;">Generar</a>
                                         </div>
                                     </div>
                                 </div>
@@ -64,9 +62,7 @@
                                                 <li class="list-group-item">DICTAMEN TÉCNICO DE PROGRAMAS INFORMÁTICOS
                                                 </li>
                                             </ol>
-                                            <button type="button" class="btn btn-primary" id="dictamenesButton1"
-                                                data-toggle="modal" data-target="#dictamenesModalinformatico"
-                                                style="margin-top: 10px;">
+                                            <button type="button" class="btn btn-primary" id="dictamenesButton1" data-toggle="modal" data-target="#dictamenesModalinformatico" style="margin-top: 10px;">
                                                 Generar
                                             </button>
                                         </div>
@@ -81,9 +77,7 @@
                                             <ol class="list-group list-group-numbered" style="text-align: left;">
                                                 <li class="list-group-item">DICTAMEN TÉCNICO DE MEDICIÓN</li>
                                             </ol>
-                                            <button type="button" class="btn btn-primary" id="dictamenesButton2"
-                                                data-toggle="modal" data-target="#dictamenesModalmedicion"
-                                                style="margin-top: 10px;">
+                                            <button type="button" class="btn btn-primary" id="dictamenesButton2" data-toggle="modal" data-target="#dictamenesModalmedicion" style="margin-top: 10px;">
                                                 Generar
                                             </button>
                                         </div>
@@ -94,33 +88,24 @@
 
 
                             <!-- Modal para Dictámenes Informático -->
-                            <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog"
-                                aria-labelledby="dictamenesModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog" aria-labelledby="dictamenesModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                                             <h5 class="modal-title" id="dictamenesModalLabel">TABLA DE CUMPLIMIENTO
                                                 SISTEMA INFORMATICO</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
-                                                aria-label="Close"></button>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="generateWordDicForm" action="{{ route('guardar.dictamenes') }}"
-                                                method="POST" enctype="multipart/form-data">
+                                            <form id="generateWordDicForm" action="{{ route('guardar.dictamenes') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
-                                                <input type="hidden" id="nomenclatura" name="nomenclatura"
-                                                    value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
-                                                <input type="hidden" id="nom_repre" name="nom_repre"
-                                                    value="{{ strtoupper($estacion->nombre_representante_legal) }}">
-                                                <input type="hidden" id="idestacion" name="idestacion"
-                                                    value="{{ strtoupper($estacion->id) }}">
-                                                <input type="hidden" id="id_servicio" name="id_servicio"
-                                                    value="{{ $servicioAnexo->id }}">
-                                                <input type="hidden" name="id_usuario"
-                                                    value="{{ $estacion->usuario->id }}">
+                                                <input type="hidden" id="nomenclatura" name="nomenclatura" value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                <input type="hidden" id="nom_repre" name="nom_repre" value="{{ strtoupper($estacion->nombre_representante_legal) }}">
+                                                <input type="hidden" id="idestacion" name="idestacion" value="{{ strtoupper($estacion->id) }}">
+                                                <input type="hidden" id="id_servicio" name="id_servicio" value="{{ $servicioAnexo->id }}">
+                                                <input type="hidden" name="id_usuario" value="{{ $estacion->usuario->id }}">
                                                 <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
-                                                <input type="hidden" type="text" name="numestacion" id="numestacion"
-                                                    class="form-control" value="{{ $estacion->num_estacion }}">
+                                                <input type="hidden" type="text" name="numestacion" id="numestacion" class="form-control" value="{{ $estacion->num_estacion }}">
                                                 <table class="table table-sm">
                                                     <thead>
                                                         <tr>
@@ -136,93 +121,60 @@
                                                             <td>
                                                                 <!-- Opción 1 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion1" id="opcion1_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion1_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion1" id="opcion1_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion1_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion1" id="opcion1_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion1_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion1" id="opcion1_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion1_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion1" id="opcion1_no_aplica"
-                                                                        value="no_aplica">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion1_no_aplica">No aplica</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion1" id="opcion1_no_aplica" value="no_aplica">
+                                                                    <label class="form-check-label" for="opcion1_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
-                                                            <td><input class="form-control" name="detalleOpinion1"
-                                                                    rows="1"></input></td>
-                                                            <td><input class="form-control" name="recomendaciones1"
-                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="detalleOpinion1" rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones1" rows="1"></input></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Requerimientos de la información</td>
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion2" id="opcion2_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion2_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion2" id="opcion2_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion2_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion2" id="opcion2_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion2_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion2" id="opcion2_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion2_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion2" id="opcion2_no_aplica"
-                                                                        value="no_aplica">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion2_no_aplica">No aplica</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion2" id="opcion2_no_aplica" value="no_aplica">
+                                                                    <label class="form-check-label" for="opcion2_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
-                                                            <td><input class="form-control" name="detalleOpinion2"
-                                                                    rows="1"></input></td>
-                                                            <td><input class="form-control" name="recomendaciones2"
-                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="detalleOpinion2" rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones2" rows="1"></input></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Requerimientos de almacenaje de información</td>
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion3" id="opcion3_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion3_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion3" id="opcion3_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion3_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion3" id="opcion3_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion3_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion3" id="opcion3_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion3_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion3" id="opcion3_no_aplica"
-                                                                        value="no_aplica">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion3_no_aplica">No aplica</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion3" id="opcion3_no_aplica" value="no_aplica">
+                                                                    <label class="form-check-label" for="opcion3_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
-                                                            <td><input class="form-control" name="detalleOpinion3"
-                                                                    rows="1"></input></td>
-                                                            <td><input class="form-control" name="recomendaciones3"
-                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="detalleOpinion3" rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones3" rows="1"></input></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Requerimientos del procesamiento de la información y de
@@ -232,62 +184,40 @@
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion4" id="opcion4_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion4_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion4" id="opcion4_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion4_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion4" id="opcion4_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion4_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion4" id="opcion4_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion4_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion4" id="opcion4_no_aplica"
-                                                                        value="no_aplica">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion4_no_aplica">No aplica</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion4" id="opcion4_no_aplica" value="no_aplica">
+                                                                    <label class="form-check-label" for="opcion4_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
-                                                            <td><input class="form-control" name="detalleOpinion4"
-                                                                    rows="1"></input></td>
-                                                            <td><input class="form-control" name="recomendaciones4"
-                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="detalleOpinion4" rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones4" rows="1"></input></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Requerimientos de seguridad</td>
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion5" id="opcion5_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion5_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion5" id="opcion5_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion5_cumple">Cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion5" id="opcion5_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion5_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion5" id="opcion5_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion5_no_cumple">No cumple</label>
                                                                 </div>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion5" id="opcion5_no_aplica"
-                                                                        value="no_aplica">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion5_no_aplica">No aplica</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion5" id="opcion5_no_aplica" value="no_aplica">
+                                                                    <label class="form-check-label" for="opcion5_no_aplica">No aplica</label>
                                                                 </div>
                                                             </td>
-                                                            <td><input class="form-control" name="detalleOpinion5"
-                                                                    rows="1"></input></td>
-                                                            <td><input class="form-control" name="recomendaciones5"
-                                                                    rows="1"></input></td>
+                                                            <td><input class="form-control" name="detalleOpinion5" rows="1"></input></td>
+                                                            <td><input class="form-control" name="recomendaciones5" rows="1"></input></td>
                                                         </tr>
 
                                                         <tr>
@@ -295,18 +225,14 @@
                                                             <td>
                                                                 <!-- Opción 2 -->
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion6" id="opcion6_cumple"
-                                                                        value="cumple" checked>
-                                                                    <label class="form-check-label"
-                                                                        for="opcion6_cumple">Cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion6" id="opcion6_cumple" value="cumple" checked>
+                                                                    <label class="form-check-label" for="opcion6_cumple">Cumple</label>
                                                                 </div>
+                                                            </td>
+                                                            <td>
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="opcion6" id="opcion6_no_cumple"
-                                                                        value="no_cumple">
-                                                                    <label class="form-check-label"
-                                                                        for="opcion6_no_cumple">No cumple</label>
+                                                                    <input class="form-check-input" type="radio" name="opcion6" id="opcion6_no_cumple" value="no_cumple">
+                                                                    <label class="form-check-label" for="opcion6_no_cumple">No cumple</label>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -315,10 +241,28 @@
                                                     </tbody>
                                                 </table>
 
-                                                <div class="col-xs-12 col-sm-12 col-md-12 text-center"
-                                                    style="padding-top: 10px;">
-                                                    <button type="submitButtonDictamenes"
-                                                        class="btn btn-primary btn-generar">Generar</button>
+                                                <!-- Campos del formulario que se llenarán automáticamente -->
+
+                                                <div class="form-group">
+                                                    <label for="proveedor">Proveedor de Sitemas Informaticos</label>
+                                                    <input type="text" name="proveedor" id="proveedor" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="rfc_proveedor">RFC</label>
+                                                    <input type="text" name="rfc_proveedor" id="rfc_proveedor" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="software">Software</label>
+                                                    <input type="text" name="software" id="software" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="version">Version</label>
+                                                    <input type="text" name="version" id="version" class="form-control">
+                                                </div>
+
+
+                                                <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 10px;">
+                                                    <button type="submitButtonDictamenes" class="btn btn-primary btn-generar">Generar</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -331,42 +275,32 @@
 
 
                             <!-- Modal para generar expediente -->
-                            <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                                             <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar
                                                 Expediente de ({{$servicioAnexo->nomenclatura}})</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
-                                                aria-label="Close"></button>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <!-- Formulario de generación de expediente con soporte AJAX -->
-                                            <form id="generateWordForm" action="{{ route('generate.word') }}"
-                                                method="POST" enctype="multipart/form-data">
+                                            <form id="generateWordForm" action="{{ route('generate.word') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
-                                                    <input type="hidden" id="nomenclatura" name="nomenclatura"
-                                                        value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
-                                                    <input type="hidden" id="idestacion" name="idestacion"
-                                                        value="{{ strtoupper($estacion->id) }}">
-                                                    <input type="hidden" id="id_servicio" name="id_servicio"
-                                                        value="{{ $servicioAnexo->id }}">
-                                                    <input type="hidden" name="id_usuario"
-                                                        value="{{ $estacion->usuario->id }}">
-                                                    <input type="hidden" name="fecha_actual"
-                                                        value="{{ date('d/m/Y') }}">
-                                                    <input type="hidden" type="text" name="numestacion" id="numestacion"
-                                                        class="form-control" value="{{ $estacion->num_estacion }}">
+                                                    <input type="hidden" id="nomenclatura" name="nomenclatura" value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                    <input type="hidden" id="idestacion" name="idestacion" value="{{ strtoupper($estacion->id) }}">
+                                                    <input type="hidden" id="id_servicio" name="id_servicio" value="{{ $servicioAnexo->id }}">
+                                                    <input type="hidden" name="id_usuario" value="{{ $estacion->usuario->id }}">
+                                                    <input type="hidden" name="fecha_actual" value="{{ date('d/m/Y') }}">
+                                                    <input type="hidden" type="text" name="numestacion" id="numestacion" class="form-control" value="{{ $estacion->num_estacion }}">
 
                                                     <div class="col-md-6">
                                                         <!-- Campos del formulario que se llenarán automáticamente -->
 
                                                         <div class="form-group">
                                                             <label for="razonsocial">Razón Social</label>
-                                                            <input type="text" name="razonsocial" id="razonsocial"
-                                                                class="form-control">
+                                                            <input type="text" name="razonsocial" id="razonsocial" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="rfc">RFC</label>
@@ -374,24 +308,20 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="domicilio_fiscal">Domicilio Fiscal</label>
-                                                            <input type="text" name="domicilio_fiscal"
-                                                                id="domicilio_fiscal" class="form-control">
+                                                            <input type="text" name="domicilio_fiscal" id="domicilio_fiscal" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="telefono">Teléfono</label>
-                                                            <input type="text" name="telefono" id="telefono"
-                                                                class="form-control">
+                                                            <input type="text" name="telefono" id="telefono" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="correo">Correo Electrónico</label>
-                                                            <input type="email" name="correo" id="correo"
-                                                                class="form-control">
+                                                            <input type="email" name="correo" id="correo" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="fecha_recepcion">Fecha de Recepción de
                                                                 Solicitud</label>
-                                                            <input type="date" name="fecha_recepcion"
-                                                                id="fecha_recepcion" class="form-control">
+                                                            <input type="date" name="fecha_recepcion" id="fecha_recepcion" class="form-control">
                                                         </div>
                                                     </div>
 
@@ -404,46 +334,39 @@
                                                         <div class="form-group">
                                                             <label for="constancia">Num. de Constancia de Trámite o
                                                                 Estación de Servicio</label>
-                                                            <input type="text" name="constancia" id="constancia"
-                                                                class="form-control">
+                                                            <input type="text" name="constancia" id="constancia" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="domicilio_estacion">Domicilio de la Estación de
                                                                 Servicio</label>
-                                                            <input type="text" name="domicilio_estacion"
-                                                                id="domicilio_estacion" class="form-control">
+                                                            <input type="text" name="domicilio_estacion" id="domicilio_estacion" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="estado">Estado</label>
                                                             <select name="estado" id="estado" class="form-select">
                                                                 @foreach($estados as $estado)
-                                                                    <option value="{{ $estado }}">{{ $estado }}</option>
+                                                                <option value="{{ $estado }}">{{ $estado }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="contacto">Contacto</label>
-                                                            <input type="text" name="contacto" id="contacto"
-                                                                class="form-control">
+                                                            <input type="text" name="contacto" id="contacto" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="nom_repre">Nombre del Representante
                                                                 Legal</label>
-                                                            <input type="text" name="nom_repre" id="nom_repre"
-                                                                class="form-control">
+                                                            <input type="text" name="nom_repre" id="nom_repre" class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="fecha_inspeccion">Fecha Programada de
                                                                 Inspección</label>
-                                                            <input type="date" name="fecha_inspeccion"
-                                                                id="fecha_inspeccion" class="form-control">
+                                                            <input type="date" name="fecha_inspeccion" id="fecha_inspeccion" class="form-control">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-12 col-sm-12 col-md-12 text-center"
-                                                        style="padding-top: 10px;">
-                                                        <button type="submitButton"
-                                                            class="btn btn-primary btn-generar">Generar</button>
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 10px;">
+                                                        <button type="submitButton" class="btn btn-primary btn-generar">Generar</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -460,28 +383,27 @@
 
                                 <!-- Incluir la estructura HTML de tu vista actual para archivos existentes -->
                                 @if(!empty($existingFiles))
-                                    <h4>Archivos Existentes:</h4>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre del Archivo</th>
-                                                <th>Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($existingFiles as $file)
-                                                <tr>
-                                                    <td>{{ basename($file['name']) }}</td>
-                                                    <!-- Mostrar solo el nombre del archivo -->
-                                                    <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}"
-                                                            class="btn btn-info" download>Descargar</a></td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                <h4>Archivos Existentes:</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre del Archivo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($existingFiles as $file)
+                                        <tr>
+                                            <td>{{ basename($file['name']) }}</td>
+                                            <!-- Mostrar solo el nombre del archivo -->
+                                            <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}" class="btn btn-info" download>Descargar</a></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                                 @else
-                                    <!-- Mensaje o contenido alternativo si no hay archivos existentes -->
-                                    <p>No hay archivos existentes.</p>
+                                <!-- Mensaje o contenido alternativo si no hay archivos existentes -->
+                                <p>No hay archivos existentes.</p>
                                 @endif
                             </div>
 
@@ -499,11 +421,11 @@
 
 <!-- Script optimizado -->
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Función para cargar los archivos generados
         function loadGeneratedFiles() {
             const nomenclatura = $('#nomenclatura').val();
-            fetch(`/list-generated-files/${encodeURIComponent(nomenclatura)}`)  // Codificar la nomenclatura
+            fetch(`/list-generated-files/${encodeURIComponent(nomenclatura)}`) // Codificar la nomenclatura
                 .then(response => response.json())
                 .then(data => {
                     const generatedFilesTable = $('#generatedFilesTable');
@@ -546,9 +468,9 @@
             const formData = new FormData(event.target);
 
             fetch(event.target.action, {
-                method: event.target.method,
-                body: formData,
-            })
+                    method: event.target.method,
+                    body: formData,
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.generatedFiles && data.generatedFiles.length > 0) {
@@ -577,9 +499,9 @@
                     url: '/obtener-datos-estacion/' + estacionId,
                     type: 'GET',
                     dataType: 'json',
-                    success: function (data) {
+                    success: function(data) {
                         // Iterar sobre cada input y select del formulario
-                        $('#generateWordForm input, #generateWordForm select').each(function () {
+                        $('#generateWordForm input, #generateWordForm select').each(function() {
                             var nombreCampo = $(this).attr('name');
                             var valor = data[nombreCampo];
 
@@ -598,7 +520,7 @@
                             }
                         });
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error('Error al obtener los datos de la estación:', error);
                     }
                 });
@@ -611,7 +533,7 @@
         function checkRegistro() {
             const id = $('#id_servicio').val();
             fetch(`/api/consulta/${id}`)
-                .then(response => response.json())
+                .then(response => response.json()) 
                 .then(data => {
                     const cards = $('.dictamenes-card');
                     if (data.exists) {
@@ -620,7 +542,7 @@
                     } else {
                         // Ocultar las cards si no existe el registro
                         cards.hide();
-                        // alert('Registro no encontrado');
+                        // alert('Registro no encontrado'); 
                     }
                 })
                 .catch(error => console.error('Error en la solicitud AJAX:', error));
@@ -630,12 +552,12 @@
         loadGeneratedFiles();
 
         // Asignar el manejador de eventos para el botón de envío del formulario
-        $('#submitButtonDictamenes').on('click', function () {
+        $('#submitButtonDictamenes').on('click', function() {
             $('#generateWordDicForm').submit();
         });
 
         // Asignar el manejador de eventos para el botón de envío del formulario
-        $('#submitButton').on('click', function () {
+        $('#submitButton').on('click', function() {
             $('#generateWordForm').submit();
         });
 

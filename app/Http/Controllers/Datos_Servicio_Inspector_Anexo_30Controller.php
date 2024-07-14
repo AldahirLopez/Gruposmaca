@@ -283,8 +283,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         try {
             // Cambiar la conexión a la base de datos 'segunda_db' y verificar la existencia de expedientes
             $existeExpediente = DB::connection('segunda_db')
-                ->table('servicio_anexo_30')
-                ->where('id', $id)
+                ->table('expediente_servicio_anexo_30')
+                ->where('servicio_anexo_id', $id)
                 ->exists();
 
             return response()->json([
@@ -370,6 +370,11 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'nom_repre' => 'required',
+                'proveedor' => 'required',
+                'rfc_proveedor' => 'required',
+                'software' => 'required',
+                'version' => 'required',
+                
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
@@ -409,6 +414,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Cargar las plantillas de Word
             $templatePaths = [
                 'DICTAMEN TECNICO DE PROGRAMAS INFORMATICOS.docx',
+                'DICTAMEN TECNICO DE SISTEMAS DE MEDICION.docx',
             ];
 
             // Definir la carpeta de destino

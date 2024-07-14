@@ -119,7 +119,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/list-generated-files-operacion/{nomenclatura}', [OperacionController::class, 'listGeneratedFiles']);
 
 
-    Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
+    Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']); 
     
     Route::get('/api/consulta/operacion/{id}', [OperacionController::class, 'validarDatosExpediente']);
    

@@ -143,14 +143,14 @@ class OperacionController extends Controller
         }
     }
 
-    
+
 
     public function generateWord(Request $request)
     {
 
         try {
             // Obtener el ID de la estación desde la solicitud
-             // Verificar todos los datos de la solicitud
+            // Verificar todos los datos de la solicitud
             // dd($request->all());
 
             // Obtener el ID de la estación desde la solicitud
@@ -270,19 +270,18 @@ class OperacionController extends Controller
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.operacion', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles);
-
-
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
-    public function generarExpedientesOperacion(Request $request){
+    public function generarExpedientesOperacion(Request $request)
+    {
 
         try {
             // Obtener el ID de la estación desde la solicitud
-             // Verificar todos los datos de la solicitud
+            // Verificar todos los datos de la solicitud
             // dd($request->all());
 
             // Obtener el ID de la estación desde la solicitud
@@ -302,18 +301,18 @@ class OperacionController extends Controller
                 'contacto' => 'nullable',
                 'nom_repre' => 'nullable',
                 'constancia' => 'nullable',
-                'cantidad'=>'required',
-                'observaciones'=>'nullable',
-                'iva'=>'required',
+                'cantidad' => 'required',
+                'observaciones' => 'nullable',
+                'iva' => 'required',
                 'fecha_inspeccion' => 'required|date',
-                'images.*'=>'required|image|mimes:jpeg,png,jpg,gif',
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif',
             ];
 
-          
+
 
             // Validar los datos del formulario
             $data = $request->validate($rules);
-           
+
             // Completar los datos necesarios para el procesamiento
             $data['numestacion'] = $estacion->num_estacion;
             $data['fecha_actual'] = Carbon::now()->format('d/m/Y');
@@ -332,17 +331,17 @@ class OperacionController extends Controller
             $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
 
             //Calculo de precio con iva y el 50% para el contrato
-            $data['total']= $data['cantidad'] * ( 1 + $data['iva']);
-            
-            $data['iva']=$data['cantidad'] * $data['iva'];
+            $data['total'] = $data['cantidad'] * (1 + $data['iva']);
 
-            $data['total_mitad']=$data['total'] * 0.50;
+            $data['iva'] = $data['cantidad'] * $data['iva'];
 
-            $data['total_restante']=$data['total'] - $data['total_mitad'];
+            $data['total_mitad'] = $data['total'] * 0.50;
 
-        
-           
-  
+            $data['total_restante'] = $data['total'] - $data['total_mitad'];
+
+
+
+
             // Convertir las fechas al formato deseado
             $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
             $fechaRecepcion = Carbon::createFromFormat('Y-m-d', $data['fecha_recepcion'])->format('d-m-Y');
@@ -356,13 +355,13 @@ class OperacionController extends Controller
                 'PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO.docx',
                 'ORDEN DE TRABAJO.docx',
                 'REPORTE FOTOGRAFICO.docx',
-               
+
             ];
 
             // Definir la carpeta de destino
             $customFolderPath = "OperacionyMantenimiento/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
-            $carpetaImages="{$subFolderPath}/imagenes";
+            $carpetaImages = "{$subFolderPath}/imagenes";
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
@@ -372,7 +371,7 @@ class OperacionController extends Controller
             if (!Storage::disk('public')->exists($subFolderPath)) {
                 Storage::disk('public')->makeDirectory($subFolderPath);
             }
-            
+
             //Creamos la carpteta donde iran las imagenes del reporte fotografico
             if (!Storage::disk('public')->exists($carpetaImages)) {
                 Storage::disk('public')->makeDirectory($carpetaImages);
@@ -380,45 +379,41 @@ class OperacionController extends Controller
 
             //Obtener las imagenes
             $imageNumber = 1;
-           
-            $imagePaths=[];
+
+            $imagePaths = [];
             foreach ($request->file('images') as $image) {
                 // Generar el nombre de la imagen
 
                 $imageName = 'img_' . $imageNumber . '.' . $image->extension();
-                
-            
+
+
                 // Mover la imagen a la carpeta de destino, reemplazando si existe
                 $image->storeAs($carpetaImages, $imageName, 'public');
 
-               
+
                 // Obtener la ruta completa de la imagen
                 $imagePath = Storage::disk('public')->path("$carpetaImages/$imageName") ?? null;
 
-                 // Almacenar la ruta de la imagen en el array
-                 $imagePaths[] = [
-                    'name' => 'img_' . $imageNumber ,
+                // Almacenar la ruta de la imagen en el array
+                $imagePaths[] = [
+                    'name' => 'img_' . $imageNumber,
                     'path' => $imagePath,
                 ];
                 $imageNumber++;
-
-                 
             }
-           
-        
+
+
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
                 $templateProcessor = new TemplateProcessor(storage_path("app/templates/OperacionyMantenimiento/{$templatePath}"));
 
-                if($templatePath =="REPORTE FOTOGRAFICO.docx"){
-                    
-                   for ($i=0; $i < count($imagePaths) ; $i++) { 
-                    $templateProcessor->setImageValue($imagePaths[$i]['name'], array('path' => $imagePaths[$i]['path'], 'width' => 310, 'height' => 285, 'ratio' => false));
-                    
-                   }
-                   
+                if ($templatePath == "REPORTE FOTOGRAFICO.docx") {
+
+                    for ($i = 0; $i < count($imagePaths); $i++) {
+                        $templateProcessor->setImageValue($imagePaths[$i]['name'], array('path' => $imagePaths[$i]['path'], 'width' => 310, 'height' => 285, 'ratio' => false));
+                    }
                 }
-                $data['images']=null;
+                $data['images'] = null;
                 // Reemplazar todos los marcadores con los datos del formulario
                 foreach ($data as $key => $value) {
                     $templateProcessor->setValue($key, $value);
@@ -461,16 +456,11 @@ class OperacionController extends Controller
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.operacion', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles);
-
-        
-
-
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
-
     }
 
 
@@ -512,8 +502,8 @@ class OperacionController extends Controller
         try {
             // Cambiar la conexión a la base de datos 'segunda_db' y verificar la existencia de expedientes
             $existeExpediente = DB::connection('segunda_db')
-                ->table('operacion_mantenimiento')
-                ->where('id', $id)
+                ->table('expediente_servicio_operacion')
+                ->where('operacion_mantenimiento_id', $id)
                 ->exists();
 
             return response()->json([
@@ -538,7 +528,6 @@ class OperacionController extends Controller
         if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador, obtener todos los dictámenes
             $servicios = ServicioOperacion::all();
-
         } else {
             // Si no es administrador, obtener solo los dictámenes del usuario autenticado
             $servicios = ServicioOperacion::where('usuario_id', $usuario->id)->get();
@@ -591,36 +580,36 @@ class OperacionController extends Controller
     public function obtenerServicios(Request $request)
     {
         $usuarioSeleccionado = $request->input('usuario_id');
-        $estadoSeleccionado=$request->input('estado');
-        $yearSeleccionado=$request->input('year');
-      
-    
-            // Obtener el usuario autenticado
-            $usuario = Auth::user();
+        $estadoSeleccionado = $request->input('estado');
+        $yearSeleccionado = $request->input('year');
 
-            // Obtener el rol "Verificador Anexo 30"
-            $rol = Role::on('mysql')->where('name', 'Operacion y Mantenimiento')->first();
 
-            if (!$rol) {
-                throw new \Exception('El rol "Operación y Mantenimiento" no existe.');
-            }
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
 
-            // Obtener los IDs de los usuarios con el rol específico
-            $usuariosConRol = $rol->users()->pluck('id');
+        // Obtener el rol "Verificador Anexo 30"
+        $rol = Role::on('mysql')->where('name', 'Operacion y Mantenimiento')->first();
 
-            if ($usuariosConRol->isEmpty()) {
-                throw new \Exception('No hay usuarios con el rol "Operacion y Mantenimiento".');
-            }
+        if (!$rol) {
+            throw new \Exception('El rol "Operación y Mantenimiento" no existe.');
+        }
 
-            // Obtener los usuarios correspondientes a esos IDs
-            $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+        // Obtener los IDs de los usuarios con el rol específico
+        $usuariosConRol = $rol->users()->pluck('id');
 
-            if($usuarioSeleccionado==="todos"){
-                $servicios=ServicioOperacion::all();
-            }
-            $usuario=User::find($usuarioSeleccionado);
-          
-            $servicios = ServicioOperacion::query()
+        if ($usuariosConRol->isEmpty()) {
+            throw new \Exception('No hay usuarios con el rol "Operacion y Mantenimiento".');
+        }
+
+        // Obtener los usuarios correspondientes a esos IDs
+        $usuarios = User::on('mysql')->whereIn('id', $usuariosConRol)->get();
+
+        if ($usuarioSeleccionado === "todos") {
+            $servicios = ServicioOperacion::all();
+        }
+        $usuario = User::find($usuarioSeleccionado);
+
+        $servicios = ServicioOperacion::query()
             ->join('estacion_servicio_operacion_mantenimiento', 'operacion_mantenimiento.id', '=', 'estacion_servicio_operacion_mantenimiento.servicio_operacion_id')
             ->join('estacion', 'estacion.id', '=', 'estacion_servicio_operacion_mantenimiento.estacion_id')
             ->select('operacion_mantenimiento.*')
@@ -634,14 +623,11 @@ class OperacionController extends Controller
                 return $query->where('estacion.estado_republica_estacion', $estadoSeleccionado);
             })
             ->get();
-          
 
-           
-            // Pasar los datos a la vista
-           return redirect()->route('servicio_operacion.index')->with(['servicios' => $servicios,'año'=>$yearSeleccionado,'estado'=>$estadoSeleccionado,'usuario'=>$usuario]);
-          
 
-        
+
+        // Pasar los datos a la vista
+        return redirect()->route('servicio_operacion.index')->with(['servicios' => $servicios, 'año' => $yearSeleccionado, 'estado' => $estadoSeleccionado, 'usuario' => $usuario]);
     }
 
 
@@ -656,8 +642,16 @@ class OperacionController extends Controller
                 $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}/documentacion";
 
                 $requiredDocuments = [
+                    'ANALISIS DE RIESGO DEL SECTOR HIDROCARBUROS',
                     'PRUEBAS DE HERMETICIDAD',
+                    'CARTA RESPONSIVA Y/O FACTURA DEL MANTENIMIENTO A EXTINTORES',
+                    'DICTAMEN DE INSTALACIONES ELECTRICAS',
+                    'ESTUDIO DE TIERRAS FISICAS',
+                    'CERTIFICADO DE LIMPIEZA ECOLOGICA',
                     'PERMISO DE LA CRE',
+                    'TIRILLA DEL REPORTE DE INVENTARIOS',
+                    'TIRILLA DE LAS PRUEBAS DE SENSORES',
+                    'IDENTIFICACION OFICIAL DE LA PERSONA QUE ATENDIO LA INSPECCION Y TESTIGOS'
                 ];
 
                 $documentos = [];
@@ -684,7 +678,7 @@ class OperacionController extends Controller
 
     public function storeDocumenctacionOperacion(Request $request)
     {
-       
+
         $data = $request->validate([
             'rutadoc_estacion' => 'required|file',
             'servicio_id' => 'required',
@@ -693,9 +687,9 @@ class OperacionController extends Controller
         ]);
 
         try {
-            $documento =Documento_Servicio_operacion::firstOrNew(['servicio_id' => $data['servicio_id']]);
-        
-            
+            $documento = Documento_Servicio_operacion::firstOrNew(['servicio_id' => $data['servicio_id']]);
+
+
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
                 $nombreArchivoPersonalizado = $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension();
@@ -720,14 +714,15 @@ class OperacionController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('documentacion_operacion', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
-    } 
+    }
 
-    public function descargardocumentacion(Request $request,$documento){
-       
-        
+    public function descargardocumentacion(Request $request, $documento)
+    {
+
+
 
         $nomenclatura = strtoupper($request->input('nomenclatura')); // Obtener la nomenclatura desde la ruta
-       
+
         // Construir la ruta del archivo
         $rutaArchivo = storage_path("app/public/OperacionyMantenimiento/{$nomenclatura}/documentacion/{$documento}");
 
@@ -739,9 +734,5 @@ class OperacionController extends Controller
             // Manejar el caso en que el archivo no exista
             abort(404, "El archivo no existe en la ruta especificada.");
         }
-
-
-
     }
-   
 }
