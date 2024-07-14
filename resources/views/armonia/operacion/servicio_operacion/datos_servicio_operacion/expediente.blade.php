@@ -59,9 +59,9 @@
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5 class="card-title">Dictámenes Informáticos</h5>
+                                            <h5 class="card-title">Lista inspeccion operacion y mantenimiento</h5>
                                             <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">DICTAMEN TÉCNICO DE PROGRAMAS INFORMÁTICOS
+                                                <li class="list-group-item">FORMATO LISTA INSPECCION OPERACION Y MANTENIMIENTO-V3
                                                 </li>
                                             </ol>
                                             <button type="button" class="btn btn-primary" id="dictamenesButton1"
@@ -77,9 +77,9 @@
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h5 class="card-title">Dictámenes de Medición</h5>
+                                            <h5 class="card-title">Acta de verificación</h5>
                                             <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">DICTAMEN TÉCNICO DE MEDICIÓN</li>
+                                                <li class="list-group-item">ACTA VERIFICACIÓN O.M. V3</li>
                                             </ol>
                                             <button type="button" class="btn btn-primary" id="dictamenesButton2"
                                                 data-toggle="modal" data-target="#dictamenesModalmedicion"
@@ -91,6 +91,30 @@
                                 </div>
                             </div>
 
+
+                            <div class="row">
+                                <!-- Tarjeta 1 -->
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Expediente</h5>
+                                            <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                <li class="list-group-item">COMPROBANTE DE TRASLADO</li>
+                                                <li class="list-group-item">CONTRATO</li>
+                                                <li class="list-group-item">DETEC. R.I</li>
+                                                <li class="list-group-item">PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO
+                                                </li>
+                                                <li class="list-group-item">PROCEDIMIENTO P REVISION V 3</li>
+                                                <li class="list-group-item">ORDEN DE TRABAJO</li>
+                                                <li class="list-group-item">REPORTE FOTOGRAFICO</li>
+
+                                            </ol>
+                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton"
+                                                data-toggle="modal" data-target="#generarExpedienteOperacionModal"
+                                                style="margin-top: 10px;">Generar</a>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                             <!-- Modal para Dictámenes Informático -->
@@ -207,8 +231,171 @@
                                 </div>
                             </div>
 
+                            <!-- Modal para generar expediente -->
+                            <div class="modal fade" id="generarExpedienteOperacionModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                                            <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar
+                                                Expediente operacion de  ({{$servicioAnexo->nomenclatura}})</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Formulario de generación de expediente con soporte AJAX -->
+                                            <form id="generateWordForm" action="{{ route('generate.expedientes.operacion') }}"
+                                                method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="row">
+                                                    <input type="hidden" id="nomenclatura" name="nomenclatura"
+                                                        value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                    <input type="hidden" id="idestacion" name="idestacion"
+                                                        value="{{ strtoupper($estacion->id) }}">
+                                                    <input type="hidden" id="id_servicio" name="id_servicio"
+                                                        value="{{ $servicioAnexo->id }}">
+                                                    <input type="hidden" name="id_usuario"
+                                                        value="{{ $estacion->usuario->id }}">
+                                                    <input type="hidden" name="fecha_actual"
+                                                        value="{{ date('d/m/Y') }}">
+                                                    <input type="hidden" type="text" name="numestacion" id="numestacion"
+                                                        class="form-control" value="{{ $estacion->num_estacion }}">
+
+                                                    <div class="col-md-6">
+                                                        <!-- Campos del formulario que se llenarán automáticamente -->
+
+                                                        <div class="form-group">
+                                                            <label for="razonsocial">Razón Social</label>
+                                                            <input type="text" name="razonsocial" id="razonsocial"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="rfc">RFC</label>
+                                                            <input type="text" name="rfc" id="rfc" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="domicilio_fiscal">Domicilio Fiscal</label>
+                                                            <input type="text" name="domicilio_fiscal"
+                                                                id="domicilio_fiscal" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="telefono">Teléfono</label>
+                                                            <input type="text" name="telefono" id="telefono"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="correo">Correo Electrónico</label>
+                                                            <input type="email" name="correo" id="correo"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="fecha_recepcion">Fecha de Recepción de
+                                                                Solicitud</label>
+                                                            <input type="date" name="fecha_recepcion"
+                                                                id="fecha_recepcion" class="form-control">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="cre">Num. de Permiso de la Comisión Reguladora
+                                                                de Energía</label>
+                                                            <input type="text" name="cre" id="cre" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="constancia">Num. de Constancia de Trámite o
+                                                                Estación de Servicio</label>
+                                                            <input type="text" name="constancia" id="constancia"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="domicilio_estacion">Domicilio de la Estación de
+                                                                Servicio</label>
+                                                            <input type="text" name="domicilio_estacion"
+                                                                id="domicilio_estacion" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="estado">Estado</label>
+                                                            <select name="estado" id="estado" class="form-select">
+                                                                @foreach($estados as $estado)
+                                                                    <option value="{{ $estado }}">{{ $estado }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="contacto">Contacto</label>
+                                                            <input type="text" name="contacto" id="contacto"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="nom_repre">Nombre del Representante
+                                                                Legal</label>
+                                                            <input type="text" name="nom_repre" id="nom_repre"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="fecha_inspeccion">Fecha Programada de
+                                                                Inspección</label>
+                                                            <input type="date" name="fecha_inspeccion"
+                                                                id="fecha_inspeccion" class="form-control">
+                                                        </div>
+                                                    </div>
 
 
+                                                    <div class="row">
+                                                        <h2 class="card-title">Datos generales del contrato</h2>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                    <label for="cantidad">Precio a pagar por el servicio de inspeccion</label>
+                                                                    <input type="float" name="cantidad"
+                                                                        id="cantidad" class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                    <label for="iva">I.V.A</label>
+                                                                    <input type="float" name="iva"
+                                                                        id="iva" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <h2 class="card-title">Datos necesarios del plan de inspección operación y mantenimiento</h2>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="observaciones">Observaciones</label>
+                                                                <textarea name="observaciones" id="observaciones" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <h2 class="card-title">Fotografias para el reporte fotografico</h2>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                                                               
+                                                                <input type="file" id="images" name="images[]" alt="Login" multiple/>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 text-center"
+                                                        style="padding-top: 10px;">
+                                                        <button type="submitButton"
+                                                            class="btn btn-primary btn-generar">Generar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Modal para generar expediente -->
                             <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog"

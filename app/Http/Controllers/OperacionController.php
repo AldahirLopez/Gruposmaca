@@ -277,6 +277,201 @@ class OperacionController extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
+    public function generarExpedientesOperacion(Request $request){
+
+        try {
+            // Obtener el ID de la estación desde la solicitud
+             // Verificar todos los datos de la solicitud
+            // dd($request->all());
+
+            // Obtener el ID de la estación desde la solicitud
+            $idEstacion = $request->input('idestacion');
+
+            // Buscar la estación por su ID y obtener los datos necesarios
+            $estacion = Estacion::findOrFail($idEstacion);
+
+            // Definir las reglas de validación
+            $rules = [
+                'nomenclatura' => 'required',
+                'idestacion' => 'required',
+                'id_servicio' => 'required',
+                'id_usuario' => 'required',
+                'fecha_recepcion' => 'required|date',
+                'cre' => 'nullable',
+                'contacto' => 'nullable',
+                'nom_repre' => 'nullable',
+                'constancia' => 'nullable',
+                'cantidad'=>'required',
+                'observaciones'=>'nullable',
+                'iva'=>'required',
+                'fecha_inspeccion' => 'required|date',
+                'images.*'=>'required|image|mimes:jpeg,png,jpg,gif',
+            ];
+
+          
+
+            // Validar los datos del formulario
+            $data = $request->validate($rules);
+           
+            // Completar los datos necesarios para el procesamiento
+            $data['numestacion'] = $estacion->num_estacion;
+            $data['fecha_actual'] = Carbon::now()->format('d/m/Y');
+            $data['razonsocial'] = $estacion->razon_social;
+            $data['rfc'] = $estacion->rfc;
+            $data['domicilio_fiscal'] = $estacion->domicilio_fiscal;
+            $data['domicilio_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['estado'] = $estacion->estado_republica_estacion;
+            $data['telefono'] = $estacion->telefono;
+            $data['correo'] = $estacion->correo_electronico;
+
+            // Si algún campo opcional no está en los datos validados, úsalo de la base de datos
+            $data['cre'] = $data['cre'] ?? $estacion->num_cre ?? '';
+            $data['contacto'] = $data['contacto'] ?? $estacion->contacto ?? '';
+            $data['nom_repre'] = $data['nom_repre'] ?? $estacion->nombre_representante_legal ?? '';
+            $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
+
+            //Calculo de precio con iva y el 50% para el contrato
+            $data['total']= $data['cantidad'] * ( 1 + $data['iva']);
+            
+            $data['iva']=$data['cantidad'] * $data['iva'];
+
+            $data['total_mitad']=$data['total'] * 0.50;
+
+            $data['total_restante']=$data['total'] - $data['total_mitad'];
+
+        
+           
+  
+            // Convertir las fechas al formato deseado
+            $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
+            $fechaRecepcion = Carbon::createFromFormat('Y-m-d', $data['fecha_recepcion'])->format('d-m-Y');
+            $fechaInspeccionAumentada = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->addYear()->format('d-m-Y');
+
+            // Cargar las plantillas de Word
+            $templatePaths = [
+                'COMPROBANTE DE TRASLADO.docx',
+                'CONTRATO.docx',
+                'DETEC. R.I.docx',
+                'PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO.docx',
+                'ORDEN DE TRABAJO.docx',
+                'REPORTE FOTOGRAFICO.docx',
+               
+            ];
+
+            // Definir la carpeta de destino
+            $customFolderPath = "OperacionyMantenimiento/{$data['nomenclatura']}";
+            $subFolderPath = "{$customFolderPath}/expediente";
+            $carpetaImages="{$subFolderPath}/imagenes";
+            // Crear la carpeta personalizada si no existe
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            // Verificar y crear la subcarpeta si no existe
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                Storage::disk('public')->makeDirectory($subFolderPath);
+            }
+            
+            //Creamos la carpteta donde iran las imagenes del reporte fotografico
+            if (!Storage::disk('public')->exists($carpetaImages)) {
+                Storage::disk('public')->makeDirectory($carpetaImages);
+            }
+
+            //Obtener las imagenes
+            $imageNumber = 1;
+           
+            $imagePaths=[];
+            foreach ($request->file('images') as $image) {
+                // Generar el nombre de la imagen
+
+                $imageName = 'img_' . $imageNumber . '.' . $image->extension();
+                
+            
+                // Mover la imagen a la carpeta de destino, reemplazando si existe
+                $image->storeAs($carpetaImages, $imageName, 'public');
+
+               
+                // Obtener la ruta completa de la imagen
+                $imagePath = Storage::disk('public')->path("$carpetaImages/$imageName") ?? null;
+
+                 // Almacenar la ruta de la imagen en el array
+                 $imagePaths[] = [
+                    'name' => 'img_' . $imageNumber ,
+                    'path' => $imagePath,
+                ];
+                $imageNumber++;
+
+                 
+            }
+           
+        
+            // Reemplazar marcadores en todas las plantillas
+            foreach ($templatePaths as $templatePath) {
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/OperacionyMantenimiento/{$templatePath}"));
+
+                if($templatePath =="REPORTE FOTOGRAFICO.docx"){
+                    
+                   for ($i=0; $i < count($imagePaths) ; $i++) { 
+                    $templateProcessor->setImageValue($imagePaths[$i]['name'], array('path' => $imagePaths[$i]['path'], 'width' => 310, 'height' => 285, 'ratio' => false));
+                    
+                   }
+                   
+                }
+                $data['images']=null;
+                // Reemplazar todos los marcadores con los datos del formulario
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                    // Reemplazar fechas formateadas específicas
+                    $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
+                    $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
+                    $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
+                }
+
+                // Crear un nombre de archivo basado en la nomenclatura
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+
+                // Guardar la plantilla procesada en la carpeta de destino
+                $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
+            }
+
+            $servicio = ServicioOperacion::firstOrNew(['id' => $data['id_servicio']]);
+            $servicio->date_recepcion_at = $data['fecha_recepcion'];
+            $servicio->date_inspeccion_at = $data['fecha_inspeccion'];
+            $servicio->save();
+
+            $expediente = Expediente_Operacion::firstOrNew(['operacion_mantenimiento_id' => $data['id_servicio']]);
+            $expediente->rutadoc_expediente = $subFolderPath;
+            $expediente->operacion_mantenimiento_id = $data['id_servicio'];
+            $expediente->usuario_id = $data['id_usuario'];
+            $expediente->save();
+
+            // Crear la lista de archivos generados con sus URLs
+            $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+                return [
+                    'name' => $fileName,
+                    'url' => Storage::url("{$subFolderPath}/{$fileName}"),
+                ];
+            }, $templatePaths);
+
+            // Retornar respuesta JSON con los archivos generados
+            // Redireccionar a la vista con los archivos generados
+            // Redireccionar a una ruta específica con los archivos generados
+            // Redirigir a la vista deseada con los archivos generados
+            return redirect()->route('expediente.operacion', ['slug' => $data['id_servicio']])
+                ->with('generatedFiles', $generatedFiles);
+
+        
+
+
+        } catch (\Exception $e) {
+            // Capturar y registrar cualquier excepción ocurrida
+            \Log::error("Error al generar documentos: " . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
+        }
+
+    }
+
 
     public function listGeneratedFiles($nomenclatura)
     {

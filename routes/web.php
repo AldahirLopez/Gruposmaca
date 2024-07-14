@@ -91,8 +91,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::post('/generate-word', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generateWord'])->name('generate.word');
-    
+
     Route::post('/generate-word-operacion', [OperacionController::class, 'generateWord'])->name('generate.word.operacion');
+    
+    Route::post('/generate-expedientes-operacion', [OperacionController::class, 'generarExpedientesOperacion'])->name('generate.expedientes.operacion');
+
 
 
     Route::get('/list-generated-files/{nomenclatura}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'listGeneratedFiles']);
@@ -185,6 +188,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'showChangePasswordForm'])->name('usuarios.showchangepasswordform');
 
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
+
 
 
 
