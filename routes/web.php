@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 
 //Servicio Anexo Vista general 
+use App\Http\Controllers\DictamenDiseñoController;
 use App\Http\Controllers\Servicio_Anexo_30Controller;
 
 //Servicio Inspector Anexo 30
@@ -244,6 +245,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'showChangePasswordForm'])->name('usuarios.showchangepasswordform');
 
     Route::post('/usuarios/{id}/cambiar-contrasena', [UsuarioController::class, 'updatePassword'])->name('usuarios.cambiar-contrasena');
+
+    Route::resource('diseño', DictamenDiseñoController::class);
+
+    Route::get('diseño/{id}/download', [DictamenDiseñoController::class, 'download'])->name('diseño.download');
+
+    Route::post('diseño/{id}/subir-sustento', [DictamenDiseñoController::class, 'subirSustento'])->name('diseño.subirSustento');
 
 
 

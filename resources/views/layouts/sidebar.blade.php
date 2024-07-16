@@ -134,7 +134,7 @@
                 </a>
             </li>
 
-     
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('operacion.index') }}">
                     <i class="bi bi-hammer"></i>
@@ -171,7 +171,14 @@
                     <span>Pendientes de eliminacion dictamenes</span>
                 </a>
             </li>
-            
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('diseño.index') }}">
+                    <i class="bi bi-brush-fill"></i>
+                    <span>Dictamenes Diseño</span>
+                </a>
+            </li>
+
             <!-- End Profile Page Nav -->
         @endif
 

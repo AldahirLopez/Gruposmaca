@@ -25,7 +25,7 @@ class ApprovalController extends Controller
         return view('notificaciones.index', compact('dictamenes', 'servicios'));
     }
 
-    public function show($id)
+    /*public function show($id)
     {
         $tipo_servicio;
         try {
@@ -40,7 +40,7 @@ class ApprovalController extends Controller
 
         // Ahora puedes pasar el dictamen encontrado a la vista
         return view('notificaciones.show', compact('variable','tipo_servicio'));
-    }
+    }*/
 
     public function approveDictamenDeletion(Request $request, $id)
     {
