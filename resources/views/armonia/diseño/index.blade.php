@@ -37,10 +37,10 @@
                                         <td>{{ $dictamen->nomenclatura }}</td>
                                         <td>{{ $dictamen->estacion->razon_social }}</td>
                                         <td>
-                                            <button class="btn btn-primary"
-                                                href="{{ route('diseño.download', $dictamen->id) }}">
+                                            <a class="btn btn-primary"
+                                                href="{{ route('diseño.download', $dictamen->id) }}"> 
                                                 <i class="bi bi-download"></i>
-                                            </button>
+                                            </a>
                                         </td>
                                         <td>
                                             @if ($dictamen->rutadoc_sustento_diseño)
