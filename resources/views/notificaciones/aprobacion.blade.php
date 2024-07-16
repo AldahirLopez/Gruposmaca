@@ -99,6 +99,102 @@
             </div>
         </div>
 
+        <div class="section-header">
+            <h3 class="page__heading">Aprobaciones Servicios de Operación y Mantenimiento</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="margin-top: 15px;">
+                            <a href="{{ route('operacion.index') }}" class="btn btn-danger"><i
+                                    class="bi bi-arrow-return-left"></i></a>
+                        </div>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Numero de servicio</th>
+                                    <th scope="col">Razon Social</th>
+                                    <th scope="col">Direccion</th>
+                                    <th scope="col">Cotizacion</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                @forelse($operaciones as $servicio)
+                                    <tr>
+                                        <td scope="row">{{ $servicio->nomenclatura }}</td>
+                                        @foreach($servicio->estacionServicios as $estacion)
+                                            <td>{{ $estacion->razon_social ?? 'Sin datos' }}</td>
+                                            <td>{{ $estacion->domicilio_estacion_servicio ?? 'Sin datos' }}</td>
+                                            <!-- Otros campos -->
+                                        @endforeach
+
+                                        <td scope="row">
+                                            @if(!$servicio->pending_apro_servicio)
+
+                                                <button class="btn btn-primary" disabled><i
+                                                        class="bi bi-file-pdf-fill"></i></button>
+
+                                            @elseif($servicio->pending_deletion_servicio)
+
+                                                <button class="btn btn-primary" disabled><i
+                                                        class="bi bi-file-pdf-fill"></i></button>
+
+                                            @else
+                                                @foreach($servicio->estacionServicios as $estacion)
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modal" data-servicio_id="{{ $servicio->id }}"
+                                                        data-id="{{ $servicio->nomenclatura }}"
+                                                        data-razon-social="{{ $estacion->razon_social ?? 'Sin datos' }}"
+                                                        data-direccion="{{$estacion->domicilio_estacion_servicio ?? 'Sin datos' }}">
+                                                        <i class="bi bi-file-pdf-fill"></i>
+                                                    </button>
+                                                @endforeach
+                                            @endif
+                                        </td>
+                                        <td scope="row">
+                                            @if($servicio->pending_apro_servicio)
+
+                                                <button class="btn btn-primary" disabled><i
+                                                        class="bi bi-file-earmark-check-fill"></i></button>
+
+                                            @elseif($servicio->pending_deletion_servicio)
+
+                                                <button class="btn btn-primary" disabled><i
+                                                        class="bi bi-file-earmark-check-fill"></i></button>
+
+                                            @else
+                                                <a class="btn btn-primary"
+                                                    href="{{ route('servicio_operacion.apro', $servicio->id) }}">
+                                                    <i class="bi bi-file-earmark-check-fill"></i>
+                                                </a>
+                                            @endif
+
+                                            @can('borrar-servicio')
+                                                @if($servicio->pending_deletion_servicio)
+                                                    <button class="btn btn-danger" disabled><i
+                                                            class="bi bi-trash-fill">Eliminando</i></button>
+                                                @else
+                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                    {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                                    {!! Form::close() !!}
+                                                @endif
+                                            @endcan
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">No se encontraron servicios para mostrar.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 

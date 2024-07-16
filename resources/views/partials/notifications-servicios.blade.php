@@ -63,7 +63,7 @@
     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
         <li class="dropdown-header">
             Tienes {{ $pendingDeletionsServicio->count() + $pendingAproServicioOperacion->count()}} nuevas notificaciones
-            <a href="{{ route('apro.anexo') }}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
+            <a href="{{ route('aprobacion.servicios') }}"><span class="badge rounded-pill bg-primary p-2 ms-2">Ver todos</span></a>
         </li>
         <li>
             <hr class="dropdown-divider">
@@ -104,7 +104,7 @@
         @endforeach
 
         <li class="dropdown-footer">
-            <a href="{{ route('apro.anexo') }}">Ver todas las notificaciones</a> 
+            <a href="{{ route('aprobacion.servicios') }}">Ver todas las notificaciones</a> 
         </li>
     </ul><!-- End Notification Dropdown Items -->
 </li><!-- End Notification Nav -->

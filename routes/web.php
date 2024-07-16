@@ -65,6 +65,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/descargar-cotizacion-ajax', [Servicio_Anexo_30Controller::class, 'descargarCotizacionAjax'])->name('descargar.cotizacion.ajax');
 
+
+    //Generar PDF cotizacion operacion
+    
+    Route::post('/pdf_cotizacion_operacion', [OperacionController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion.operacion');
+    
+   
+
+
+
     //Servicios Para Aprobar
     Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
     Route::get('servicio_anexo/apro/{id}', [Servicio_Anexo_30Controller::class, 'apro'])->name('servicio_anexo.apro');
@@ -203,6 +212,9 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');
+
+
+    Route::get('/aprobacion_servicios', [NotificationController::class, 'notificacionesAprobacion'])->name('aprobacion.servicios');  
 
 
 

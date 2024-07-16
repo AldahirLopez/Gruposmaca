@@ -27,8 +27,11 @@
                                 @forelse($servicios as $servicio)
                                 <tr>
                                     <td scope="row">{{ $servicio->nomenclatura }}</td>
-                                    <td>{{ $servicio->estacion_servicio->Razon_Social ?? 'Sin datos' }}</td>
-                                    <td>{{ $servicio->estacion_servicio->Domicilio_Estacion_Servicio ?? 'Sin datos' }}</td>
+                                    @foreach($servicio->estacionServicios as $estacion)
+                                            <td>{{ $estacion->razon_social ?? 'Sin datos' }}</td>
+                                            <td>{{ $estacion->domicilio_estacion_servicio ?? 'Sin datos' }}</td>
+                                            <!-- Otros campos -->
+                                    @endforeach   
 
                                     <td scope="row">
                                         @if(!$servicio->pending_apro_servicio)
@@ -40,9 +43,15 @@
                                         <button class="btn btn-primary" disabled><i class="bi bi-file-pdf-fill"></i></button>
 
                                         @else
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" data-servicio_id="{{ $servicio->id }}" data-id="{{ $servicio->nomenclatura }}" data-razon-social="{{ $servicio->datos->Razon_Social ?? 'Sin datos' }}" data-direccion="{{ $servicio->datos->Domicilio_Estacion_Servicio ?? 'Sin datos' }}">
-                                            <i class="bi bi-file-pdf-fill"></i>
-                                        </button>
+                                            @foreach($servicio->estacionServicios as $estacion)
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modal" data-servicio_id="{{ $servicio->id }}"
+                                                        data-id="{{ $servicio->nomenclatura }}"
+                                                        data-razon-social="{{ $estacion->razon_social ?? 'Sin datos' }}"
+                                                        data-direccion="{{$estacion->domicilio_estacion_servicio ?? 'Sin datos' }}">
+                                                        <i class="bi bi-file-pdf-fill"></i>
+                                                    </button>
+                                            @endforeach
                                         @endif
                                     </td>
                                     <td scope="row">
@@ -94,7 +103,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="row g-3" action="{{ route('pdf.cotizacion') }}" method="POST" id="cotizacionForm">
+                <form class="row g-3" action="{{ route('pdf.cotizacion.operacion') }}" method="POST" id="cotizacionForm">
                     @csrf
                     <input type="hidden" name="nomenclatura">
                     <input type="hidden" name="id_servicio">
@@ -137,12 +146,12 @@
         });
 
         var formularioCotizacion = document.querySelector('#cotizacionForm');
-
+        
         formularioCotizacion.addEventListener('submit', function(event) {
             event.preventDefault();
             var formData = new FormData(formularioCotizacion);
 
-            fetch('{{ route("pdf.cotizacion") }}', {
+            fetch('{{ route("pdf.cotizacion.operacion") }}', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -159,6 +168,7 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+        
     });
 </script>
 

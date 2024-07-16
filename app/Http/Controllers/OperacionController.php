@@ -15,7 +15,10 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Models\Cotizacion_Operacion;
 //Este controlador se va utilizar para la parte del administrador donde aprueba los servicios de operacion y mantenimiento
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OperacionController extends Controller
 {
@@ -352,7 +355,7 @@ class OperacionController extends Controller
                 'COMPROBANTE DE TRASLADO.docx',
                 'CONTRATO.docx',
                 'DETEC. R.I.docx',
-                'PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO.docx',
+                'PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO.docx',
                 'ORDEN DE TRABAJO.docx',
                 'REPORTE FOTOGRAFICO.docx',
 
@@ -735,4 +738,76 @@ class OperacionController extends Controller
             abort(404, "El archivo no existe en la ruta especificada.");
         }
     }
+
+
+     public function generarpdfcotizacion (Request $request){
+        app()->setLocale('es');
+        
+        $id_servicio = $request->input('id_servicio');
+        $nomenclatura = $request->input('nomenclatura');
+        $nombre_estacion = strtoupper($request->input('razon_social'));
+        $direccion_estacion = strtoupper($request->input('direccion'));
+        $costo = $request->input('costo');
+
+         // Calcular el 16% de IVA 
+        $iva = $costo * 0.16;
+       
+        //Calcular el total
+        $total = $costo + $iva;
+
+        
+        $fecha_actual = Carbon::now()->formatLocalized('%A %d de %B de %Y');
+
+        
+        $folderPath = "OperacionyMantenimiento/{$nomenclatura}";
+        $subFolderPath = "{$folderPath}/cotizacion";
+
+
+        // Verificar y crear la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
+        }
+
+        // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+        if (!Storage::disk('public')->exists($subFolderPath)) {
+            Storage::disk('public')->makeDirectory($subFolderPath);
+        }
+
+
+       // Definir la ruta completa del PDF
+       $pdfPath = "{$subFolderPath}/Cotizacion_{$nomenclatura}.pdf";
+
+
+       // Pasar los datos al PDF y renderizarlo, incluyendo la fecha actual
+       $html = view('armonia.operacion.cotizacion.cotizacion', compact('nombre_estacion', 'direccion_estacion', 'costo', 'iva', 'fecha_actual'))->render();
+       $pdf = PDF::loadHTML($html);
+      
+       Storage::disk('public')->put($pdfPath, $pdf->output());
+    
+       $pdfUrl = Storage::url($pdfPath);
+
+
+       $cotizacion = Cotizacion_Operacion::where('servicio_id', $id_servicio)->first();
+
+       if ($cotizacion) {
+           // Si ya existe, actualiza el registro existente
+           $cotizacion->rutadoc_cotizacion = $pdfUrl;
+           $cotizacion->save();
+       } else {
+           // Si no existe, crea un nuevo registro
+           $cotizacion = new Cotizacion_Operacion();
+           $cotizacion->rutadoc_cotizacion = $pdfUrl;
+           $cotizacion->servicio_id = $id_servicio;
+           $cotizacion->estado_cotizacion = true;
+           // Asigna otros campos si es necesario
+           $cotizacion->save();
+       }
+    
+
+       return response()->json(['pdf_url' => $pdfUrl]);
+     }
+
+
+
+
 }

@@ -52,16 +52,13 @@ class Servicio_Anexo_30Controller extends Controller
         if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
             // Si es administrador, obtener todos los dictámenes
             $servicios = ServicioAnexo::all();
-            $operaciones=ServicioOperacion::all();
-
         } else {
             // Si no es administrador, obtener solo los dictámenes del usuario autenticado
             $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
-            $operaciones = ServicioOperacion::where('usuario_id', $usuario->id)->get();
         }
 
         // Pasar los dictámenes a la vista
-        return view('armonia.servicio_anexo_30.aprobacion_servicio.index', compact('servicios','operaciones'));
+        return view('armonia.servicio_anexo_30.aprobacion_servicio.index', compact('servicios'));
     }
 
     public function apro($id)

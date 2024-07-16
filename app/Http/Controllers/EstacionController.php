@@ -151,7 +151,7 @@ class EstacionController extends Controller
             $estacionServicio->save();
 
             // Redirigir con un mensaje de éxito
-            return redirect()->route('estacion.index')->with('success', 'Estación agregada exitosamente');
+            return redirect()->route('estaciones.usuario')->with('success', 'Estación agregada exitosamente');
         } catch (\Exception $e) {
             // Captura cualquier excepción y muestra el mensaje
             dd($e->getMessage());
