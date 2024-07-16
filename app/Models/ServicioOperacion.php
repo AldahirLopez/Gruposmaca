@@ -23,6 +23,15 @@ class ServicioOperacion extends Model
     {
         return $this->belongsToMany(Estacion::class, 'estacion_servicio_operacion_mantenimiento', 'servicio_operacion_id', 'estacion_id');
     }
+    
+    public function cotizacion()
+    {
+        return $this->hasOne(Cotizacion_Operacion::class, 'servicio_id');
+    }
 
+    public function pago()
+    {
+        return $this->hasOne(Pago_Operacion::class, 'servicio_id');
+    }
 
 }

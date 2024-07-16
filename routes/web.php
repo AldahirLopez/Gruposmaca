@@ -148,6 +148,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/guardar-dictamenes', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenes'])->name('guardar.dictamenes');
 
 
+    //PARTE DE PAGOS DE SERVICIO DE OPERACION
+    Route::post('/pago-operacion/store', [OperacionController::class, 'storePago'])->name('pago_operacion.store');
 
 
 
@@ -155,11 +157,13 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::get('/listas/anexo30/{slug}', 'ListasInspeccionController@verAnexo30')->name('listas.anexo30');
     //  Route::get('/archivos/{slug}', 'ArchivosController@index')->name('archivos.index');
 
+    //PARTE DE PAGOS EN LA VISTA DE ADMINISTRADO PARA LAS FACTURAS
 
-
-
-
-
+    Route::get('/pagos', [OperacionController::class, 'pagos'])->name('pagos.index');
+    Route::post('/descarga-pago', [OperacionController::class, 'descargarPago'])->name('descargar.pago.operacion');
+    Route::post('/factura-operacion/store', [OperacionController::class, 'storeFactura'])->name('factura_operacion.store');
+    
+    Route::post('/descarga-factura', [OperacionController::class, 'descargarFactura'])->name('descargar.factura.operacion');
 
 
 

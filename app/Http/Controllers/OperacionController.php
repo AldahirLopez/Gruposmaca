@@ -16,6 +16,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Models\Cotizacion_Operacion;
+use App\Models\Pago_Operacion;
+use App\Models\Factura_Operacion;
 //Este controlador se va utilizar para la parte del administrador donde aprueba los servicios de operacion y mantenimiento
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -560,22 +562,7 @@ class OperacionController extends Controller
         }
     }
 
-    public function descargarCotizacionAjax(Request $request)
-    {
-        // Obtener la ruta del documento desde la solicitud GET
-        $rutaDocumento = $request->query('rutaDocumento');
-
-        // Construir la ruta completa del archivo de cotización
-        $rutaCompleta = public_path($rutaDocumento);
-
-        // Verificar si el archivo existe
-        if (!file_exists($rutaCompleta)) {
-            abort(404, 'El archivo solicitado no existe.');
-        }
-
-        // Devolver el archivo como una respuesta binaria (blob)
-        return response()->file($rutaCompleta);
-    }
+  
 
 
 
@@ -808,6 +795,158 @@ class OperacionController extends Controller
      }
 
 
+     
+     public function descargarCotizacionAjax(Request $request)
+     {
+         // Obtener la ruta del documento desde la solicitud GET
+         $rutaDocumento = $request->query('rutaDocumento');
+ 
+         // Construir la ruta completa del archivo de cotización
+         $rutaCompleta = public_path($rutaDocumento);
+ 
+         // Verificar si el archivo existe
+         if (!file_exists($rutaCompleta)) {
+             abort(404, 'El archivo solicitado no existe.');
+         }
+ 
+         // Devolver el archivo como una respuesta binaria (blob)
+         return response()->file($rutaCompleta);
+     }
+
+
+     public function storePago(Request $request){
+       
+        $data = $request->validate([
+            'rutadoc' => 'required|file|mimes:pdf',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+        ]);
+        try {
+            $pago =Pago_Operacion::firstOrNew(['servicio_id' => $data['servicio_id']]);
+           
+            if ($request->hasFile('rutadoc')) {
+                
+                $archivoSubido = $request->file('rutadoc');
+
+                $nombreArchivoPersonalizado = "Pago_" .$data['nomenclatura'].'.'. $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}/Pagos";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $pago->rutadoc_pago = $rutaArchivo;
+            }
+
+                $pago->servicio_id = $data['servicio_id'];
+                $pago->estado_facturado=false;
+                $pago->save();
+
+            return redirect()->route('servicio_operacion.index', ['id' => $data['servicio_id']])->with('success', 'Pago guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_operacion.index', ['id' => $data['servicio_id']])->with('error', 'Pago no guardado exitosamente.');
+        }
+
+
+     }
+
+     public function descargarPago(Request $request)
+     {
+        
+        $nomenclatura = strtoupper($request->input('nomenclatura')); // Obtener la nomenclatura desde la ruta
+       
+        $documento="Pago_".$nomenclatura.".pdf";
+        // Construir la ruta del archivo
+        $rutaArchivo = storage_path("app/public/OperacionyMantenimiento/{$nomenclatura}/Pagos/{$documento}");
+
+        // Verificar si el archivo existe antes de proceder
+        if (file_exists($rutaArchivo)) {
+            // Devolver el archivo para descargar
+            return response()->file($rutaArchivo);
+        } else {
+            // Manejar el caso en que el archivo no exista
+            abort(404, "El archivo no existe en la ruta especificada.");
+        }
+     }
+
+     
+     public function pagos(){
+        
+        $pagos=Pago_Operacion::all();
+
+        return view('armonia.operacion.pagos.index', compact('pagos'));
+     }
+
+
+
+     public function storeFactura(Request $request){
+
+        $data = $request->validate([
+            'rutadoc' => 'required|file|mimes:pdf',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+        ]);
+
+        try {
+            $pago =Pago_Operacion::where('servicio_id',$data['servicio_id'])->first();
+
+            $factura=Factura_Operacion::firstOrNew(['id_pago' => $pago->id]);
+          
+            if ($request->hasFile('rutadoc')) {
+                
+                $archivoSubido = $request->file('rutadoc');
+
+                $nombreArchivoPersonalizado = "Factura_" .$data['nomenclatura'].'.'. $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}/Facturas";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $factura->rutadoc_factura = $rutaArchivo;
+            }
+                $pago->estado_facturado=true;
+                $pago->save();
+         
+
+                $factura->id_pago = $pago->id;
+                $factura->estado_factura=true;
+                $factura->save();
+
+
+            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('success', 'Factura guardada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('error', 'Factura no guardada exitosamente.');
+        }
+
+     }
+
+     public function descargarFactura(Request $request)
+     {
+        
+        $nomenclatura = strtoupper($request->input('nomenclatura')); // Obtener la nomenclatura desde la ruta
+       
+        $documento="Factura_".$nomenclatura.".pdf";
+        // Construir la ruta del archivo
+        $rutaArchivo = storage_path("app/public/OperacionyMantenimiento/{$nomenclatura}/Facturas/{$documento}");
+
+        // Verificar si el archivo existe antes de proceder
+        if (file_exists($rutaArchivo)) {
+            // Devolver el archivo para descargar
+            return response()->file($rutaArchivo);
+        } else {
+            // Manejar el caso en que el archivo no exista
+            abort(404, "El archivo no existe en la ruta especificada.");
+        }
+     }
 
 
 }
