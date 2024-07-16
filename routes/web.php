@@ -207,7 +207,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('servicio_operacion', ServicioOperacionController::class);
-    Route::resource('pago_anexo', PagosAnexoController::class);
+    //Route::resource('pago_anexo', PagosAnexoController::class);
     //Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
     Route::resource('historialformatos', FormatosHistorialController::class);

@@ -50,7 +50,7 @@
                                         </td>
 
                                         <td scope="row">
-                                            @if ($pago->estado_facturado == false)
+                                            @if ($pago->estado_pago == false)
                                                 Pediente por facturar
                                                 @else                                           Facturado
                                             @endif                                      </td>
@@ -72,7 +72,7 @@
                                                         data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('factura_operacion.store') }}" method="POST"
+                                                    <form action="{{ route('factura_anexo.store') }}" method="POST"
                                                         enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group">

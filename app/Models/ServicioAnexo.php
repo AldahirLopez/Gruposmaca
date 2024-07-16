@@ -28,4 +28,9 @@ class ServicioAnexo extends Model
     {
         return $this->belongsToMany(Estacion::class, 'estacion_servicio', 'servicio_anexo_id', 'estacion_id');
     }
+
+    public function pago()
+    {
+        return $this->hasOne(Pago_Anexo::class, 'servicio_anexo_id');
+    }
 }

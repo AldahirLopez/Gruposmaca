@@ -247,7 +247,7 @@
                                                     <td scope="row">{{ $servicio->nomenclatura }}</td>
                                                     @if ($servicio->pago === null)
                                                         <td>Subir pago para generar factura</td>
-                                                    @else   @if ($servicio->pago->estado_facturado == true)
+                                                    @else   @if ($servicio->pago->estado_pago == true)
                                                         <td>
                                                             <a href="{{ route('descargar.factura.anexo') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
                                                                 class="btn btn-primary btn-descargar-pdf"

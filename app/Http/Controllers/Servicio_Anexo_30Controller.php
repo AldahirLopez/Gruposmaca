@@ -180,10 +180,11 @@ class Servicio_Anexo_30Controller extends Controller
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
         ]);
-
+       
+      
         try {
             $pago = Pago_Anexo::firstOrNew(['servicio_anexo_id' => $data['servicio_id']]);
-
+            $pago->comentarios="";
             if ($request->hasFile('rutadoc')) {
                 $archivoSubido = $request->file('rutadoc');
 
@@ -211,16 +212,16 @@ class Servicio_Anexo_30Controller extends Controller
                 // Obtener la URL pública del PDF
                 $pdfUrl = Storage::url($rutaArchivo);
 
-                $pago->rutadoc_pago = $pdfUrl;
+                $pago->rutadoc_pago = $pdfUrl;      
             }
 
             $pago->servicio_anexo_id = $data['servicio_id'];
             $pago->estado_pago = false;
             $pago->save();
-
-            return redirect()->route('servicio_inspector_anexo_30', ['id' => $data['servicio_id']])->with('success', 'Pago guardado exitosamente.');
+          
+            return redirect()->route('servicio_inspector_anexo_30.index', ['id' => $data['servicio_id']])->with('success', 'Pago guardado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('servicio_inspector_anexo_30', ['id' => $data['servicio_id']])->with('error', 'Pago no guardado exitosamente.');
+            return redirect()->route('servicio_inspector_anexo_30.index', ['id' => $data['servicio_id']])->with('error', 'Pago no guardado exitosamente.');
         }
     }
     public function descargarPagoAnexo(Request $request)
@@ -243,17 +244,20 @@ class Servicio_Anexo_30Controller extends Controller
 
     public function storeFacturaAnexo(Request $request)
     {
+       
         $data = $request->validate([
             'rutadoc' => 'required|file|mimes:pdf',
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
         ]);
 
+           $usuario = Auth::user();
+
         try {
             $pago = Pago_Anexo::where('servicio_anexo_id', $data['servicio_id'])->first();
 
             if (!$pago) {
-                return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('error', 'Pago no encontrado.');
+                return redirect()->route('pagosAnexo.index', ['id' => $data['servicio_id']])->with('error', 'Pago no encontrado.');
             }
 
             $factura = Factura_Anexo::firstOrNew(['id_pago' => $pago->id]);
@@ -285,20 +289,21 @@ class Servicio_Anexo_30Controller extends Controller
                 // Obtener la URL pública del PDF
                 $pdfUrl = Storage::url($rutaArchivo);
 
-                $factura->rutadoc_factura = $pdfUrl;
+                $factura->ruta_pdf = $pdfUrl;
+                $factura->rutad_xml=$pdfUrl;
             }
 
-            $pago->estado_facturado = true;
+            $pago->estado_pago = true;
             $pago->save();
 
-            $factura->id_pago = $pago->id;
-            $factura->estado_factura = true;
+            $factura->id_pago = $pago->id;        
+            $factura->usuario_id = $usuario->id;        
             $factura->save();
 
-            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('success', 'Factura guardada exitosamente.');
+            return redirect()->route('pagosAnexo.index', ['id' => $data['servicio_id']])->with('success', 'Factura guardada exitosamente.');
         } catch (\Exception $e) {
             \Log::error('Error guardando la factura: ' . $e->getMessage());
-            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('error', 'Factura no guardada exitosamente.');
+            return redirect()->route('pagosAnexo.index', ['id' => $data['servicio_id']])->with('error', 'Factura no guardada exitosamente.');
         }
     }
 

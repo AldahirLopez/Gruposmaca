@@ -130,15 +130,13 @@
                                                     <td>Subir pago para generar factura</td>
                                                 @else   
                                                     @if ($servicio->pago->estado_facturado == true)
-                                                        <td>
-                                                            <form action="{{ route('descargar.factura.operacion') }}" method="POST">
-                                                                @csrf
-                                                                <input type="text" value="{{$servicio->nomenclatura}}"
-                                                                    style="display:none;" name="nomenclatura">
-                                                                <button type="submit" class="btn btn-primary"><i
-                                                                        class="bi bi-file-pdf-fill"></i></button>
-                                                            </form>
-                                                        </td>
+                                                            <td>
+                                                                <a href="{{ route('descargar.factura.operacion') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
+                                                                    class="btn btn-primary btn-descargar-pdf"
+                                                                    data-carpeta="{{ $servicio->nomenclatura }}">
+                                                                    <i class="bi bi-file-earmark-check-fill"></i>
+                                                                </a>
+                                                            </td>
 
                                                     @else
                                                         <td>Generando factura</td>
@@ -147,17 +145,17 @@
                                                 <td scope="row">
 
                                                     @if ($servicio->pago !== null)
-                                                        <button type="button" class="btn btn-success" data-toggle="modal"
-                                                            data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
-                                                            disabled>
-                                                            <i class="bi bi-upload"></i> Agregar
-                                                        </button>
+                                                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                                                data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
+                                                                disabled>
+                                                                <i class="bi bi-upload"></i> Agregar
+                                                            </button>
 
                                                     @else
-                                                        <button type="button" class="btn btn-success" data-toggle="modal"
-                                                            data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                            <i class="bi bi-upload"></i> Agregar
-                                                        </button>
+                                                    <button type="button" class="btn btn-success" data-toggle="modal"
+                                                                data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
+                                                                <i class="bi bi-upload"></i> Agregar
+                                                            </button>
 
                                                     @endif
 
@@ -210,6 +208,47 @@
                                                     @endcan
                                                 </td>
                                             </tr>
+
+                                            <!-- Modal para agregar documento -->
+                                            <div class="modal fade" id="agregarDocumentoModal-{{$servicio->nomenclatura }}"
+                                                    tabindex="-1" role="dialog"
+                                                    aria-labelledby="agregarDocumentoLabel-{{$servicio->nomenclatura }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header"
+                                                                style="background-color: #007bff; color: #ffffff;">
+                                                                <h5 class="modal-title"
+                                                                    id="agregarDocumentoLabel-{{ $servicio->nomenclatura }}">
+                                                                    Agregar Pago:{{$servicio->nomenclatura}}</h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('pago_operacion.store') }}" method="POST"
+                                                                    enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    <div class="form-group">
+                                                                        <label for="rutadoc">Seleccionar Archivo</label>
+                                                                        <input type="file" name="rutadoc" class="form-control"
+                                                                            required>
+                                                                    </div>
+                                                                    <input type="hidden" name="servicio_id"
+                                                                        value="{{ $servicio->id }}">
+                                                                    <input type="hidden" name="nomenclatura"
+                                                                        value="{{ $servicio->nomenclatura }}">
+
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-dismiss="modal">Cerrar</button>
+                                                                        <button type="submit" class="btn btn-primary">Agregar
+                                                                            pago</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- FIN Modal para agregar documento -->
                                         @empty
                                             <tr>
                                                 <td colspan="6">No se encontraron servicios para mostrar.</td>

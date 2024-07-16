@@ -14,7 +14,7 @@ class Pago_Anexo extends Model
     
     protected $fillable = [
         'rutadoc_pago',
-        'servicio_anexo_id ',
+        'servicio_anexo_id',
     ];
 
     public function servicio()
@@ -24,6 +24,6 @@ class Pago_Anexo extends Model
 
     public function factura()
     {
-        return $this->hasOne(Factura_Operacion::class, 'id_pago');
+        return $this->hasOne(Factura_Anexo::class, 'id_pago');
     }
 }
