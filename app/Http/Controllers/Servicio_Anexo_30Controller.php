@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Factura_Anexo;
+use App\Models\Pago_Anexo;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Cotizacion_Servicio_Anexo30;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
-use Spatie\Permission\Models\Role; 
+use Spatie\Permission\Models\Role;
 use App\Models\ServicioOperacion;
 
 use Illuminate\Support\Facades\Auth; // Importa la clase Auth
@@ -163,4 +165,158 @@ class Servicio_Anexo_30Controller extends Controller
         return response()->file($rutaCompleta);
     }
 
+    public function pagosAnexo()
+    {
+
+        $pagos = Pago_Anexo::all();
+
+        return view('armonia.servicio_anexo_30.pagos.index', compact('pagos'));
+    }
+
+    public function storePagoAnexo(Request $request)
+    {
+        $data = $request->validate([
+            'rutadoc' => 'required|file|mimes:pdf',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+        ]);
+
+        try {
+            $pago = Pago_Anexo::firstOrNew(['servicio_anexo_id' => $data['servicio_id']]);
+
+            if ($request->hasFile('rutadoc')) {
+                $archivoSubido = $request->file('rutadoc');
+
+                $nombreArchivoPersonalizado = "Pago_" . $data['nomenclatura'] . '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+
+                // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
+                $folderPath = "Servicios_Anexo30/{$nomenclatura}";
+                $subFolderPath = "{$folderPath}/pago";
+
+                // Verificar y crear la carpeta principal si no existe
+                if (!Storage::disk('public')->exists($folderPath)) {
+                    Storage::disk('public')->makeDirectory($folderPath);
+                }
+
+                // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+                if (!Storage::disk('public')->exists($subFolderPath)) {
+                    Storage::disk('public')->makeDirectory($subFolderPath);
+                }
+
+                // Guardar el PDF en el almacenamiento de Laravel con un nombre personalizado
+                $rutaArchivo = $archivoSubido->storeAs($subFolderPath, $nombreArchivoPersonalizado, 'public');
+
+                // Obtener la URL pública del PDF
+                $pdfUrl = Storage::url($rutaArchivo);
+
+                $pago->rutadoc_pago = $pdfUrl;
+            }
+
+            $pago->servicio_anexo_id = $data['servicio_id'];
+            $pago->estado_pago = false;
+            $pago->save();
+
+            return redirect()->route('servicio_inspector_anexo_30', ['id' => $data['servicio_id']])->with('success', 'Pago guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30', ['id' => $data['servicio_id']])->with('error', 'Pago no guardado exitosamente.');
+        }
+    }
+    public function descargarPagoAnexo(Request $request)
+    {
+
+        // Obtener la ruta del documento desde la solicitud GET
+        $rutaDocumento = $request->query('rutaDocumento');
+
+        // Construir la ruta completa del archivo de cotización
+        $rutaCompleta = public_path($rutaDocumento);
+
+        // Verificar si el archivo existe
+        if (!file_exists($rutaCompleta)) {
+            abort(404, 'El archivo solicitado no existe.');
+        }
+
+        // Devolver el archivo como una respuesta binaria (blob)
+        return response()->file($rutaCompleta);
+    }
+
+    public function storeFacturaAnexo(Request $request)
+    {
+        $data = $request->validate([
+            'rutadoc' => 'required|file|mimes:pdf',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+        ]);
+
+        try {
+            $pago = Pago_Anexo::where('servicio_anexo_id', $data['servicio_id'])->first();
+
+            if (!$pago) {
+                return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('error', 'Pago no encontrado.');
+            }
+
+            $factura = Factura_Anexo::firstOrNew(['id_pago' => $pago->id]);
+
+            if ($request->hasFile('rutadoc')) {
+                $archivoSubido = $request->file('rutadoc');
+
+                $nombreArchivoPersonalizado = "Factura_" . $data['nomenclatura'] . '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+
+                // Definir la carpeta principal y la subcarpeta donde se guardarán los PDFs
+                $folderPath = "Servicios_Anexo30/{$nomenclatura}";
+                $subFolderPath = "{$folderPath}/facturas";
+
+                // Verificar y crear la carpeta principal si no existe
+                if (!Storage::disk('public')->exists($folderPath)) {
+                    Storage::disk('public')->makeDirectory($folderPath);
+                }
+
+                // Verificar y crear la subcarpeta dentro de la carpeta principal si no existe
+                if (!Storage::disk('public')->exists($subFolderPath)) {
+                    Storage::disk('public')->makeDirectory($subFolderPath);
+                }
+
+                // Guardar el PDF en el almacenamiento de Laravel con un nombre personalizado
+                $rutaArchivo = $archivoSubido->storeAs($subFolderPath, $nombreArchivoPersonalizado, 'public');
+
+                // Obtener la URL pública del PDF
+                $pdfUrl = Storage::url($rutaArchivo);
+
+                $factura->rutadoc_factura = $pdfUrl;
+            }
+
+            $pago->estado_facturado = true;
+            $pago->save();
+
+            $factura->id_pago = $pago->id;
+            $factura->estado_factura = true;
+            $factura->save();
+
+            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('success', 'Factura guardada exitosamente.');
+        } catch (\Exception $e) {
+            \Log::error('Error guardando la factura: ' . $e->getMessage());
+            return redirect()->route('pagos.index', ['id' => $data['servicio_id']])->with('error', 'Factura no guardada exitosamente.');
+        }
+    }
+
+    public function descargarFacturaAnexo(Request $request)
+    {
+
+        // Obtener la ruta del documento desde la solicitud GET
+        $rutaDocumento = $request->query('rutaDocumento');
+
+        // Construir la ruta completa del archivo de cotización
+        $rutaCompleta = public_path($rutaDocumento);
+
+        // Verificar si el archivo existe
+        if (!file_exists($rutaCompleta)) {
+            abort(404, 'El archivo solicitado no existe.');
+        }
+
+        // Devolver el archivo como una respuesta binaria (blob)
+        return response()->file($rutaCompleta);
+    }
 }

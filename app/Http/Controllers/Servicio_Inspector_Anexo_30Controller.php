@@ -137,7 +137,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
         $estacionServicio->save();
 
         // Definir la carpeta de destino dentro de 'public/storage'
-        $customFolderPath = "servicios_anexo30/{$nomenclatura}";
+        $customFolderPath = "Servicios_Anexo30/{$nomenclatura}";
 
         // Crear la carpeta si no existe
         Storage::disk('public')->makeDirectory($customFolderPath);

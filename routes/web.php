@@ -54,10 +54,25 @@ Route::group(['middleware' => ['auth']], function () {
     //Servicio Anexo Vista general 
     Route::resource('servicio_anexo_30', Servicio_Anexo_30Controller::class);
 
+    Route::get('/pagos-anexo', [Servicio_Anexo_30Controller::class, 'pagosAnexo'])->name('pagosAnexo.index');
+
+    
+    //PARTE DE PAGOS DE Anexo
+    Route::post('/pago-anexo/store', [Servicio_Anexo_30Controller::class, 'storePagoAnexo'])->name('pago_anexo.store');
+
+    //PARTE DE PAGOS EN LA VISTA DE ADMINISTRADO PARA LAS FACTURAS
+
+    Route::get('/descarga-pago-anexo', [Servicio_Anexo_30Controller::class, 'descargarPagoAnexo'])->name('descargar.pago.anexo');
+    Route::post('/factura-anexo/store', [Servicio_Anexo_30Controller::class, 'storeFacturaAnexo'])->name('factura_anexo.store');
+    
+    Route::get('/descarga-factura-anexo', [Servicio_Anexo_30Controller::class, 'descargarFacturaAnexo'])->name('descargar.factura.anexo');
+
     Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioDeletion')
         ->name('approve.servicio.deletion');
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
+
+    
     
 
     //Generar PDF cotizacion anexo 30 
