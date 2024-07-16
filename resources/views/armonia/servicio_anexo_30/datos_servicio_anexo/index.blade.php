@@ -249,8 +249,8 @@
                                                         <td>Subir pago para generar factura</td>
                                                     @else   @if ($servicio->pago->estado_pago == true)
                                                         <td>
-                                                            <a href="{{ route('descargar.factura.anexo') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
-                                                                class="btn btn-primary btn-descargar-pdf"
+                                                            <a href="{{ route('descargar.factura.anexo') }}?rutaDocumento={{ urlencode($servicio->pago->factura->ruta_pdf) }}"
+                                                                class="btn btn-primary btn-descargar-factura"
                                                                 data-carpeta="{{ $servicio->nomenclatura }}">
                                                                 <i class="bi bi-file-earmark-check-fill"></i>
                                                             </a>
@@ -458,6 +458,33 @@
 
             // Construir el nombre de archivo para la descarga
             var nombreArchivo = 'Cotizacion_' + carpeta + '.pdf';
+
+            // Crear un elemento <a> temporal y simular clic para descargar el archivo
+            var link = document.createElement('a');
+            link.href = rutaDocumento;
+            link.setAttribute('download', nombreArchivo);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $('.btn-descargar-factura').click(function (event) {
+            // Prevenir el comportamiento predeterminado del enlace (navegación)
+            event.preventDefault();
+
+            // Obtener la ruta del documento desde el atributo href del enlace
+            var rutaDocumento = $(this).attr('href');
+
+            // Obtener el nombre de la carpeta desde el atributo data-carpeta del enlace
+            var carpeta = $(this).data('carpeta');
+
+            // Construir el nombre de archivo para la descarga
+            var nombreArchivo = 'Factura_' + carpeta + '.pdf';
 
             // Crear un elemento <a> temporal y simular clic para descargar el archivo
             var link = document.createElement('a');
