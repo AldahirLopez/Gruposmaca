@@ -160,10 +160,10 @@ Route::group(['middleware' => ['auth']], function () {
     //PARTE DE PAGOS EN LA VISTA DE ADMINISTRADO PARA LAS FACTURAS
 
     Route::get('/pagos', [OperacionController::class, 'pagos'])->name('pagos.index');
-    Route::post('/descarga-pago', [OperacionController::class, 'descargarPago'])->name('descargar.pago.operacion');
+    Route::get('/descarga-pago', [OperacionController::class, 'descargarPago'])->name('descargar.pago.operacion');
     Route::post('/factura-operacion/store', [OperacionController::class, 'storeFactura'])->name('factura_operacion.store');
     
-    Route::post('/descarga-factura', [OperacionController::class, 'descargarFactura'])->name('descargar.factura.operacion');
+    Route::get('/descarga-factura', [OperacionController::class, 'descargarFactura'])->name('descargar.factura.operacion');
 
 
 
@@ -186,6 +186,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('operacion', OperacionController::class);
+    
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
 

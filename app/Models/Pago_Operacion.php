@@ -21,4 +21,9 @@ class Pago_Operacion extends Model
     {
         return $this->belongsTo(ServicioOperacion::class, 'servicio_id');
     }
+
+    public function factura()
+    {
+        return $this->hasOne(Factura_Operacion::class, 'id_pago');
+    }
 }
