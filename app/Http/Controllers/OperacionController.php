@@ -29,10 +29,25 @@ class OperacionController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-servicio_operacion_mantenimiento|crear-servicio_operacion_mantenimiento|editar-servicio_operacion_mantenimiento|borrar-servicio_operacion_mantenimiento', ['only' => ['index']]);
-        $this->middleware('permission:crear-servicio_operacion_mantenimiento', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-servicio_operacion_mantenimiento', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-servicio_operacion_mantenimiento', ['only' => ['destroy']]);
+       
+        //EXPENDIENTE
+        $this->middleware('permission:Generar-expediente-operacion', ['only' => ['ExpedienteInspectorOperacion','generarExpedientesOperacion']]);
+        $this->middleware('permission:Descargar-documentos-expediente-operacion', ['only' => ['descargarWord']]);
+        //DOCUMENTACION
+        $this->middleware('permission:Generar-documentacion-operacion', ['only' => ['DocumentacionOperacion','storeDocumenctacionOperacion']]);
+        $this->middleware('permission:Descargar-documentacion-operacion', ['only' => ['descargardocumentacion']]);       
+        //COTIZACION
+        $this->middleware('permission:Descargar-cotizacion-operacion', ['only' => ['descargarCotizacionAjax']]);
+        //PAGO
+        $this->middleware('permission:Ver-pagos', ['only' => ['pagos']]);
+        $this->middleware('permission:Subir-pago-operacion', ['only' => ['storePago']]);
+        $this->middleware('permission:Descargar-pago-operacion', ['only' => ['descargarPago']]);
+        //FACTURA
+        $this->middleware('permission:Subir-factura-operacion', ['only' => ['storeFactura']]);
+        $this->middleware('permission:Descargar-factura-operacion', ['only' => ['descargarFactura']]);
+
+        
+
     }
     /**
      * Display a listing of the resource.

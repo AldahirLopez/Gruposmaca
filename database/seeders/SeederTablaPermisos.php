@@ -32,8 +32,30 @@ class SeederTablaPermisos extends Seeder
             //Tabla Operacion y Mantenimiento
             'ver-servicio_operacion_mantenimiento',
             'crear-servicio_operacion_mantenimiento',
-            'editar-servicio_operacion_mantenimiento',
             'borrar-servicio_operacion_mantenimiento',
+                //PARTE DE EXPEDIENTE 
+            'Generar-expediente-operacion',
+            'Descargar-documentos-expediente-operacion',
+                //PARTE DE DOCUMENTACION
+            'Generar-documentacion-operacion',
+            'Descargar-documentacion-operacion',   
+                //PARTE DE COTIZACION
+            'Descargar-cotizacion-operacion',
+                //PARTE DE PAGO
+            'Ver-pagos',
+            'Subir-pago-operacion',
+            'Descargar-pago-operacion',
+                //PARTE DE FACTURA
+            'Subir-factura-operacion',
+            'Descargar-factura-operacion',
+
+
+
+
+
+
+
+
 
             //Tabla Servicios Anexo 30
             'ver-servicio_anexo_30',
@@ -52,7 +74,6 @@ class SeederTablaPermisos extends Seeder
             'crear-formato_historial',
             'editar-formato_historial',
             'borrar-formato_historial',
-
 
 
         ];

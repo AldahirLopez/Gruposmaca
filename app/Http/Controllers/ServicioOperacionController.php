@@ -26,9 +26,8 @@ class ServicioOperacionController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-servicio_operacion_mantenimiento|crear-servicio_operacion_mantenimiento|editar-servicio_operacion_mantenimiento|borrar-servicio_operacion_mantenimiento', ['only' => ['index']]);
+        $this->middleware('permission:ver-servicio_operacion_mantenimiento|crear-servicio_operacion_mantenimiento|borrar-servicio_operacion_mantenimiento', ['only' => ['index']]);
         $this->middleware('permission:crear-servicio_operacion_mantenimiento', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-servicio_operacion_mantenimiento', ['only' => ['edit', 'update']]);
         $this->middleware('permission:borrar-servicio_operacion_mantenimiento', ['only' => ['destroy']]);
     }
     /**

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@can('ver-servicio_operacion_mantenimiento')
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">NOM 005</h3>
@@ -8,6 +10,7 @@
     <div class="section-body">
         <div class="row">
 
+            @can('ver-servicio_operacion_mantenimiento')              
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
@@ -24,6 +27,10 @@
                     </div>
                 </div>
             </div>
+            @endcan
+            
+
+
             @if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
             <div class="col-lg-4">
                 <div class="card">
@@ -64,5 +71,5 @@
         </div>
     </div>
 </section>
-
+@endcan
 @endsection

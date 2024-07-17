@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@can('ver-servicio_operacion_mantenimiento')
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Servicios operacion y Mantenimiento</h3>
@@ -110,13 +112,32 @@
                                 <table class="table table-striped">
                                     <thead style="text-align: center;">
                                         <tr>
+
                                             <th scope="col">Numero de servicio</th>
-                                            <th scope="col">Descargar factura</th>
-                                            <th scope="col">Pago</th>
-                                            <th scope="col">Cotizacion</th>
-                                            <th scope="col">Expediente</th>
-                                            <th scope="col">Documentacion</th>
-                                            <th scope="col">Acciones</th>
+                                            @can('Descargar-factura-operacion')
+                                                <th scope="col">Descargar factura</th>
+                                            @endcan
+
+                                            @can('Subir-pago-operacion')
+                                                <th scope="col">Pago</th>
+                                            @endcan
+
+                                            @can('Descargar-cotizacion-operacion')
+                                                <th scope="col">Cotizacion</th>
+                                            @endcan
+
+                                            @can('Generar-expediente-operacion')
+                                                <th scope="col">Expediente</th>
+                                            @endcan
+
+                                            @can('Generar-documentacion-operacion')
+                                                <th scope="col">Documentacion</th>
+                                            @endcan
+
+                                            @can('borrar-servicio_operacion_mantenimiento')
+                                                <th scope="col">Acciones</th>
+                                            @endcan
+    
                                         </tr>
                                     </thead>
                                     <tbody style="text-align: center;">
@@ -126,54 +147,64 @@
                                             <tr>
                                                 <td scope="row">{{ $servicio->nomenclatura }}</td>
 
-                                                @if ($servicio->pago === null)
-                                                    <td>Subir pago para generar factura</td>
-                                                @else   
-                                                    @if ($servicio->pago->estado_facturado == true)
-                                                            <td>
-                                                                <a href="{{ route('descargar.factura.operacion') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
-                                                                    class="btn btn-primary btn-descargar-pdf"
-                                                                    data-carpeta="{{ $servicio->nomenclatura }}">
-                                                                    <i class="bi bi-file-earmark-check-fill"></i>
-                                                                </a>
-                                                            </td>
+                                                @can('Descargar-factura-operacion') 
+                                                    @if ($servicio->pago === null)
+                                                        <td>Subir pago para generar factura</td>
+                                                    @else   
+                                                        @if ($servicio->pago->estado_facturado == true)
+                                                            
+                                                                <td>
+                                                                    <a href="{{ route('descargar.factura.operacion') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
+                                                                        class="btn btn-primary btn-descargar-pdf"
+                                                                        data-carpeta="{{ $servicio->nomenclatura }}">
+                                                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                                                    </a>
+                                                                </td>
+                                                        
 
-                                                    @else
-                                                        <td>Generando factura</td>
-                                                    @endif                                          @endif
-
-                                                <td scope="row">
-
-                                                    @if ($servicio->pago !== null)
-                                                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                                                data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
-                                                                disabled>
-                                                                <i class="bi bi-upload"></i> Agregar
-                                                            </button>
-
-                                                    @else
-                                                    <button type="button" class="btn btn-success" data-toggle="modal"
-                                                                data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                                <i class="bi bi-upload"></i> Agregar
-                                                            </button>
-
+                                                        @else
+                                                            <td>Generando factura</td>
+                                                        @endif
                                                     @endif
+                                                 @endcan
 
-                                                </td>
+                                                @can('Subir-pago-operacion')                                               
+                                                    <td scope="row">
+                                                        @if ($servicio->pago !== null)
+                                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                                                    data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
+                                                                    disabled>
+                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                </button>
+
+                                                        @else
+                                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                                                    data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
+                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                </button>
+                                                        @endif
+                                                    </td>
+                                                @endcan
+
+                                                @can('Descargar-cotizacion-operacion') 
                                                 <td scope="row">
                                                     @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
                                                         <button class="btn btn-primary" disabled>
                                                             <i class="bi bi-file-earmark-excel-fill"></i>
                                                         </button>
-                                                    @else 
+                                                    @else                                                                                                                                   
                                                         <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
                                                             class="btn btn-primary btn-descargar-pdf"
                                                             data-carpeta="{{ $servicio->nomenclatura }}">
                                                             <i class="bi bi-file-earmark-check-fill"></i>
                                                         </a>
+ 
                                                     @endif
                                                 </td>
-
+                                                @endcan
+                                                
+                                                
+                                                @can('Generar-expediente-operacion')
                                                 <td scope="row">
                                                     @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
                                                         <button class="btn btn-primary" disabled><i
@@ -185,19 +216,23 @@
                                                         </a>
                                                     @endif
                                                 </td>
+                                                @endcan
+
+                                                @can('Generar-documentacion-operacion')
+                                                    <td scope="row">
+                                                        <form action="{{ route('documentacion_operacion') }}" method="GET"
+                                                            style="display:inline;">
+                                                            <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                            <button type="submit" class="btn btn-primary">
+                                                                <i class="bi bi-folder-fill"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td><!--FIN BOTON DE DOCUMENTACION-->
+                                                    @endcan
+
+                                                @can('borrar-servicio_operacion_mantenimiento')
                                                 <td scope="row">
-                                                    @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
-                                                        <button class="btn btn-primary" disabled><i
-                                                                class="bi bi-folder-fill"></i></button>
-                                                    @else
-                                                        <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}"
-                                                            class="btn btn-primary">
-                                                            <i class="bi bi-folder-fill"></i>
-                                                        </a>
-                                                    @endif
-                                                </td>
-                                                <td scope="row">
-                                                    @can('borrar-servicio_operacion_mantenimiento')
+                                                  
                                                         @if($servicio->pending_deletion_servicio)
                                                             <button class="btn btn-danger" disabled>(pendiente)</button>
                                                         @else
@@ -205,10 +240,12 @@
                                                             {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                             {!! Form::close() !!}
                                                         @endif
-                                                    @endcan
+                                                   
                                                 </td>
-                                            </tr>
+                                                @endcan
 
+                                            </tr>
+                                            @can('Subir-pago-operacion')
                                             <!-- Modal para agregar documento -->
                                             <div class="modal fade" id="agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                     tabindex="-1" role="dialog"
@@ -249,6 +286,7 @@
                                                         </div>
                                                     </div>
                                                 </div> <!-- FIN Modal para agregar documento -->
+                                                @endcan
                                         @empty
                                             <tr>
                                                 <td colspan="6">No se encontraron servicios para mostrar.</td>
@@ -296,13 +334,31 @@
                                     <table class="table table-striped">
                                         <thead style="text-align: center;">
                                             <tr>
-                                                <th scope="col">Numero de servicio</th>
+                                            <th scope="col">Numero de servicio</th>
+                                            @can('Descargar-factura-operacion')
                                                 <th scope="col">Descargar factura</th>
+                                            @endcan
+
+                                            @can('Subir-pago-operacion')
                                                 <th scope="col">Pago</th>
+                                            @endcan
+
+                                            @can('Descargar-cotizacion-operacion')
                                                 <th scope="col">Cotizacion</th>
+                                            @endcan
+
+                                            @can('Generar-expediente-operacion')
                                                 <th scope="col">Expediente</th>
+                                            @endcan
+
+                                            @can('Generar-documentacion-operacion')
                                                 <th scope="col">Documentacion</th>
+                                            @endcan
+
+                                            @can('borrar-servicio_operacion_mantenimiento')
                                                 <th scope="col">Acciones</th>
+                                            @endcan
+
                                             </tr>
                                         </thead>
                                         <tbody style="text-align: center;">
@@ -312,25 +368,29 @@
                                                 <tr>
                                                     <td scope="row">{{ $servicio->nomenclatura }}</td>
 
-                                                    @if ($servicio->pago === null)
-                                                        <td>Subir pago para generar factura</td>
-                                                    @else   
-                                                        @if ($servicio->pago->estado_facturado == true)
-                                                            <td>
-                                                                <a href="{{ route('descargar.factura.operacion') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
-                                                                    class="btn btn-primary btn-descargar-factura"
-                                                                    data-carpeta="{{ $servicio->nomenclatura }}">
-                                                                    <i class="bi bi-file-earmark-check-fill"></i>
-                                                                </a>
-                                                            </td>
+                                                    @can('Descargar-factura-operacion')
+                                                        @if ($servicio->pago === null)
+                                                                <td>Subir pago para generar factura</td>    
+                                                        @else   
+                                                            @if ($servicio->pago->estado_facturado == true)
+                                                            
+                                                                <td>
+                                                                    <a href="{{ route('descargar.factura.operacion') }}?rutaDocumento={{ urlencode($servicio->pago->factura->rutadoc_factura) }}"
+                                                                        class="btn btn-primary btn-descargar-factura"
+                                                                        data-carpeta="{{ $servicio->nomenclatura }}">
+                                                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                                                    </a>
+                                                                </td>
+                                                                
 
-                                                        @else
-                                                            <td>Generando factura</td>
-                                                        @endif                                          @endif
-
-
+                                                            @else                                                        
+                                                                <td>Generando factura</td>  
+                                                            @endif   
+                                                        @endif
+                                                    @endcan
+                                                    
+                                                    @can('Subir-pago-operacion')                                                 
                                                     <td scope="row">
-
                                                         @if ($servicio->pago !== null)
                                                             <button type="button" class="btn btn-success" data-toggle="modal"
                                                                 data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
@@ -348,12 +408,15 @@
 
 
                                                     </td>
+                                                    @endcan
+                                                    
+                                                    @can('Descargar-cotizacion-operacion')
                                                     <td scope="row">
                                                         @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
                                                             <button class="btn btn-primary" disabled>
                                                                 <i class="bi bi-file-earmark-excel-fill"></i>
                                                             </button>
-                                                        @else
+                                                        @else                                                         
                                                             <a href="{{ route('descargar.cotizacion.ajax') }}?rutaDocumento={{ urlencode($servicio->cotizacion->rutadoc_cotizacion) }}"
                                                                 class="btn btn-primary btn-descargar-pdf"
                                                                 data-carpeta="{{ $servicio->nomenclatura }}">
@@ -361,6 +424,9 @@
                                                             </a>
                                                         @endif
                                                     </td>
+                                                    @endcan
+
+                                                    @can('Generar-expediente-operacion')                                                       
                                                     <td scope="row">
                                                         @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
                                                             <button class="btn btn-primary" disabled><i
@@ -372,7 +438,10 @@
                                                             </a>
                                                         @endif
                                                     </td>
+                                                    @endcan
+
                                                     <!--BOTON DE DOCUMENTACION-->
+                                                    @can('Generar-documentacion-operacion')
                                                     <td scope="row">
                                                         <form action="{{ route('documentacion_operacion') }}" method="GET"
                                                             style="display:inline;">
@@ -382,19 +451,22 @@
                                                             </button>
                                                         </form>
                                                     </td><!--FIN BOTON DE DOCUMENTACION-->
+                                                    @endcan
+
+                                                    @can('borrar-servicio_operacion_mantenimiento')
                                                     <td scope="row">
-                                                        @can('borrar-servicio_operacion_mantenimiento')
+                                                        
                                                             @if($servicio->pending_deletion_servicio)
                                                                 <button class="btn btn-danger" disabled>(pendiente)</button>
                                                             @else
                                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                 {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                 {!! Form::close() !!}
-                                                            @endif
-                                                        @endcan
+                                                            @endif           
                                                     </td>
+                                                    @endcan
                                                 </tr>
-
+                                                @can('Subir-pago-operacion')                                                                                              
                                                 <!-- Modal para agregar documento -->
                                                 <div class="modal fade" id="agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                     tabindex="-1" role="dialog"
@@ -435,6 +507,7 @@
                                                         </div>
                                                     </div>
                                                 </div> <!-- FIN Modal para agregar documento -->
+                                                @endcan
                                             @empty
                                                 <tr>
                                                     <td colspan="6">No se encontraron servicios para mostrar.</td>
@@ -451,7 +524,7 @@
                 </div>
             </div>
         @endif
-
+    @can('crear-servicio_operacion_mantenimiento')
     <!-- Formulario con soporte AJAX -->
     <div class="modal fade" id="generarServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -495,6 +568,8 @@
             </div>
         </div>
     </div>
+    @endcan
+
     </div>
 </section>
 
@@ -554,5 +629,5 @@
         });
     });
 </script>
-
+@endcan
 @endsection

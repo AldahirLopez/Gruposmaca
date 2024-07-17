@@ -115,7 +115,6 @@
             </li>
         @endif
         <!-- End Components Nav -->
-        @if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
             <li class="nav-heading">Paginas</li>
 
             <li class="nav-item">
@@ -125,8 +124,6 @@
                 </a>
             </li>
 
-
-
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('ema.index') }}">
                     <i class="bi bi-cloud-arrow-up-fill"></i>
@@ -135,12 +132,16 @@
             </li>
 
 
+            @can('ver-servicio_operacion_mantenimiento')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('operacion.index') }}">
                     <i class="bi bi-hammer"></i>
                     <span>Operacion y Mantenimiento</span>
                 </a>
             </li>
+            @endcan
+            
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('servicio_anexo_30.index') }}">
@@ -180,7 +181,7 @@
             </li>
 
             <!-- End Profile Page Nav -->
-        @endif
+      
 
 
     </ul>

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@can('Generar-documentacion-operacion')
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Documentación del servicio
@@ -23,8 +25,12 @@
                             <thead style="text-align: center;">
                                 <tr>
                                     <th scope="col">Nombre</th>
+                                    @can('Generar-documentacion-operacion')                                                                     
                                     <th scope="col">Agregar</th>
+                                    @endcan
+                                    @can('Descargar-documentacion-operacion')                                                        
                                     <th scope="col">Descargar</th>
+                                    @endcan
                                 </tr>
                             </thead>
                             <tbody id="tablaEstaciones">
@@ -32,11 +38,14 @@
                                                                 <tr>
                                                                     <td>{{ $doc }}</td>
                                                                     <td>
+                                                                        @can('Generar-documentacion-operacion')                                                                                                                               
                                                                         <!-- Botón que abre el modal para agregar nuevo documento -->
                                                                         <button type="button" class="btn btn-success" data-toggle="modal"
                                                                             data-target="#agregarDocumentoModal-{{ Str::slug($doc) }}">
                                                                             <i class="bi bi-upload"></i> Agregar
                                                                         </button>
+                                                                        @endcan
+
                                                                     </td>
                                                                     <td>
                                                                         @php
@@ -62,6 +71,7 @@
 
                                                                           
                                                                         @if($docExists)
+                                                                        @can('Descargar-documentacion-operacion')                                                                                                                                              
                                                                         <form action="{{route('descargar.documentos.operacion', ['documento' => $docData['name']]) }}" method="POST">
                                                                                     @csrf
                                                                                     <input type="text" value="{{ $servicio->nomenclatura }}" hidden name="nomenclatura">
@@ -69,6 +79,7 @@
                                                                                     <button type="submit" class="btn btn-info" ><i
                                                                                     class="bi bi-download"></i> Descargar</button>
                                                                         </form>
+                                                                        @endcan
                                                                             
                                                                         @else
                                                                             <span>No disponible</span>
@@ -76,6 +87,7 @@
                                                                     </td>
                                                                 </tr>
 
+                                                                  @can('Generar-documentacion-operacion')                                                                                                                                             
                                                                 <!-- Modal para agregar documento -->
                                                                 <div class="modal fade" id="agregarDocumentoModal-{{ Str::slug($doc) }}" tabindex="-1"
                                                                     role="dialog" aria-labelledby="agregarDocumentoLabel-{{ Str::slug($doc) }}"
@@ -113,7 +125,8 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                </div><!-- FIN Modal para agregar documento -->
+                                                                @endcan  
                                 @endforeach
                             </tbody>
                         </table>
@@ -130,4 +143,5 @@
     defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"
     defer></script>
+@endcan
 @endsection

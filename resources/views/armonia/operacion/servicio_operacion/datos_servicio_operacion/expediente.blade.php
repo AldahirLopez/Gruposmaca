@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('Generar-expediente-operacion')
 <section class="section">
 
     <div class="section-header">
@@ -50,9 +51,12 @@
                                                 <li class="list-group-item">REPORTE FOTOGRAFICO</li>
 
                                             </ol>
-                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton"
-                                                data-toggle="modal" data-target="#generarExpedienteOperacionModal"
-                                                style="margin-top: 10px;">Generar</a>
+                                            @can('Generar-expediente-operacion')                                                                                      
+                                                <a href="#" class="btn btn-primary" id="generateExpedienteButton"
+                                                 data-toggle="modal" data-target="#generarExpedienteOperacionModal"
+                                                    style="margin-top: 10px;">Generar</a>
+                                            @endcan
+
                                         </div>
                                     </div>
                                 </div>
@@ -212,6 +216,7 @@
                                 </div>
                             </div>
 
+                            @can('Generar-expediente-operacion')                                                     
                             <!-- Modal para generar expediente -->
                             <div class="modal fade" id="generarExpedienteOperacionModal" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -376,9 +381,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> <!-- FIN Modal para generar expediente -->
+                            @endcan
 
-                            <!-- Modal para generar expediente -->
+                            <!-- Modal para generar Acta de verificación  -->
                             <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -521,8 +527,10 @@
                                                 <tr>
                                                     <td>{{ basename($file['name']) }}</td>
                                                     <!-- Mostrar solo el nombre del archivo -->
-                                                    <td><a href="{{ route('descargar.archivo.operacion', ['archivo' => basename($file['name'])]) }}"
-                                                            class="btn btn-info" download>Descargar</a></td>
+                                                     @can('Descargar-documentos-expediente-operacion')                                                                                                      
+                                                        <td><a href="{{ route('descargar.archivo.operacion', ['archivo' => basename($file['name'])]) }}"
+                                                             class="btn btn-info" download>Descargar</a></td>
+                                                    @endcan
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -686,4 +694,5 @@
         cargarDatosEstacion();
     });
 </script>
+@endcan
 @endsection
