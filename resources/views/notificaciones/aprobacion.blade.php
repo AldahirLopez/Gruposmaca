@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Aprobaciones Servicios Anexo 30</h3>
@@ -278,5 +280,5 @@
 </script>
 
 
-
+@endif
 @endsection

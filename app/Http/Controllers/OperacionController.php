@@ -38,6 +38,7 @@ class OperacionController extends Controller
         $this->middleware('permission:Descargar-documentacion-operacion', ['only' => ['descargardocumentacion']]);       
         //COTIZACION
         $this->middleware('permission:Descargar-cotizacion-operacion', ['only' => ['descargarCotizacionAjax']]);
+        $this->middleware('permission:Generar-cotizacion-operacion', ['only' => ['generarpdfcotizacion']]);
         //PAGO
         $this->middleware('permission:Ver-pagos', ['only' => ['pagos']]);
         $this->middleware('permission:Subir-pago-operacion', ['only' => ['storePago']]);

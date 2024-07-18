@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
+@can('Ver-pagos')
+    
+
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Pagos de Servicios de Operaciones y Mantenimiento </h3>
@@ -31,16 +37,18 @@
 
                                         <td>{{$pago->observaciones}}</td>
 
-                                        <td scope="row">
- 
-                                            <a href="{{ route('descargar.pago.operacion') }}?rutaDocumento={{ urlencode($pago->rutadoc_pago) }}"
-                                                class="btn btn-primary btn-descargar-pdf"
-                                                data-carpeta="{{ $pago->servicio->nomenclatura }}">
-                                                <i class="bi bi-file-earmark-check-fill"></i>
-                                            </a>
-                                        </td>
+                                        @can('Descargar-pago-operacion')                                                                                 
+                                            <td scope="row">
+    
+                                                <a href="{{ route('descargar.pago.operacion') }}?rutaDocumento={{ urlencode($pago->rutadoc_pago) }}"
+                                                    class="btn btn-primary btn-descargar-pdf"
+                                                    data-carpeta="{{ $pago->servicio->nomenclatura }}">
+                                                    <i class="bi bi-file-earmark-check-fill"></i>
+                                                </a>
+                                            </td>
+                                        @endcan
 
-
+                                        @can('Subir-factura-operacion')                                                                                 
                                         <td scope="row">
                                             <button type="button" class="btn btn-success" data-toggle="modal"
                                                 data-target="#agregarDocumentoModal-{{$pago->servicio->nomenclatura }}">
@@ -48,6 +56,8 @@
                                             </button>
 
                                         </td>
+                                        @endcan
+
 
                                         <td scope="row">
                                             @if ($pago->estado_facturado == false)
@@ -56,6 +66,7 @@
                                             @endif                                      </td>
                                     </tr>
 
+                                    @can('Subir-factura-operacion')                                
                                     <!-- Modal para agregar documento -->
                                     <div class="modal fade" id="agregarDocumentoModal-{{$pago->servicio->nomenclatura }}"
                                         tabindex="-1" role="dialog"
@@ -95,7 +106,7 @@
                                             </div>
                                         </div>
                                     </div> <!-- FIN Modal para agregar documento -->
-
+                                    @endcan
                                 @empty
                                     <tr>
                                         <td colspan="7">No se encontraron servicios para mostrar.</td>
@@ -137,5 +148,6 @@
         });
     });
 </script>
-
+@endcan
+@endif
 @endsection

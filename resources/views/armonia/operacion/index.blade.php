@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-
+            
 
             <div class="col-lg-4">
                 <div class="card">
@@ -66,7 +66,6 @@
                     </div>
                 </div>
             </div>
-
             @endif
         </div>
     </div>

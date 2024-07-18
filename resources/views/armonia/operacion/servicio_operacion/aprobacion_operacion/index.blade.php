@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
 <section class="section">
     <div class="section-header"> 
         <h3 class="page__heading">Aprobaciones Servicios de Operaciones y Mantenimiento </h3>
@@ -33,6 +35,7 @@
                                             <!-- Otros campos -->
                                     @endforeach   
 
+                                    @can('Generar-cotizacion-operacion')
                                     <td scope="row">
                                         @if(!$servicio->pending_apro_servicio)
 
@@ -54,6 +57,8 @@
                                             @endforeach
                                         @endif
                                     </td>
+                                    @endcan
+                                    
                                     <td scope="row">
                                         @if($servicio->pending_apro_servicio)
 
@@ -173,5 +178,5 @@
 </script>
 
 
-
+@endif
 @endsection

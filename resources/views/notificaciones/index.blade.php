@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
 <section class="section">
     <div class="section-body">
         <div class="row">
@@ -100,4 +102,5 @@
         </div>
     </div>
 </section>
+@endif
 @endsection

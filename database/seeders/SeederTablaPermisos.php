@@ -41,6 +41,7 @@ class SeederTablaPermisos extends Seeder
             'Descargar-documentacion-operacion',   
                 //PARTE DE COTIZACION
             'Descargar-cotizacion-operacion',
+            'Generar-cotizacion-operacion',
                 //PARTE DE PAGO
             'Ver-pagos',
             'Subir-pago-operacion',

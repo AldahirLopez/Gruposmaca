@@ -512,26 +512,31 @@
                                     <span class="visually-hidden">Cargando...</span>
                                 </div>
 
-                                <!-- Incluir la estructura HTML de tu vista actual para archivos existentes -->
+                                <!-- Incluir la estructura HTML de tu vista actual para archivos existenFtes -->
                                 @if(!empty($existingFiles))
                                     <h4>Archivos Existentes:</h4>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Nombre del Archivo</th>
+                                                @can('Descargar-documentos-expediente-operacion')
                                                 <th>Acción</th>
+                                                @endcan
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($existingFiles as $file)
+                                            @can('Descargar-documentos-expediente-operacion')  
                                                 <tr>
+                                               
                                                     <td>{{ basename($file['name']) }}</td>
                                                     <!-- Mostrar solo el nombre del archivo -->
-                                                     @can('Descargar-documentos-expediente-operacion')                                                                                                      
+                                                                                                                                                        
                                                         <td><a href="{{ route('descargar.archivo.operacion', ['archivo' => basename($file['name'])]) }}"
                                                              class="btn btn-info" download>Descargar</a></td>
-                                                    @endcan
+                                                    
                                                 </tr>
+                                                @endcan
                                             @endforeach
                                         </tbody>
                                     </table>
