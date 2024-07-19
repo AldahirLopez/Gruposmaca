@@ -24,10 +24,21 @@ class Servicio_Anexo_30Controller extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-servicio_anexo_30|editar-servicio_anexo_30|borrar-servicio_anexo_30|crear-servicio_anexo_30', ['only' => ['index']]);
-        $this->middleware('permission:ver-servicio_anexo_30', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-servicio_anexo_30', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-servicio_anexo_30', ['only' => ['destroy']]);
+  
+        //COTIZACION
+        $this->middleware('permission:Generar-cotizacion-anexo_30', ['only' => ['generarpdfcotizacion']]);
+        $this->middleware('permission:Descargar-cotizacion-anexo_30', ['only' => ['descargarCotizacionAjax']]);    
+        //PAGOS
+        $this->middleware('permission:Ver-pagos-anexo_30', ['only' => ['pagosAnexo']]);
+        $this->middleware('permission:Subir-pago-anexo_30', ['only' => ['storePagoAnexo']]);
+        $this->middleware('permission:Descargar-pago-anexo_30', ['only' => ['descargarPagoAnexo']]);
+        //FACTURA
+        $this->middleware('permission:Subir-factura-anexo_30', ['only' => ['storeFactura']]);
+        $this->middleware('permission:Descargar-factura-anexo_30', ['only' => ['descargarFacturaAnexo']]);
+
+    
+    
+        
     }
     /**
      * Display a listing of the resource.

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
+@can('Ver-pagos-anexo_30')   
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Pagos de Servicios de Operaciones y Mantenimiento </h3>
@@ -28,9 +30,11 @@
                                 @forelse($pagos as $pago)
                                     <tr>
                                         <td scope="row">{{$pago->servicio->nomenclatura }}</td>
+                                        @can('Ver-pagos-anexo_30')
+                                            <td>{{$pago->observaciones}}</td>
+                                        @endcan
 
-                                        <td>{{$pago->observaciones}}</td>
-
+                                        @can('Descargar-pago-anexo_30')
                                         <td scope="row">
  
                                             <a href="{{ route('descargar.pago.operacion') }}?rutaDocumento={{ urlencode($pago->rutadoc_pago) }}"
@@ -38,9 +42,10 @@
                                                 data-carpeta="{{ $pago->servicio->nomenclatura }}">
                                                 <i class="bi bi-file-earmark-check-fill"></i>
                                             </a>
-                                        </td>
+                                        </td> 
+                                        @endcan
 
-
+                                        @can('Subir-pago-anexo_30')
                                         <td scope="row">
                                             <button type="button" class="btn btn-success" data-toggle="modal"
                                                 data-target="#agregarDocumentoModal-{{$pago->servicio->nomenclatura }}">
@@ -48,14 +53,20 @@
                                             </button>
 
                                         </td>
+                                        @endcan
 
+
+                                        @can('Ver-pagos-anexo_30')                                         
                                         <td scope="row">
                                             @if ($pago->estado_pago == false)
                                                 Pediente por facturar
                                                 @else                                           Facturado
                                             @endif                                      </td>
+                                        @endcan
                                     </tr>
 
+
+                                    @can('Subir-factura-anexo_30')
                                     <!-- Modal para agregar documento -->
                                     <div class="modal fade" id="agregarDocumentoModal-{{$pago->servicio->nomenclatura }}"
                                         tabindex="-1" role="dialog"
@@ -95,7 +106,7 @@
                                             </div>
                                         </div>
                                     </div> <!-- FIN Modal para agregar documento -->
-
+                                    @endcan
                                 @empty
                                     <tr>
                                         <td colspan="7">No se encontraron servicios para mostrar.</td>
@@ -137,5 +148,6 @@
         });
     });
 </script>
-
+@endcan
+@endif
 @endsection

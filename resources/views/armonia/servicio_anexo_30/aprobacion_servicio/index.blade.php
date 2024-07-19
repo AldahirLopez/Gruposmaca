@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@if(auth()->check() && auth()->user()->hasAnyRole(['Administrador']))
+
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Aprobaciones Servicios Anexo 30</h3>
@@ -34,6 +36,7 @@
                                             <!-- Otros campos -->
                                         @endforeach
 
+                                        @can('Generar-cotizacion-anexo_30')                                      
                                         <td scope="row">
                                             @if(!$servicio->pending_apro_servicio)
 
@@ -57,6 +60,8 @@
                                                 @endforeach
                                             @endif
                                         </td>
+                                        @endcan
+
                                         <td scope="row">
                                             @if($servicio->pending_apro_servicio)
 
@@ -75,7 +80,7 @@
                                                 </a>
                                             @endif
 
-                                            @can('borrar-servicio')
+                                            @can('borrar-servicio_anexo_30')
                                                 @if($servicio->pending_deletion_servicio)
                                                     <button class="btn btn-danger" disabled><i
                                                             class="bi bi-trash-fill">Eliminando</i></button>
@@ -181,6 +186,6 @@
     });
 </script>
 
-
+@endif
 
 @endsection

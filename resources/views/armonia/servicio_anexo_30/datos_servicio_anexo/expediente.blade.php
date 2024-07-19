@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('Generar-expediente-anexo_30')
 <section class="section">
 
     <div class="section-header">
@@ -48,11 +49,14 @@
                                                 <li class="list-group-item">PLAN DE INSPECCION DE LOS SISTEMAS DE
                                                     MEDICION</li>
                                             </ol>
-                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton" data-toggle="modal" data-target="#generarExpedienteModal" style="margin-top: 10px;">Generar</a>
+                                            @can('Generar-expediente-anexo_30')
+                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton" data-toggle="modal" data-target="#generarExpedienteModal" style="margin-top: 10px;">Generar</a>    
+                                            @endcan
                                         </div>
                                     </div>
                                 </div>
-
+                                
+                                @can('Generar-dictamenes-anexo')
                                 <!-- Tarjeta 2 - Dictámenes Informáticos -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
@@ -68,6 +72,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endcan
 
                                 <!-- Tarjeta 3 - Dictámenes de Medición -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
@@ -86,7 +91,7 @@
                             </div>
 
 
-
+                            @can('Generar-dictamenes-anexo')   
                             <!-- Modal para Dictámenes Informático -->
                             <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog" aria-labelledby="dictamenesModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -270,10 +275,10 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan
 
 
-
-
+                             @can('Generar-expediente-anexo_30') 
                             <!-- Modal para generar expediente -->
                             <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -374,6 +379,8 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan   
+
                             <!-- Contenedor para la tabla de archivos generados -->
                             <div id="generatedFilesTable" style="margin-top: 30px;">
                                 <!-- Spinner de carga -->
@@ -393,11 +400,13 @@
                                     </thead>
                                     <tbody>
                                         @foreach($existingFiles as $file)
+                                        @can('Descargar-documentos-expediente-anexo_30')
                                         <tr>
                                             <td>{{ basename($file['name']) }}</td>
                                             <!-- Mostrar solo el nombre del archivo -->
                                             <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}" class="btn btn-info" download>Descargar</a></td>
                                         </tr>
+                                        @endcan
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -565,4 +574,5 @@
         cargarDatosEstacion();
     });
 </script>
+@endcan
 @endsection

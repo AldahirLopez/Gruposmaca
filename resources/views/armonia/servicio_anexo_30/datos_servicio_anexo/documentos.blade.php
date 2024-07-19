@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('Generar-documentacion-anexo_30')  
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Documentación del servicio
@@ -23,7 +24,9 @@
                             <thead style="text-align: center;">
                                 <tr>
                                     <th scope="col">Nombre</th>
+                                    @can('Generar-documentacion-anexo_30')
                                     <th scope="col">Agregar</th>
+                                    @endcan
                                     <th scope="col">Descargar</th>
                                 </tr>
                             </thead>
@@ -31,6 +34,7 @@
                                 @foreach($requiredDocuments as $doc)
                                                                 <tr>
                                                                     <td>{{ $doc }}</td>
+                                                                    @can('Generar-documentacion-anexo_30')
                                                                     <td>
                                                                         <!-- Botón que abre el modal para agregar nuevo documento -->
                                                                         <button type="button" class="btn btn-success" data-toggle="modal"
@@ -38,6 +42,7 @@
                                                                             <i class="bi bi-upload"></i> Agregar
                                                                         </button>
                                                                     </td>
+                                                                    @endcan
                                                                     <td>
                                                                         @php
                                                                             $docExists = false;
@@ -58,7 +63,8 @@
                                                                         @endif
                                                                     </td>
                                                                 </tr>
-
+                                                                @can('Generar-documentacion-operacion')        
+       
                                                                 <!-- Modal para agregar documento -->
                                                                 <div class="modal fade" id="agregarDocumentoModal-{{ Str::slug($doc) }}" tabindex="-1"
                                                                     role="dialog" aria-labelledby="agregarDocumentoLabel-{{ Str::slug($doc) }}"
@@ -97,6 +103,8 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                @endcan  
+                                                                
                                 @endforeach
                             </tbody>
                         </table>
@@ -113,4 +121,5 @@
     defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"
     defer></script>
+@endcan
 @endsection

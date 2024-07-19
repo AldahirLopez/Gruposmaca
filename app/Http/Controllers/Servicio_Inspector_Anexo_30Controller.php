@@ -32,9 +32,10 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
     function __construct()
     {
         $this->middleware('permission:ver-servicio_anexo_30|editar-servicio_anexo_30|borrar-servicio_anexo_30|crear-servicio_anexo_30', ['only' => ['index']]);
-        $this->middleware('permission:ver-servicio_anexo_30', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-servicio_anexo_30', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:crear-servicio_anexo_30', ['only' => ['create', 'store']]);   
         $this->middleware('permission:borrar-servicio_anexo_30', ['only' => ['destroy']]);
+       
+
     }
 
     public function index(Request $request)

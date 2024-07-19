@@ -37,16 +37,16 @@
                                 @foreach($requiredDocuments as $doc)
                                                                 <tr>
                                                                     <td>{{ $doc }}</td>
+                                                                    @can('Generar-documentacion-operacion')        
                                                                     <td>
-                                                                        @can('Generar-documentacion-operacion')                                                                                                                               
+                                                                                                                                                                                             
                                                                         <!-- Botón que abre el modal para agregar nuevo documento -->
                                                                         <button type="button" class="btn btn-success" data-toggle="modal"
                                                                             data-target="#agregarDocumentoModal-{{ Str::slug($doc) }}">
                                                                             <i class="bi bi-upload"></i> Agregar
-                                                                        </button>
-                                                                        @endcan
-
+                                                                        </button>                                                                       
                                                                     </td>
+                                                                    @endcan
                                                                     <td>
                                                                         @php
                                                                             $docExists = false;

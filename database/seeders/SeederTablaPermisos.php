@@ -54,15 +54,31 @@ class SeederTablaPermisos extends Seeder
 
 
 
-
-
-
-
             //Tabla Servicios Anexo 30
             'ver-servicio_anexo_30',
-            'crear-servicio_anexo_30',
-            'editar-servicio_anexo_30',
+            'crear-servicio_anexo_30',           
             'borrar-servicio_anexo_30',
+                //PARTE DE EXPEDIENTE
+            'Generar-expediente-anexo_30',
+            'Descargar-documentos-expediente-anexo_30',
+                //PARTE DE DOCUMENTACION
+            'Generar-documentacion-anexo_30',
+                //PARTE DE COTIZACION
+            'Generar-cotizacion-anexo_30', 
+            'Descargar-cotizacion-anexo_30',
+                //PARTE DE PAGO
+            'Ver-pagos-anexo_30',
+            'Subir-pago-anexo_30',
+            'Descargar-pago-anexo_30',
+                //PARTE DE FACTURA
+            'Subir-factura-anexo_30',
+            'Descargar-factura-anexo_30',
+
+                //LISTA DE INSPECCION
+
+                //DICTAMENES
+            'Generar-dictamenes-anexo',
+        
 
             //Tabla Formatos Vigentes
             'ver-formato_vigentes',

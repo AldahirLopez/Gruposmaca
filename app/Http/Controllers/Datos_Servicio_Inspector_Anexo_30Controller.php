@@ -19,6 +19,20 @@ use Illuminate\Support\Facades\DB;
 
 class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 {
+
+    function __construct()
+    {
+
+        //Expediente 
+        $this->middleware('permission:Generar-expediente-anexo_30', ['only' => ['ExpedienteInspectorAnexo30','generateWord']]);
+        $this->middleware('permission:Descargar-documentos-expediente-anexo_30', ['only' => ['descargarWord']]);
+        //Documentacion
+        $this->middleware('permission:Generar-documentacion-anexo_30', ['only' => ['DocumentacionAnexo','storeanexo']]);
+        //Dictamenes
+        $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenes']]);
+
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('ver-servicio_anexo_30')
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Anexo 30</h3>
@@ -60,5 +61,5 @@
         </div>
     </div>
 </section>
-
+@endcan
 @endsection

@@ -74,7 +74,7 @@
                                         </a>
                                         @endif
 
-                                        @can('borrar-servicio')
+                                        @can('borrar-servicio_operacion_mantenimiento')
                                         @if($servicio->pending_deletion_servicio)
                                         <button class="btn btn-danger" disabled><i class="bi bi-trash-fill">Eliminando</i></button>
                                         @else

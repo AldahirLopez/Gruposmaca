@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('ver-servicio_anexo_30')
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Servicios Anexo 30</h3>
@@ -111,12 +112,29 @@
                                     <thead style="text-align: center;">
                                         <tr>
                                             <th scope="col">Numero de servicio</th>
+                                          
+                                            @can('Subir-pago-anexo_30')
                                             <th scope="col">Pago</th>
+                                            @endcan
+                                            
+                                            @can('Descargar-cotizacion-anexo_30')                                                                                         
                                             <th scope="col">Cotizacion</th>
+                                            @endcan
+
+                                            @can('Generar-expediente-anexo_30')                                         
                                             <th scope="col">Expediente</th>
+                                            @endcan
+                                            
                                             <th scope="col">Listas de Inspeccion</th>
+
+                                            @can('Generar-documentacion-anexo_30')
                                             <th scope="col">Documentacion</th>
-                                            <th scope="col">Acciones</th>
+                                            @endcan
+
+                                            @can('borrar-servicio_anexo_30')
+                                                <th scope="col">Acciones</th>
+                                            @endcan
+                                           
                                         </tr>
                                     </thead>
                                     <tbody style="text-align: center;">
@@ -125,7 +143,12 @@
                                         @forelse($servicios as $servicio)
                                             <tr>
                                                 <td scope="row">{{ $servicio->nomenclatura }}</td>
+
+                                                @can('Subir-pago-anexo_30')
                                                 <td scope="row">Anexar Pago</td>
+                                                @endcan
+
+                                                @can('Descargar-cotizacion-anexo_30')      
                                                 <td scope="row">
                                                     @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
                                                         <button class="btn btn-primary" disabled>
@@ -139,6 +162,9 @@
                                                         </a>
                                                     @endif
                                                 </td>
+                                                @endcan
+
+                                                @can('Generar-expediente-anexo_30') 
                                                 <td scope="row">
                                                     @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
                                                         <button class="btn btn-primary" disabled><i
@@ -150,6 +176,8 @@
                                                         </a>
                                                     @endif
                                                 </td>
+                                                @endcan
+
                                                 <td scope="row">
                                                     @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
                                                         <button class="btn btn-primary" disabled><i
@@ -161,6 +189,8 @@
                                                         </a>
                                                     @endif
                                                 </td>
+
+                                                @can('Generar-documentacion-anexo_30')
                                                 <td scope="row">
                                                     <form action="{{ route('documentacion_anexo') }}" method="GET"
                                                         style="display:inline;">
@@ -170,6 +200,9 @@
                                                         </button>
                                                     </form>
                                                 </td>
+                                                @endcan
+
+                                                @can('borrar-servicio_anexo_30')
                                                 <td scope="row">
                                                     @can('borrar-servicio_anexo_30')
                                                         @if($servicio->pending_deletion_servicio)
@@ -181,6 +214,8 @@
                                                         @endif
                                                     @endcan
                                                 </td>
+                                                @endcan
+
                                             </tr>
                                         @empty
                                             <tr>
@@ -230,13 +265,34 @@
                                         <thead style="text-align: center;">
                                             <tr>
                                                 <th scope="col">Numero de servicio</th>
-                                                <th scope="col">Descargar factura</th>
-                                                <th scope="col">Pago</th>
-                                                <th scope="col">Cotizacion</th>
+                                                @can('Descargar-factura-anexo_30')
+                                                <th scope="col">Descargar factura</th> 
+                                                @endcan
+
+                                                @can('Subir-pago-anexo_30')
+                                                <th scope="col">Pago</th>  
+                                                @endcan
+                                                
+                                                @can('Descargar-cotizacion-anexo_30')
+                                                <th scope="col">Cotizacion</th> 
+                                                @endcan
+                                                
+                                                @can('Generar-expediente-anexo_30')
                                                 <th scope="col">Expediente</th>
+                                                @endcan
+
+                                                @can('Generar-expediente-anexo_30')
                                                 <th scope="col">Listas de Inspeccion</th>
-                                                <th scope="col">Documentacion</th>
+                                                @endcan
+
+                                                @can('Generar-documentacion-anexo_30')
+                                                <th scope="col">Documentacion</th>                                              
+                                                @endcan
+                                                
+                                                @can('borrar-servicio_anexo_30')
                                                 <th scope="col">Acciones</th>
+                                                @endcan
+            
                                             </tr>
                                         </thead>
                                         <tbody style="text-align: center;">
@@ -245,22 +301,26 @@
                                             @forelse(session('servicios') as $servicio)
                                                 <tr>
                                                     <td scope="row">{{ $servicio->nomenclatura }}</td>
-                                                    @if ($servicio->pago === null)
-                                                        <td>Subir pago para generar factura</td>
-                                                    @else   @if ($servicio->pago->estado_pago == true)
-                                                        <td>
-                                                            <a href="{{ route('descargar.factura.anexo') }}?rutaDocumento={{ urlencode($servicio->pago->factura->ruta_pdf) }}"
-                                                                class="btn btn-primary btn-descargar-factura"
-                                                                data-carpeta="{{ $servicio->nomenclatura }}">
-                                                                <i class="bi bi-file-earmark-check-fill"></i>
-                                                            </a>
-                                                        </td>
+                                                    
+                                                    @can('Descargar-factura-anexo_30')
+                                                        @if ($servicio->pago === null)
+                                                                <td>Subir pago para generar factura</td>
+                                                            @else   @if ($servicio->pago->estado_pago == true)
+                                                                <td>
+                                                                    <a href="{{ route('descargar.factura.anexo') }}?rutaDocumento={{ urlencode($servicio->pago->factura->ruta_pdf) }}"
+                                                                        class="btn btn-primary btn-descargar-factura"
+                                                                        data-carpeta="{{ $servicio->nomenclatura }}">
+                                                                        <i class="bi bi-file-earmark-check-fill"></i>
+                                                                    </a>
+                                                                </td>
 
-                                                    @else
-                                                        <td>Generando factura</td>
-                                                    @endif                 @endif
+                                                            @else
+                                                            <td>Generando factura</td>
+                                                            @endif                 
+                                                        @endif
+                                                    @endcan
 
-
+                                                    @can('Subir-pago-anexo_30')
                                                     <td scope="row">
 
                                                         @if ($servicio->pago !== null)
@@ -277,6 +337,10 @@
                                                             </button>
 
                                                         @endif
+                                                    @endcan
+
+
+                                                    @can('Descargar-cotizacion-anexo_30')
                                                     <td scope="row">
                                                         @if(!$servicio->cotizacion || !$servicio->cotizacion->estado_cotizacion || $servicio->pending_deletion_servicio)
                                                             <button class="btn btn-primary" disabled>
@@ -290,6 +354,9 @@
                                                             </a>
                                                         @endif
                                                     </td>
+                                                    @endcan
+
+                                                    @can('Generar-expediente-anexo_30')  
                                                     <td scope="row">
                                                         @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->id)
                                                             <button class="btn btn-primary" disabled><i
@@ -301,6 +368,9 @@
                                                             </a>
                                                         @endif
                                                     </td>
+                                                    @endcan
+
+
                                                     <td scope="row">
                                                         @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
                                                             <button class="btn btn-primary" disabled><i
@@ -312,6 +382,8 @@
                                                             </a>
                                                         @endif
                                                     </td>
+
+                                                    @can('Generar-documentacion-anexo_30')
                                                     <td scope="row">
                                                         <form action="{{ route('documentacion_anexo') }}" method="GET"
                                                             style="display:inline;">
@@ -321,18 +393,23 @@
                                                             </button>
                                                         </form>
                                                     </td>
-                                                    <td scope="row">
-                                                        @can('borrar-servicio_anexo_30')
+                                                    @endcan
+
+                                                    @can('borrar-servicio_anexo_30')
+                                                    <td scope="row">        
                                                             @if($servicio->pending_deletion_servicio)
                                                                 <button class="btn btn-danger" disabled>(pendiente)</button>
                                                             @else
                                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                 {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                 {!! Form::close() !!}
-                                                            @endif
-                                                        @endcan
+                                                            @endif       
                                                     </td>
+                                                    @endcan
+
                                                 </tr>
+
+                                                @can('Subir-pago-anexo_30')
                                                 <!-- Modal para agregar documento -->
                                                 <div class="modal fade" id="agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                     tabindex="-1" role="dialog"
@@ -373,6 +450,7 @@
                                                         </div>
                                                     </div>
                                                 </div> <!-- FIN Modal para agregar documento -->
+                                                @endcan
                                             @empty
                                                 <tr>
                                                     <td colspan="6">No se encontraron servicios para mostrar.</td>
@@ -393,6 +471,7 @@
             </div>
         @endif
 
+    @can('crear-servicio_anexo_30')   
     <!-- Formulario con soporte AJAX -->
     <div class="modal fade" id="generarServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -403,7 +482,6 @@
                         Servicio Anexo 30</h5>
                     <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
                         aria-label="Close"></button>
-
                 </div>
 
 
@@ -436,6 +514,7 @@
             </div>
         </div>
     </div>
+    @endcan
     </div>
 </section>
 
@@ -496,5 +575,5 @@
         });
     });
 </script>
-
+@endcan
 @endsection
