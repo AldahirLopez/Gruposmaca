@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Dictámenes de Diseño</h3>
+        <h3 class="page__heading">Dictámenes de Construccion</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -52,7 +52,7 @@
                                     </td>
                                     @if(auth()->check() && auth()->user()->hasRole('Administrador'))
                                     <td>
-                                        {!! Form::open(['method' => 'DELETE', 'route' => ['diseño.destroy', $dictamen->id], 'style' => 'display:inline']) !!}
+                                        {!! Form::open(['method' => 'DELETE', 'route' => ['construccion.destroy', $dictamen->id], 'style' => 'display:inline']) !!}
                                         {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                         {!! Form::close() !!}
                                     </td>
@@ -79,7 +79,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario de generación de dictamen de diseño -->
-                <form id="generateWordForm" action="{{ route('diseño.store') }}" method="POST" enctype="multipart/form-data">
+                <form id="generateWordForm" action="{{ route('construccion.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- Campos del formulario para generar dictamen de diseño -->
                     <h5 class="modal-title" style="padding-top: 10px;">Seleccione una estación</h5>

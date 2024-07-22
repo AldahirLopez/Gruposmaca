@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Auth;
 
-class DictamenDiseñoController extends Controller
+class DIctamenConstruccionController extends Controller
 {
     protected $connection = 'segunda_db';
     public function index()
@@ -25,7 +25,7 @@ class DictamenDiseñoController extends Controller
 
         $todosLosUsuarios = User::all();
 
-        return view("armonia.diseño.index", compact('estaciones', 'usuariosOperacionMantenimiento', 'todosLosUsuarios', 'dictamenes'));
+        return view("armonia.construccion.index", compact('estaciones', 'usuariosOperacionMantenimiento', 'todosLosUsuarios', 'dictamenes'));
     }
 
     public function store(Request $request)
@@ -56,12 +56,12 @@ class DictamenDiseñoController extends Controller
 
             // Cargar las plantillas de Word
             $templatePaths = [
-                'DICTAMEN DISEÑO.docx',
+                'DICTAMEN CONSTRUCCION.docx',
             ];
 
             // Definir la carpeta de destino
             $customFolderPath = "Dictames/{$nomenclatura}";
-            $subFolderPath = "{$customFolderPath}/Diseño";
+            $subFolderPath = "{$customFolderPath}/Construccion";
 
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
@@ -75,7 +75,7 @@ class DictamenDiseñoController extends Controller
 
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
-                $templateProcessor = new TemplateProcessor(storage_path("app/templates/Diseño/{$templatePath}"));
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/Construccion/{$templatePath}"));
 
                 // Reemplazar todos los marcadores con los datos del formulario
                 $templateProcessor->setValue('nomenclatura', $nomenclatura);
@@ -135,7 +135,7 @@ class DictamenDiseñoController extends Controller
         $numero = 1;
 
         do {
-            $nomenclatura = "D-$iniciales-$numero-$anio";
+            $nomenclatura = "C-$iniciales-$numero-$anio";
             $existe = Dictamen_Diseño::where('nomenclatura', $nomenclatura)->exists();
 
             if ($existe) {
@@ -172,7 +172,7 @@ class DictamenDiseñoController extends Controller
         $dictamen = Dictamen_Diseño::findOrFail($id);
 
         // Construir la ruta completa del archivo
-        $filePath = storage_path("app/public/{$dictamen->rutadoc_diseño}/DICTAMEN DISEÑO_{$dictamen->nomenclatura}.docx");
+        $filePath = storage_path("app/public/{$dictamen->rutadoc_diseño}/DICTAMEN CONSTRUCCION_{$dictamen->nomenclatura}.docx");
 
         // Verificar si el archivo existe
         if (file_exists($filePath)) {
@@ -200,7 +200,7 @@ class DictamenDiseñoController extends Controller
 
         // Definir la carpeta de destino
         $customFolderPath = "Dictames/{$dictamen->nomenclatura}";
-        $subFolderPath = "{$customFolderPath}/Diseño";
+        $subFolderPath = "{$customFolderPath}/Construccion";
 
         // Crear la carpeta personalizada si no existe
         if (!Storage::disk('public')->exists($customFolderPath)) {

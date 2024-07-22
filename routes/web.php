@@ -16,6 +16,7 @@ use App\Http\Controllers\Datos_Servicio_Inspector_Anexo_30Controller;
 use App\Http\Controllers\ApprovalController;
 
 use App\Http\Controllers\ArchivosDicController;
+use App\Http\Controllers\DIctamenConstruccionController;
 use App\Http\Controllers\Documentacion_EstacionController;
 use App\Http\Controllers\EstacionController;
 use App\Http\Controllers\FormatosHistorialController;
@@ -252,6 +253,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('diseño/{id}/subir-sustento', [DictamenDiseñoController::class, 'subirSustento'])->name('diseño.subirSustento');
 
+
+    //Dictamenes Construccion 
+
+    Route::resource('construccion', DIctamenConstruccionController::class);
+
+    Route::get('construccion/{id}/download', [DIctamenConstruccionController::class, 'download'])->name('diseño.download');
+
+    Route::post('construccion/{id}/subir-sustento', [DIctamenConstruccionController::class, 'subirSustento'])->name('diseño.subirSustento');
 
 
 

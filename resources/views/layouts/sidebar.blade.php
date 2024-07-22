@@ -180,6 +180,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('construccion.index') }}">
+                    <i class="bi bi-brush-fill"></i>
+                    <span>Dictamenes Construccion</span>
+                </a>
+            </li>
+
             <!-- End Profile Page Nav -->
       
 
