@@ -35,13 +35,13 @@
                                     <td>{{ $dictamen->nomenclatura }}</td>
                                     <td>{{ $dictamen->estacion->razon_social }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('diseño.download', $dictamen->id) }}">
+                                        <a class="btn btn-primary" href="{{ route('construccion.download', $dictamen->id) }}">
                                             <i class="bi bi-download"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        @if ($dictamen->rutadoc_sustento_diseño)
-                                        <a href="{{ Storage::url($dictamen->rutadoc_sustento_diseño) }}" class="btn btn-success" target="_blank">
+                                        @if ($dictamen->rutadoc_sustento_construccion)
+                                        <a href="{{ Storage::url($dictamen->rutadoc_sustento_construccion) }}" class="btn btn-success" target="_blank">
                                             Ver sustento
                                         </a>
                                         @else
@@ -74,14 +74,14 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #002855; color: #ffffff;">
-                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar Dictamen de Diseño</h5>
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Generar Dictamen de construccion</h5>
                 <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Formulario de generación de dictamen de diseño -->
+                <!-- Formulario de generación de dictamen de construccion -->
                 <form id="generateWordForm" action="{{ route('construccion.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <!-- Campos del formulario para generar dictamen de diseño -->
+                    <!-- Campos del formulario para generar dictamen de construccion -->
                     <h5 class="modal-title" style="padding-top: 10px;">Seleccione una estación</h5>
                     <div class="row">
                         <div class="form-group" style="padding-top: 10px;">
@@ -144,7 +144,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('diseño.subirSustento', $dictamen->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('construccion.subirSustento', $dictamen->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">

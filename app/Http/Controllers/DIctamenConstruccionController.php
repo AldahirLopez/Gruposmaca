@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dictamen_Construccion;
 use App\Models\Dictamen_Diseño;
 use App\Models\Estacion;
 use App\Models\User;
@@ -17,7 +18,7 @@ class DIctamenConstruccionController extends Controller
     protected $connection = 'segunda_db';
     public function index()
     {
-        $dictamenes = Dictamen_Diseño::all();
+        $dictamenes = Dictamen_Construccion::all();
         $estaciones = Estacion::all();
         $usuariosOperacionMantenimiento = User::whereHas('roles', function ($query) {
             $query->where('name', 'Operacion y Mantenimiento');
@@ -98,7 +99,7 @@ class DIctamenConstruccionController extends Controller
             }
 
             // Guardar el dictamen de diseño en la base de datos
-            $dictamen = new Dictamen_Diseño;
+            $dictamen = new Dictamen_Construccion;
             $dictamen->nomenclatura = $nomenclatura;
             $dictamen->fecha_inicio = $fecha_inicio;
             $dictamen->fecha_emision = $fecha_emision;
@@ -118,7 +119,7 @@ class DIctamenConstruccionController extends Controller
             }, $templatePaths);
 
             // Redireccionar a la vista con los archivos generados
-            return redirect()->route('diseño.index')
+            return redirect()->route('construccion.index')
                 ->with('generatedFiles', $generatedFiles);
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
@@ -136,7 +137,7 @@ class DIctamenConstruccionController extends Controller
 
         do {
             $nomenclatura = "C-$iniciales-$numero-$anio";
-            $existe = Dictamen_Diseño::where('nomenclatura', $nomenclatura)->exists();
+            $existe = Dictamen_Construccion::where('nomenclatura', $nomenclatura)->exists();
 
             if ($existe) {
                 $numero++;
@@ -169,7 +170,7 @@ class DIctamenConstruccionController extends Controller
     public function download($id)
     {
         // Obtener el dictamen de diseño por ID
-        $dictamen = Dictamen_Diseño::findOrFail($id);
+        $dictamen = Dictamen_Construccion::findOrFail($id);
 
         // Construir la ruta completa del archivo
         $filePath = storage_path("app/public/{$dictamen->rutadoc_diseño}/DICTAMEN CONSTRUCCION_{$dictamen->nomenclatura}.docx");
@@ -190,7 +191,7 @@ class DIctamenConstruccionController extends Controller
             'sustento' => 'required|file|mimes:pdf|max:10240', // Max 10MB
         ]);
 
-        $dictamen = Dictamen_Diseño::findOrFail($id);
+        $dictamen = Dictamen_Construccion::findOrFail($id);
 
         // Verificar si ya existe un sustento
         if ($dictamen->rutadoc_sustento_diseño) {
@@ -229,10 +230,10 @@ class DIctamenConstruccionController extends Controller
     {
         try {
             // Obtener el dictamen de diseño por ID
-            $dictamen = Dictamen_Diseño::findOrFail($id);
+            $dictamen = Dictamen_Construccion::findOrFail($id);
 
             // Construir la ruta completa de la carpeta donde están los archivos
-            $folderPath = "Dictames/{$dictamen->nomenclatura}/Diseño";
+            $folderPath = "Dictames/{$dictamen->nomenclatura}/Construccion";
 
             // Eliminar los archivos en la carpeta
             if (Storage::disk('public')->exists($folderPath)) {
@@ -243,11 +244,11 @@ class DIctamenConstruccionController extends Controller
             $dictamen->delete();
 
             // Redireccionar con un mensaje de éxito
-            return redirect()->route('diseño.index')->with('success', 'Dictamen de diseño eliminado correctamente.');
+            return redirect()->route('construccion.index')->with('success', 'Dictamen de construccion eliminado correctamente.');
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
-            \Log::error("Error al eliminar el dictamen de diseño: " . $e->getMessage());
-            return redirect()->route('diseño.index')->with('error', 'Ocurrió un error al eliminar el dictamen de diseño. Por favor, intenta de nuevo más tarde.');
+            \Log::error("Error al eliminar el dictamen de construccion: " . $e->getMessage());
+            return redirect()->route('construccion.index')->with('error', 'Ocurrió un error al eliminar el dictamen de construccion. Por favor, intenta de nuevo más tarde.');
         }
     }
 }

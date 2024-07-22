@@ -178,6 +178,10 @@
                                 <input type="text" name="correo" class="form-control">
                             </div>
                             <div class="form-group">
+                                <label for="repre">Representante Legal</label>
+                                <input type="text" name="repre" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <label for="domicilio_estacion">Domicilio de la Estacion de Servicio</label>
                                 <input type="text" name="domicilio_estacion" class="form-control">
                             </div>

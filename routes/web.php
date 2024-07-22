@@ -258,9 +258,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('construccion', DIctamenConstruccionController::class);
 
-    Route::get('construccion/{id}/download', [DIctamenConstruccionController::class, 'download'])->name('diseño.download');
+    Route::get('construccion/{id}/download', [DIctamenConstruccionController::class, 'download'])->name('construccion.download');
 
-    Route::post('construccion/{id}/subir-sustento', [DIctamenConstruccionController::class, 'subirSustento'])->name('diseño.subirSustento');
+    Route::post('construccion/{id}/subir-sustento', [DIctamenConstruccionController::class, 'subirSustento'])->name('construccion.subirSustento');
 
 
 

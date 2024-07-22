@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('segunda_db')->create('dictamenes_diseño', function (Blueprint $table) {
+        Schema::connection('segunda_db')->create('dictamenes_construccion', function (Blueprint $table) {
             $table->id();
             $table->string('nomenclatura')->unique()->nullable(); // Nomenclatura única, inicialmente null
             $table->string('fecha_emision');
@@ -24,7 +24,6 @@ return new class extends Migration
 
             $table->foreign('estacion_id')->references('id')->on('armonia.estacion');
             $table->foreign('usuario_id')->references('id')->on('gruposmaca.users'); 
-
         });
     }
 
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dictamenes_diseño');
+        Schema::dropIfExists('dictamenes_construccion');
     }
 };

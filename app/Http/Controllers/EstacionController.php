@@ -118,6 +118,7 @@ class EstacionController extends Controller
                 'razonsocial' => 'required|string|max:255',
                 'rfc' => 'required|string|max:255',
                 'domicilio_fiscal' => 'required|string|max:255',
+                'repre' => 'required',
                 'telefono' => 'nullable|string|max:255',
                 'correo' => 'nullable|email|max:255',
                 'domicilio_estacion' => 'required|string|max:255',
@@ -134,6 +135,7 @@ class EstacionController extends Controller
             $estacionServicio->domicilio_fiscal = $data['domicilio_fiscal'];
             $estacionServicio->telefono = $data['telefono'];
             $estacionServicio->correo_electronico = $data['correo'];
+            $estacionServicio->nombre_representante_legal = $data['repre'];
             $estacionServicio->domicilio_estacion_servicio = $data['domicilio_estacion'];
             $estacionServicio->estado_republica_estacion = $data['estado'];
             $estacionServicio->usuario_id = $data['id_usuario'];
