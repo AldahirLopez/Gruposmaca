@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Auth;
 
-class DIctamenDiseñoController extends Controller
+class DictamenDiseñoController extends Controller
 {
     protected $connection = 'segunda_db';
     public function index()
