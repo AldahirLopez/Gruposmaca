@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Dictamen_Diseño;
+use App\Models\Dictamen_Diseno;
 use App\Models\Estacion;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,12 +12,12 @@ use Carbon\Carbon;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Auth;
 
-class DictamenDiseñoController extends Controller
+class DictamenDisenoController extends Controller
 {
     protected $connection = 'segunda_db';
     public function index()
     {
-        $dictamenes = Dictamen_Diseño::all();
+        $dictamenes = Dictamen_Diseno::all();
         $estaciones = Estacion::all();
         $usuariosOperacionMantenimiento = User::whereHas('roles', function ($query) {
             $query->where('name', 'Operacion y Mantenimiento');
@@ -98,7 +98,7 @@ class DictamenDiseñoController extends Controller
             }
 
             // Guardar el dictamen de diseño en la base de datos
-            $dictamen = new Dictamen_Diseño;
+            $dictamen = new Dictamen_Diseno;
             $dictamen->nomenclatura = $nomenclatura;
             $dictamen->fecha_inicio = $fecha_inicio;
             $dictamen->fecha_emision = $fecha_emision;
@@ -136,7 +136,7 @@ class DictamenDiseñoController extends Controller
 
         do {
             $nomenclatura = "D-$iniciales-$numero-$anio";
-            $existe = Dictamen_Diseño::where('nomenclatura', $nomenclatura)->exists();
+            $existe = Dictamen_Diseno::where('nomenclatura', $nomenclatura)->exists();
 
             if ($existe) {
                 $numero++;
@@ -169,7 +169,7 @@ class DictamenDiseñoController extends Controller
     public function download($id)
     {
         // Obtener el dictamen de diseño por ID
-        $dictamen = Dictamen_Diseño::findOrFail($id);
+        $dictamen = Dictamen_Diseno::findOrFail($id);
 
         // Construir la ruta completa del archivo
         $filePath = storage_path("app/public/{$dictamen->rutadoc_diseño}/DICTAMEN DISEÑO_{$dictamen->nomenclatura}.docx");
@@ -190,7 +190,7 @@ class DictamenDiseñoController extends Controller
             'sustento' => 'required|file|mimes:pdf|max:10240', // Max 10MB
         ]);
 
-        $dictamen = Dictamen_Diseño::findOrFail($id);
+        $dictamen = Dictamen_Diseno::findOrFail($id);
 
         // Verificar si ya existe un sustento
         if ($dictamen->rutadoc_sustento_diseño) {
@@ -229,7 +229,7 @@ class DictamenDiseñoController extends Controller
     {
         try {
             // Obtener el dictamen de diseño por ID
-            $dictamen = Dictamen_Diseño::findOrFail($id);
+            $dictamen = Dictamen_Diseno::findOrFail($id);
 
             // Construir la ruta completa de la carpeta donde están los archivos
             $folderPath = "Dictames/{$dictamen->nomenclatura}/Diseño";

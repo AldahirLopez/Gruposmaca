@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Dictamen_Diseño extends Model
+class Dictamen_Diseno extends Model
 {
     use HasFactory;
 
