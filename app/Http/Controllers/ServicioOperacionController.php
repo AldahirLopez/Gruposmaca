@@ -84,7 +84,7 @@ class ServicioOperacionController extends Controller
                     $estacionesRelacionadas = collect();
 
                     // Verificar si el usuario no es administrador para buscar relaciones
-                    if (!$usuario->hasAnyRole(['Administrador', 'Operacion y Mantenimiento'])) {
+                    if (!$usuario->hasAnyRole(['Administrador', 'Auditor'])) {
                         // Obtener las relaciones de usuario a estación
                         $relaciones = Usuario_Estacion::where('usuario_id', $usuario->id)->get();
 
