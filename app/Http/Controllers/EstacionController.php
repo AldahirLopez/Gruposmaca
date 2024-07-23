@@ -182,6 +182,7 @@ class EstacionController extends Controller
             'domicilio_fiscal' => 'required',
             'telefono' => 'required',
             'correo' => 'required|email',
+            'repre' => 'required',
             'domicilio_estacion' => 'required',
             'estado' => 'required'
         ]);
@@ -194,13 +195,14 @@ class EstacionController extends Controller
             $estacion->domicilio_fiscal = $request->domicilio_fiscal;
             $estacion->telefono = $request->telefono;
             $estacion->correo_electronico = $request->correo;
+            $estacion->nombre_representante_legal = $request->repre;
             $estacion->domicilio_estacion_servicio = $request->domicilio_estacion;
             $estacion->estado_republica_estacion = $request->estado;
             $estacion->save();
 
-            return redirect()->route('estacion.index')->with('success', 'Estación actualizada exitosamente.');
+            return redirect()->route('estaciones.usuario')->with('success', 'Estación actualizada exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('estacion.index')->with('error', 'Error al actualizar la estación.');
+            return redirect()->route('estaciones.usuario')->with('error', 'Error al actualizar la estación.');
         }
     }
 
