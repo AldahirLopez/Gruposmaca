@@ -7,7 +7,7 @@
     </div>
     <div class="section-body">
         <div class="row">
-            @if(auth()->check() && auth()->user()->hasAnyRole(['Anexo 30', 'Operacion y Mantenimiento']))
+            @if(auth()->check() && auth()->user()->hasAnyRole(['Verificador Anexo 30', 'Operacion y Mantenimiento']))
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
