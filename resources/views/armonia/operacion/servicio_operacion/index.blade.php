@@ -244,14 +244,19 @@
 
                                                     @can('borrar-servicio_operacion_mantenimiento')
                                                         <td scope="row">
-
-                                                            @if($servicio->pending_deletion_servicio)
-                                                                <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                           
+                                                        @if($servicio->pending_deletion_servicio)
+                                                            <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                        @else
+                                                            @if($servicio->pending_apro_servicio == false)
+                                                                <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                                             @else
                                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                 {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                 {!! Form::close() !!}
                                                             @endif
+                                                        @endif
+
 
                                                         </td>
                                                     @endcan
@@ -470,13 +475,18 @@
                                                         @can('borrar-servicio_operacion_mantenimiento')
                                                             <td scope="row">
 
-                                                                @if($servicio->pending_deletion_servicio)
-                                                                    <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                            @if($servicio->pending_deletion_servicio)
+                                                                <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                            @else
+                                                                @if($servicio->pending_apro_servicio == false)
+                                                                    <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                                                 @else
                                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                     {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                     {!! Form::close() !!}
-                                                                @endif                                          </td>
+                                                                @endif
+                                                            @endif
+                                                            </td>
                                                         @endcan
                                                     </tr>
                                                     @can('Subir-pago-operacion')
