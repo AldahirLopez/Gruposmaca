@@ -137,7 +137,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/generate-word-operacion', [OperacionController::class, 'generateWord'])->name('generate.word.operacion');
     
     Route::post('/generate-expedientes-operacion', [OperacionController::class, 'generarExpedientesOperacion'])->name('generate.expedientes.operacion');
-
+    
+    Route::post('/generate-comprobante-operacion', [OperacionController::class, 'generarComprobanteTraslado'])->name('generate.comprobante.operacion');
+    
+    Route::post('/generate-acta-operacion', [OperacionController::class, 'generarActaVerificacion'])->name('generate.acta.operacion');
 
 
     Route::get('/list-generated-files/{nomenclatura}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'listGeneratedFiles']);
