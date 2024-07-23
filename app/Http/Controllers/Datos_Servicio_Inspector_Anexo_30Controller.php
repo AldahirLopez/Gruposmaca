@@ -24,13 +24,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     {
 
         //Expediente 
-        $this->middleware('permission:Generar-expediente-anexo_30', ['only' => ['ExpedienteInspectorAnexo30','generateWord']]);
+        $this->middleware('permission:Generar-expediente-anexo_30', ['only' => ['ExpedienteInspectorAnexo30', 'generateWord']]);
         $this->middleware('permission:Descargar-documentos-expediente-anexo_30', ['only' => ['descargarWord']]);
         //Documentacion
-        $this->middleware('permission:Generar-documentacion-anexo_30', ['only' => ['DocumentacionAnexo','storeanexo']]);
+        $this->middleware('permission:Generar-documentacion-anexo_30', ['only' => ['DocumentacionAnexo', 'storeanexo']]);
         //Dictamenes
         $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenes']]);
-
     }
 
     /**
@@ -167,6 +166,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'nom_repre' => 'nullable',
                 'constancia' => 'nullable',
                 'fecha_inspeccion' => 'required|date',
+                'cantidad' => 'required',
+
             ];
 
             // Validar los datos del formulario
@@ -188,6 +189,22 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['contacto'] = $data['contacto'] ?? $estacion->contacto ?? '';
             $data['nom_repre'] = $data['nom_repre'] ?? $estacion->nombre_representante_legal ?? '';
             $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
+
+            //Calculo de precio con iva y el 50% para el contrato
+
+            $data['iva'] = $data['cantidad'] * 0.16;
+            $data['total'] = $data['cantidad'] + $data['iva'];
+            $data['total_mitad'] = $data['total'] * 0.50;
+            $data['total_restante'] = $data['total'] - $data['total_mitad'];
+
+            // Formateando los valores
+            $data['cantidad'] = number_format($data['cantidad'], 2, '.', ',');
+            $data['iva'] = number_format($data['iva'], 2, '.', ',');
+            $data['total'] = number_format($data['total'], 2, '.', ',');
+            $data['total_mitad'] = number_format($data['total_mitad'], 2, '.', ',');
+            $data['total_restante'] = number_format($data['total_restante'], 2, '.', ',');
+
+
 
             // Convertir las fechas al formato deseado
             $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
@@ -269,7 +286,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles);
-
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
@@ -388,7 +404,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'rfc_proveedor' => 'required',
                 'software' => 'required',
                 'version' => 'required',
-                
+
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
@@ -598,7 +614,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Retornar respuesta con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles);
-
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
@@ -652,7 +667,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         ]);
 
         try {
-            $documento =Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
+            $documento = Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
@@ -678,6 +693,5 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
-    } 
-
+    }
 }

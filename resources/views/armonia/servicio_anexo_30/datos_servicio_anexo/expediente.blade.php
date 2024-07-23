@@ -50,12 +50,12 @@
                                                     MEDICION</li>
                                             </ol>
                                             @can('Generar-expediente-anexo_30')
-                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton" data-toggle="modal" data-target="#generarExpedienteModal" style="margin-top: 10px;">Generar</a>    
+                                            <a href="#" class="btn btn-primary" id="generateExpedienteButton" data-toggle="modal" data-target="#generarExpedienteModal" style="margin-top: 10px;">Generar</a>
                                             @endcan
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 @can('Generar-dictamenes-anexo')
                                 <!-- Tarjeta 2 - Dictámenes Informáticos -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
@@ -91,7 +91,7 @@
                             </div>
 
 
-                            @can('Generar-dictamenes-anexo')   
+                            @can('Generar-dictamenes-anexo')
                             <!-- Modal para Dictámenes Informático -->
                             <div class="modal fade" id="dictamenesModalinformatico" tabindex="-1" role="dialog" aria-labelledby="dictamenesModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -278,7 +278,7 @@
                             @endcan
 
 
-                             @can('Generar-expediente-anexo_30') 
+                            @can('Generar-expediente-anexo_30')
                             <!-- Modal para generar expediente -->
                             <div class="modal fade" id="generarExpedienteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -369,6 +369,15 @@
                                                             <input type="date" name="fecha_inspeccion" id="fecha_inspeccion" class="form-control">
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <h2 class="card-title">Datos generales del contrato</h2>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="cantidad">Precio a pagar por el servicio de inspeccion</label>
+                                                                <input type="float" name="cantidad" id="cantidad" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 10px;">
                                                         <button type="submitButton" class="btn btn-primary btn-generar">Generar</button>
@@ -379,7 +388,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endcan   
+                            @endcan
 
                             <!-- Contenedor para la tabla de archivos generados -->
                             <div id="generatedFilesTable" style="margin-top: 30px;">
@@ -542,7 +551,7 @@
         function checkRegistro() {
             const id = $('#id_servicio').val();
             fetch(`/api/consulta/${id}`)
-                .then(response => response.json()) 
+                .then(response => response.json())
                 .then(data => {
                     const cards = $('.dictamenes-card');
                     if (data.exists) {
