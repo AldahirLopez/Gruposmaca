@@ -173,7 +173,7 @@
                                                     @can('Subir-pago-anexo_30')
                                                         <td scope="row">
 
-                                                            @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false)
+                                                            @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false or $servicio->pending_deletion_servicio)
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                     disabled>
@@ -235,7 +235,7 @@
                                                             <form action="{{ route('documentacion_anexo') }}" method="GET"
                                                                 style="display:inline;">
                                                                 <input type="hidden" name="id" value="{{ $servicio->id }}">
-                                                                @if ($servicio->pending_apro_servicio == false)
+                                                                @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
                                                                 <button type="submit" class="btn btn-primary" disabled>
                                                                     <i class="bi bi-folder-fill"></i>
                                                                 </button>
@@ -417,7 +417,7 @@
                                                         @can('Subir-pago-anexo_30')
                                                             <td scope="row">
 
-                                                                @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false)
+                                                                @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false or $servicio->pending_deletion_servicio)
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                         disabled>
@@ -482,7 +482,7 @@
                                                             <form action="{{ route('documentacion_anexo') }}" method="GET"
                                                                 style="display:inline;">
                                                                 <input type="hidden" name="id" value="{{ $servicio->id }}">
-                                                                @if ($servicio->pending_apro_servicio == false)
+                                                                @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
                                                                 <button type="submit" class="btn btn-primary" disabled>
                                                                     <i class="bi bi-folder-fill"></i>
                                                                 </button>
