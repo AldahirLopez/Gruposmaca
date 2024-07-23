@@ -37,7 +37,7 @@
         </li>
         @endif
 
-        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento']))
+        @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento', 'Auditor']))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-calendar-check-fill"></i><span>Formatos Vigentes</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -83,6 +83,9 @@
                 </li>
             </ul>
         </li>
+        @endif
+
+        @if(auth()->check() && auth()->user()->hasAnyRole(['Verificador Anexo 30', 'Auditor', 'Operacion y Mantenimiento']))
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
                 <i class="bx bxs-data"></i>
@@ -91,7 +94,7 @@
         </li>
         @endif
 
-        @if(auth()->check() && auth()->user()->hasAnyRole(['Verificador Anexo 30']))
+        @if(auth()->check() && auth()->user()->hasAnyRole(['Verificador Anexo 30', 'Auditor']))
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#anexo-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-folder"></i><span>Anexo 30</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -104,13 +107,8 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
-                <i class="bx bxs-data"></i>
-                <span>Estaciones de servicio</span>
-            </a>
-        </li>
         @endif
+
         @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
         <!-- End Components Nav -->
         <li class="nav-heading">Paginas</li>
