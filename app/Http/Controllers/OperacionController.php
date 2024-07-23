@@ -18,6 +18,7 @@ use Spatie\Permission\Models\Role;
 use App\Models\Cotizacion_Operacion;
 use App\Models\Pago_Operacion;
 use App\Models\Factura_Operacion;
+use App\Models\Acta_Operacion;
 //Este controlador se va utilizar para la parte del administrador donde aprueba los servicios de operacion y mantenimiento
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -370,8 +371,7 @@ class OperacionController extends Controller
             $fechaInspeccionAumentada = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->addYear()->format('d-m-Y');
 
             // Cargar las plantillas de Word
-            $templatePaths = [
-                'COMPROBANTE DE TRASLADO.docx',
+            $templatePaths = [             
                 'CONTRATO.docx',
                 'DETEC. R.I.docx',
                 'PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO.docx',
@@ -991,6 +991,498 @@ class OperacionController extends Controller
         return response()->file($rutaCompleta);
     }
 
+
+    public function generarComprobanteTraslado(Request $request){
+       
+       try {
+        
+            $rules = [
+                    'nomenclatura' => 'required',
+                    'idestacion' => 'required',
+                    'id_servicio' => 'required',
+                    'id_usuario' => 'required',
+                    'fecha_emision1' => 'required|date',  
+                    'fecha_inspeccion' => 'required|date', 
+                    
+                    'origen1'=>'required',
+                    'destino_1'=>'required',
+                    'transporte1'=>'required',
+                    'comprobante1'=>'required',
+                    'concepto1'=>'required',
+
+                    'origen2'=>'required',
+                    'destino_2'=>'required',
+                    'transporte2'=>'required',
+                    'comprobante2'=>'required',
+                    'concepto2'=>'required',
+                    'fecha_emision2'=>'required|date', 
+
+
+            ];
+
+          
+           
+            $data = $request->validate($rules);
+           
+
+
+            $idEstacion = $request->input('idestacion');
+            // Buscar la estación por su ID y obtener los datos necesarios
+            $estacion = Estacion::findOrFail($idEstacion);
+
+            $data['domicilio_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['razonsocial'] = $estacion->razon_social;
+        
+            $templatePaths = [             
+                'COMPROBANTE DE TRASLADO.docx',
+            ];
+            // Definir la carpeta de destino
+            $customFolderPath = "OperacionyMantenimiento/{$data['nomenclatura']}";
+            $subFolderPath = "{$customFolderPath}/expediente";
+
+            // Crear la carpeta personalizada si no existe
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            // Verificar y crear la subcarpeta si no existe
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                Storage::disk('public')->makeDirectory($subFolderPath);
+            }
+            $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
+            $fechaEmision1=Carbon::createFromFormat('Y-m-d', $data['fecha_emision1'])->format('d-m-Y');
+            $fechaEmision2=Carbon::createFromFormat('Y-m-d', $data['fecha_emision2'])->format('d-m-Y');
+
+
+            foreach ($templatePaths as $templatePath) {
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/OperacionyMantenimiento/{$templatePath}"));
+
+                // Reemplazar todos los marcadores con los datos del formulario
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                    // Reemplazar fechas formateadas específicas
+                    $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
+                    $templateProcessor->setValue('fecha_emision1', $fechaEmision1);
+                    $templateProcessor->setValue('fecha_emision2', $fechaEmision2);
+                   
+                    switch ($data['transporte1']) {
+                        case 'avion':
+                            $templateProcessor->setValue('avion1', 'X');
+                            $templateProcessor->setValue('autobus1', ' ');
+                            $templateProcessor->setValue('taxi1', ' ');
+                            $templateProcessor->setValue('oficial1', ' ');
+                            $templateProcessor->setValue('otro1', ' ');
+                            $templateProcessor->setValue('otro_text1', ' ');
+                            break;
+                        case 'autobus':
+                            $templateProcessor->setValue('avion1', ' ');
+                            $templateProcessor->setValue('autobus1', 'X');
+                            $templateProcessor->setValue('taxi1', ' ');
+                            $templateProcessor->setValue('oficial1', ' ');
+                            $templateProcessor->setValue('otro1', ' ');
+                            $templateProcessor->setValue('otro_text1', ' ');
+                            break;
+                        case 'taxi':
+                            $templateProcessor->setValue('avion1', ' ');
+                            $templateProcessor->setValue('autobus1', ' ');
+                            $templateProcessor->setValue('taxi1', 'X');
+                            $templateProcessor->setValue('oficial1', ' ');
+                            $templateProcessor->setValue('otro1', ' ');
+                            $templateProcessor->setValue('otro_text1', ' ');
+                            break;
+                        case 'oficial':
+                            $templateProcessor->setValue('avion1', ' ');
+                            $templateProcessor->setValue('autobus1', ' ');
+                            $templateProcessor->setValue('taxi1', ' ');
+                            $templateProcessor->setValue('oficial1', 'X');
+                            $templateProcessor->setValue('otro1', ' ');
+                            $templateProcessor->setValue('otro_text1', ' ');
+                            break;
+                        case 'otro':
+                            $templateProcessor->setValue('avion1', ' ');
+                            $templateProcessor->setValue('autobus1', ' ');
+                            $templateProcessor->setValue('taxi1', ' ');
+                            $templateProcessor->setValue('oficial1', ' ');
+                            $templateProcessor->setValue('otro1', 'X');
+                            $templateProcessor->setValue('otro_text1', $request->input('otro_transporte_text1'));
+                            break;
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+
+                    switch ($data['comprobante1']) {
+                        case 'factura':
+                            $templateProcessor->setValue('factura1', 'X');
+                            $templateProcessor->setValue('boleto1', ' ');
+                            $templateProcessor->setValue('otro2', ' ');
+                            $templateProcessor->setValue('otro_text2', ' ');
+                            break;
+                        case 'boleto':
+                            $templateProcessor->setValue('factura1', ' ');
+                            $templateProcessor->setValue('boleto1', 'X');
+                            $templateProcessor->setValue('otro2', ' ');
+                            $templateProcessor->setValue('otro_text2', ' ');
+                            break;
+                    
+                        case 'otro':
+                            $templateProcessor->setValue('factura1', ' ');
+                            $templateProcessor->setValue('boleto1', ' ');
+                            $templateProcessor->setValue('otro2', 'X');
+                            $templateProcessor->setValue('otro_text2', $request->input('otro_comprobante_text1'));
+                            break;
+           
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+
+                    switch ($data['concepto1']) {
+                        case 'pasaje':
+                            $templateProcessor->setValue('pasaje1', 'X');
+                            $templateProcessor->setValue('caseta1', ' ');
+                            $templateProcessor->setValue('combustible1', ' ');
+                            $templateProcessor->setValue('otro3', ' ');
+                            $templateProcessor->setValue('otro_text3', ' ');
+                            break;
+                        case 'caseta':
+                            $templateProcessor->setValue('pasaje1', ' ');
+                            $templateProcessor->setValue('caseta1', 'X');
+                            $templateProcessor->setValue('combustible1', ' ');
+                            $templateProcessor->setValue('otro3', ' ');
+                            $templateProcessor->setValue('otro_text3', ' ');
+                            break;
+
+                        case 'combustible':
+                            $templateProcessor->setValue('pasaje1', ' ');
+                            $templateProcessor->setValue('caseta1', ' ');
+                            $templateProcessor->setValue('combustible1', 'X');
+                            $templateProcessor->setValue('otro3', ' ');
+                            $templateProcessor->setValue('otro_text3', ' ');
+                            break;      
+
+                    
+                        case 'otro':
+                            $templateProcessor->setValue('pasaje1', ' ');
+                            $templateProcessor->setValue('caseta1', ' ');
+                            $templateProcessor->setValue('combustible1', ' ');
+                            $templateProcessor->setValue('otro3', 'X');
+                            $templateProcessor->setValue('otro_text3', $request->input('otro_concepto_text1'));
+                            break;
+           
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+
+                    switch ($data['transporte2']) {
+                        case 'avion':
+                            $templateProcessor->setValue('avion2', 'X');
+                            $templateProcessor->setValue('autobus2', ' ');
+                            $templateProcessor->setValue('taxi2', ' ');
+                            $templateProcessor->setValue('oficial2', ' ');
+                            $templateProcessor->setValue('otro4', ' ');
+                            $templateProcessor->setValue('otro_text4', ' ');
+                            break;
+                        case 'autobus':
+                            $templateProcessor->setValue('avion2', ' ');
+                            $templateProcessor->setValue('autobus2', 'X');
+                            $templateProcessor->setValue('taxi2', ' ');
+                            $templateProcessor->setValue('oficial2', ' ');
+                            $templateProcessor->setValue('otro4', ' ');
+                            $templateProcessor->setValue('otro_text4', ' ');
+                            break;
+                        case 'taxi':
+                            $templateProcessor->setValue('avion2', ' ');
+                            $templateProcessor->setValue('autobus2', ' ');
+                            $templateProcessor->setValue('taxi2', 'X');
+                            $templateProcessor->setValue('oficial2', ' ');
+                            $templateProcessor->setValue('otro4', ' ');
+                            $templateProcessor->setValue('otro_text4', ' ');
+                            break;
+                        case 'oficial':
+                            $templateProcessor->setValue('avion2', ' ');
+                            $templateProcessor->setValue('autobus2', ' ');
+                            $templateProcessor->setValue('taxi2', ' ');
+                            $templateProcessor->setValue('oficial2', 'X');
+                            $templateProcessor->setValue('otro4', ' ');
+                            $templateProcessor->setValue('otro_text4', ' ');
+                            break;
+                        case 'otro':
+                            $templateProcessor->setValue('avion2', ' ');
+                            $templateProcessor->setValue('autobus2', ' ');
+                            $templateProcessor->setValue('taxi2', ' ');
+                            $templateProcessor->setValue('oficial2', ' ');
+                            $templateProcessor->setValue('otro4', 'X');
+                            $templateProcessor->setValue('otro_text4', $request->input('otro_trasnporte2_text'));
+                            break;
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+                    switch ($data['comprobante2']) {
+                        case 'factura':
+                            $templateProcessor->setValue('factura2', 'X');
+                            $templateProcessor->setValue('boleto2', ' ');
+                            $templateProcessor->setValue('otro5', ' ');
+                            $templateProcessor->setValue('otro_text5', ' ');
+                            break;
+                        case 'boleto':
+                            $templateProcessor->setValue('factura2', ' ');
+                            $templateProcessor->setValue('boleto2', 'X');
+                            $templateProcessor->setValue('otro5', ' ');
+                            $templateProcessor->setValue('otro_text5', ' ');
+                            break;
+                    
+                        case 'otro':
+                            $templateProcessor->setValue('factura2', ' ');
+                            $templateProcessor->setValue('boleto2', ' ');
+                            $templateProcessor->setValue('otro5', 'X');
+                            $templateProcessor->setValue('otro_text5', $request->input('otro_comprobante2_text'));
+                            break;
+           
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+
+                    switch ($data['concepto2']) {
+                        case 'pasaje':
+                            $templateProcessor->setValue('pasaje2', 'X');
+                            $templateProcessor->setValue('caseta2', ' ');
+                            $templateProcessor->setValue('combustible2', ' ');
+                            $templateProcessor->setValue('otro6', ' ');
+                            $templateProcessor->setValue('otro_text6', ' ');
+                            break;
+                        case 'caseta':
+                            $templateProcessor->setValue('pasaje2', ' ');
+                            $templateProcessor->setValue('caseta2', 'X');
+                            $templateProcessor->setValue('combustible2', ' ');
+                            $templateProcessor->setValue('otro6', ' ');
+                            $templateProcessor->setValue('otro_text6', ' ');
+                            break;
+
+                        case 'combustible':
+                            $templateProcessor->setValue('pasaje2', ' ');
+                            $templateProcessor->setValue('caseta2', ' ');
+                            $templateProcessor->setValue('combustible2', 'X');
+                            $templateProcessor->setValue('otro6', ' ');
+                            $templateProcessor->setValue('otro_text6', ' ');
+                            break;      
+
+                    
+                        case 'otro':
+                            $templateProcessor->setValue('pasaje2', ' ');
+                            $templateProcessor->setValue('caseta2', ' ');
+                            $templateProcessor->setValue('combustible2', ' ');
+                            $templateProcessor->setValue('otro6', 'X');
+                            $templateProcessor->setValue('otro_text6', $request->input('otro_concepto2_text'));
+                            break;
+           
+                            
+                        default:
+                            // Manejar cualquier otro caso aquí si es necesario
+                            break;
+                    }
+
+
+
+
+
+
+                }
+
+                // Crear un nombre de archivo basado en la nomenclatura
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+
+                // Guardar la plantilla procesada en la carpeta de destino
+                $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
+            }
+
+            $expediente = Expediente_Operacion::firstOrNew(['operacion_mantenimiento_id' => $data['id_servicio']]);
+            $expediente->rutadoc_expediente = $subFolderPath;
+            $expediente->operacion_mantenimiento_id = $data['id_servicio'];
+            $expediente->usuario_id = $data['id_usuario'];
+            $expediente->save();
+
+            // Crear la lista de archivos generados con sus URLs
+            $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+                return [
+                    'name' => $fileName,
+                    'url' => Storage::url("{$subFolderPath}/{$fileName}"),
+                ];
+            }, $templatePaths);
+
+            return redirect()->route('expediente.operacion', ['slug' => $data['id_servicio']])
+                ->with('generatedFiles', $generatedFiles);
+
+        }
+
+        catch (\Exception $e) {
+            \Log::error("Error al generar documentos: " . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
+        }
+
+
+    }
+
+    public function generarActaVerificacion(Request $request){
+       
+        try{
+        $rules = [
+            'nomenclatura' => 'required',
+            'idestacion' => 'required',
+            'id_servicio' => 'required',
+            'id_usuario' => 'required',
+            'fecha_actual' => 'required|date',  
+        
+
+            'hora'=>'required',
+            'hora_fin'=>'required',
+            'recepcion'=>'required',
+            'cargo'=>'required',
+            'exten'=>'required',
+            'num_telefono'=>'required',
+            'correo'=>'required',
+
+            'folio_testigo1'=>'required',
+            'nom_testigo1'=>'required',
+            'domicilio_testigo1'=>'required',
+
+            'folio_testigo2'=>'required',
+            'nom_testigo2'=>'required', 
+            'domicilio_testigo2'=>'required', 
+
+            'tipo_vialidad'=>'required', 
+            'suma_tanques'=>'required', 
+            'num_tanques'=>'required', 
+            'num_tanques_diesel'=>'required', 
+            'litros_diesel'=>'required', 
+            'num_tanques_gaso'=>'required', 
+            'litros_gasolina'=>'required', 
+            'marca_tanque'=>'required', 
+            'num_pozos'=>'required', 
+            'num_pozos_moni'=>'required', 
+            'num_techunbre'=>'required', 
+            'num_columnas'=>'required', 
+            'tipo_material'=>'required', 
+            'num_despachos'=>'required', 
+            'num_pro_diesel'=>'required', 
+            'num_pro_gaso'=>'required', 
+            'cuarto_sucios'=>'required', 
+            'cuarto_maquinas'=>'required', 
+            'cuarto_electrico'=>'required', 
+            'trampas_sucios'=>'required', 
+            'num_fases_sucios'=>'required', 
+            'tubos_veteo'=>'required', 
+            'lado_tubos'=>'required', 
+            'si_no_anuncion'=>'required', 
+            'almacen'=>'required', 
+        ];
+            $data = $request->validate($rules);
+           
+
+
+            $idEstacion = $request->input('idestacion');
+            // Buscar la estación por su ID y obtener los datos necesarios
+            $estacion = Estacion::findOrFail($idEstacion);
+
+            $data['dirección_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['domicilio_estacion'] = $estacion->domicilio_estacion_servicio;
+            $data['razon_social'] = $estacion->razon_social;
+            $data['cre']=$estacion->num_cre;
+            
+            $date = Carbon::parse($data['fecha_actual']);
+
+            $data['dia']=$date->month;
+            $data['mes']=$date->day;
+            $data['año']=$date->year;
+
+           
+            
+
+
+            $usuario=User::find($data['id_usuario']);
+            
+            $data['inspector']=$usuario->name;
+            $data['nom_inspector']=$usuario->name;
+        
+            $templatePaths = [             
+                'ACTA VERIFICACIÓN O.M. V3.docx',
+            ];
+            // Definir la carpeta de destino
+            $customFolderPath = "OperacionyMantenimiento/{$data['nomenclatura']}";
+            $subFolderPath = "{$customFolderPath}/expediente";
+
+            // Crear la carpeta personalizada si no existe
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            // Verificar y crear la subcarpeta si no existe
+            if (!Storage::disk('public')->exists($subFolderPath)) {
+                Storage::disk('public')->makeDirectory($subFolderPath);
+            }
+            $fecha_actual = Carbon::createFromFormat('Y-m-d', $data['fecha_actual'])->format('d-m-Y');
+    
+
+
+            foreach ($templatePaths as $templatePath) {
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/OperacionyMantenimiento/{$templatePath}"));
+  
+                // Reemplazar todos los marcadores con los datos del formulario
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                    // Reemplazar fechas formateadas específicas
+                    $templateProcessor->setValue('fecha_actual', $fecha_actual);
+                 
+                }
+
+                // Crear un nombre de archivo basado en la nomenclatura
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+
+                // Guardar la plantilla procesada en la carpeta de destino
+                $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
+            }
+
+
+            $acta = Acta_Operacion::firstOrNew(['servicio_id' => $data['id_servicio']]);
+            $acta->rutadoc_acta = $subFolderPath;
+            $acta->servicio_id= $data['id_servicio'];
+            $acta->save();
+
+            $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+                return [
+                    'name' => $fileName,
+                    'url' => Storage::url("{$subFolderPath}/{$fileName}"),
+                ];
+            }, $templatePaths);
+
+            return redirect()->route('expediente.operacion', ['slug' => $data['id_servicio']])
+                ->with('generatedFiles', $generatedFiles);
+
+
+
+
+        }
+ catch (\Exception $e) {
+            \Log::error("Error al generar documentos: " . $e->getMessage());
+            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
+        }
+
+    }
 
 
 }

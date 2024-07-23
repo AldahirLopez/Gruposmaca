@@ -40,8 +40,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Expediente</h5>
-                                            <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">COMPROBANTE DE TRASLADO</li>
+                                            <ol class="list-group list-group-numbered" style="text-align: left;">                                           
                                                 <li class="list-group-item">CONTRATO</li>
                                                 <li class="list-group-item">DETEC. R.I</li>
                                                 <li class="list-group-item">PLAN DE INSPECCIÓN OPERACIÓN Y MANTENIMIENTO
@@ -88,16 +87,607 @@
                                             <h5 class="card-title">Acta de verificación</h5>
                                             <ol class="list-group list-group-numbered" style="text-align: left;">
                                                 <li class="list-group-item">ACTA VERIFICACIÓN O.M. V3</li>
-                                            </ol>
-                                            <button type="button" class="btn btn-primary" id="dictamenesButton2"
-                                                data-toggle="modal" data-target="#dictamenesModalmedicion"
-                                                style="margin-top: 10px;">
+                                            </ol>             
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actaVerificacion"  style="margin-top: 10px;">
                                                 Generar
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Tarjeta 4 - Comprobantes -->
+                            <div class="col-md-4 dictamenes-card" style="display: none;">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Comprobantes</h5>
+                                            <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                <li class="list-group-item">COMPROBANTE DE TRASLADO
+                                                </li>
+                                            </ol>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largeModal"  style="margin-top: 10px;">
+                                                Generar
+                                            </button>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+            <!-- End Acta Modal-->
+            <div class="modal fade" id="actaVerificacion" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                      <h5 class="modal-title">ACTA VERIFICACIÓN O.M. V3</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{route('generate.acta.operacion')}}" class="row g-3" method="POST">
+                            @csrf
+                        <input type="hidden" id="nomenclatura" name="nomenclatura"
+                                             value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                        <input type="hidden" id="idestacion" name="idestacion"
+                                            value="{{ strtoupper($estacion->id) }}">
+                                        <input type="hidden" id="id_servicio" name="id_servicio"
+                                            value="{{ $servicioAnexo->id }}">
+                                        <input type="hidden" name="id_usuario"
+                                            value="{{ $estacion->usuario->id }}">
+                                            
+                            <div class="col-md-6">
+                                <label for="fecha_actual"class="form-label">Fecha</label>
+                                <input type="date" name="fecha_actual" class="form-control">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="" class="form-label">Hora</label>
+                                <input type="time" name="hora" class="form-control">
+                            </div>
+                                
+                            <div class="col-md-3">
+                                <label for="" class="form-label">Hora fin</label>
+                                <input type="time" name="hora_fin" class="form-control">
+                            </div>
+                            
+
+                                <h5>Datos del encargado</h5>
+                                <div class="col-md-6">
+                                    <label for="recepcion" class="form-label">Nombre del encargardo de recepcion</label>
+                                    <input type="text" name="recepcion"class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cargo" class="form-label" >Cargo</label>
+                                    <input type="text" name="cargo" class="form-control">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label for="exten" class="form-label">Extension</label>
+                                    <input type="text" name="exten" class="form-control">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label for="num_telefono"class="form-label">Numero telefonico</label>
+                                    <input type="text" name="num_telefono" class="form-control">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="correo"class="form-label">Correo electronico</label>
+                                    <input type="text" name="correo" class="form-control">
+                                </div>
+
+                                <h5>Testigos</h5>
+
+                                <div class="col-md-6">
+                                    <label for="folio_testigo1" class="form-label">Folio del testigo 1</label>
+                                    <input type="text" name="folio_testigo1" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="nom_testigo1"class="form-label">Nombre del testigo 1</label>
+                                    <input type="text" name="nom_testigo1" class="form-control">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="domicilio_testigo1"class="form-label" >Domicilio del testigo 1</label>
+                                    <input type="text" name="domicilio_testigo1"class="form-control" placeholder="1234 Main St">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="folio_testigo2" class="form-label">Folio del testigo 2</label>
+                                    <input type="text" name="folio_testigo2" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="nom_testigo2"class="form-label" >Nombre del testigo 2</label>
+                                    <input type="text" name="nom_testigo2"  class="form-control">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="domicilio_testigo2" class="form-label">Domicilio del testigo 2</label>
+                                    <input type="text" name="domicilio_testigo2"class="form-control" placeholder="1234 Main St">
+                                </div>
+
+                                
+
+
+                                <h5>Informacion general de la instalacion</h5>
+                                <div class="col-md-12">
+                                    <label for="" class="form-label">Tipo de vialidad de la estacion</label>
+                                    <input type="text" name="tipo_vialidad" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">Capacidad total almacenamiento(Litros) </label>
+                                    <input type="text" name="suma_tanques" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">No.Tanques de almacenamiento de doble pared</label>
+                                    <input type="text" name="num_tanques" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">No.Tanques de diesel</label>
+                                    <input type="text" name="num_tanques_diesel" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">Litros de diesel</label>
+                                    <input type="text" name="litros_diesel" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="" class="form-label">No.Tanques de gasolina</label>
+                                    <input type="text" name="num_tanques_gaso" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="" class="form-label">Litros de gasolina</label>
+                                    <input type="text" name="litros_gasolina" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="" class="form-label">Marca de tanque</label>
+                                    <input type="text" name="marca_tanque" class="form-control">
+                                </div>
+
+                                <h5>Pozos</h5>
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">No.Pozos</label>
+                                    <input type="text" name="num_pozos" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="" class="form-label">No.Pozos monitoriados</label>
+                                    <input type="text" name="num_pozos_moni" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="num_techunbre" class="form-label">No.Techumbre(s)</label>
+                                    <input type="text" name="num_techunbre" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="num_columnas" class="form-label">No.Columnas</label>
+                                    <input type="text" name="num_columnas" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="tipo_material" class="form-label">Tipo de material</label>
+                                    <input type="text" name="tipo_material" class="form-control">
+                                </div>
+
+                                <h5>Despachos</h5>
+                                <div class="col-md-4">
+                                    <label for="num_despachos" class="form-label">No.Despachos módulos despachadores</label>
+                                    <input type="text" name="num_despachos" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="num_pro_diesel" class="form-label">No.Despachos para despacho de diesel</label>
+                                    <input type="text" name="num_pro_diesel" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="num_pro_gaso" class="form-label">No.Despachos para el despacho de gasolina</label>
+                                    <input type="text" name="num_pro_gaso" class="form-control">
+                                </div>
+
+                                <h5>Cuartos</h5>
+
+                                <div class="col-md-4">
+                                    <label for="cuarto_sucios" class="form-label">Cuarto de sucios</label>
+                                    <input type="text" name="cuarto_sucios" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="cuarto_maquinas" class="form-label">Cuarto de maquinas</label>
+                                    <input type="text" name="cuarto_maquinas" class="form-control">
+                                </div>
+
+                                
+                                <div class="col-md-4">
+                                    <label for="cuarto_electrico" class="form-label">Cuarto de electrico</label>
+                                    <input type="text" name="cuarto_electrico" class="form-control">
+                                </div> 
+
+                                <h5>Almacen</h5>
+                            
+                                <div class="col-md-12">
+                                    <label for="almacen" class="form-label">Almacen de residuos peligrosos</label>
+                                    <input type="text" name="almacen" class="form-control">
+                                </div> 
+
+                                <div class="col-md-6">
+                                    <label for="trampas_sucios" class="form-label">Trampas de combustible</label>
+                                    <input type="text" name="trampas_sucios" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="num_fases_sucios" class="form-label">Fases de trampa de combustible</label>
+                                    <input type="text" name="num_fases_sucios" class="form-control">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="tubos_veteo" class="form-label">Tubos de venteo</label>
+                                    <input type="text" name="tubos_veteo" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="lado_tubos" class="form-label">Al Lado de la instalacion</label>
+                                    <input type="text" name="lado_tubos" class="form-control">
+                                </div>
+
+                                
+                                <label for="si_no_anuncion" class="form-label">Anuncio independiente(si/no)</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="si_no_anuncion" id="si_no_anuncion" value="si">
+                                    <label class="form-check-label" for="gridRadios2">
+                                        Si
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="si_no_anuncion" id="si_no_anuncion" value="No">
+                                    <label class="form-check-label" for="gridRadios2">
+                                        No
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 text-center"
+                                                        style="padding-top: 10px;">
+                                                        <button type="submit" class="btn btn-primary">Generar</button>
+                                                    </div>
+
+                             
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Acta Modal-->
+
+
+
+
+
+
+                                 
+              
+                    <!--  Comprobantes  Modal -->
+                        <div class="modal fade" id="largeModal" tabindex="-1">
+                            <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                                <h5 class="modal-title">COMPROBANTE DE TRASLADO</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+
+                            <h5 class="modal-title">Traslados</h5>
+
+
+                                <form action="{{route('generate.comprobante.operacion')}}" method="POST" id="generateWordForm">
+                                    @csrf
+                                        <input type="hidden" id="nomenclatura" name="nomenclatura"
+                                             value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                        <input type="hidden" id="idestacion" name="idestacion"
+                                            value="{{ strtoupper($estacion->id) }}">
+                                        <input type="hidden" id="id_servicio" name="id_servicio"
+                                            value="{{ $servicioAnexo->id }}">
+                                        <input type="hidden" name="id_usuario"
+                                            value="{{ $estacion->usuario->id }}">
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <label for="fecha_inspeccion">Fecha Programada de
+                                                                    Inspección</label>
+                                                    <input type="date" name="fecha_inspeccion"
+                                                        id="fecha_inspeccion" class="form-control">
+                                                </div>
+                                            </div>
+                                            <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Origen</th>
+                                                            <th>Destino</th>
+                                                            <th>Transporte utilizado</th>
+                                                            <th>Tipo comprobante</th>
+                                                            <th>Concepto</th>
+                                                            <th>Fecha de emisión</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            
+                                                            <td>                                                              
+                                                                    <textarea id="origen1" name="origen1" rows="5" cols="33" class="form-control">
+                                                                        
+                                                                    </textarea>            
+                                                            </td>
+
+                                                            <td>   
+                                                                
+                                                                    <textarea id="destino_1" name="destino_1" rows="5" cols="33" class="form-control">
+                                                                            
+                                                                    </textarea>
+                                                                
+                                                            </td>
+
+
+                                                            <td>
+                                                                <!-- TRASNSPORTE UTILZIADO -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte1" id="avion1"
+                                                                        value="avion">
+                                                                    <label class="form-check-label"
+                                                                        for="avion1">Avión</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte1" id="autobus1"
+                                                                        value="autobus">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Autobús</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte1" id="taxi1"
+                                                                        value="taxi">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_aplica">Taxi</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte1" id="oficial1"
+                                                                        value="oficial">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_aplica">Oficial</label>
+                                                                </div>
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="transporte1" id="otro_transporte1" value="otro">
+                                                                    <label class="form-check-label me-2" for="otro_transporte1">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_transporte_text1" id="other_option">
+                                                                </div>
+                                                                
+                                                            </td>
+
+
+                                                            <td>
+                                                                <!-- TIPO COMPROBANTE -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="comprobante1" id="factura1"
+                                                                        value="factura">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_cumple">Factura</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="comprobante1" id="boleto1"
+                                                                        value="boleto">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Boleto</label>
+                                                                </div>
+
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="comprobante1" id="opcion1_no_aplica" value="otro">
+                                                                    <label class="form-check-label me-2" for="opcion1_no_aplica">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_comprobante_text1" id="other_option">
+                                                                </div>
+
+                                                            </td>
+
+
+
+                                                            <td>
+                                                               <!-- CONCEPTO -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto1" id="opcion1_cumple"
+                                                                        value="pasaje">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_cumple">Pasaje</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto1" id="opcion1_no_cumple"
+                                                                        value="caseta">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Caseta</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto1" id="opcion1_no_cumple"
+                                                                        value="combustible">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Combustible</label>
+                                                                </div>
+
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="concepto1" id="opcion1_no_aplica" value="otro">
+                                                                    <label class="form-check-label me-2" for="opcion1_no_aplica">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_concepto_text1" id="other_option">
+                                                                </div>
+                                                            </td>
+
+                                           
+                                                            <td>
+                                                                <!-- FECHA DE EMISION -->
+                                                                <input type="date" name="fecha_emision1"
+                                                                id="fecha_inspeccion" class="form-control">
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td>2</td>
+                                                            
+                                                            <td>
+                                                            <textarea id="origen2" name="origen2" rows="5" cols="33" class="form-control">
+                                                                        
+                                                                        </textarea>      
+                                                            </td>
+
+                                                            <td>
+                                                            <textarea id="destino_2" name="destino_2" rows="5" cols="33" class="form-control">
+                                                                        
+                                                                        </textarea>      
+                                                            </td>
+
+
+                                                            <td>
+                                                                <!-- Opción 1 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte2" id="opcion1_cumple"
+                                                                        value="avion">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_cumple">Avión</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte2" id="opcion1_no_cumple"
+                                                                        value="autobus">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Autobús</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte2" id="opcion1_no_aplica"
+                                                                        value="taxi">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_aplica">Taxi</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="transporte2" id="opcion1_no_aplica"
+                                                                        value="oficial">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_aplica">Oficial</label>
+                                                                </div>
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="transporte2" id="opcion1_no_aplica" value="otro">
+                                                                    <label class="form-check-label me-2" for="opcion1_no_aplica">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_trasnporte2_text" id="other_option">
+                                                                </div>
+                                                                
+                                                            </td>
+
+
+                                                            <td>
+                                                                <!-- Opción 1 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="comprobante2" id="opcion1_cumple"
+                                                                        value="factura">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_cumple">Factura</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="comprobante2" id="opcion1_no_cumple"
+                                                                        value="boleto">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Boleto</label>
+                                                                </div>
+
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="comprobante2" id="opcion1_no_aplica" value="otro">
+                                                                    <label class="form-check-label me-2" for="opcion1_no_aplica">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_comprobante2_text" id="other_option">
+                                                                </div>
+
+                                                            </td>
+
+
+                                                            <td>
+                                                                <!-- Opción 1 -->
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto2" id="opcion1_cumple"
+                                                                        value="pasaje">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_cumple">Pasaje</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto2" id="opcion1_no_cumple"
+                                                                        value="caseta">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Caseta</label>
+                                                                </div>
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="concepto2" id="opcion1_no_cumple"
+                                                                        value="combustible">
+                                                                    <label class="form-check-label"
+                                                                        for="opcion1_no_cumple">Combustible</label>
+                                                                </div>
+
+
+                                                                <div class="form-check d-flex align-items-center">
+                                                                    <input class="form-check-input" type="radio" name="concepto2" id="opcion1_no_aplica" value="otro">
+                                                                    <label class="form-check-label me-2" for="opcion1_no_aplica">Otro</label>
+                                                                    <input type="text" class="form-control w-auto" name="otro_concepto2_text" id="other_option">
+                                                                </div>
+                                                            </td>
+
+                                           
+                                                            <td>
+                                                                <input type="date" name="fecha_emision2"
+                                                                id="fecha_inspeccion" class="form-control">
+                                                            </td>
+                                                        </tr>
+
+                                                        <!-- Agregar más filas según sea necesario -->
+                                                    </tbody>
+                                                </table>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 text-center"
+                                                        style="padding-top: 10px;">
+                                                        <button type="submit" class="btn btn-primary">Generar</button>
+                                                    </div>
+                                            </form>                               
+                                </div>
+                            </div>
+                            </div>
+                        </div><!-- End  Comprobantes Modal-->
 
 
                            
