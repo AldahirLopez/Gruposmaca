@@ -88,6 +88,22 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Tarjeta 4 - Certificado y JSON  -->
+                                <div class="col-md-4 dictamenes-card" style="display: none;">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Certificado</h5>
+                                            <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                <li class="list-group-item">Certificado</li>
+                                                <li class="list-group-item">Archivo JSON</li>
+                                            </ol>
+                                            <button type="button" class="btn btn-primary" id="dictamenesButton2" data-toggle="modal" data-target="#dictamenesModalmedicion" style="margin-top: 10px;">
+                                                Generar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
 
