@@ -13,7 +13,7 @@
                         <div style="margin-top: 15px;">
                             <a href="{{ route('home') }}" class="btn btn-danger"><i
                                     class="bi bi-arrow-return-left"></i></a>
-                            @can('crear-formato')
+                            @can('crear-formato_vigentes')
                                 <a class="btn btn-success" href="{{ route('archivosanexo.create') }}">Nuevo</a>
                             @endcan
                         </div>
@@ -43,14 +43,14 @@
                                                 }
                                             </script>
                                         </td>
-                                        @if(auth()->check() && auth()->user()->hasRole('Administrador'))
+                                        @if(auth()->check() && auth()->user()->hasRole(['Administrador','Expedientes']))
                                             <td scope="row">
-                                                @can('editar-formato')
+                                                @can('editar-formato_vigentes')
                                                     <a class="btn btn-primary"
                                                         href="{{ route('archivos.edit', $archivo->id) }}">Editar</a>
                                                 @endcan
 
-                                                @can('borrar-formato')
+                                                @can('borrar-formato_vigentes')
                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['archivos.destroy', $archivo->id], 'style' => 'display:inline']) !!}
                                                     {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
                                                     {!! Form::close() !!}

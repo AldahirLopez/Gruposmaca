@@ -148,26 +148,119 @@
                 </ul>
             </li>
         @endif
+        @if(auth()->check() && auth()->user()->hasRole(['Expedientes']))
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-calendar-check-fill"></i><span>Formatos Vigentes</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.anexo30') }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.ope') }}">
+                            <i class="bi bi-circle"></i><span>Operacion y Mantenimiento</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.diseno') }}">
+                            <i class="bi bi-circle"></i><span>Diseño</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('listar.const') }}">
+                            <i class="bi bi-circle"></i><span>Construccion</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#formshistori-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-calendar-week-fill"></i><span>Historial de Formatos</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="formshistori-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('historialformatos.index', ['tipo_doc' => 'anexo30']) }}">
+                            <i class="bi bi-circle"></i><span>Anexo 30</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('historialformatos.index', ['tipo_doc' => 'operacion']) }}">
+                            <i class="bi bi-circle"></i><span>Operacion y Mantenimiento</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('historialformatos.index', ['tipo_doc' => 'diseno']) }}">
+                            <i class="bi bi-circle"></i><span>Diseño</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('historialformatos.index', ['tipo_doc' => 'construccion']) }}">
+                            <i class="bi bi-circle"></i><span>Construcción</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#operacion-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-folder"></i><span>Operacion y Mantenimiento</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="operacion-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('operacion.index') }}">
+                            <i class="bi bi-circle"></i><span>Ver Servicios</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
+                    <i class="bx bxs-data"></i>
+                    <span>Estaciones de servicio</span>
+                </a>
+            </li>
+
+
+
+        @endif
 
         @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
-        <!-- End Components Nav -->
-        <li class="nav-heading">Paginas</li>
+            <!-- End Components Nav -->
+            <li class="nav-heading">Paginas</li>
             <!-- 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
-                    <i class="bi bi-calendar3"></i>
-                    <span>Recordatorios</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#">
+                        <i class="bi bi-calendar3"></i>
+                        <span>Recordatorios</span>
+                    </a>
+                </li>
 
-             
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('ema.index') }}">
-                    <i class="bi bi-cloud-arrow-up-fill"></i>
-                    <span>Tramites Entidad Mexicana de Acreditacion, A.C.</span>
-                </a>
-            </li>
-            -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('ema.index') }}">
+                        <i class="bi bi-cloud-arrow-up-fill"></i>
+                        <span>Tramites Entidad Mexicana de Acreditacion, A.C.</span>
+                    </a>
+                </li>
+                -->
 
             @can('ver-servicio_operacion_mantenimiento')
                 <li class="nav-item">
@@ -189,12 +282,12 @@
 
 
 
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
-                <i class="bx bxs-data"></i>
-                <span>Estaciones de servicio</span>
-            </a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
+                    <i class="bx bxs-data"></i>
+                    <span>Estaciones de servicio</span>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('usuario_estacion.index') }}">
