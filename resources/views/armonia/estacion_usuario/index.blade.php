@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="#" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
+                            <a href="/" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i></a>
                             @can('crear-servicio')
                                 <!-- Botón que abre el modal -->
                                 <button type="button" class="btn btn-success" data-toggle="modal"

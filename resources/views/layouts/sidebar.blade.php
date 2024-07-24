@@ -152,7 +152,7 @@
         @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
         <!-- End Components Nav -->
         <li class="nav-heading">Paginas</li>
-
+            <!-- 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#">
                     <i class="bi bi-calendar3"></i>
@@ -160,13 +160,14 @@
                 </a>
             </li>
 
+             
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('ema.index') }}">
                     <i class="bi bi-cloud-arrow-up-fill"></i>
                     <span>Tramites Entidad Mexicana de Acreditacion, A.C.</span>
                 </a>
             </li>
-
+            -->
 
             @can('ver-servicio_operacion_mantenimiento')
                 <li class="nav-item">
