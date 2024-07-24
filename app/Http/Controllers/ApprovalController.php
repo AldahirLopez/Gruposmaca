@@ -3,6 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cotizacion_Servicio_Anexo30;
+use App\Models\Cotizacion_Operacion;
+use App\Models\Expediente_Operacion;
+use App\Models\Expediente_Servicio_Anexo_30;
+use App\Models\Documento_Servicio_operacion;
+use App\Models\Documento_Servicio_Anexo;
+use App\Models\Factura_Anexo;
+use App\Models\Pago_Anexo;
+use App\Models\Pago_Operacion;
+use App\Models\Acta_Operacion;
 use App\Models\Datos_Servicio;
 use App\Models\ServicioOperacion;
 use App\Models\User;
@@ -95,8 +104,21 @@ class ApprovalController extends Controller
             // Eliminar registros relacionados en cotizacion_anexo_30
             Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
 
-            // Eliminar primero la referencia en la tabla datos_servicio_anexo_30 si existe
+             // Eliminar registros relacionados en Expediente operacion
+            Expediente_Servicio_Anexo_30::where('servicio_anexo_id', $servicio->id)->delete();
+            
+            Documento_Servicio_Anexo::where('servicio_id', $servicio->id)->delete();
+        
+             //Elimnar regustros relacionados en pago
+             $pago=Pago_Anexo::where('servicio_anexo_id', $servicio->id)->first();
+             
+             if($pago){
+                Factura_Anexo::where('id_pago', $pago->id)->delete();
+                $pago->delete();
 
+             }
+
+           
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;
             $customFolderPath = "servicios_anexo30/{$nomenclatura}";
@@ -118,15 +140,27 @@ class ApprovalController extends Controller
 
     public function approveServicioOperacionDeletion(Request $request, $id)
     {
+       
         try {
             // Intenta encontrar el servicio en la segunda tabla
             $servicio = ServicioOperacion::where('nomenclatura', $id)->firstOrFail();
-            
-            // Eliminar registros relacionados en cotizacion_anexo_30
-            Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
 
-            // Eliminar primero la referencia en la tabla datos_servicio_anexo_30 si existe
+            // Eliminar registros relacionados en Cotizacion operacion
+            Cotizacion_Operacion::where('servicio_id', $servicio->id)->delete();
 
+            // Eliminar registros relacionados en Expediente operacion
+            Expediente_Operacion::where('operacion_mantenimiento_id', $servicio->id)->delete();
+
+            //Eliminar registros relacionados en documentacion
+            Documento_Servicio_operacion::where('servicio_id', $servicio->id)->delete();
+
+            //Elimnar regustros relacionados en acta de verificacion 
+            Acta_Operacion::where('servicio_id', $servicio->id)->delete();
+
+            //Elimnar regustros relacionados en Pago operaciob
+            Pago_Operacion::where('servicio_id', $servicio->id)->delete();
+
+    
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;
             $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}";
