@@ -12,11 +12,11 @@ class FormatosController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-formato|crear-formato|editar-formato|borrar-formato', ['only' => ['index']]);
-        $this->middleware('permission:crear-formato', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-formato', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-formato', ['only' => ['destroy']]);
-    }
+        $this->middleware('permission:ver-formato_vigentes|crear-formato_vigentes|editar-formato_vigentes|borrar-formato_vigentes', ['only' => ['index']]);
+        $this->middleware('permission:crear-formato_vigentes', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-formato_vigentes', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-formato_vigentes', ['only' => ['destroy']]);
+    } 
 
     public function save(Request $request, $id = null)
     {

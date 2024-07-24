@@ -12,10 +12,10 @@ class FormatosHistorialController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-formato|crear-formato|editar-formato|borrar-formato', ['only' => ['index']]);
-        $this->middleware('permission:crear-formato', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-formato', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:borrar-formato', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-formato_historial|crear-formato_historial|editar-formato_historial|borrar-formato_historial', ['only' => ['index']]);
+        $this->middleware('permission:crear-formato_historial', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-formato_historial', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:borrar-formato_historial', ['only' => ['destroy']]);
     }
 
     public function index($tipo_doc = null)
