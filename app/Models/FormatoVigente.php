@@ -15,5 +15,6 @@ class FormatoVigente extends Model
     protected $fillable = [
         'nombre',
         'rutadoc',
+        'tipo_doc',
     ];
 }

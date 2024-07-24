@@ -3,7 +3,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Historial Formatos Anexo 30</h3>
+        <h3 class="page__heading">Historial Formatos {{ $tipo_doc_name }}</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -78,6 +78,7 @@
 <script>
     document.getElementById('filtrohistorial').addEventListener('change', function () {
         var nombre = this.value;
+        var tipoDoc = "{{ $tipo_doc }}"; // Ensure this is set correctly in the Blade view
 
         fetch('{{ route("filtrar.archivos") }}', {
             method: 'POST',
@@ -85,7 +86,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            body: JSON.stringify({ nombre: nombre })
+            body: JSON.stringify({ tipo_doc: tipoDoc, nombre: nombre })
         })
             .then(response => response.json())
             .then(data => {

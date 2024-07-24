@@ -13,6 +13,7 @@ class CreateFormatosVigentesTable extends Migration
     {
         Schema::connection('segunda_db')->create('formatos_vigentes', function (Blueprint $table) {
             $table->id();
+            $table->string('tipo_doc');
             $table->string('nombre');
             $table->string('rutadoc');
             $table->timestamps();

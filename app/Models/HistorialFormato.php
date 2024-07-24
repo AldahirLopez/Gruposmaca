@@ -16,5 +16,6 @@ class HistorialFormato extends Model
         'formato_id',
         'nombre',
         'rutadoc',
+        'tipo_doc',
     ];
 }
