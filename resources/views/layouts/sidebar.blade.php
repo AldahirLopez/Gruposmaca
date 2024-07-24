@@ -150,8 +150,8 @@
         @endif
 
         @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
-            <!-- End Components Nav -->
-            <li class="nav-heading">Paginas</li>
+        <!-- End Components Nav -->
+        <li class="nav-heading">Paginas</li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#">
@@ -188,12 +188,12 @@
 
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
-                    <i class="bx bxs-data"></i>
-                    <span>Estaciones de servicio</span>
-                </a>
-            </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('estacion.selecccion') }}">
+                <i class="bx bxs-data"></i>
+                <span>Estaciones de servicio</span>
+            </a>
+        </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('usuario_estacion.index') }}">
@@ -226,6 +226,9 @@
             <!-- End Profile Page Nav -->
 
         @endif
+
+
+
 
     </ul>
 

@@ -175,7 +175,7 @@
 
                                                     @can('Subir-pago-operacion')
                                                         <td scope="row">
-                                                            @if ($servicio->pago !== null)
+                                                            @if ($servicio->pago !== null or $servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                     disabled>
@@ -227,23 +227,36 @@
                                                             <form action="{{ route('documentacion_operacion') }}" method="GET"
                                                                 style="display:inline;">
                                                                 <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                                @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
+                                                                <button type="submit" class="btn btn-primary" disabled>
+                                                                    <i class="bi bi-folder-fill"></i>
+                                                                </button>
+                                                                @else
                                                                 <button type="submit" class="btn btn-primary">
                                                                     <i class="bi bi-folder-fill"></i>
                                                                 </button>
+                                                                @endif
+                                                                
+                                                                
                                                             </form>
                                                         </td><!--FIN BOTON DE DOCUMENTACION-->
                                                     @endcan
 
                                                     @can('borrar-servicio_operacion_mantenimiento')
                                                         <td scope="row">
-
-                                                            @if($servicio->pending_deletion_servicio)
-                                                                <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                           
+                                                        @if($servicio->pending_deletion_servicio)
+                                                            <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                        @else
+                                                            @if($servicio->pending_apro_servicio == false)
+                                                                <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                                             @else
                                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                 {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                 {!! Form::close() !!}
                                                             @endif
+                                                        @endif
+
 
                                                         </td>
                                                     @endcan
@@ -392,7 +405,7 @@
 
                                                         @can('Subir-pago-operacion')
                                                             <td scope="row">
-                                                                @if ($servicio->pago !== null)
+                                                                @if ($servicio->pago !== null or $servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                         disabled>
@@ -446,9 +459,15 @@
                                                                 <form action="{{ route('documentacion_operacion') }}" method="GET"
                                                                     style="display:inline;">
                                                                     <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                                    @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
+                                                                    <button type="submit" class="btn btn-primary"disabled>
+                                                                        <i class="bi bi-folder-fill"></i>
+                                                                    </button >
+                                                                    @else
                                                                     <button type="submit" class="btn btn-primary">
                                                                         <i class="bi bi-folder-fill"></i>
                                                                     </button>
+                                                                    @endif
                                                                 </form>
                                                             </td><!--FIN BOTON DE DOCUMENTACION-->
                                                         @endcan
@@ -456,13 +475,18 @@
                                                         @can('borrar-servicio_operacion_mantenimiento')
                                                             <td scope="row">
 
-                                                                @if($servicio->pending_deletion_servicio)
-                                                                    <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                            @if($servicio->pending_deletion_servicio)
+                                                                <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                            @else
+                                                                @if($servicio->pending_apro_servicio == false)
+                                                                    <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                                                 @else
                                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_operacion.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                     {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                     {!! Form::close() !!}
-                                                                @endif                                          </td>
+                                                                @endif
+                                                            @endif
+                                                            </td>
                                                         @endcan
                                                     </tr>
                                                     @can('Subir-pago-operacion')

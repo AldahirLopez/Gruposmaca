@@ -173,7 +173,7 @@
                                                     @can('Subir-pago-anexo_30')
                                                         <td scope="row">
 
-                                                            @if ($servicio->pago !== null)
+                                                            @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false or $servicio->pending_deletion_servicio)
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                     disabled>
@@ -235,24 +235,35 @@
                                                             <form action="{{ route('documentacion_anexo') }}" method="GET"
                                                                 style="display:inline;">
                                                                 <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                                @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
+                                                                <button type="submit" class="btn btn-primary" disabled>
+                                                                    <i class="bi bi-folder-fill"></i>
+                                                                </button>
+                                                                @else
                                                                 <button type="submit" class="btn btn-primary">
                                                                     <i class="bi bi-folder-fill"></i>
                                                                 </button>
+                                                                @endif
                                                             </form>
                                                         </td>
                                                     @endcan
 
                                                     @can('borrar-servicio_anexo_30')
                                                         <td scope="row">
-                                                            @can('borrar-servicio_anexo_30')
-                                                                @if($servicio->pending_deletion_servicio)
-                                                                    <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                           
+                                                            @if($servicio->pending_deletion_servicio)
+                                                                <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                            @else
+                                                                @if($servicio->pending_apro_servicio == false)
+                                                                    <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
                                                                 @else
+
                                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
                                                                     {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
                                                                     {!! Form::close() !!}
                                                                 @endif
-                                                            @endcan
+                                                            @endif
+                                                            
                                                         </td>
                                                     @endcan
 
@@ -406,7 +417,7 @@
                                                         @can('Subir-pago-anexo_30')
                                                             <td scope="row">
 
-                                                                @if ($servicio->pago !== null)
+                                                                @if ($servicio->pago !== null or $servicio->pending_apro_servicio==false or $servicio->pending_deletion_servicio)
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                         disabled>
@@ -467,27 +478,40 @@
                                                         </td>
 
                                                         @can('Generar-documentacion-anexo_30')
-                                                            <td scope="row">
-                                                                <form action="{{ route('documentacion_anexo') }}" method="GET"
-                                                                    style="display:inline;">
-                                                                    <input type="hidden" name="id" value="{{ $servicio->id }}">
-                                                                    <button type="submit" class="btn btn-primary">
-                                                                        <i class="bi bi-folder-fill"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
+                                                        <td scope="row">
+                                                            <form action="{{ route('documentacion_anexo') }}" method="GET"
+                                                                style="display:inline;">
+                                                                <input type="hidden" name="id" value="{{ $servicio->id }}">
+                                                                @if ($servicio->pending_apro_servicio == false or $servicio->pending_deletion_servicio)
+                                                                <button type="submit" class="btn btn-primary" disabled>
+                                                                    <i class="bi bi-folder-fill"></i>
+                                                                </button>
+                                                                @else
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    <i class="bi bi-folder-fill"></i>
+                                                                </button>
+                                                                @endif
+                                                            </form>
+                                                        </td>
                                                         @endcan
 
                                                         @can('borrar-servicio_anexo_30')
-                                                            <td scope="row">
-                                                                @if($servicio->pending_deletion_servicio)
-                                                                    <button class="btn btn-danger" disabled>(pendiente)</button>
-                                                                @else
-                                                                    {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @endif
-                                                            </td>
+                                                        <td scope="row">
+                                                           
+                                                           @if($servicio->pending_deletion_servicio)
+                                                               <button class="btn btn-danger" disabled>(pendiente)</button>
+                                                           @else
+                                                               @if($servicio->pending_apro_servicio == false)
+                                                                   <button class="btn btn-danger" disabled><i class="bi bi-trash-fill"></i></button>
+                                                               @else
+
+                                                                   {!! Form::open(['method' => 'DELETE', 'route' => ['servicio_inspector_anexo_30.destroy', $servicio->id], 'style' => 'display:inline']) !!}
+                                                                   {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                                                   {!! Form::close() !!}
+                                                               @endif
+                                                           @endif
+                                                           
+                                                       </td>
                                                         @endcan
 
                                                     </tr>
