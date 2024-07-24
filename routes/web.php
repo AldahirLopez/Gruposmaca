@@ -215,19 +215,29 @@ Route::group(['middleware' => ['auth']], function () {
     //Route::resource('pago_anexo', PagosAnexoController::class);
     //Route::resource('estacion_anexo', EstacionesAnexoController::class);
     Route::resource('ema', TramitesEmaController::class);
-    Route::resource('historialformatos', FormatosHistorialController::class);
-    Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'index'])->name('historialformatos.anexo30.index');
+    Route::get('/historial-formatos/{tipo_doc?}', [FormatosHistorialController::class, 'index'])->name('historialformatos.index');
+    Route::delete('/historialformatos/{id}', [FormatosHistorialController::class, 'destroy'])->name('historialformatos.destroy');
+
+
 
     Route::post('/filtrar-archivos', [FormatosHistorialController::class, 'filtrarArchivos'])->name('filtrar.archivos');
 
 
 
-    Route::get('/armonia/formatos/anexo30', [FormatosController::class, 'listarAnexo30'])->name('listar.anexo30');
-    Route::get('/armonia/formatos/anexo30/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
-    Route::get('/armonia/formatos/anexo30/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.anexo.edit');
+    //Rutas de formatos
+    Route::get('/listar/anexo30', [FormatosController::class, 'ListarAnexo30'])->name('listar.anexo30');
+    Route::get('/listar/ope', [FormatosController::class, 'ListarOpe'])->name('listar.ope');
+    Route::get('/listar/diseno', [FormatosController::class, 'ListarDiseno'])->name('listar.diseno');
+    Route::get('/listar/const', [FormatosController::class, 'ListarConst'])->name('listar.const');
+    
 
-    Route::post('/armonia/formatos/anexo30/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');
-    Route::delete('/armonia/formatos/anexo30/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.anexo.destroy');
+
+    //
+    Route::get('/armonia/formatos/nuevo', [FormatosController::class, 'create'])->name('archivosanexo.create');
+    Route::get('/armonia/formatos/editar/{id}', [FormatosController::class, 'edit'])->name('archivos.edit');
+
+    Route::post('/armonia/formatos/save/{id?}', [FormatosController::class, 'save'])->name('archivos.save');
+    Route::delete('/armonia/formatos/destroy/{id}', [FormatosController::class, 'destroy'])->name('archivos.destroy');
 
 
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);

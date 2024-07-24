@@ -29,12 +29,21 @@
                             {!! Form::label('archivo', 'Archivo (dejar en blanco para mantener el actual)') !!}
                             {!! Form::file('archivo', ['class' => 'form-control']) !!}
                         </div>
+                        <div class="form-group">
+                            {!! Form::label('tipo', 'Tipo de Documento') !!}
+                            {!! Form::select('tipo_doc', [
+                                'anexo30' => 'Anexo 30',
+                                'operacion' => 'Operación y Mantenimiento',
+                                'diseño' => 'Diseño',
+                                'construccion' => 'Construcción'
+                            ], null, ['class' => 'form-control']) !!}
+                        </div>
                         <div style="margin-top: 15px;">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                                 <a href="{{ route('listar.anexo30') }}" class="btn btn-danger">Cancelar</a>
                             </div>
-                        </div>
+                        </div> 
                         {!! Form::close() !!}
                     </div>
                 </div>

@@ -18,14 +18,30 @@ class FormatosHistorialController extends Controller
         $this->middleware('permission:borrar-formato', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index($tipo_doc = null)
     {
+        // Define a mapping for tipo_doc values
+        $tipoDocNames = [
+            'anexo30' => 'Anexo 30',
+            'operacion' => 'Operación y Mantenimiento',
+            'diseno' => 'Diseño',
+            'construccion' => 'Construcción'
+        ];
 
-        // Obtener el nombre del dictamen
-        $archivos = HistorialFormato::all();
+        // Get the human-readable name for the tipo_doc
+        $tipoDocName = $tipo_doc ? ($tipoDocNames[$tipo_doc] ?? 'Formatos') : 'Formatos';
 
-        // Pasar el nombre del dictamen, los archivos y el ID del dictamen a la vista
-        return view('armonia.historialformatos.anexo30.index', ['archivos' => $archivos]);
+        // Filter the files by tipo_doc if provided, otherwise get all
+        $archivos = $tipo_doc
+            ? HistorialFormato::where('tipo_doc', $tipo_doc)->get()
+            : HistorialFormato::all();
+
+        // Pass the files and the tipo_doc name to the view
+        return view('armonia.historialformatos.index', [
+            'archivos' => $archivos,
+            'tipo_doc_name' => $tipoDocName,
+            'tipo_doc' => $tipo_doc
+        ]);
     }
 
     public function destroy($id)
@@ -57,21 +73,46 @@ class FormatosHistorialController extends Controller
         // Eliminar el registro de la base de datos
         $formato->delete();
 
+        // Obtener el tipo de documento para redirigir
+        $tipoDoc = request()->query('tipo_doc', 'anexo30'); // Valor por defecto 'anexo30'
+
         // Redirigir con un mensaje de éxito
-        return redirect()->route('historialformatos.anexo30.index')->with('success', 'Formato Histórico eliminado correctamente');
+        switch ($tipoDoc) {
+            case 'anexo30':
+                return redirect()->route('historialformatos.index', ['tipo_doc' => 'anexo30'])->with('success', 'Formato eliminado correctamente');
+            case 'operacion':
+                return redirect()->route('historialformatos.index', ['tipo_doc' => 'operacion'])->with('success', 'Formato eliminado correctamente');
+            case 'diseno':
+                return redirect()->route('historialformatos.index', ['tipo_doc' => 'diseno'])->with('success', 'Formato eliminado correctamente');
+            case 'construccion':
+                return redirect()->route('historialformatos.index', ['tipo_doc' => 'construccion'])->with('success', 'Formato eliminado correctamente');
+            default:
+                return redirect()->route('historialformatos.index', ['tipo_doc' => 'anexo30'])->with('success', 'Formato eliminado correctamente');
+        }
     }
+
 
     public function filtrarArchivos(Request $request)
     {
+        $tipo_doc = $request->input('tipo_doc');
         $nombre = $request->input('nombre');
 
-        if ($nombre) {
-            $archivos = HistorialFormato::where('nombre', $nombre)->orderBy('created_at', 'desc')->get();
-        } else {
-            $archivos = HistorialFormato::orderBy('created_at', 'desc')->get();
+        $query = HistorialFormato::query();
+
+        // Filter by tipo_doc if provided
+        if ($tipo_doc) {
+            $query->where('tipo_doc', $tipo_doc);
         }
 
-        // Añadir el formato de fecha en el servidor
+        // Filter by nombre if provided
+        if ($nombre) {
+            $query->where('nombre', $nombre);
+        }
+
+        // Order by created_at descending
+        $archivos = $query->orderBy('created_at', 'desc')->get();
+
+        // Add formatted date to each archivo
         $archivos = $archivos->map(function ($archivo) {
             $archivo->formatted_date = $archivo->created_at->format('d-m-Y');
             return $archivo;
@@ -79,6 +120,7 @@ class FormatosHistorialController extends Controller
 
         return response()->json($archivos);
     }
+
 
 
 }

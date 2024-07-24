@@ -13,6 +13,7 @@ class CreateHistorialFormatosTable extends Migration
     {
         Schema::connection('segunda_db')->create('historial_formatos', function (Blueprint $table) {
             $table->id();
+            $table->string('tipo_doc');
             $table->string('nombre');
             $table->string('rutadoc');
             $table->unsignedBigInteger('formato_id');
