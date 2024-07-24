@@ -32,11 +32,11 @@
                                                 class="btn btn-info">Listar Archivos</a>
                                         </td>
                                         <td scope="row">
-                                            @can('editar-operacion')
+                                            
                                                 <a class="btn btn-primary"
                                                     href="{{ route('operacion.edit', $dictamen->id) }}">Editar</a>
-                                            @endcan
-                                            @can('borrar-operacion')
+                                           
+                                            
                                                 <form action="{{ route('approval.cancel', $dictamen->id) }}" method="POST"
                                                     style="display: inline;">
                                                     @csrf
@@ -49,7 +49,7 @@
                                                     <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
                                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                                 </form>
-                                            @endcan
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -77,7 +77,7 @@
                                                 class="btn btn-info">Listar Archivos</a>
                                         </td>
                                         <td scope="row">
-                                            @can('borrar-servicio')
+                                          
                                                 <form action="{{ route('approval.cancel', $servicio->nomenclatura) }}"
                                                     method="POST" style="display: inline;">
                                                     @csrf
@@ -90,7 +90,7 @@
                                                     <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
                                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                                 </form>
-                                            @endcan
+                                           
                                         </td>
                                     </tr>
                                 @endforeach
