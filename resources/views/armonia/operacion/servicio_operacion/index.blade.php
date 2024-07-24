@@ -572,7 +572,7 @@
                                 <div class="row">
                                     <!-- Select dentro del formulario -->
                                     <div class="form-group" style="padding-top: 10px;">
-                                        <select name="estacion" class="form-select" id="estacion">
+                                        <select name="estacion" class="form-select" id="estacion" required>
                                             <option value="">Selecciona una estación</option>
                                             @foreach ($estaciones as $estacion)
                                                 <option value="{{ $estacion->id }}">

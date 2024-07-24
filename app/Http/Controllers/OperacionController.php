@@ -1331,7 +1331,7 @@ class OperacionController extends Controller
 
         catch (\Exception $e) {
             \Log::error("Error al generar documentos: " . $e->getMessage());
-            return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
+            return redirect()->back()->withErrors(['error' => 'No dejar campos sin rellenar']);
         }
 
 

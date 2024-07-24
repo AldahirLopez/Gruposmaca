@@ -21,14 +21,15 @@
 
                     <div class="card-body">
                         @if ($errors->any())
-                            <div class="alert alert-dark alert-dismissible fade show" role="alert">
-                                <strong>¡Revise los campos!</strong>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 @foreach ($errors->all() as $error)
-                                    <span class="badge badge-danger">{{ $error }}</span>
-                                @endforeach
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <i class="bi bi-exclamation-octagon me-1"></i>
+                                        {{$error}}
+                                @endforeach  
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>                        
+                            </div>
+
+                           
                             </div>
                         @endif
 
@@ -60,9 +61,25 @@
                                     </div>
                                 </div>
 
+                                  <!-- Tarjeta 4 - Comprobantes -->
+                            <div class="col-md-4 dictamenes-card" style="display: none;">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Comprobantes</h5>
+                                            <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                <li class="list-group-item">COMPROBANTE DE TRASLADO
+                                                </li>
+                                            </ol>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largeModal"  style="margin-top: 10px;">
+                                                Generar
+                                            </button>
+                                        </div>
+                                    </div>
+                            </div>
+
                             
 
-                                <!-- Tarjeta 2 - Dictámenes Informáticos -->
+                                <!-- Tarjeta 2 - Dictámenes Informáticos 
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
                                         <div class="card-body">
@@ -79,7 +96,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                -->
                                 <!-- Tarjeta 3 - Dictámenes de Medición -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
@@ -96,21 +113,7 @@
                                 </div>
                             </div>
 
-                            <!-- Tarjeta 4 - Comprobantes -->
-                            <div class="col-md-4 dictamenes-card" style="display: none;">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Comprobantes</h5>
-                                            <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                <li class="list-group-item">COMPROBANTE DE TRASLADO
-                                                </li>
-                                            </ol>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largeModal"  style="margin-top: 10px;">
-                                                Generar
-                                            </button>
-                                        </div>
-                                    </div>
-                            </div>
+                          
 
 
             <!-- End Acta Modal-->
@@ -135,76 +138,76 @@
                                             
                             <div class="col-md-6">
                                 <label for="fecha_actual"class="form-label">Fecha</label>
-                                <input type="date" name="fecha_actual" class="form-control">
+                                <input type="date" name="fecha_actual" class="form-control" required>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="" class="form-label">Hora</label>
-                                <input type="time" name="hora" class="form-control">
+                                <input type="time" name="hora" class="form-control" required>
                             </div>
                                 
                             <div class="col-md-3">
                                 <label for="" class="form-label">Hora fin</label>
-                                <input type="time" name="hora_fin" class="form-control">
+                                <input type="time" name="hora_fin" class="form-control" required>
                             </div>
                             
 
                                 <h5>Datos del encargado</h5>
                                 <div class="col-md-6">
                                     <label for="recepcion" class="form-label">Nombre del encargardo de recepcion</label>
-                                    <input type="text" name="recepcion"class="form-control">
+                                    <input type="text" name="recepcion"class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="cargo" class="form-label" >Cargo</label>
-                                    <input type="text" name="cargo" class="form-control">
+                                    <input type="text" name="cargo" class="form-control"required>
                                 </div>
 
                                 <div class="col-md-2">
                                     <label for="exten" class="form-label">Extension</label>
-                                    <input type="text" name="exten" class="form-control">
+                                    <input type="text" name="exten" class="form-control" required>
                                 </div>
                                 
                                 <div class="col-md-4">
                                     <label for="num_telefono"class="form-label">Numero telefonico</label>
-                                    <input type="text" name="num_telefono" class="form-control">
+                                    <input type="text" name="num_telefono" class="form-control" required>
                                 </div>
                                 
                                 <div class="col-md-6">
                                     <label for="correo"class="form-label">Correo electronico</label>
-                                    <input type="text" name="correo" class="form-control">
+                                    <input type="email" name="correo" class="form-control" required>
                                 </div>
 
                                 <h5>Testigos</h5>
 
                                 <div class="col-md-6">
                                     <label for="folio_testigo1" class="form-label">Folio del testigo 1</label>
-                                    <input type="text" name="folio_testigo1" class="form-control">
+                                    <input type="text" name="folio_testigo1" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="nom_testigo1"class="form-label">Nombre del testigo 1</label>
-                                    <input type="text" name="nom_testigo1" class="form-control">
+                                    <input type="text" name="nom_testigo1" class="form-control" required>
                                 </div>
                                 
                                 <div class="col-12">
                                     <label for="domicilio_testigo1"class="form-label" >Domicilio del testigo 1</label>
-                                    <input type="text" name="domicilio_testigo1"class="form-control" placeholder="1234 Main St">
+                                    <input type="text" name="domicilio_testigo1"class="form-control" placeholder="1234 Main St" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="folio_testigo2" class="form-label">Folio del testigo 2</label>
-                                    <input type="text" name="folio_testigo2" class="form-control">
+                                    <input type="text" name="folio_testigo2" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="nom_testigo2"class="form-label" >Nombre del testigo 2</label>
-                                    <input type="text" name="nom_testigo2"  class="form-control">
+                                    <input type="text" name="nom_testigo2"  class="form-control" required>
                                 </div>
 
                                 <div class="col-12">
                                     <label for="domicilio_testigo2" class="form-label">Domicilio del testigo 2</label>
-                                    <input type="text" name="domicilio_testigo2"class="form-control" placeholder="1234 Main St">
+                                    <input type="text" name="domicilio_testigo2"class="form-control" placeholder="1234 Main St" required>
                                 </div>
 
                                 
@@ -213,135 +216,135 @@
                                 <h5>Informacion general de la instalacion</h5>
                                 <div class="col-md-12">
                                     <label for="" class="form-label">Tipo de vialidad de la estacion</label>
-                                    <input type="text" name="tipo_vialidad" class="form-control">
+                                    <input type="text" name="tipo_vialidad" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="" class="form-label">Capacidad total almacenamiento(Litros) </label>
-                                    <input type="text" name="suma_tanques" class="form-control">
+                                    <input type="number" name="suma_tanques" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="" class="form-label">No.Tanques de almacenamiento de doble pared</label>
-                                    <input type="text" name="num_tanques" class="form-control">
+                                    <input type="number" name="num_tanques" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="" class="form-label">No.Tanques de diesel</label>
-                                    <input type="text" name="num_tanques_diesel" class="form-control">
+                                    <input type="number" name="num_tanques_diesel" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="" class="form-label">Litros de diesel</label>
-                                    <input type="text" name="litros_diesel" class="form-control">
+                                    <input type="number" name="litros_diesel" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="" class="form-label">No.Tanques de gasolina</label>
-                                    <input type="text" name="num_tanques_gaso" class="form-control">
+                                    <input type="number" name="num_tanques_gaso" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="" class="form-label">Litros de gasolina</label>
-                                    <input type="text" name="litros_gasolina" class="form-control">
+                                    <input type="number" name="litros_gasolina" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="" class="form-label">Marca de tanque</label>
-                                    <input type="text" name="marca_tanque" class="form-control">
+                                    <input type="text" name="marca_tanque" class="form-control" required>
                                 </div>
 
                                 <h5>Pozos</h5>
                                 <div class="col-md-6">
                                     <label for="" class="form-label">No.Pozos</label>
-                                    <input type="text" name="num_pozos" class="form-control">
+                                    <input type="number" name="num_pozos" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="" class="form-label">No.Pozos monitoriados</label>
-                                    <input type="text" name="num_pozos_moni" class="form-control">
+                                    <input type="number" name="num_pozos_moni" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="num_techunbre" class="form-label">No.Techumbre(s)</label>
-                                    <input type="text" name="num_techunbre" class="form-control">
+                                    <input type="number" name="num_techunbre" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="num_columnas" class="form-label">No.Columnas</label>
-                                    <input type="text" name="num_columnas" class="form-control">
+                                    <input type="number" name="num_columnas" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="tipo_material" class="form-label">Tipo de material</label>
-                                    <input type="text" name="tipo_material" class="form-control">
+                                    <input type="text" name="tipo_material" class="form-control" required>
                                 </div>
 
                                 <h5>Despachos</h5>
                                 <div class="col-md-4">
                                     <label for="num_despachos" class="form-label">No.Despachos módulos despachadores</label>
-                                    <input type="text" name="num_despachos" class="form-control">
+                                    <input type="number" name="num_despachos" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="num_pro_diesel" class="form-label">No.Despachos para despacho de diesel</label>
-                                    <input type="text" name="num_pro_diesel" class="form-control">
+                                    <input type="number" name="num_pro_diesel" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="num_pro_gaso" class="form-label">No.Despachos para el despacho de gasolina</label>
-                                    <input type="text" name="num_pro_gaso" class="form-control">
+                                    <input type="number" name="num_pro_gaso" class="form-control" required>
                                 </div>
 
                                 <h5>Cuartos</h5>
 
                                 <div class="col-md-4">
                                     <label for="cuarto_sucios" class="form-label">Cuarto de sucios</label>
-                                    <input type="text" name="cuarto_sucios" class="form-control">
+                                    <input type="number" name="cuarto_sucios" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="cuarto_maquinas" class="form-label">Cuarto de maquinas</label>
-                                    <input type="text" name="cuarto_maquinas" class="form-control">
+                                    <input type="number" name="cuarto_maquinas" class="form-control" required>
                                 </div>
 
                                 
                                 <div class="col-md-4">
                                     <label for="cuarto_electrico" class="form-label">Cuarto de electrico</label>
-                                    <input type="text" name="cuarto_electrico" class="form-control">
+                                    <input type="number" name="cuarto_electrico" class="form-control" required>
                                 </div> 
 
                                 <h5>Almacen</h5>
                             
                                 <div class="col-md-12">
                                     <label for="almacen" class="form-label">Almacen de residuos peligrosos</label>
-                                    <input type="text" name="almacen" class="form-control">
+                                    <input type="text" name="almacen" class="form-control" required>
                                 </div> 
 
                                 <div class="col-md-6">
                                     <label for="trampas_sucios" class="form-label">Trampas de combustible</label>
-                                    <input type="text" name="trampas_sucios" class="form-control">
+                                    <input type="number" name="trampas_sucios" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="num_fases_sucios" class="form-label">Fases de trampa de combustible</label>
-                                    <input type="text" name="num_fases_sucios" class="form-control">
+                                    <input type="number" name="num_fases_sucios" class="form-control" required>
                                 </div>
                                 
                                 <div class="col-md-6">
                                     <label for="tubos_veteo" class="form-label">Tubos de venteo</label>
-                                    <input type="text" name="tubos_veteo" class="form-control">
+                                    <input type="number" name="tubos_veteo" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="lado_tubos" class="form-label">Al Lado de la instalacion</label>
-                                    <input type="text" name="lado_tubos" class="form-control">
+                                    <input type="text" name="lado_tubos" class="form-control" required>
                                 </div>
 
                                 
                                 <label for="si_no_anuncion" class="form-label">Anuncio independiente(si/no)</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="si_no_anuncion" id="si_no_anuncion" value="si">
+                                    <input class="form-check-input" type="radio" name="si_no_anuncion" id="si_no_anuncion" value="si" required>
                                     <label class="form-check-label" for="gridRadios2">
                                         Si
                                     </label>
@@ -402,7 +405,7 @@
                                                     <label for="fecha_inspeccion">Fecha Programada de
                                                                     Inspección</label>
                                                     <input type="date" name="fecha_inspeccion"
-                                                        id="fecha_inspeccion" class="form-control">
+                                                        id="fecha_inspeccion" class="form-control" required>
                                                 </div>
                                             </div>
                                             <table class="table table-sm">
@@ -422,14 +425,14 @@
                                                             <td>1</td>
                                                             
                                                             <td>                                                              
-                                                                    <textarea id="origen1" name="origen1" rows="5" cols="33" class="form-control">
+                                                                    <textarea id="origen1" name="origen1" rows="5" cols="33" class="form-control" required>
                                                                         
                                                                     </textarea>            
                                                             </td>
 
                                                             <td>   
                                                                 
-                                                                    <textarea id="destino_1" name="destino_1" rows="5" cols="33" class="form-control">
+                                                                    <textarea id="destino_1" name="destino_1" rows="5" cols="33" class="form-control" required>
                                                                             
                                                                     </textarea>
                                                                 
@@ -441,7 +444,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="transporte1" id="avion1"
-                                                                        value="avion">
+                                                                        value="avion" required>
                                                                     <label class="form-check-label"
                                                                         for="avion1">Avión</label>
                                                                 </div>
@@ -483,7 +486,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="comprobante1" id="factura1"
-                                                                        value="factura">
+                                                                        value="factura" required>
                                                                     <label class="form-check-label"
                                                                         for="opcion1_cumple">Factura</label>
                                                                 </div>
@@ -512,7 +515,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="concepto1" id="opcion1_cumple"
-                                                                        value="pasaje">
+                                                                        value="pasaje" required>
                                                                     <label class="form-check-label"
                                                                         for="opcion1_cumple">Pasaje</label>
                                                                 </div>
@@ -545,7 +548,7 @@
                                                             <td>
                                                                 <!-- FECHA DE EMISION -->
                                                                 <input type="date" name="fecha_emision1"
-                                                                id="fecha_inspeccion" class="form-control">
+                                                                id="fecha_inspeccion" class="form-control" required>
                                                             </td>
                                                         </tr>
                                                         
@@ -553,13 +556,13 @@
                                                             <td>2</td>
                                                             
                                                             <td>
-                                                            <textarea id="origen2" name="origen2" rows="5" cols="33" class="form-control">
+                                                            <textarea id="origen2" name="origen2" rows="5" cols="33" class="form-control" required>
                                                                         
                                                                         </textarea>      
                                                             </td>
 
                                                             <td>
-                                                            <textarea id="destino_2" name="destino_2" rows="5" cols="33" class="form-control">
+                                                            <textarea id="destino_2" name="destino_2" rows="5" cols="33" class="form-control" required>
                                                                         
                                                                         </textarea>      
                                                             </td>
@@ -570,7 +573,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="transporte2" id="opcion1_cumple"
-                                                                        value="avion">
+                                                                        value="avion" required>
                                                                     <label class="form-check-label"
                                                                         for="opcion1_cumple">Avión</label>
                                                                 </div>
@@ -612,7 +615,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="comprobante2" id="opcion1_cumple"
-                                                                        value="factura">
+                                                                        value="factura" required>
                                                                     <label class="form-check-label"
                                                                         for="opcion1_cumple">Factura</label>
                                                                 </div>
@@ -640,7 +643,7 @@
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="concepto2" id="opcion1_cumple"
-                                                                        value="pasaje">
+                                                                        value="pasaje" required>
                                                                     <label class="form-check-label"
                                                                         for="opcion1_cumple">Pasaje</label>
                                                                 </div>
@@ -672,7 +675,7 @@
                                            
                                                             <td>
                                                                 <input type="date" name="fecha_emision2"
-                                                                id="fecha_inspeccion" class="form-control">
+                                                                id="fecha_inspeccion" class="form-control" required>
                                                             </td>
                                                         </tr>
 
@@ -868,7 +871,7 @@
                                                             <label for="fecha_recepcion">Fecha de Recepción de
                                                                 Solicitud</label>
                                                             <input type="date" name="fecha_recepcion"
-                                                                id="fecha_recepcion" class="form-control">
+                                                                id="fecha_recepcion" class="form-control" required>
                                                         </div>
                                                     </div>
 
@@ -913,7 +916,7 @@
                                                             <label for="fecha_inspeccion">Fecha Programada de
                                                                 Inspección</label>
                                                             <input type="date" name="fecha_inspeccion"
-                                                                id="fecha_inspeccion" class="form-control">
+                                                                id="fecha_inspeccion" class="form-control" required>
                                                         </div>
                                                     </div>
 
@@ -924,7 +927,7 @@
                                                             <div class="form-group">
                                                                     <label for="cantidad">Precio a pagar por el servicio de inspeccion</label>
                                                                     <input type="float" name="cantidad"
-                                                                        id="cantidad" class="form-control">
+                                                                        id="cantidad" class="form-control" required>
                                                             </div>
                                                         </div>
 
@@ -932,7 +935,7 @@
                                                             <div class="form-group">
                                                                     <label for="iva">I.V.A</label>
                                                                     <input type="float" name="iva"
-                                                                        id="iva" class="form-control">
+                                                                        id="iva" class="form-control" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -953,7 +956,7 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                                                                
-                                                                <input type="file" id="images" name="images[]" alt="Login" multiple/>
+                                                                <input type="file" id="images" name="images[]" alt="Login" multiple required/>
 
                                                             </div>
                                                         </div>
