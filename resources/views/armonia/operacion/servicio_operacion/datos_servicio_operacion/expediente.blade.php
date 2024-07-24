@@ -923,7 +923,7 @@
 
                                                     <div class="row">
                                                         <h2 class="card-title">Datos generales del contrato</h2>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <div class="form-group">
                                                                     <label for="cantidad">Precio a pagar por el servicio de inspeccion</label>
                                                                     <input type="float" name="cantidad"
@@ -931,13 +931,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                    <label for="iva">I.V.A</label>
-                                                                    <input type="float" name="iva"
-                                                                        id="iva" class="form-control" required>
-                                                            </div>
-                                                        </div>
+                                                        
                                                     </div>
 
 

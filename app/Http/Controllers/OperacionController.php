@@ -326,7 +326,7 @@ class OperacionController extends Controller
                 'constancia' => 'nullable',
                 'cantidad' => 'required',
                 'observaciones' => 'nullable',
-                'iva' => 'required',
+                
                 'fecha_inspeccion' => 'required|date',
                 'images.*' => 'required|image|mimes:jpeg,png,jpg,gif',
             ];
@@ -354,6 +354,8 @@ class OperacionController extends Controller
             $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
 
             //Calculo de precio con iva y el 50% para el contrato
+            $data['iva']=.16;
+
             $data['total'] = $data['cantidad'] * (1 + $data['iva']);
 
             $data['iva'] = $data['cantidad'] * $data['iva'];
