@@ -317,6 +317,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('dictamen_datos.create') }}">
+                    <i class="bi bi-brush-fill"></i>
+                    <span>Dictamenes datos</span>
+                </a>
+            </li>
+
             <!-- End Profile Page Nav -->
 
         @endif
