@@ -49,7 +49,6 @@ class DictamenDatosController extends Controller
                 'num_constancia' => "",
                 'correo_electronico' => $request->input('correo'),
                 'contacto' => $request->input('telefono'),
-                'sondas' => $request->input('sonda'),
                 'nombre_representante_legal' => $request->input('responsable_sgm'),
                 'usuario_id' =>$usuario->id, // Asegúrate de que este campo está presente y correcto
             ]);

@@ -29,7 +29,6 @@ class Estacion extends Model
         'contacto',
         'nombre_representante_legal',
         'usuario_id',
-        'sondas',
     ];
 
     // Relaciones con otros modelos
