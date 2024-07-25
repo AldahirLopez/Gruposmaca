@@ -29,6 +29,7 @@ class Estacion extends Model
         'contacto',
         'nombre_representante_legal',
         'usuario_id',
+        'sondas',
     ];
 
     // Relaciones con otros modelos
@@ -59,4 +60,18 @@ class Estacion extends Model
     {
         return $this->belongsToMany(User::class, 'usuario_estacion', 'estacion_id', 'usuario_id');
     }
+
+     //Relaciones N a N
+     public function equipos()
+     {
+         return $this->belongsToMany(Equipo::class, 'equipo_estacion', 'id_estacion', 'id_equipo');
+     }
+
+     public function tanques()
+     {
+         return $this->belongsToMany(Tanque::class, 'estacion_tanque', 'id_estacion', 'id_tanque')
+         ->withPivot(['capacidad']);;
+     }
+
+
 }

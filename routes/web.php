@@ -30,6 +30,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServicioOperacionController;
 use App\Http\Controllers\TramitesEmaController;
 use App\Http\Controllers\FormatosController;
+use App\Http\Controllers\DictamenDatosController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -276,6 +277,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('construccion/{id}/subir-sustento', [DIctamenConstruccionController::class, 'subirSustento'])->name('construccion.subirSustento');
 
 
+    //Dictamen de datos
+
+    Route::get('/dictamen-datos', [DictamenDatosController::class, 'create'])->name('dictamen_datos.create');
+    
+    Route::post('/dictamen-datos', [DictamenDatosController::class, 'store'])->name('dictamen_datos.store');
 
 
 });
