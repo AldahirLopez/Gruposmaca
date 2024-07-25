@@ -5,7 +5,7 @@
     <div class="section-header">
         <h3 class="page__heading">Generar dictamen de datos</h3>
     </div>
-    <div class="section-header" style="margin: 5px 5px 15px 5px;">
+    <div class="section-header mb-4">
         <a href="/" class="btn btn-danger">
             <i class="bi bi-arrow-return-left"></i> Volver
         </a>
@@ -13,98 +13,131 @@
 
     <form action="{{ route('dictamen_datos.store') }}" method="POST" class="row g-3">
         @csrf
+
         <div class="col-md-6">
-            <label for="" class="form-label">Numero de estación</label>
-            <input type="text" name="num_estacion" class="form-control" required>
+            <label for="num_estacion" class="form-label">Número de estación</label>
+            <input type="text" name="num_estacion" id="num_estacion" class="form-control" required>
         </div>
 
         <div class="col-md-6">
-            <label for="" class="form-label">Nombre o Razón Social</label>
-            <input type="text" name="razon_social" class="form-control" required>
-        </div>
-
-        <div class="col-md-8">
-            <label for="" class="form-label">RFC</label>
-            <input type="text" name="rfc" class="form-control" required>
-        </div>
-        <div class="col-md-4">
-            <label for="" class="form-label">Teléfono</label>
-            <input type="text" name="telefono" class="form-control" required>
+            <label for="razon_social" class="form-label">Nombre o Razón Social</label>
+            <input type="text" name="razon_social" id="razon_social" class="form-control" required>
         </div>
 
         <div class="col-md-6">
-            <label for="" class="form-label">Correo electrónico</label>
-            <input type="email" name="correo" class="form-control" required>
+            <label for="domicilio_instalacion" class="form-label">Domicilio de la instalación</label>
+            <input type="text" name="domicilio_instalacion" id="domicilio_instalacion" class="form-control" required>
         </div>
 
         <div class="col-md-6">
-            <label for="" class="form-label">Tipo de contribuyente</label>
-            <input type="text" name="tipo_contribuyente" class="form-control" required>
+            <label for="rfc" class="form-label">RFC</label>
+            <input type="text" name="rfc" id="rfc" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" name="telefono" id="telefono" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" name="correo" id="correo" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="tipo_contribuyente" class="form-label">Tipo de contribuyente</label>
+            <input type="text" name="tipo_contribuyente" id="tipo_contribuyente" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="domicilio_fiscal" class="form-label">Domicilio fiscal</label>
+            <input type="text" name="domicilio_fiscal" id="domicilio_fiscal" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="cre" class="form-label">No. de permiso de la CRE</label>
+            <input type="text" name="cre" id="cre" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="responsable_sgm" class="form-label">Nombre del Representante legal</label>
+            <input type="text" name="responsable_sgm" id="responsable_sgm" class="form-control" required>
         </div>
 
         <div class="col-md-12">
-            <label for="" class="form-label">Domicilio de la instalación</label>
-            <input type="text" name="domicilio_instalacion" class="form-control" required>
+            <label for="responsable_instalacion" class="form-label">Nombre de personal responsable de la
+                instalación</label>
+            <input type="text" name="responsable_instalacion" id="responsable_instalacion" class="form-control"
+                required>
         </div>
 
-        <div class="col-md-6">
-            <label for="" class="form-label">No. de permiso de la CRE</label>
-            <input type="text" name="cre" class="form-control" required>
-        </div>
-        <div class="col-md-6">
-            <label for="" class="form-label">Nombre del Responsable de SGM</label>
-            <input type="text" name="responsable_sgm" class="form-control" required>
-        </div>
+        <h3 class="mt-4 mb-3">Agregue sus dispensarios</h3>
+        <p class="mb-3">
+            En caso de no contar con:
+        </p>
+        <ul class="list-group mb-3">
+            <li class="list-group-item">
+                <strong>Modelo:</strong> Colocar NM1, NM2, etc., según el número de dispensarios.
+            </li>
+            <li class="list-group-item">
+                <strong>Número de serie:</strong> Colocar NN1, NN2, etc., según el número de dispensarios.
+            </li>
+        </ul>
 
-        <div class="col-md-12">
-            <label for="" class="form-label">Nombre de personal responsable de la instalación</label>
-            <input type="text" name="responsable_sgm" class="form-control" required>
-        </div>
-
-        <div id="dispensarios-container">
+        <div id="dispensarios-container" class="mb-3">
             <!-- Aquí se agregarán los dispensarios -->
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-12 mb-3">
             <button id="add-dispensario" type="button" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i>
-                Agregar dispensario </button>
+                Agregar dispensario</button>
         </div>
 
-        <div class="col-md-12">
-            <label for="" class="form-label">Diesel</label>
-            <input type="float" name="Diesel" class="form-control" required>
+        <h3 class="mt-4 mb-3">Agregue sus Tanques</h3>
+        <div id="combustibles-container" class="mb-3">
+            <!-- Aquí se agregarán los combustibles -->
         </div>
 
-        <div class="col-md-12">
-            <label for="" class="form-label">Premium</label>
-            <input type="float" name="Premium" class="form-control" required>
+        <div class="col-md-12 mb-3">
+            <button id="add-combustible" type="button" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i>
+                Agregar combustible</button>
         </div>
 
-        <div class="col-md-12">
-            <label for="" class="form-label">Magna</label>
-            <input type="float" name="Magna" class="form-control" required>
-        </div>
+        <h3 class="mt-4 mb-3">Agregue sus sondas</h3>
+        <p class="mb-3">
+            En caso de no contar con:
+        </p>
+        <ul class="list-group mb-3">
+            <li class="list-group-item">
+                <strong>Marca:</strong> Colocar el producto del tanque.
+            </li>
+            <li class="list-group-item">
+                <strong>Modelo:</strong> Colocar NM1, NM2, etc., según el número de sondas.
+            </li>
+            <li class="list-group-item">
+                <strong>Número de serie:</strong> Colocar NN1, NN2, etc., según el número de sondas.
+            </li>
+        </ul>
 
-        <div class="col-md-12">
-            <label for="" class="form-label">Sondas</label>
-        </div>
-
-        <div id="sondas-container">
+        <div id="sondas-container" class="mb-3">
             <!-- Aquí se agregarán las sondas -->
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-12 mb-3">
             <button id="add-sondas" type="button" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i>
                 Agregar sondas</button>
         </div>
 
-        <h5>Control volumétrico</h5>
-        <div class="col-md-12">
-            <label for="" class="form-label">Nombre</label>
-            <input type="float" name="nombre_control" class="form-control" required>
-        </div>
-        <div class="col-md-12">
-            <label for="" class="form-label">Versión</label>
-            <input type="float" name="version_control" class="form-control" required>
+        <h5 class="mt-4">Control volumétrico</h5>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nombre_control" class="form-label">Nombre</label>
+                <input type="text" name="nombre_control" id="nombre_control" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="version_control" class="form-label">Versión</label>
+                <input type="text" name="version_control" id="version_control" class="form-control" required>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -114,16 +147,22 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         let dispensarioCount = 0;
-        let SondasCount = 0;
+        let combustibleCount = 0;
+        let sondasCount = 0;
 
         document.getElementById('add-dispensario').addEventListener('click', () => {
             dispensarioCount++;
             addDispensario(dispensarioCount);
         });
 
+        document.getElementById('add-combustible').addEventListener('click', () => {
+            combustibleCount++;
+            addCombustible(combustibleCount);
+        });
+
         document.getElementById('add-sondas').addEventListener('click', () => {
-            SondasCount++;
-            addSondas(SondasCount);
+            sondasCount++;
+            addSondas(sondasCount);
         });
 
         function addSondas(count) {
@@ -133,7 +172,7 @@
             sondasDiv.className = 'sondas';
             sondasDiv.id = `sondas-${count}`;
 
-            const sondasLabel = document.createElement('h3');
+            const sondasLabel = document.createElement('h4');
             sondasLabel.textContent = `Sonda ${count}`;
             sondasDiv.appendChild(sondasLabel);
 
@@ -155,7 +194,7 @@
             dispensarioDiv.className = 'dispensario';
             dispensarioDiv.id = `dispensario-${count}`;
 
-            const dispensarioLabel = document.createElement('h3');
+            const dispensarioLabel = document.createElement('h4');
             dispensarioLabel.textContent = `Dispensario ${count}`;
             dispensarioDiv.appendChild(dispensarioLabel);
 
@@ -170,14 +209,43 @@
             container.appendChild(dispensarioDiv);
         }
 
+        function addCombustible(count) {
+            const container = document.getElementById('combustibles-container');
+
+            const combustibleDiv = document.createElement('div');
+            combustibleDiv.className = 'combustible';
+            combustibleDiv.id = `combustible-${count}`;
+
+            const combustibleLabel = document.createElement('h4');
+            combustibleLabel.textContent = `Combustible ${count}`;
+            combustibleDiv.appendChild(combustibleLabel);
+
+            const tipoCombustibleSelect = document.createElement('select');
+            tipoCombustibleSelect.name = `combustibles[${count}][tipo]`;
+            tipoCombustibleSelect.className = 'form-select';
+            tipoCombustibleSelect.innerHTML = `
+                <option value="Diesel">Diesel</option>
+                <option value="Magna">Magna</option>
+                <option value="Premium">Premium</option>
+            `;
+            combustibleDiv.appendChild(tipoCombustibleSelect);
+
+            const cantidadInput = createInputField('Cantidad', `combustibles[${count}][cantidad]`);
+            combustibleDiv.appendChild(cantidadInput);
+
+            container.appendChild(combustibleDiv);
+        }
+
         function createInputField(labelText, name) {
             const div = document.createElement('div');
+            div.className = 'mb-3';
 
             const label = document.createElement('label');
             label.textContent = labelText;
+            label.className = 'form-label';
 
             const input = document.createElement('input');
-            input.type = 'text';
+            input.type = 'text'; // Changed from 'number' to 'text'
             input.name = name;
             input.className = 'form-control';
 
