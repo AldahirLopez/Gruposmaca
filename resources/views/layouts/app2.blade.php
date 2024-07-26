@@ -33,15 +33,7 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  @include('layouts.header')
-  <!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  @include('layouts.sidebar')
-  <!-- End Sidebar-->
-
-  <main id="main" class="main">
+  <main>
 
     <div class="pagetitle">
     </div><!-- End Page Title -->
