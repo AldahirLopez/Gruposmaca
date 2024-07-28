@@ -631,38 +631,38 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Certificado de conformidad del Software', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Resolución favorable de la actualización de Software', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Modelo y Número de serie de Dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Factura de recepción de producto con su tirilla de aumento (1 por mes) año 2023', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Dictamen de inspección NOM-005-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Dictamen de inspección NOM-185-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Certificado o ficha técnica de medidores de dispensarios', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Ficha técnica de dispensarios', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Modelo de interfaz y tipo de protocolo que utiliza', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Tipo de conexión de la Interfaz', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Tipo de regulador que respalda a la interfaz (marca, modelo y número de serie)', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Bitácora de desconexión de la interfaz del control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Tipo de control volumétrico y modelo', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Verificar que no exista ningún elemento mecánico adicional (donde se encuentra consola de medición, rack y sistemas de control)', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Mostrar tira de configuración de consola', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Ficha técnica de sondas de medición', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Certificado de calibración de sondas', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Números de series de sondas', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Número de serie de la consola de medición', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
-                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Tablas de cubicación de tanques', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Tipo y marca de cable que alimenta a las sondas de medición', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Tipo y marca de cable que alimenta la interfaz', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Tipo de configuración de la interfaz', 'codigo' => '', 'tipo' => 'Fotos'],
-                    ['descripcion' => 'Reportes de ventas', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Dictamen de calidad de producto NOM-016-CRE-2016', 'codigo' => '', 'tipo' => 'Documental'],
-                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) conformado e implementado', 'codigo' => '', 'tipo' => 'Documental y Fotos'],
+                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
+                    ['descripcion' => 'Certificado de conformidad del Software', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
+                    ['descripcion' => 'Resolución favorable de la actualización de Software', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
+                    ['descripcion' => 'Modelo y Número de serie de Dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],
+                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>5],
+                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>6],
+                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>7],
+                    ['descripcion' => 'Factura de recepción de producto con su tirilla de aumento (1 por mes) año 2023', 'codigo' => '', 'tipo' => 'Documental','id'=>8],
+                    ['descripcion' => 'Dictamen de inspección NOM-005-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>9],
+                    ['descripcion' => 'Dictamen de inspección NOM-185-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>10],
+                    ['descripcion' => 'Certificado o ficha técnica de medidores de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>11],
+                    ['descripcion' => 'Ficha técnica de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>12],
+                    ['descripcion' => 'Modelo de interfaz y tipo de protocolo que utiliza', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],
+                    ['descripcion' => 'Tipo de conexión de la Interfaz', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],
+                    ['descripcion' => 'Tipo de regulador que respalda a la interfaz (marca, modelo y número de serie)', 'codigo' => '', 'tipo' => 'Fotos','id'=>15],
+                    ['descripcion' => 'Bitácora de desconexión de la interfaz del control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>16],
+                    ['descripcion' => 'Tipo de control volumétrico y modelo', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>17],
+                    ['descripcion' => 'Verificar que no exista ningún elemento mecánico adicional (donde se encuentra consola de medición, rack y sistemas de control)', 'codigo' => '', 'tipo' => 'Fotos','id'=>18],
+                    ['descripcion' => 'Mostrar tira de configuración de consola', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>19],
+                    ['descripcion' => 'Ficha técnica de sondas de medición', 'codigo' => '', 'tipo' => 'Documental','id'=>20],
+                    ['descripcion' => 'Certificado de calibración de sondas', 'codigo' => '', 'tipo' => 'Documental','id'=>21],
+                    ['descripcion' => 'Números de series de sondas', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>22],
+                    ['descripcion' => 'Número de serie de la consola de medición', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>23],
+                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Fotos','id'=>24],
+                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>25],
+                    ['descripcion' => 'Tablas de cubicación de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>26],
+                    ['descripcion' => 'Tipo y marca de cable que alimenta a las sondas de medición', 'codigo' => '', 'tipo' => 'Fotos','id'=>27],
+                    ['descripcion' => 'Tipo y marca de cable que alimenta la interfaz', 'codigo' => '', 'tipo' => 'Fotos','id'=>28],
+                    ['descripcion' => 'Tipo de configuración de la interfaz', 'codigo' => '', 'tipo' => 'Fotos','id'=>29],
+                    ['descripcion' => 'Reportes de ventas', 'codigo' => '', 'tipo' => 'Documental','id'=>30],
+                    ['descripcion' => 'Dictamen de calidad de producto NOM-016-CRE-2016', 'codigo' => '', 'tipo' => 'Documental','id'=>31],
+                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) conformado e implementado', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>32],
                 ];
 
                 $documentos = [];
@@ -674,7 +674,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                         $rutaArchivo = Storage::url($archivo);
 
                         // Extraer referencia y nombre del archivo
-                        $partes = explode('-', $nombreArchivo, 2);
+                        $partes = explode('-', $nombreArchivo, 3);
                         $referencia = $partes[0] ?? '';
                         $nombre = $partes[1] ?? '';
 
@@ -706,6 +706,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             'nomenclatura' => 'required',
             'nombre' => 'required',
             'referencia' => 'required',
+            'id_documento'=>'required'
         ]);
 
         try {
@@ -713,7 +714,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
@@ -735,5 +736,106 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
+    }
+
+
+    public function generarSistemaMedicion(Request $request){
+
+       
+        $data = $request->validate([
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+        ]);
+
+        
+
+        $servicio = ServicioAnexo::findOrFail($data['servicio_id']);
+       
+        $estacion=$servicio->estacionServicios()->where('servicio_anexo_id',$servicio->id)->first();
+
+        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion";
+
+
+        $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $extension = pathinfo($archivo, PATHINFO_EXTENSION);
+                        $rutaArchivo = Storage::url($archivo);
+
+                        // Extraer referencia y nombre del archivo
+                        $partes = explode('-', $nombreArchivo, 3);
+                        $referencia = $partes[0] ?? '';
+                        $nombre = $partes[1] ?? '';
+                        $id = $partes[2] ?? '';
+
+                        $documentos[] = (object) [
+                            'id'=>$id,
+                            'nombre' => $nombre,
+                            'referencia' => $referencia,
+                            'ruta' => $rutaArchivo,
+                            'extension' => $extension
+                        ];
+
+                        
+                    }
+                }
+              
+        
+            $codigos_documentos = [];
+            foreach ($documentos as $documento) {
+
+                $codigos_documentos[] = [
+                    'name' => 'cod_' . $documento->id,
+                    'codigo'=>$documento->referencia 
+                ];
+
+                
+            }
+           
+
+            $templatePaths = [             
+                'REQUISITOS SISTEMA DE MEDICION ESTACIONES.docx', 
+            ];
+
+            //Carpeta destino del documento
+            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/sistema_medicion";
+           
+            if (!Storage::disk('public')->exists($customFolderPath)) {
+                Storage::disk('public')->makeDirectory($customFolderPath);
+            }
+
+            foreach ($templatePaths as $templatePath) {
+                $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
+
+                for ($i = 0; $i < count($codigos_documentos); $i++) {
+                       
+                    $templateProcessor->setValue($codigos_documentos[$i]['name'],$codigos_documentos[$i]['codigo'] );
+                }
+                $templateProcessor->setValue('razon_social',$estacion->razon_social);
+                $templateProcessor->setValue('cre',$estacion->num_cre);
+              
+             
+                // Crear un nombre de archivo basado en la nomenclatura
+                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+
+                // Guardar la plantilla procesada en la carpeta de destino
+                $templateProcessor->saveAs(storage_path("app/public/{$customFolderPath}/{$fileName}"));
+                $rutaArchivo=storage_path("app/public/{$customFolderPath}/{$fileName}");
+            }
+            
+
+            if (file_exists($rutaArchivo)) {
+                // Devolver el archivo para descargar
+                return response()->download($rutaArchivo);
+            } else {
+                // Manejar el caso en que el archivo no exista
+                abort(404, "El archivo no existe en la ruta especificada.");
+            }
+
+           
+
+
     }
 }

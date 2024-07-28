@@ -121,6 +121,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/documentacion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'DocumentacionAnexo'])->name('documentacion_anexo');
 
     Route::post('/documentacion-anexo/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeanexo'])->name('documentacion_anexo.store');
+    
+    Route::post('/documentacion-anexo/generate-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generarSistemaMedicion'])->name('documentacion_anexo_medicion.generate');
+
    
     //Docuemtnacion para servicio de operacion 
 
