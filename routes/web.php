@@ -167,7 +167,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
     // En web.php (o routes.php)
-    Route::post('/guardar-dictamenes', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenes'])->name('guardar.dictamenes');
+    Route::post('/guardar-dictamenes-informatico', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenesInformatico'])->name('guardar.dictamenesinformatico');
+
+    Route::post('/guardar-dictamenes-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenesMedicion'])->name('guardar.dictamenesmedicion');
 
 
     //PARTE DE PAGOS DE SERVICIO DE OPERACION
