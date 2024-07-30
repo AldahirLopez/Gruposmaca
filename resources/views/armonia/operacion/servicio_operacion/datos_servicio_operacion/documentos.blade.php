@@ -15,7 +15,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('servicio_inspector_anexo_30.index', ['id' => $servicio->id]) }}"
+                            <a href="{{ route('servicio_operacion.index', ['id' => $servicio->id]) }}"
                                 class="btn btn-danger"><i class="bi bi-arrow-return-left"></i> Volver</a>
                         </div>
 

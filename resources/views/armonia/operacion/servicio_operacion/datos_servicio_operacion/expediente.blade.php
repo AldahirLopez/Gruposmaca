@@ -707,7 +707,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="generateWordDicForm" action="{{ route('guardar.dictamenes') }}"
+                                            <form id="generateWordDicForm" action="{{ route('guardar.dictamenesinformatico') }}"
                                                 method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <input type="hidden" id="nomenclatura" name="nomenclatura"
