@@ -29,7 +29,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         //Documentacion
         $this->middleware('permission:Generar-documentacion-anexo_30', ['only' => ['DocumentacionAnexo', 'storeanexo']]);
         //Dictamenes
-        $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenes']]);
+        $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenesInformatico'],['guardarDictamenesMedicion']]);
     }
 
     /**

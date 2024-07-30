@@ -78,6 +78,7 @@
                                         </div>
                                     @endcan
 
+                                    @can('Generar-dictamenes-anexo')
                                     <!-- Tarjeta 3 - Dictámenes de Medición -->
                                     <div class="col-md-4 dictamenes-card" style="display: none;">
                                         <div class="card">
@@ -94,7 +95,9 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    @endcan 
+                                                                     
+                                    @can('Generar-dictamenes-anexo')
                                     <!-- Tarjeta 4 - Certificado y JSON  -->
                                     <div class="col-md-4 dictamenes-card" style="display: none;">
                                         <div class="card">
@@ -113,7 +116,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                @endcan
 
                                 @can('Generar-dictamenes-anexo')
                                     <!-- Modal para Dictámenes Informático -->
