@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Certificado_Anexo30;
 use App\Models\Documento_Servicio_Anexo;
 use App\Models\Estacion;
 use App\Models\Estacion_Servicio;
@@ -29,7 +30,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         //Documentacion
         $this->middleware('permission:Generar-documentacion-anexo_30', ['only' => ['DocumentacionAnexo', 'storeanexo']]);
         //Dictamenes
-        $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenesInformatico'],['guardarDictamenesMedicion']]);
+        $this->middleware('permission:Generar-dictamenes-anexo', ['only' => ['guardarDictamenesInformatico'], ['guardarDictamenesMedicion']]);
     }
 
     /**
@@ -285,7 +286,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Redireccionar a una ruta específica con los archivos generados
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
-                ->with('generatedFiles', $generatedFiles);
+                ->with('generatedFiles', $generatedFiles)
+                ->with('success', 'Expediente guardado correctamente.');
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
@@ -295,15 +297,34 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     public function listGeneratedFiles($nomenclatura)
     {
-        $folderPath = "servicios_anexo30/{$nomenclatura}/expediente/";
-        $files = Storage::disk('public')->files($folderPath);
+        // Definir las rutas de las carpetas
+        $expedienteFolderPath = "servicios_anexo30/{$nomenclatura}/expediente/";
+        $certificadoFolderPath = "servicios_anexo30/{$nomenclatura}/certificado/";
 
-        $generatedFiles = array_map(function ($filePath) {
+        // Obtener archivos de la carpeta expediente
+        $expedienteFiles = Storage::disk('public')->files($expedienteFolderPath);
+
+        // Obtener archivos de la carpeta certificado
+        $certificadoFiles = Storage::disk('public')->files($certificadoFolderPath);
+
+        // Mapear los archivos de expediente
+        $expedienteGeneratedFiles = array_map(function ($filePath) {
             return [
                 'name' => basename($filePath),
                 'url' => Storage::url($filePath),
             ];
-        }, $files);
+        }, $expedienteFiles);
+
+        // Mapear los archivos de certificado
+        $certificadoGeneratedFiles = array_map(function ($filePath) {
+            return [
+                'name' => basename($filePath),
+                'url' => Storage::url($filePath),
+            ];
+        }, $certificadoFiles);
+
+        // Combinar los archivos de expediente y certificado
+        $generatedFiles = array_merge($expedienteGeneratedFiles, $certificadoGeneratedFiles);
 
         return response()->json(['generatedFiles' => $generatedFiles]);
     }
@@ -612,7 +633,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Retornar respuesta con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
-                ->with('generatedFiles', $generatedFiles);
+                ->with('generatedFiles', $generatedFiles)
+                ->with('success', 'Dictamen Informatico guardado correctamente.');
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
@@ -830,7 +852,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Retornar respuesta con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
-                ->with('generatedFiles', $generatedFiles);
+                ->with('generatedFiles', $generatedFiles)
+                ->with('success', 'Dictamen de medicion guardado correctamente.');
         } catch (\Exception $e) {
             // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
@@ -838,7 +861,99 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
-    public function documentacion(Request $request){
+    public function guardarCertificado(Request $request)
+    {
+        // Obtener el ID de la estación desde la solicitud
+        $idEstacion = $request->input('idestacion');
+        $idServicio = $request->input('id_servicio'); // Ajustado para obtener el id_servicio
+
+        // Buscar la estación por su ID y obtener los datos necesarios
+        $estacion = Estacion::findOrFail($idEstacion);
+        $servicio = ServicioAnexo::findOrFail($idServicio); // Ajustado para buscar por id_servicio
+
+        // Obtener las fechas desde el servicio y formatearlas correctamente
+        $fechaInspeccion = $servicio->date_inspeccion_at;
+
+        // Definir las reglas de validación
+        $rules = [
+            'nomenclatura' => 'required',
+            'idestacion' => 'required',
+            'id_servicio' => 'required',
+            'id_usuario' => 'required',
+            'RfcRepresentanteLegal' => 'required',
+            'RfcPersonal' => 'required',
+        ];
+
+        // Validar los datos del formulario
+        $data = $request->validate($rules);
+
+        // Definir la carpeta de destino
+        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+        $subFolderPath = "{$customFolderPath}/certificado";
+
+        // Crear la carpeta personalizada si no existe
+        if (!Storage::disk('public')->exists($customFolderPath)) {
+            Storage::disk('public')->makeDirectory($customFolderPath);
+        }
+
+        // Verificar y crear la subcarpeta si no existe
+        if (!Storage::disk('public')->exists($subFolderPath)) {
+            Storage::disk('public')->makeDirectory($subFolderPath);
+        }
+
+        // Extraer el número después del segundo guion en la nomenclatura
+        $parts = explode('-', $data['nomenclatura']);
+        $numeroNomenclatura = isset($parts[2]) ? $parts[2] : '0'; // Obtén el número después del segundo guion
+
+        // Formatear el número a 5 dígitos
+        $formattedNumeroNomenclatura = str_pad($numeroNomenclatura, 5, '0', STR_PAD_LEFT);
+        // Obtener el año actual
+        $anoActual = date('Y');
+
+        // Crear el número de folio con el formato adecuado
+        $numeroFolio = "ACA160422EA7";
+        $numeroFolioCertificado = "{$numeroFolio}{$formattedNumeroNomenclatura}{$anoActual}";
+
+
+
+        // Crear la estructura del archivo JSON
+        $jsonData = [
+            'RfcContribuyente' => $estacion->rfc,
+            'RfcRepresentanteLegal' => $data['RfcRepresentanteLegal'],
+            'RfcProveedorCertificado' => "ACA160422EA7",
+            'RfcRepresentanteLegalProveedor' => "LOBJ711123NS5",
+            'InformacionVerificacion' => [
+                'FechaEmisionCertificado' => $fechaInspeccion,
+                'NumeroFolioCertificado' => $numeroFolioCertificado,
+                'ResultadoCertificado' => "ACREDITADO",
+                'RfcPersonal' => $data['RfcPersonal']
+            ]
+        ];
+
+        // Convertir el array a JSON
+        $jsonString = json_encode($jsonData, JSON_PRETTY_PRINT);
+
+        // Definir el nombre del archivo JSON
+        $fileName = "CE-{$estacion->rfc}_{$numeroFolioCertificado}.json";
+        $filePath = "{$subFolderPath}/{$fileName}";
+
+        // Guardar el archivo JSON en la ruta especificada
+        Storage::disk('public')->put($filePath, $jsonString);
+
+        // Guardar los detalles del certificado en la base de datos
+        $certificado = Certificado_Anexo30::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
+        $certificado->rutadoc = $subFolderPath;
+        $certificado->usuario_id = $data['id_usuario'];
+        $certificado->servicio_anexo_id = $data['id_servicio'];
+        $certificado->save();
+
+        // Redirigir a la vista deseada
+        return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
+            ->with('success', 'Certificado guardado correctamente.');
+    }
+
+    public function documentacion(Request $request)
+    {
         try {
             if ($request->has('id')) {
                 $id = $request->input('id');
@@ -867,26 +982,26 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Dictámenes de calibración de dispensarios (primero y segundo semestre del año a inspeccionar)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
-                    ['descripcion' => 'Orden de Servicio de la última actualización de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
-                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
-                    ['descripcion' => 'DGN de certificado de producto de software de dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],
-                    ['descripcion' => 'DGN de resolución favorable de actualización de dispensarios (si aplica)', 'codigo' => '', 'tipo' => 'Documental','id'=>5],
-                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>6],                
-                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>7],
-                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>8],
-                    ['descripcion' => 'Dictamen de inspección NOM-005-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>9],
-                    ['descripcion' => 'Dictamen de inspección NOM-185-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>10],
-                    ['descripcion' => 'Fichas técnicas y/o manuales de equipos de medición (sondas, dispensarios y consola de Telemedicion)', 'codigo' => '', 'tipo' => 'Documental','id'=>11],
-                    ['descripcion' => 'Informes de calibración de sondas de medición en magnitudes: nivel y temperatura', 'codigo' => '', 'tipo' => 'Documental','id'=>12],
-                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],
-                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],
-                    ['descripcion' => 'Tablas de cubicación de tanques ', 'codigo' => '', 'tipo' => 'Fotos','id'=>15],
-                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) digital: Manual, procedimientos y formatos', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>16],
-                    ['descripcion' => 'Constancia de capacitación al personal involucrado en las actividades del SGM', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>17],
-                    ['descripcion' => 'Certificados de calibración vigentes de equipos de medición manual para la correcta verificación de los equipos automáticos(Cinta petrolera con plomada, Termómetro electrónico portátil, Jarra patrón)', 'codigo' => '', 'tipo' => 'Fotos','id'=>18],
-                    ['descripcion' => 'Reportes de laboratorio de la calidad del petrolífero correspondientes al primero y segundo semestre del año', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>19],
-                    
+                    ['descripcion' => 'Dictámenes de calibración de dispensarios (primero y segundo semestre del año a inspeccionar)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
+                    ['descripcion' => 'Orden de Servicio de la última actualización de dispensarios', 'codigo' => '', 'tipo' => 'Documental', 'id' => 2],
+                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 3],
+                    ['descripcion' => 'DGN de certificado de producto de software de dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 4],
+                    ['descripcion' => 'DGN de resolución favorable de actualización de dispensarios (si aplica)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 5],
+                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental', 'id' => 6],
+                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental', 'id' => 7],
+                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental', 'id' => 8],
+                    ['descripcion' => 'Dictamen de inspección NOM-005-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental', 'id' => 9],
+                    ['descripcion' => 'Dictamen de inspección NOM-185-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental', 'id' => 10],
+                    ['descripcion' => 'Fichas técnicas y/o manuales de equipos de medición (sondas, dispensarios y consola de Telemedicion)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 11],
+                    ['descripcion' => 'Informes de calibración de sondas de medición en magnitudes: nivel y temperatura', 'codigo' => '', 'tipo' => 'Documental', 'id' => 12],
+                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 13],
+                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 14],
+                    ['descripcion' => 'Tablas de cubicación de tanques ', 'codigo' => '', 'tipo' => 'Fotos', 'id' => 15],
+                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) digital: Manual, procedimientos y formatos', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 16],
+                    ['descripcion' => 'Constancia de capacitación al personal involucrado en las actividades del SGM', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 17],
+                    ['descripcion' => 'Certificados de calibración vigentes de equipos de medición manual para la correcta verificación de los equipos automáticos(Cinta petrolera con plomada, Termómetro electrónico portátil, Jarra patrón)', 'codigo' => '', 'tipo' => 'Fotos', 'id' => 18],
+                    ['descripcion' => 'Reportes de laboratorio de la calidad del petrolífero correspondientes al primero y segundo semestre del año', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 19],
+
                 ];
 
                 $documentos = [];
@@ -930,7 +1045,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             'nomenclatura' => 'required',
             'nombre' => 'required',
             'referencia' => 'required',
-            'id_documento'=>'required'
+            'id_documento' => 'required'
         ]);
 
         try {
@@ -938,7 +1053,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
@@ -978,110 +1093,112 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     }
 
 
-    public function generarSistemaMedicion(Request $request){ 
+    public function generarSistemaMedicion(Request $request)
+    {
 
-       
+
         $data = $request->validate([
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
         ]);
 
-        
+
 
         $servicio = ServicioAnexo::findOrFail($data['servicio_id']);
-       
-        $estacion=$servicio->estacionServicios()->where('servicio_anexo_id',$servicio->id)->first();
+
+        $estacion = $servicio->estacionServicios()->where('servicio_anexo_id', $servicio->id)->first();
 
         $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/medicion";
 
 
         $documentos = [];
-                if (Storage::disk('public')->exists($customFolderPath)) {
-                    $archivos = Storage::disk('public')->files($customFolderPath);
-                    foreach ($archivos as $archivo) {
-                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
-                        $extension = pathinfo($archivo, PATHINFO_EXTENSION);
-                        $rutaArchivo = Storage::url($archivo);
+        if (Storage::disk('public')->exists($customFolderPath)) {
+            $archivos = Storage::disk('public')->files($customFolderPath);
+            foreach ($archivos as $archivo) {
+                $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                $extension = pathinfo($archivo, PATHINFO_EXTENSION);
+                $rutaArchivo = Storage::url($archivo);
 
-                        // Extraer referencia y nombre del archivo
-                        $partes = explode('-', $nombreArchivo, 3);
-                        $referencia = $partes[0] ?? '';
-                        $nombre = $partes[1] ?? '';
-                        $id = $partes[2] ?? '';
+                // Extraer referencia y nombre del archivo
+                $partes = explode('-', $nombreArchivo, 3);
+                $referencia = $partes[0] ?? '';
+                $nombre = $partes[1] ?? '';
+                $id = $partes[2] ?? '';
 
-                        $documentos[] = (object) [
-                            'id'=>$id,
-                            'nombre' => $nombre,
-                            'referencia' => $referencia,
-                            'ruta' => $rutaArchivo,
-                            'extension' => $extension
-                        ];
-
-                        
-                    }
-                }
-              
-        
-            $codigos_documentos = [];
-            foreach ($documentos as $documento) {
-
-                $codigos_documentos[] = [
-                    'name' => 'cod_' . $documento->id,
-                    'codigo'=>$documento->referencia 
+                $documentos[] = (object) [
+                    'id' => $id,
+                    'nombre' => $nombre,
+                    'referencia' => $referencia,
+                    'ruta' => $rutaArchivo,
+                    'extension' => $extension
                 ];
 
-                
-            }
-           
 
-            $templatePaths = [             
-                'REQUISITOS SISTEMA DE MEDICION ESTACIONES.docx', 
+            }
+        }
+
+
+        $codigos_documentos = [];
+        foreach ($documentos as $documento) {
+
+            $codigos_documentos[] = [
+                'name' => 'cod_' . $documento->id,
+                'codigo' => $documento->referencia
             ];
 
-            //Carpeta destino del documento
-            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/sistema_medicion";
-           
-            if (!Storage::disk('public')->exists($customFolderPath)) {
-                Storage::disk('public')->makeDirectory($customFolderPath);
+
+        }
+
+
+        $templatePaths = [
+            'REQUISITOS SISTEMA DE MEDICION ESTACIONES.docx',
+        ];
+
+        //Carpeta destino del documento
+        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/sistema_medicion";
+
+        if (!Storage::disk('public')->exists($customFolderPath)) {
+            Storage::disk('public')->makeDirectory($customFolderPath);
+        }
+
+        foreach ($templatePaths as $templatePath) {
+            $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
+
+            for ($i = 0; $i < count($codigos_documentos); $i++) {
+
+                $templateProcessor->setValue($codigos_documentos[$i]['name'], $codigos_documentos[$i]['codigo']);
             }
+            $templateProcessor->setValue('razon_social', $estacion->razon_social);
+            $templateProcessor->setValue('cre', $estacion->num_cre);
 
-            foreach ($templatePaths as $templatePath) {
-                $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
 
-                for ($i = 0; $i < count($codigos_documentos); $i++) {
-                       
-                    $templateProcessor->setValue($codigos_documentos[$i]['name'],$codigos_documentos[$i]['codigo'] );
-                }
-                $templateProcessor->setValue('razon_social',$estacion->razon_social);
-                $templateProcessor->setValue('cre',$estacion->num_cre);
-              
-             
-                // Crear un nombre de archivo basado en la nomenclatura
-                $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
+            // Crear un nombre de archivo basado en la nomenclatura
+            $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
 
-                // Guardar la plantilla procesada en la carpeta de destino
-                $templateProcessor->saveAs(storage_path("app/public/{$customFolderPath}/{$fileName}"));
-                $rutaArchivo=storage_path("app/public/{$customFolderPath}/{$fileName}");
-            }
-            
+            // Guardar la plantilla procesada en la carpeta de destino
+            $templateProcessor->saveAs(storage_path("app/public/{$customFolderPath}/{$fileName}"));
+            $rutaArchivo = storage_path("app/public/{$customFolderPath}/{$fileName}");
+        }
 
-            if (file_exists($rutaArchivo)) {
-                // Devolver el archivo para descargar
-                return response()->download($rutaArchivo);
-            } else {
-                // Manejar el caso en que el archivo no exista
-                abort(404, "El archivo no existe en la ruta especificada.");
-            }
 
-           
+        if (file_exists($rutaArchivo)) {
+            // Devolver el archivo para descargar
+            return response()->download($rutaArchivo);
+        } else {
+            // Manejar el caso en que el archivo no exista
+            abort(404, "El archivo no existe en la ruta especificada.");
+        }
+
+
 
 
     }
 
 
     //LISTA DE DOCUMENTOS GENERALES REQUERIDOS ANEZO 30 Y 31 RMF 2024 
-    public function documentosGenerales(Request $request){
-       
+    public function documentosGenerales(Request $request)
+    {
+
         try {
             if ($request->has('id')) {
                 $id = $request->input('id');
@@ -1090,10 +1207,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/generales";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Cedula de Identificación Fiscal de la Empresa (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
-                    ['descripcion' => 'Cedula de Identificación Fiscal del Representante Legal (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
-                    ['descripcion' => 'INE del representante legal', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
-                    ['descripcion' => 'Permiso de la Cre', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
+                    ['descripcion' => 'Cedula de Identificación Fiscal de la Empresa (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
+                    ['descripcion' => 'Cedula de Identificación Fiscal del Representante Legal (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 2],
+                    ['descripcion' => 'INE del representante legal', 'codigo' => '', 'tipo' => 'Documental', 'id' => 3],
+                    ['descripcion' => 'Permiso de la Cre', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 4],
                 ];
 
                 $documentos = [];
@@ -1126,18 +1243,19 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
         }
 
-        
+
     }
 
-    public function storeDocumentosGenerales(Request $request){
-       
+    public function storeDocumentosGenerales(Request $request)
+    {
+
         $data = $request->validate([
             'rutadoc_estacion' => 'required|file',
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
             'referencia' => 'required',
-            'id_documento'=>'required'
+            'id_documento' => 'required'
         ]);
 
         try {
@@ -1145,7 +1263,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/generales";
@@ -1153,7 +1271,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
                 }
-                
+
                 // Verificar si el archivo ya existe y eliminarlo
                 $archivosExistentes = Storage::disk('public')->files($customFolderPath);
                 $nombreSinReferenciaYId = "{$data['nombre']}";
@@ -1187,8 +1305,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     }
 
     //REQUSISITOS PARA LA APROBACIÓN DEL SISTEMA INFORMATICO ANEXOS 30 Y 31
-    public function documentosSistemaInformatico(Request $request){
-       
+    public function documentosSistemaInformatico(Request $request)
+    {
+
         try {
             if ($request->has('id')) {
                 $id = $request->input('id');
@@ -1197,21 +1316,21 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Inventario de Activos tecnológicos relacionados con el control Volumétrico', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
-                    ['descripcion' => 'Manual de Usuario de control volumétrico, de preferencia si incluye apartado de cumplimiento anexos 30 y 31 RMF', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
-                    ['descripcion' => 'Información técnica de la base de datos utilizada en el control volumétrico', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
-                    ['descripcion' => 'Documentación técnica del programa informático utilizado como control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
-                    ['descripcion' => 'Evidencia de realizar pruebas de seguridad anual y evidencia del seguimiento a los hallazgos encontrados durante las pruebas', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>5],                  
-                    ['descripcion' => 'Política y procedimientos de control de acceso al programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>6],                  
-                    ['descripcion' => 'Procedimientos de restricción, control de asignación y uso de privilegios de acceso al programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>7],                  
-                    ['descripcion' => 'Evidencia de depuración y revisión de usuarios cada 6 meses en el programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>8],                  
-                    ['descripcion' => 'Procedimiento de control de cambios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>9],                  
-                    ['descripcion' => 'Contrato de Arrendamiento o pólizas de contratación del programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>10],                  
-                    ['descripcion' => 'Políticas y procedimientos para la generación de respaldos de la información', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>11],                  
-                    ['descripcion' => 'Organigrama, estructura y mapa de la red informática que interactúa con los sistemas de medición y los programas informáticos de control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>12],                  
-                    ['descripcion' => 'Políticas y procedimientos para la gestión de incidentes de seguridad relacionados con el programa informático para llevar controles volumétricos', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],                  
-                    ['descripcion' => 'Acuerdos de confidencialidad firmado con el personal de desarrollo e implementación del programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],                  
-                    ['descripcion' => 'Pólizas y contratos de Control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>15],                  
+                    ['descripcion' => 'Inventario de Activos tecnológicos relacionados con el control Volumétrico', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
+                    ['descripcion' => 'Manual de Usuario de control volumétrico, de preferencia si incluye apartado de cumplimiento anexos 30 y 31 RMF', 'codigo' => '', 'tipo' => 'Documental', 'id' => 2],
+                    ['descripcion' => 'Información técnica de la base de datos utilizada en el control volumétrico', 'codigo' => '', 'tipo' => 'Documental', 'id' => 3],
+                    ['descripcion' => 'Documentación técnica del programa informático utilizado como control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 4],
+                    ['descripcion' => 'Evidencia de realizar pruebas de seguridad anual y evidencia del seguimiento a los hallazgos encontrados durante las pruebas', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 5],
+                    ['descripcion' => 'Política y procedimientos de control de acceso al programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 6],
+                    ['descripcion' => 'Procedimientos de restricción, control de asignación y uso de privilegios de acceso al programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 7],
+                    ['descripcion' => 'Evidencia de depuración y revisión de usuarios cada 6 meses en el programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 8],
+                    ['descripcion' => 'Procedimiento de control de cambios', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 9],
+                    ['descripcion' => 'Contrato de Arrendamiento o pólizas de contratación del programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 10],
+                    ['descripcion' => 'Políticas y procedimientos para la generación de respaldos de la información', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 11],
+                    ['descripcion' => 'Organigrama, estructura y mapa de la red informática que interactúa con los sistemas de medición y los programas informáticos de control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 12],
+                    ['descripcion' => 'Políticas y procedimientos para la gestión de incidentes de seguridad relacionados con el programa informático para llevar controles volumétricos', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 13],
+                    ['descripcion' => 'Acuerdos de confidencialidad firmado con el personal de desarrollo e implementación del programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 14],
+                    ['descripcion' => 'Pólizas y contratos de Control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 15],
                 ];
 
                 $documentos = [];
@@ -1244,18 +1363,19 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
         }
 
-        
+
     }
 
-    public function storeDocumentosSistemaInformatico(Request $request){
-       
+    public function storeDocumentosSistemaInformatico(Request $request)
+    {
+
         $data = $request->validate([
             'rutadoc_estacion' => 'required|file',
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
             'referencia' => 'required',
-            'id_documento'=>'required'
+            'id_documento' => 'required'
         ]);
 
         try {
@@ -1263,7 +1383,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
@@ -1304,7 +1424,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     }
 
     //DURANTE LA INSPECCIÓN DE SOLICITARAN LAS SIGUIENTES EVIDENCIAS AL MOMENTO. 
-    public function documentosInspeccion(Request $request){
+    public function documentosInspeccion(Request $request)
+    {
 
         try {
             if ($request->has('id')) {
@@ -1314,10 +1435,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Una tirilla de inventario de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
-                    ['descripcion' => 'Impresión de la configuración de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
-                    ['descripcion' => 'La factura de una compra con su soporte (Remisión, Carta porte, Tira de Inicio y Fin de Incremento)', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
-                    ['descripcion' => 'La factura de una venta ', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
+                    ['descripcion' => 'Una tirilla de inventario de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
+                    ['descripcion' => 'Impresión de la configuración de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental', 'id' => 2],
+                    ['descripcion' => 'La factura de una compra con su soporte (Remisión, Carta porte, Tira de Inicio y Fin de Incremento)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 3],
+                    ['descripcion' => 'La factura de una venta ', 'codigo' => '', 'tipo' => 'Documental y Fotos', 'id' => 4],
                 ];
 
                 $documentos = [];
@@ -1351,14 +1472,15 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
-    public function storedocumentosInspeccion(Request $request){
+    public function storedocumentosInspeccion(Request $request)
+    {
         $data = $request->validate([
             'rutadoc_estacion' => 'required|file',
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
             'referencia' => 'required',
-            'id_documento'=>'required'
+            'id_documento' => 'required'
         ]);
 
         try {
@@ -1366,7 +1488,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
                 $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";

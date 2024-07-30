@@ -171,7 +171,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/guardar-dictamenes-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenesMedicion'])->name('guardar.dictamenesmedicion');
 
-
+    Route::post('/guardar-certificado', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarCertificado'])->name('guardar.certificado');
     //PARTE DE PAGOS DE SERVICIO DE OPERACION
     Route::post('/pago-operacion/store', [OperacionController::class, 'storePago'])->name('pago_operacion.store');
 

@@ -79,44 +79,42 @@
                                     @endcan
 
                                     @can('Generar-dictamenes-anexo')
-                                    <!-- Tarjeta 3 - Dictámenes de Medición -->
-                                    <div class="col-md-4 dictamenes-card" style="display: none;">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Dictámenes de Medición</h5>
-                                                <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                    <li class="list-group-item">DICTAMEN TÉCNICO DE MEDICIÓN</li>
-                                                </ol>
-                                                <button type="button" class="btn btn-primary" id="dictamenesButton2"
-                                                    data-toggle="modal" data-target="#dictamenesModalmedicion"
-                                                    style="margin-top: 10px;">
-                                                    Generar
-                                                </button>
+                                        <!-- Tarjeta 3 - Dictámenes de Medición -->
+                                        <div class="col-md-4 dictamenes-card" style="display: none;">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Dictámenes de Medición</h5>
+                                                    <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                        <li class="list-group-item">DICTAMEN TÉCNICO DE MEDICIÓN</li>
+                                                    </ol>
+                                                    <button type="button" class="btn btn-primary" id="dictamenesButton2"
+                                                        data-toggle="modal" data-target="#dictamenesModalmedicion"
+                                                        style="margin-top: 10px;">
+                                                        Generar
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    @endcan 
-                                                                     
-                                    @can('Generar-dictamenes-anexo')
-                                    <!-- Tarjeta 4 - Certificado y JSON  -->
-                                    <div class="col-md-4 dictamenes-card" style="display: none;">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Certificado</h5>
-                                                <ol class="list-group list-group-numbered" style="text-align: left;">
-                                                    <li class="list-group-item">Certificado</li>
-                                                    <li class="list-group-item">Archivo JSON</li>
-                                                </ol>
-                                                <button type="button" class="btn btn-primary" id="dictamenesButton2"
-                                                    data-toggle="modal" data-target="#dictamenesModalmedicion"
-                                                    style="margin-top: 10px;">
-                                                    Generar
-                                                </button>
+                                    @endcan  @can('Generar-dictamenes-anexo')
+                                            <!-- Tarjeta 4 - Certificado y JSON  -->
+                                            <div class="col-md-4 dictamenes-card" style="display: none;">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Certificado</h5>
+                                                        <ol class="list-group list-group-numbered" style="text-align: left;">
+                                                            <li class="list-group-item">Certificado</li>
+                                                            <li class="list-group-item">Archivo JSON</li>
+                                                        </ol>
+                                                        <button type="button" class="btn btn-primary" id="dictamenesButton2"
+                                                            data-toggle="modal" data-target="#dictamenesModalcertificado"
+                                                            style="margin-top: 10px;">
+                                                            Generar
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                @endcan
+                                    @endcan
 
                                 @can('Generar-dictamenes-anexo')
                                     <!-- Modal para Dictámenes Informático -->
@@ -127,8 +125,8 @@
                                                 <div class="modal-header" style="background-color: #002855; color: #ffffff;">
                                                     <h5 class="modal-title" id="dictamenesModalLabel">TABLA DE CUMPLIMIENTO
                                                         SISTEMA INFORMÁTICO</h5>
-                                                    <button type="button" class="btn-close btn-close-white"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form id="generateWordDicForm"
@@ -304,13 +302,63 @@
                                                         </table>
 
                                                         <!-- Campos del formulario que se llenarán automáticamente -->
-                                                        @foreach([['proveedor', 'Proveedor de Sistemas Informáticos'], ['rfc_proveedor', 'RFC'],['SCom', 'Controlador del Surtidor de Combustible']] as [$name, $label])
+                                                        @foreach([['proveedor', 'Proveedor de Sistemas Informáticos'], ['rfc_proveedor', 'RFC'], ['SCom', 'Controlador del Surtidor de Combustible']] as [$name, $label])
                                                             <div class="form-group">
                                                                 <label for="{{ $name }}">{{ $label }}</label>
                                                                 <input type="text" name="{{ $name }}" id="{{ $name }}"
                                                                     class="form-control">
                                                             </div>
                                                         @endforeach
+
+                                                        <div class="text-center mt-3">
+                                                            <button type="submit"
+                                                                class="btn btn-primary btn-generar">Generar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endcan
+
+                                @can('Generar-dictamenes-anexo')
+                                    <!-- Modal para Generar Certificado -->
+                                    <div class="modal fade" id="dictamenesModalcertificado" tabindex="-1" role="dialog"
+                                        aria-labelledby="dictamenesModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header" style="background-color: #002855; color: #ffffff;">
+                                                    <h5 class="modal-title" id="dictamenesModalLabel">GENERAR CERTIFICADO</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="generateCertificadoForm"
+                                                        action="{{ route('guardar.certificado') }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" id="nomenclatura" name="nomenclatura"
+                                                            value="{{ strtoupper($servicioAnexo->nomenclatura) }}">
+                                                        <input type="hidden" id="idestacion" name="idestacion"
+                                                            value="{{ strtoupper($estacion->id) }}">
+                                                        <input type="hidden" id="id_servicio" name="id_servicio"
+                                                            value="{{ $servicioAnexo->id }}">
+                                                        <input type="hidden" name="id_usuario"
+                                                            value="{{ $estacion->usuario->id }}">
+
+                                                        <!-- Campos adicionales para RFC -->
+                                                        <div class="form-group mt-3">
+                                                            <label for="RfcRepresentanteLegal">RFC del Representante
+                                                                Legal:</label>
+                                                            <input type="text" class="form-control" id="RfcRepresentanteLegal"
+                                                                name="RfcRepresentanteLegal" required>
+                                                        </div>
+
+                                                        <div class="form-group mt-3">
+                                                            <label for="RfcPersonal">RFC del Personal:</label>
+                                                            <input type="text" class="form-control" id="RfcPersonal"
+                                                                name="RfcPersonal" required>
+                                                        </div>
 
                                                         <div class="text-center mt-3">
                                                             <button type="submit"
@@ -460,7 +508,6 @@
                                         </div>
                                     </div>
                                 @endcan
-
                                 <!-- Contenedor para la tabla de archivos generados -->
                                 <div id="generatedFilesTable" style="margin-top: 30px;">
                                     <!-- Spinner de carga -->
@@ -468,12 +515,13 @@
                                         <span class="visually-hidden">Cargando...</span>
                                     </div>
 
-                                    <!-- Incluir la estructura HTML de tu vista actual para archivos existentes -->
+                                    <!-- Estructura HTML para archivos existentes -->
                                     @if(!empty($existingFiles))
                                         <h4>Archivos Existentes:</h4>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Nombre del Archivo</th>
                                                     <th>Acción</th>
                                                 </tr>
@@ -482,20 +530,37 @@
                                                 @foreach($existingFiles as $file)
                                                     @can('Descargar-documentos-expediente-anexo_30')
                                                         <tr>
+                                                            <td>
+                                                                <!-- Mostrar el ícono adecuado según el tipo de archivo -->
+                                                                @if (str_ends_with($file['name'], '.json'))
+                                                                    <i class="bi bi-filetype-json"></i>
+                                                                @elseif (str_ends_with($file['name'], '.pdf'))
+                                                                    <i class="bi bi-filetype-pdf"></i>
+                                                                @elseif (str_ends_with($file['name'], '.docx'))
+                                                                    <i class="bi bi-file-word-fill"></i>
+                                                                @elseif (str_ends_with($file['name'], '.xlsx'))
+                                                                    <i class="bi bi-filetype-xlsx"></i>
+                                                                @else
+                                                                    <i class="bi bi-file-earmark"></i>
+                                                                @endif
+                                                            </td>
                                                             <td>{{ basename($file['name']) }}</td>
-                                                            <!-- Mostrar solo el nombre del archivo -->
-                                                            <td><a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}"
-                                                                    class="btn btn-info" download>Descargar</a></td>
+                                                            <td>
+                                                                <a href="{{ route('descargar.archivo', ['archivo' => basename($file['name'])]) }}"
+                                                                    class="btn btn-info" download>Descargar</a>
+                                                            </td>
                                                         </tr>
                                                     @endcan
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     @else
-                                        <!-- Mensaje o contenido alternativo si no hay archivos existentes -->
                                         <p>No hay archivos existentes.</p>
                                     @endif
                                 </div>
+
+
+
 
 
                             </div>
@@ -521,11 +586,28 @@
                         const generatedFilesTable = $('#generatedFilesTable');
                         if (data && data.generatedFiles && data.generatedFiles.length > 0) {
                             // Construir el HTML para la tabla de archivos generados
-                            let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
+                            let tableHtml = '<h4>Documentos Generados:</h4><table class="table table-bordered"><thead><tr><th></th><th>Nombre del Archivo</th><th>Acción</th></tr></thead><tbody>';
+
                             data.generatedFiles.forEach(file => {
+                                // Determinar el ícono basado en la extensión del archivo
+                                let icon;
+                                const fileName = file.name;
+                                if (fileName.endsWith('.json')) {
+                                    icon = '<i class="bx bxs-file-json" style="font-size: 44px; text-align: center; display: inline-block;"></i>'; // Ícono para JSON
+                                } else if (fileName.endsWith('.pdf')) {
+                                    icon = '<i class="fas fa-file-pdf" style="font-size: 44px; text-align: center; display: inline-block;"></i>'; // Ícono para PDF
+                                } else if (fileName.endsWith('.docx')) {
+                                    icon = '<i class="bi bi-file-word-fill" style="font-size: 38px; text-align: center; display: inline-block;"></i>'; // Ícono para DOCX
+                                } else if (fileName.endsWith('.xlsx')) {
+                                    icon = '<i class="fas fa-file-excel" style="font-size: 44px; text-align: center; display: inline-block;"></i>'; // Ícono para XLSX
+                                } else {
+                                    icon = '<i class="fas fa-file"></i>'; // Ícono por defecto
+                                }
+
                                 // Modificar la línea donde se genera el enlace de descarga
-                                tableHtml += `<tr><td>${file.name}</td><td><a href="/descargar-archivo/${encodeURIComponent(file.name)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
+                                tableHtml += `<tr><td>${icon}</td><td>${fileName}</td><td><a href="/descargar-archivo/${encodeURIComponent(fileName)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
                             });
+
                             tableHtml += '</tbody></table>';
 
                             // Actualizar el contenedor de la tabla de archivos generados y mostrarla
