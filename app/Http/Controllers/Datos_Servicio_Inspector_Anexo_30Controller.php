@@ -621,6 +621,25 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
+    public function documentacion(Request $request){
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioAnexo::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+
+
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentos', compact('id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentos')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+    }
+
+
+    //LISTA DE DOCUMENTOS REQUERIDOS SITEMAS DE MEDICION ANEXO 30 y 31 RMF 2024
     public function DocumentacionAnexo(Request $request)
     {
         try {
@@ -628,41 +647,29 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $id = $request->input('id');
                 $servicio = ServicioAnexo::findOrFail($id);
                 $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
 
                 $requiredDocuments = [
-                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
-                    ['descripcion' => 'Certificado de conformidad del Software', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
-                    ['descripcion' => 'Resolución favorable de la actualización de Software', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
-                    ['descripcion' => 'Modelo y Número de serie de Dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],
-                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>5],
-                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>6],
-                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>7],
-                    ['descripcion' => 'Factura de recepción de producto con su tirilla de aumento (1 por mes) año 2023', 'codigo' => '', 'tipo' => 'Documental','id'=>8],
+                    ['descripcion' => 'Dictámenes de calibración de dispensarios (primero y segundo semestre del año a inspeccionar)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
+                    ['descripcion' => 'Orden de Servicio de la última actualización de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
+                    ['descripcion' => 'Aprobación de modelo prototipo (dispensarios)', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
+                    ['descripcion' => 'DGN de certificado de producto de software de dispensarios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],
+                    ['descripcion' => 'DGN de resolución favorable de actualización de dispensarios (si aplica)', 'codigo' => '', 'tipo' => 'Documental','id'=>5],
+                    ['descripcion' => 'Modelo, marca y capacidad de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>6],                
+                    ['descripcion' => 'Plano Arquitectónico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>7],
+                    ['descripcion' => 'Plano Mecánico de la Estación de servicio', 'codigo' => '', 'tipo' => 'Documental','id'=>8],
                     ['descripcion' => 'Dictamen de inspección NOM-005-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>9],
                     ['descripcion' => 'Dictamen de inspección NOM-185-SCFI-2017', 'codigo' => '', 'tipo' => 'Documental','id'=>10],
-                    ['descripcion' => 'Certificado o ficha técnica de medidores de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>11],
-                    ['descripcion' => 'Ficha técnica de dispensarios', 'codigo' => '', 'tipo' => 'Documental','id'=>12],
-                    ['descripcion' => 'Modelo de interfaz y tipo de protocolo que utiliza', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],
-                    ['descripcion' => 'Tipo de conexión de la Interfaz', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],
-                    ['descripcion' => 'Tipo de regulador que respalda a la interfaz (marca, modelo y número de serie)', 'codigo' => '', 'tipo' => 'Fotos','id'=>15],
-                    ['descripcion' => 'Bitácora de desconexión de la interfaz del control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>16],
-                    ['descripcion' => 'Tipo de control volumétrico y modelo', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>17],
-                    ['descripcion' => 'Verificar que no exista ningún elemento mecánico adicional (donde se encuentra consola de medición, rack y sistemas de control)', 'codigo' => '', 'tipo' => 'Fotos','id'=>18],
-                    ['descripcion' => 'Mostrar tira de configuración de consola', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>19],
-                    ['descripcion' => 'Ficha técnica de sondas de medición', 'codigo' => '', 'tipo' => 'Documental','id'=>20],
-                    ['descripcion' => 'Certificado de calibración de sondas', 'codigo' => '', 'tipo' => 'Documental','id'=>21],
-                    ['descripcion' => 'Números de series de sondas', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>22],
-                    ['descripcion' => 'Número de serie de la consola de medición', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>23],
-                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Fotos','id'=>24],
-                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>25],
-                    ['descripcion' => 'Tablas de cubicación de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>26],
-                    ['descripcion' => 'Tipo y marca de cable que alimenta a las sondas de medición', 'codigo' => '', 'tipo' => 'Fotos','id'=>27],
-                    ['descripcion' => 'Tipo y marca de cable que alimenta la interfaz', 'codigo' => '', 'tipo' => 'Fotos','id'=>28],
-                    ['descripcion' => 'Tipo de configuración de la interfaz', 'codigo' => '', 'tipo' => 'Fotos','id'=>29],
-                    ['descripcion' => 'Reportes de ventas', 'codigo' => '', 'tipo' => 'Documental','id'=>30],
-                    ['descripcion' => 'Dictamen de calidad de producto NOM-016-CRE-2016', 'codigo' => '', 'tipo' => 'Documental','id'=>31],
-                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) conformado e implementado', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>32],
+                    ['descripcion' => 'Fichas técnicas y/o manuales de equipos de medición (sondas, dispensarios y consola de Telemedicion)', 'codigo' => '', 'tipo' => 'Documental','id'=>11],
+                    ['descripcion' => 'Informes de calibración de sondas de medición en magnitudes: nivel y temperatura', 'codigo' => '', 'tipo' => 'Documental','id'=>12],
+                    ['descripcion' => 'Verificar que la consola cuente con contraseña', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],
+                    ['descripcion' => 'Certificado de calibración de tanques', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],
+                    ['descripcion' => 'Tablas de cubicación de tanques ', 'codigo' => '', 'tipo' => 'Fotos','id'=>15],
+                    ['descripcion' => 'Sistema de Gestión de Medición (SGM) digital: Manual, procedimientos y formatos', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>16],
+                    ['descripcion' => 'Constancia de capacitación al personal involucrado en las actividades del SGM', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>17],
+                    ['descripcion' => 'Certificados de calibración vigentes de equipos de medición manual para la correcta verificación de los equipos automáticos(Cinta petrolera con plomada, Termómetro electrónico portátil, Jarra patrón)', 'codigo' => '', 'tipo' => 'Fotos','id'=>18],
+                    ['descripcion' => 'Reportes de laboratorio de la calidad del petrolífero correspondientes al primero y segundo semestre del año', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>19],
+                    
                 ];
 
                 $documentos = [];
@@ -687,9 +694,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     }
                 }
 
-                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentos', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_medicion', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
             } else {
-                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentos')->with('error', 'No se proporcionó un ID de estación.');
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_medicion')->with('error', 'No se proporcionó un ID de estación.');
             }
         } catch (\Exception $e) {
             return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
@@ -717,24 +724,39 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
 
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
                 }
 
+                // Verificar si el archivo ya existe y eliminarlo
+                $archivosExistentes = Storage::disk('public')->files($customFolderPath);
+                $nombreSinReferenciaYId = "{$data['nombre']}";
+
+                foreach ($archivosExistentes as $archivoExistente) {
+                    // Extraer la parte del nombre del archivo existente
+                    $partesArchivoExistente = explode('-', basename($archivoExistente, '.' . pathinfo($archivoExistente, PATHINFO_EXTENSION)));
+                    if (count($partesArchivoExistente) > 1) {
+                        $nombreExistente = $partesArchivoExistente[1];
+                        if ($nombreExistente === $nombreSinReferenciaYId) {
+                            Storage::disk('public')->delete($archivoExistente);
+                        }
+                    }
+                }
+
                 $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
 
-                $documento->rutadoc_estacion = $customFolderPath;
+                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
             }
 
             $documento->servicio_id = $data['servicio_id'];
             $documento->usuario_id = Auth::id();
             $documento->save();
 
-            return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+            return redirect()->route('documentacion_anexo_medicion', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('documentacion_anexo', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+            return redirect()->route('documentacion_anexo_medicion', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
     }
 
@@ -753,7 +775,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
        
         $estacion=$servicio->estacionServicios()->where('servicio_anexo_id',$servicio->id)->first();
 
-        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion";
+        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/medicion";
 
 
         $documentos = [];
@@ -838,4 +860,333 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
 
     }
+
+
+    //LISTA DE DOCUMENTOS GENERALES REQUERIDOS ANEZO 30 Y 31 RMF 2024 
+    public function documentosGenerales(Request $request){
+       
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioAnexo::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/generales";
+
+                $requiredDocuments = [
+                    ['descripcion' => 'Cedula de Identificación Fiscal de la Empresa (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
+                    ['descripcion' => 'Cedula de Identificación Fiscal del Representante Legal (CIF, ALTA SAT)', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
+                    ['descripcion' => 'INE del representante legal', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
+                    ['descripcion' => 'Permiso de la Cre', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
+                ];
+
+                $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $extension = pathinfo($archivo, PATHINFO_EXTENSION);
+                        $rutaArchivo = Storage::url($archivo);
+
+                        // Extraer referencia y nombre del archivo
+                        $partes = explode('-', $nombreArchivo, 3);
+                        $referencia = $partes[0] ?? '';
+                        $nombre = $partes[1] ?? '';
+
+                        $documentos[] = (object) [
+                            'nombre' => $nombre,
+                            'referencia' => $referencia,
+                            'ruta' => $rutaArchivo,
+                            'extension' => $extension
+                        ];
+                    }
+                }
+
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_general', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_general')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+
+        
+    }
+
+    public function storeDocumentosGenerales(Request $request){
+       
+        $data = $request->validate([
+            'rutadoc_estacion' => 'required|file',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+            'nombre' => 'required',
+            'referencia' => 'required',
+            'id_documento'=>'required'
+        ]);
+
+        try {
+            $documento = Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
+
+            if ($request->hasFile('rutadoc_estacion')) {
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/generales";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+                
+                // Verificar si el archivo ya existe y eliminarlo
+                $archivosExistentes = Storage::disk('public')->files($customFolderPath);
+                $nombreSinReferenciaYId = "{$data['nombre']}";
+
+                foreach ($archivosExistentes as $archivoExistente) {
+                    // Extraer la parte del nombre del archivo existente
+                    $partesArchivoExistente = explode('-', basename($archivoExistente, '.' . pathinfo($archivoExistente, PATHINFO_EXTENSION)));
+                    if (count($partesArchivoExistente) > 1) {
+                        $nombreExistente = $partesArchivoExistente[1];
+                        if ($nombreExistente === $nombreSinReferenciaYId) {
+                            Storage::disk('public')->delete($archivoExistente);
+                        }
+                    }
+                }
+
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+            }
+
+            $documento->servicio_id = $data['servicio_id'];
+            $documento->usuario_id = Auth::id();
+            $documento->save();
+
+            return redirect()->route('documentacion_anexo_general', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('documentacion_anexo_general', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+        }
+
+    }
+
+    //REQUSISITOS PARA LA APROBACIÓN DEL SISTEMA INFORMATICO ANEXOS 30 Y 31
+    public function documentosSistemaInformatico(Request $request){
+       
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioAnexo::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
+
+                $requiredDocuments = [
+                    ['descripcion' => 'Inventario de Activos tecnológicos relacionados con el control Volumétrico', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
+                    ['descripcion' => 'Manual de Usuario de control volumétrico, de preferencia si incluye apartado de cumplimiento anexos 30 y 31 RMF', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
+                    ['descripcion' => 'Información técnica de la base de datos utilizada en el control volumétrico', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
+                    ['descripcion' => 'Documentación técnica del programa informático utilizado como control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
+                    ['descripcion' => 'Evidencia de realizar pruebas de seguridad anual y evidencia del seguimiento a los hallazgos encontrados durante las pruebas', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>5],                  
+                    ['descripcion' => 'Política y procedimientos de control de acceso al programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>6],                  
+                    ['descripcion' => 'Procedimientos de restricción, control de asignación y uso de privilegios de acceso al programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>7],                  
+                    ['descripcion' => 'Evidencia de depuración y revisión de usuarios cada 6 meses en el programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>8],                  
+                    ['descripcion' => 'Procedimiento de control de cambios', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>9],                  
+                    ['descripcion' => 'Contrato de Arrendamiento o pólizas de contratación del programa informático para el control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>10],                  
+                    ['descripcion' => 'Políticas y procedimientos para la generación de respaldos de la información', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>11],                  
+                    ['descripcion' => 'Organigrama, estructura y mapa de la red informática que interactúa con los sistemas de medición y los programas informáticos de control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>12],                  
+                    ['descripcion' => 'Políticas y procedimientos para la gestión de incidentes de seguridad relacionados con el programa informático para llevar controles volumétricos', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>13],                  
+                    ['descripcion' => 'Acuerdos de confidencialidad firmado con el personal de desarrollo e implementación del programa informático', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>14],                  
+                    ['descripcion' => 'Pólizas y contratos de Control volumétrico', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>15],                  
+                ];
+
+                $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $extension = pathinfo($archivo, PATHINFO_EXTENSION);
+                        $rutaArchivo = Storage::url($archivo);
+
+                        // Extraer referencia y nombre del archivo
+                        $partes = explode('-', $nombreArchivo, 3);
+                        $referencia = $partes[0] ?? '';
+                        $nombre = $partes[1] ?? '';
+
+                        $documentos[] = (object) [
+                            'nombre' => $nombre,
+                            'referencia' => $referencia,
+                            'ruta' => $rutaArchivo,
+                            'extension' => $extension
+                        ];
+                    }
+                }
+
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_sistemaInformatico', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_sistemaInformatico')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+
+        
+    }
+
+    public function storeDocumentosSistemaInformatico(Request $request){
+       
+        $data = $request->validate([
+            'rutadoc_estacion' => 'required|file',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+            'nombre' => 'required',
+            'referencia' => 'required',
+            'id_documento'=>'required'
+        ]);
+
+        try {
+            $documento = Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
+
+            if ($request->hasFile('rutadoc_estacion')) {
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                // Verificar si el archivo ya existe y eliminarlo
+                $archivosExistentes = Storage::disk('public')->files($customFolderPath);
+                $nombreSinReferenciaYId = "{$data['nombre']}";
+
+                foreach ($archivosExistentes as $archivoExistente) {
+                    // Extraer la parte del nombre del archivo existente
+                    $partesArchivoExistente = explode('-', basename($archivoExistente, '.' . pathinfo($archivoExistente, PATHINFO_EXTENSION)));
+                    if (count($partesArchivoExistente) > 1) {
+                        $nombreExistente = $partesArchivoExistente[1];
+                        if ($nombreExistente === $nombreSinReferenciaYId) {
+                            Storage::disk('public')->delete($archivoExistente);
+                        }
+                    }
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+            }
+
+            $documento->servicio_id = $data['servicio_id'];
+            $documento->usuario_id = Auth::id();
+            $documento->save();
+
+            return redirect()->route('documentacion_anexo_informaticos', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('documentacion_anexo_informaticos', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+        }
+
+    }
+
+    //DURANTE LA INSPECCIÓN DE SOLICITARAN LAS SIGUIENTES EVIDENCIAS AL MOMENTO. 
+    public function documentosInspeccion(Request $request){
+
+        try {
+            if ($request->has('id')) {
+                $id = $request->input('id');
+                $servicio = ServicioAnexo::findOrFail($id);
+                $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";
+
+                $requiredDocuments = [
+                    ['descripcion' => 'Una tirilla de inventario de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>1],
+                    ['descripcion' => 'Impresión de la configuración de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental','id'=>2],
+                    ['descripcion' => 'La factura de una compra con su soporte (Remisión, Carta porte, Tira de Inicio y Fin de Incremento)', 'codigo' => '', 'tipo' => 'Documental','id'=>3],
+                    ['descripcion' => 'La factura de una venta ', 'codigo' => '', 'tipo' => 'Documental y Fotos','id'=>4],                  
+                ];
+
+                $documentos = [];
+                if (Storage::disk('public')->exists($customFolderPath)) {
+                    $archivos = Storage::disk('public')->files($customFolderPath);
+                    foreach ($archivos as $archivo) {
+                        $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+                        $extension = pathinfo($archivo, PATHINFO_EXTENSION);
+                        $rutaArchivo = Storage::url($archivo);
+
+                        // Extraer referencia y nombre del archivo
+                        $partes = explode('-', $nombreArchivo, 3);
+                        $referencia = $partes[0] ?? '';
+                        $nombre = $partes[1] ?? '';
+
+                        $documentos[] = (object) [
+                            'nombre' => $nombre,
+                            'referencia' => $referencia,
+                            'ruta' => $rutaArchivo,
+                            'extension' => $extension
+                        ];
+                    }
+                }
+
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_inspeccion', compact('requiredDocuments', 'documentos', 'id', 'servicio'));
+            } else {
+                return redirect()->route('armonia.servicio_anexo_30.datos_servicio_anexo.documentacion_inspeccion')->with('error', 'No se proporcionó un ID de estación.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
+        }
+    }
+
+    public function storedocumentosInspeccion(Request $request){
+        $data = $request->validate([
+            'rutadoc_estacion' => 'required|file',
+            'servicio_id' => 'required',
+            'nomenclatura' => 'required',
+            'nombre' => 'required',
+            'referencia' => 'required',
+            'id_documento'=>'required'
+        ]);
+
+        try {
+            $documento = Documento_Servicio_Anexo::firstOrNew(['servicio_id' => $data['servicio_id']]);
+
+            if ($request->hasFile('rutadoc_estacion')) {
+                $archivoSubido = $request->file('rutadoc_estacion');
+                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento']. '.' . $archivoSubido->getClientOriginalExtension();
+
+                $nomenclatura = $data['nomenclatura'];
+                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";
+
+                if (!Storage::disk('public')->exists($customFolderPath)) {
+                    Storage::disk('public')->makeDirectory($customFolderPath);
+                }
+
+                // Verificar si el archivo ya existe y eliminarlo
+                $archivosExistentes = Storage::disk('public')->files($customFolderPath);
+                $nombreSinReferenciaYId = "{$data['nombre']}";
+
+                foreach ($archivosExistentes as $archivoExistente) {
+                    // Extraer la parte del nombre del archivo existente
+                    $partesArchivoExistente = explode('-', basename($archivoExistente, '.' . pathinfo($archivoExistente, PATHINFO_EXTENSION)));
+                    if (count($partesArchivoExistente) > 1) {
+                        $nombreExistente = $partesArchivoExistente[1];
+                        if ($nombreExistente === $nombreSinReferenciaYId) {
+                            Storage::disk('public')->delete($archivoExistente);
+                        }
+                    }
+                }
+
+                $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
+
+                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+            }
+
+            $documento->servicio_id = $data['servicio_id'];
+            $documento->usuario_id = Auth::id();
+            $documento->save();
+
+            return redirect()->route('documentacion_anexo_inspeccion', ['id' => $data['servicio_id']])->with('success', 'Documento guardado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('documentacion_anexo_inspeccion', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
+        }
+    }
+
+
 }

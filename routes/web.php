@@ -118,9 +118,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/expediente/operacion/{slug}', [OperacionController::class, 'ExpedienteInspectorOperacion'])->name('expediente.operacion');
 
     //Documentacion Por servicio
-    Route::get('/documentacion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'DocumentacionAnexo'])->name('documentacion_anexo');
-
-    Route::post('/documentacion-anexo/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeanexo'])->name('documentacion_anexo.store');
+   
     
     Route::post('/documentacion-anexo/generate-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generarSistemaMedicion'])->name('documentacion_anexo_medicion.generate');
 
@@ -286,5 +284,30 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::post('/dictamen-datos', [DictamenDatosController::class, 'store'])->name('dictamen_datos.store');
 
+
+
+    //Documentacion view main 
+    Route::get('/documentacion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentacion'])->name('documentacion_anexo');
+
+
+    //LISTA DE DOCUMENTOS GENERALES REQUERIDOS ANEZO 30 Y 31 RMF 2024 
+    
+    Route::get('/documentacion-anexo-general', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentosGenerales'])->name('documentacion_anexo_general');
+    Route::post('/documentacion-anexo-general/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeDocumentosGenerales'])->name('documentacion_anexo_general.store');
+
+
+    //REQUSISITOS PARA LA APROBACIÓN DEL SISTEMA INFORMATICO ANEXOS 30 Y 31
+    Route::get('/documentacion-anexo-informaticos', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentosSistemaInformatico'])->name('documentacion_anexo_informaticos');
+    Route::post('/documentacion-anexo-informaticos/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeDocumentosSistemaInformatico'])->name('documentacion_anexo_informatico.store');
+
+
+    //LISTA DE DOCUMENTOS REQUERIDOS SITEMAS DE MEDICION ANEXO 30 y 31 RMF 2024
+    Route::get('/documentacion-anexo-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'DocumentacionAnexo'])->name('documentacion_anexo_medicion');
+    Route::post('/documentacion-anexo-medicion/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeanexo'])->name('documentacion_anexo_medicion.store');
+
+    //DURANTE LA INSPECCIÓN DE SOLICITARAN LAS SIGUIENTES EVIDENCIAS AL MOMENTO. 
+
+    Route::get('/documentacion-anexo-inspeccion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentosInspeccion'])->name('documentacion_anexo_inspeccion');
+    Route::post('/documentacion-anexo-inspeccion/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storedocumentosInspeccion'])->name('documentacion_anexo_inspeccion.store');
 
 });
