@@ -312,4 +312,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/documentacion-anexo-inspeccion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentosInspeccion'])->name('documentacion_anexo_inspeccion');
     Route::post('/documentacion-anexo-inspeccion/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storedocumentosInspeccion'])->name('documentacion_anexo_inspeccion.store');
 
+
+
+    //LISTAS DE INSPECCION
+    Route::get('/lista-inspeccion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
+
 });

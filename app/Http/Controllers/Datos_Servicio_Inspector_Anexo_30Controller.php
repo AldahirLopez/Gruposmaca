@@ -1527,5 +1527,14 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
+    public function ListaInspeccion(Request $request){
+
+        // compact('requiredDocuments', 'documentos', 'id', 'servicio')
+
+        return view('armonia.servicio_anexo_30.datos_servicio_anexo.lista_inspeccion');
+    }
+
+
+
 
 }

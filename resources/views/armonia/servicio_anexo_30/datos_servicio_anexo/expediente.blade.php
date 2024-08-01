@@ -13,6 +13,12 @@
                 <i class="bi bi-arrow-return-left"></i> Volver
             </a>
         </div>
+
+        <div class="section-header" style="margin: 5px 5px 15px 5px;">
+            <a href="{{ route('lista_inspeccion_anexo') }}" class="btn btn-primary">
+                lista inspeccion
+            </a>
+        </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-lg-12">
