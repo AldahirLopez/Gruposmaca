@@ -16,7 +16,7 @@
                                     <th class="text-center align-middle">CUMPLE SI|NO</th>
                                     <th class="text-center align-middle">NO APLICA</th>
                                     <th class="text-center align-middle">OBSERVACIONES</th>
-                                    <th>REFERENCIA DE LA EVIDENCIA DE SOPORTE</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,9 +41,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                              
                                 </tr>
 
                                 <tr>
@@ -63,9 +61,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -86,9 +82,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
                                 <!-- FIN PRIMER BLOQUE DE REQUISITOS -->
 
@@ -126,9 +120,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -150,9 +142,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -173,9 +163,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -196,9 +184,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -218,9 +204,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
                                 
                                 <tr>
@@ -241,9 +225,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -263,9 +245,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -286,9 +266,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -308,9 +286,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -330,9 +306,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -356,9 +330,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -391,9 +363,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -416,9 +386,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -448,9 +416,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -469,9 +435,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -492,9 +456,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -514,9 +476,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -537,9 +497,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -566,9 +524,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -595,9 +551,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -619,9 +573,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -641,9 +593,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -664,9 +614,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -686,9 +634,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -708,9 +654,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -739,9 +683,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -762,9 +704,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -785,9 +725,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -808,9 +746,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -832,9 +768,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -859,9 +793,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -937,9 +869,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -958,9 +888,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -980,9 +908,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1002,9 +928,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -1025,9 +949,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1058,9 +980,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1083,9 +1003,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1112,9 +1030,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1139,9 +1055,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1170,9 +1084,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1194,9 +1106,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1216,9 +1126,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1238,9 +1146,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1263,9 +1169,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1284,9 +1188,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1320,9 +1222,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1344,9 +1244,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1365,9 +1263,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -1390,9 +1286,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1411,9 +1305,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1432,9 +1324,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1462,9 +1352,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1486,9 +1374,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1510,9 +1396,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1531,9 +1415,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1562,9 +1444,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -1586,9 +1466,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -1609,9 +1487,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1630,9 +1506,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
 
@@ -1663,9 +1537,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1695,9 +1567,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1722,9 +1592,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1748,9 +1616,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
 
@@ -1773,9 +1639,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-success">
@@ -1807,9 +1671,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1830,9 +1692,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr >
@@ -1858,9 +1718,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1879,9 +1737,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -1900,9 +1756,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1921,9 +1775,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -1942,9 +1794,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr class="table-primary">
@@ -1971,9 +1821,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -1995,9 +1843,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2018,9 +1864,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
                                 
                                 <tr class="table-primary">
@@ -2048,9 +1892,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2074,9 +1916,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2101,9 +1941,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2138,9 +1976,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2160,9 +1996,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2183,9 +2017,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2216,9 +2048,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2240,9 +2070,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2267,9 +2095,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2291,9 +2117,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2316,9 +2140,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
 
@@ -2340,9 +2162,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2362,9 +2182,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2384,9 +2202,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2418,9 +2234,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-success">
@@ -2449,9 +2263,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2470,9 +2282,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2494,9 +2304,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2517,9 +2325,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr class="table-success">
@@ -2546,9 +2352,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2567,9 +2371,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2588,9 +2390,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2609,9 +2409,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2630,9 +2428,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2651,9 +2447,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2673,9 +2467,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-success">
@@ -2710,9 +2502,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2734,9 +2524,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2755,9 +2543,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2776,9 +2562,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -2797,9 +2581,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2828,9 +2610,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -2853,9 +2633,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2875,9 +2653,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2898,9 +2674,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
                                 
                                 <tr class="table-success">
@@ -2942,9 +2716,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2963,9 +2735,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -2984,9 +2754,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3005,9 +2773,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3026,9 +2792,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3047,9 +2811,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3070,9 +2832,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3094,9 +2854,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3119,9 +2877,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -3149,9 +2905,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3171,9 +2925,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
 
@@ -3193,9 +2945,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3214,9 +2964,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3236,9 +2984,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr class="table-primary">
@@ -3267,9 +3013,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3289,9 +3033,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3310,9 +3052,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3332,9 +3072,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3353,9 +3091,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
 
@@ -3375,9 +3111,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3396,9 +3130,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3418,9 +3150,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3440,9 +3170,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3461,9 +3189,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 
@@ -3484,9 +3210,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
                                 <tr class="table-primary">
                                     <th scope="row" colspan="100%">
@@ -3511,9 +3235,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3532,9 +3254,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3553,9 +3273,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3574,9 +3292,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3596,9 +3312,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3618,9 +3332,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3642,9 +3354,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -3665,9 +3375,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3688,9 +3396,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
                                 <tr class="table-primary">
                                     <th scope="row" colspan="100%">
@@ -3715,9 +3421,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3736,9 +3440,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3757,9 +3459,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3778,9 +3478,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3800,9 +3498,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3821,9 +3517,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3843,9 +3537,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3865,9 +3557,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3889,9 +3579,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3912,9 +3600,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3936,9 +3622,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                   
                                 </tr>
 
                                 <tr>
@@ -3959,9 +3643,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -3982,9 +3664,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
@@ -4005,9 +3685,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -4029,9 +3707,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -4052,9 +3728,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -4077,9 +3751,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -4100,9 +3772,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
                                 <tr>
@@ -4123,9 +3793,7 @@
                                     <td class="align-middle">
                                         <input type="text" class="form-control">
                                     </td>
-                                    <td class="align-middle">
-                                        <input type="text" class="form-control">
-                                    </td>
+                                    
                                 </tr>
 
 
