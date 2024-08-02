@@ -2,6 +2,26 @@
 
 @section('content')
 
+<div class="section-header">
+
+    <h3 class="page__heading">Lista de inspeccion</h3>
+
+    <form action="">
+        <select name="tipo" class="form-select" >
+            <option selected>Seleccion el tipo</option>
+            <option value="volvo">Estacion</option>
+            <option value="saab">Trasnporte</option>
+            <option value="mercedes">Almacenamiento</option>
+        
+        </select>
+    </form>
+</div>
+
+
+    
+
+
+
     <form action="">
         <table class="table table-bordered">
             
