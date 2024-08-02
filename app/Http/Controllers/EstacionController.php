@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 class EstacionController extends Controller
 {
-
+ 
     protected $connection = 'segunda_db';
 
     public function seleccionestacion()
@@ -167,9 +167,9 @@ class EstacionController extends Controller
             $estacion = Estacion::findOrFail($id);
             $estacion->delete();
 
-            return redirect()->route('estacion.index')->with('success', 'Estación eliminada exitosamente.');
+            return redirect()->route('estaciones.usuario')->with('success', 'Estación eliminada exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->route('estacion.index')->with('error', 'Error al eliminar la estación.');
+            return redirect()->route('estaciones.usuario')->with('error', 'Error al eliminar la estación.');
         }
     }
 
@@ -250,10 +250,10 @@ class EstacionController extends Controller
             $documento->save();
 
             // Redirigir con un mensaje de éxito
-            return redirect()->route('estacion.index')->with('success', 'Documento agregado exitosamente.');
+            return redirect()->route('estaciones.usuario')->with('success', 'Documento agregado exitosamente.');
         } catch (\Exception $e) {
             // Capturar y manejar cualquier excepción
-            return redirect()->route('estacion.index')->with('error', 'Error al agregar el documento.');
+            return redirect()->route('estaciones.usuario')->with('error', 'Error al agregar el documento.');
         }
     }
 }
