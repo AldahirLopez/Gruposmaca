@@ -667,13 +667,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'nom_repre' => 'required',
                 'proveedor' => 'required',
                 'rfc_proveedor' => 'required',
-                'software' => 'required',
-                'version' => 'required',
 
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion4' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
+                'opcion6' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'detalleOpinion1' => 'required', // Texto
                 'recomendaciones1' => 'required', // Texto
                 'detalleOpinion2' => 'required', // Texto

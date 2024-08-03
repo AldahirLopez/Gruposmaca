@@ -308,7 +308,7 @@
                                                         </table>
 
                                                         <!-- Campos del formulario que se llenarán automáticamente -->
-                                                        @foreach([['proveedor', 'Proveedor de Sistemas Informáticos'], ['rfc_proveedor', 'RFC'], ['SCom', 'Controlador del Surtidor de Combustible']] as [$name, $label])
+                                                        @foreach([['proveedor', 'Proveedor de Sistemas Informáticos'], ['rfc_proveedor', 'RFC']] as [$name, $label])
                                                             <div class="form-group">
                                                                 <label for="{{ $name }}">{{ $label }}</label>
                                                                 <input type="text" name="{{ $name }}" id="{{ $name }}"
