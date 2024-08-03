@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 //Servicio Anexo Vista general 
 use App\Http\Controllers\DictamenDisenoController;
 use App\Http\Controllers\Servicio_Anexo_30Controller;
+use App\Http\Controllers\ListasAnexo30;
 
 //Servicio Inspector Anexo 30
 use App\Http\Controllers\Servicio_Inspector_Anexo_30Controller;
@@ -316,5 +317,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     //LISTAS DE INSPECCION
     Route::get('/lista-inspeccion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
+    Route::get('/form/{type}', [ListasAnexo30::class, 'loadForm']);
 
 });
