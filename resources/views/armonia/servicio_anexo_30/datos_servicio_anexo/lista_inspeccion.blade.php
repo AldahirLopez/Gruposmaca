@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="section-header">
+    <div class="section-header" style="margin: 5px 5px 15px 5px;">
+        <a href="{{ route('expediente.anexo30', ['slug' => $id_servicio]) }}" class="btn btn-danger">
+            <i class="bi bi-arrow-return-left"></i> Volver
+        </a>
+    </div>
     <h3 class="page__heading">Lista de Inspección</h3>
 
     <form action="">

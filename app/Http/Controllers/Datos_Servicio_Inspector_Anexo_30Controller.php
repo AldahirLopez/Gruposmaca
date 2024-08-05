@@ -1131,8 +1131,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     'ruta' => $rutaArchivo,
                     'extension' => $extension
                 ];
-
-
             }
         }
 
@@ -1144,8 +1142,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'name' => 'cod_' . $documento->id,
                 'codigo' => $documento->referencia
             ];
-
-
         }
 
 
@@ -1187,10 +1183,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             // Manejar el caso en que el archivo no exista
             abort(404, "El archivo no existe en la ruta especificada.");
         }
-
-
-
-
     }
 
 
@@ -1241,8 +1233,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
         }
-
-
     }
 
     public function storeDocumentosGenerales(Request $request)
@@ -1300,7 +1290,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('documentacion_anexo_general', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
-
     }
 
     //REQUSISITOS PARA LA APROBACIÓN DEL SISTEMA INFORMATICO ANEXOS 30 Y 31
@@ -1361,8 +1350,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Error al obtener la documentación: ' . $e->getMessage());
         }
-
-
     }
 
     public function storeDocumentosSistemaInformatico(Request $request)
@@ -1419,7 +1406,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         } catch (\Exception $e) {
             return redirect()->route('documentacion_anexo_informaticos', ['id' => $data['servicio_id']])->with('error', 'Documento no guardado exitosamente.');
         }
-
     }
 
     //DURANTE LA INSPECCIÓN DE SOLICITARAN LAS SIGUIENTES EVIDENCIAS AL MOMENTO. 
@@ -1526,14 +1512,11 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         }
     }
 
-    public function ListaInspeccion(Request $request){
+    public function ListaInspeccion(Request $request, $id_servicio = null)
+    {
+        // Puedes realizar cualquier operación con el $id_servicio aquí, si es necesario.
 
-        // compact('requiredDocuments', 'documentos', 'id', 'servicio')
-
-        return view('armonia.servicio_anexo_30.datos_servicio_anexo.lista_inspeccion');
+        // Pasar el $id_servicio a la vista
+        return view('armonia.servicio_anexo_30.datos_servicio_anexo.lista_inspeccion', compact('id_servicio'));
     }
-
-
-
-
 }

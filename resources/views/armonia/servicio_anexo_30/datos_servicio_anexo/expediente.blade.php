@@ -15,8 +15,8 @@
     </div>
 
     <div class="section-header" style="margin: 5px 5px 15px 5px;">
-        <a href="{{ route('lista_inspeccion_anexo') }}" class="btn btn-primary">
-            lista inspeccion
+        <a href="{{ route('lista_inspeccion_anexo', ['id_servicio' => $servicioAnexo->id]) }}" class="btn btn-primary">
+            Lista Inspección
         </a>
     </div>
     <div class="section-body">

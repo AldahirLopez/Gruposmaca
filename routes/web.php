@@ -60,7 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/pagos-anexo', [Servicio_Anexo_30Controller::class, 'pagosAnexo'])->name('pagosAnexo.index');
 
-    
+
     //PARTE DE PAGOS DE Anexo
     Route::post('/pago-anexo/store', [Servicio_Anexo_30Controller::class, 'storePagoAnexo'])->name('pago_anexo.store');
 
@@ -68,7 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/descarga-pago-anexo', [Servicio_Anexo_30Controller::class, 'descargarPagoAnexo'])->name('descargar.pago.anexo');
     Route::post('/factura-anexo/store', [Servicio_Anexo_30Controller::class, 'storeFacturaAnexo'])->name('factura_anexo.store');
-    
+
     Route::get('/descarga-factura-anexo', [Servicio_Anexo_30Controller::class, 'descargarFacturaAnexo'])->name('descargar.factura.anexo');
 
     Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioDeletion')
@@ -76,8 +76,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
 
-    
-    
+
+
 
     //Generar PDF cotizacion anexo 30 
     Route::post('/pdf_cotizacion', [Servicio_Anexo_30Controller::class, 'generarpdfcotizacion'])->name('pdf.cotizacion');
@@ -86,17 +86,17 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     //Generar PDF cotizacion operacion
-    
+
     Route::post('/pdf_cotizacion_operacion', [OperacionController::class, 'generarpdfcotizacion'])->name('pdf.cotizacion.operacion');
-    
-   
+
+
 
 
 
     //Servicios Para Aprobar
     Route::get('/apro_anexo', [Servicio_Anexo_30Controller::class, 'apro_servicio_anexo'])->name('apro.anexo');
     Route::get('servicio_anexo/apro/{id}', [Servicio_Anexo_30Controller::class, 'apro'])->name('servicio_anexo.apro');
-    
+
     //Servicios para aprobar de operacion
     Route::get('/apro_operacion_mantenimiento', [OperacionController::class, 'apro_servicio_operacion_mantenimiento'])->name('apro.operacion');
     Route::get('/operacion_mantenimiento/apro/{id}', [OperacionController::class, 'apro'])->name('servicio_operacion.apro');
@@ -106,7 +106,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('servicio_inspector_anexo_30', Servicio_Inspector_Anexo_30Controller::class);
     Route::get('/obtener-servicios', [Servicio_Inspector_Anexo_30Controller::class, 'obtenerServicios'])->name('servicio_inspector_anexo_30.obtenerServicios');
 
-    
+
 
 
     //Servicio operacion y mantenimiento
@@ -119,11 +119,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/expediente/operacion/{slug}', [OperacionController::class, 'ExpedienteInspectorOperacion'])->name('expediente.operacion');
 
     //Documentacion Por servicio
-   
-    
+
+
     Route::post('/documentacion-anexo/generate-medicion', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generarSistemaMedicion'])->name('documentacion_anexo_medicion.generate');
 
-   
+
     //Docuemtnacion para servicio de operacion 
 
     Route::get('/documentacion-operacion', [OperacionController::class, 'DocumentacionOperacion'])->name('documentacion_operacion');
@@ -131,30 +131,30 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/documentacion-operacion-archivos/store', [OperacionController::class, 'storeDocumenctacionOperacion'])->name('documentacion_operacion_archivos.store');
 
     //Descargar la documentacion de operacion
-    Route::post('/descargar-documentacion-operacion/{documento}', [OperacionController::class,'descargardocumentacion'])->name('descargar.documentos.operacion');
+    Route::post('/descargar-documentacion-operacion/{documento}', [OperacionController::class, 'descargardocumentacion'])->name('descargar.documentos.operacion');
 
- 
+
 
     Route::post('/generate-word', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'generateWord'])->name('generate.word');
 
     Route::post('/generate-word-operacion', [OperacionController::class, 'generateWord'])->name('generate.word.operacion');
-    
+
     Route::post('/generate-expedientes-operacion', [OperacionController::class, 'generarExpedientesOperacion'])->name('generate.expedientes.operacion');
-    
+
     Route::post('/generate-comprobante-operacion', [OperacionController::class, 'generarComprobanteTraslado'])->name('generate.comprobante.operacion');
-    
+
     Route::post('/generate-acta-operacion', [OperacionController::class, 'generarActaVerificacion'])->name('generate.acta.operacion');
 
 
     Route::get('/list-generated-files/{nomenclatura}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'listGeneratedFiles']);
-   
+
     Route::get('/list-generated-files-operacion/{nomenclatura}', [OperacionController::class, 'listGeneratedFiles']);
 
 
-    Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']); 
-    
+    Route::get('/api/consulta/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'validarDatosExpediente']);
+
     Route::get('/api/consulta/operacion/{id}', [OperacionController::class, 'validarDatosExpediente']);
-   
+
 
 
     Route::get('/descargar-archivo/{archivo}/{estacion}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'descargarWord'])
@@ -187,7 +187,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pagos', [OperacionController::class, 'pagos'])->name('pagos.index');
     Route::get('/descarga-pago', [OperacionController::class, 'descargarPago'])->name('descargar.pago.operacion');
     Route::post('/factura-operacion/store', [OperacionController::class, 'storeFactura'])->name('factura_operacion.store');
-    
+
     Route::get('/descarga-factura', [OperacionController::class, 'descargarFactura'])->name('descargar.factura.operacion');
 
 
@@ -211,7 +211,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('operacion', OperacionController::class);
-    
+
     Route::resource('archivos', ArchivosDicController::class);
     Route::resource('notificaciones', ApprovalController::class);
 
@@ -234,7 +234,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/listar/ope', [FormatosController::class, 'ListarOpe'])->name('listar.ope');
     Route::get('/listar/diseno', [FormatosController::class, 'ListarDiseno'])->name('listar.diseno');
     Route::get('/listar/const', [FormatosController::class, 'ListarConst'])->name('listar.const');
-    
+
 
 
     //
@@ -249,12 +249,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Rutas para las notificaciones
     Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
-    
+
     Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');
 
 
-    Route::get('/aprobacion_servicios', [NotificationController::class, 'notificacionesAprobacion'])->name('aprobacion.servicios');  
+    Route::get('/aprobacion_servicios', [NotificationController::class, 'notificacionesAprobacion'])->name('aprobacion.servicios');
 
 
 
@@ -284,7 +284,7 @@ Route::group(['middleware' => ['auth']], function () {
     //Dictamen de datos
 
     Route::get('/dictamen-datos', [DictamenDatosController::class, 'create'])->name('dictamen_datos.create');
-    
+
     Route::post('/dictamen-datos', [DictamenDatosController::class, 'store'])->name('dictamen_datos.store');
 
 
@@ -294,7 +294,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     //LISTA DE DOCUMENTOS GENERALES REQUERIDOS ANEZO 30 Y 31 RMF 2024 
-    
+
     Route::get('/documentacion-anexo-general', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'documentosGenerales'])->name('documentacion_anexo_general');
     Route::post('/documentacion-anexo-general/store', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'storeDocumentosGenerales'])->name('documentacion_anexo_general.store');
 
@@ -316,7 +316,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     //LISTAS DE INSPECCION
-    Route::get('/lista-inspeccion-anexo', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
-    Route::get('/form/{type}', [ListasAnexo30::class, 'loadForm']);
+    Route::get('/lista-inspeccion-anexo/{id_servicio?}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
 
+    Route::get('/form/{type}', [ListasAnexo30::class, 'loadForm']);
 });
