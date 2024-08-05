@@ -179,13 +179,13 @@
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                     disabled>
-                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                    <i class="bi bi-upload"></i>
                                                                 </button>
 
                                                             @else
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                    <i class="bi bi-upload"></i>
                                                                 </button>
                                                             @endif
                                                         </td>
@@ -409,13 +409,13 @@
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                         disabled>
-                                                                        <i class="bi bi-upload"></i> Agregar
+                                                                        <i class="bi bi-upload"></i>
                                                                     </button>
 
                                                                 @else
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                                        <i class="bi bi-upload"></i> Agregar
+                                                                        <i class="bi bi-upload"></i>
                                                                     </button>
 
                                                                 @endif

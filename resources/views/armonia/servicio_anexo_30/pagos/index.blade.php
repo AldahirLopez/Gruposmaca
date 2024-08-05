@@ -5,7 +5,7 @@
 @can('Ver-pagos-anexo_30')   
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Pagos de Servicios de Operaciones y Mantenimiento </h3>
+        <h3 class="page__heading">Pagos de Servicios de Anexo 30</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div style="margin-top: 15px;">
-                            <a href="{{ route('operacion.index') }}" class="btn btn-danger"><i
+                            <a href="{{ route('servicio_anexo_30.index') }}" class="btn btn-danger"><i
                                     class="bi bi-arrow-return-left"></i></a>
                         </div>
                         <table class="table table-striped">

@@ -134,8 +134,6 @@
                                                     <th scope="col">Expediente</th>
                                                 @endcan
 
-                                                <th scope="col">Listas de Inspeccion</th>
-
                                                 @can('Generar-documentacion-anexo_30')
                                                     <th scope="col">Documentacion</th>
                                                 @endcan
@@ -177,13 +175,13 @@
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                     disabled>
-                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                    <i class="bi bi-upload"></i>
                                                                 </button>
 
                                                             @else
                                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                                     data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                                    <i class="bi bi-upload"></i> Agregar
+                                                                    <i class="bi bi-upload"></i>
                                                                 </button>
 
                                                             @endif
@@ -217,18 +215,6 @@
                                                             @endif
                                                         </td>
                                                     @endcan
-
-                                                    <td scope="row">
-                                                        @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
-                                                            <button class="btn btn-primary" disabled><i
-                                                                    class="bi bi-folder-fill"></i></button>
-                                                        @else
-                                                            <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}"
-                                                                class="btn btn-primary">
-                                                                <i class="bi bi-folder-fill"></i>
-                                                            </a>
-                                                        @endif
-                                                    </td>
 
                                                     @can('Generar-documentacion-anexo_30')
                                                         <td scope="row">
@@ -375,10 +361,6 @@
                                                         <th scope="col">Expediente</th>
                                                     @endcan
 
-                                                    @can('Generar-expediente-anexo_30')
-                                                        <th scope="col">Listas de Inspeccion</th>
-                                                    @endcan
-
                                                     @can('Generar-documentacion-anexo_30')
                                                         <th scope="col">Documentacion</th>
                                                     @endcan
@@ -421,13 +403,13 @@
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}"
                                                                         disabled>
-                                                                        <i class="bi bi-upload"></i> Agregar
+                                                                        <i class="bi bi-upload"></i>
                                                                     </button>
 
                                                                 @else
                                                                     <button type="button" class="btn btn-success" data-toggle="modal"
                                                                         data-target="#agregarDocumentoModal-{{$servicio->nomenclatura }}">
-                                                                        <i class="bi bi-upload"></i> Agregar
+                                                                        <i class="bi bi-upload"></i>
                                                                     </button>
 
                                                                 @endif
@@ -463,19 +445,6 @@
                                                                 @endif
                                                             </td>
                                                         @endcan
-
-
-                                                        <td scope="row">
-                                                            @if(!$servicio->pending_apro_servicio || $servicio->pending_deletion_servicio || !$servicio->slug)
-                                                                <button class="btn btn-primary" disabled><i
-                                                                        class="bi bi-folder-fill"></i></button>
-                                                            @else
-                                                                <a href="{{ route('listas.anexo30', ['slug' => $servicio->slug]) }}"
-                                                                    class="btn btn-primary">
-                                                                    <i class="bi bi-folder-fill"></i>
-                                                                </a>
-                                                            @endif
-                                                        </td>
 
                                                         @can('Generar-documentacion-anexo_30')
                                                         <td scope="row">
