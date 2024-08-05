@@ -194,6 +194,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('estacion', EstacionController::class);
 
+
+    Route::post('/direccion/store', [EstacionController::class, 'storedirecciones'])->name('direccion.store');
+
+
     Route::get('/seleccion-estacion', [EstacionController::class, 'seleccionestacion'])->name('estacion.selecccion');
 
     Route::get('/estaciones_usuario', [EstacionController::class, 'estacion_usuario'])->name('estaciones.usuario');

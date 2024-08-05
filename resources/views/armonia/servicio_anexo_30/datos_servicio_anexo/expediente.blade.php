@@ -563,7 +563,7 @@
                             tableHtml += `<tr><td>${icon}</td><td>${fileName}</td><td><a href="/descargar-archivo/${encodeURIComponent(fileName)}/${encodeURIComponent(nomenclatura)}" class="btn btn-info" download>Descargar</a></td></tr>`;
                         });
 
-                        tableHtml += '</tbody></table>';
+                        tableHtml += '</tbody></table>'; 
 
                         // Actualizar el contenedor de la tabla de archivos generados y mostrarla
                         generatedFilesTable.html(tableHtml).show();
