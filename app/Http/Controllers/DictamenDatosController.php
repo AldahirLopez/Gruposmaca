@@ -34,40 +34,6 @@ class DictamenDatosController extends Controller
         if (!$dispensarios || !$sondas) {
             return redirect()->route('dictamen_datos.create')->with('error', 'Rellenar todos los campos');
         }
-
-        if (!$estacion) {
-            // Crear la estación para asignarle sus equipos
-            $estacion = Estacion::create([
-                'num_estacion' => $request->input('num_estacion'),
-                'razon_social' => $request->input('razon_social'),
-                'rfc' => $request->input('rfc'),
-                'domicilio_fiscal' => $request->input('domicilio_instalacion'),
-                'domicilio_estacion_servicio' => $request->input('domicilio_instalacion'),
-                'estado_republica_estacion' => "",
-                'num_cre' => $request->input('cre'),
-                'num_constancia' => "",
-                'correo_electronico' => $request->input('correo'),
-                'contacto' => $request->input('telefono'),
-                'nombre_representante_legal' => $request->input('responsable_sgm'),
-                'usuario_id' => "4",
-            ]);
-        } else {
-            // Actualizar la estación existente
-            $estacion->update([
-                'razon_social' => $request->input('razon_social'),
-                'rfc' => $request->input('rfc'),
-                'domicilio_fiscal' => $request->input('domicilio_instalacion'),
-                'domicilio_estacion_servicio' => $request->input('domicilio_instalacion'),
-                'estado_republica_estacion' => "",
-                'num_cre' => $request->input('cre'),
-                'num_constancia' => "",
-                'correo_electronico' => $request->input('correo'),
-                'contacto' => $request->input('telefono'),
-                'nombre_representante_legal' => $request->input('responsable_sgm'),
-                'usuario_id' => "4",
-            ]);
-        }
-
         // Crear o actualizar dispensarios y sondas
         foreach ($dispensarios as $dispensario) {
             $equipo = Equipo::updateOrCreate(

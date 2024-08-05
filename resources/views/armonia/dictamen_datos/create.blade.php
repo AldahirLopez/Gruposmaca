@@ -255,4 +255,4 @@
         }
     });
 </script>
-@endsection
+@endsection 

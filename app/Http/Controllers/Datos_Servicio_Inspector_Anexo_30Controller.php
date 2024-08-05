@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Certificado_Anexo30;
 use App\Models\Documento_Servicio_Anexo;
+use App\Models\Equipo;
 use App\Models\Estacion;
 use App\Models\Estacion_Servicio;
 use App\Models\Expediente_Servicio_Anexo_30;
+use App\Models\ProveedorInformatico;
 use App\Models\ServicioAnexo;
+use App\Models\Tanque;
 use App\Models\Usuario_Estacion;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -468,6 +471,17 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
 
+            // Buscar o crear un nuevo registro
+            $software = ProveedorInformatico::updateOrCreate(
+                ['servicio_anexo_id' => $idServicio], // Condiciones para buscar el registro
+                [
+                    'nombre' => $data['proveedor'],
+                    'rfc' => $data['rfc_proveedor'],
+                    'nombre_software' => $data['software'],
+                    'version' => $data['version'],
+                    'servicio_anexo_id' => $idServicio
+                ] // Atributos a actualizar o establecer
+            );
             // Cargar las plantillas de Word
             $templatePaths = [
                 'DICTAMEN TECNICO DE PROGRAMAS INFORMATICOS.docx',
@@ -665,14 +679,15 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             $estacion = Estacion::findOrFail($idEstacion);
 
+            $software = ProveedorInformatico::where('servicio_anexo_id', $idServicio)->firstOrFail();
+
+
             // Definir las reglas de validación
             $rules = [
                 'nomenclatura' => 'required|string',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'nom_repre' => 'required',
-                'proveedor' => 'required',
-                'rfc_proveedor' => 'required',
 
                 'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
                 'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
@@ -706,6 +721,90 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['direccion_estacion'] = $estacion->domicilio_estacion_servicio;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
+
+            //Software
+            $data['proveedor'] =  $software->nombre;
+            $data['rfc_proveedor'] =  $software->rfc;
+            //Datos de los equipos
+            $dispensarios = $request->input('dispensarios', []);
+            $sondas = $request->input('sondas', []);
+            $combustibles = $request->input('combustibles', []);
+
+            // Depuración: Imprimir datos recibidos
+            \Log::info('Datos recibidos:', [
+                'combustibles' => $combustibles,
+            ]);
+
+            $numSeriesEquipos = [];
+            $usuario = Auth::user();
+
+            if (!$dispensarios || !$sondas) {
+                return redirect()->route('dictamen_datos.create')->with('error', 'Rellenar todos los campos');
+            }
+            // Crear o actualizar dispensarios y sondas
+            foreach ($dispensarios as $dispensario) {
+                $equipo = Equipo::updateOrCreate(
+                    ['num_serie' => $dispensario['numero_serie']],
+                    [
+                        'modelo' => $dispensario['modelo'],
+                        'marca' => $dispensario['marca'],
+                        'tipo' => "Dispensario",
+                    ]
+                );
+                $numSeriesEquipos[] = $dispensario['numero_serie'];
+            }
+
+            foreach ($sondas as $sonda) {
+                $equipo = Equipo::updateOrCreate(
+                    ['num_serie' => $sonda['numero_serie']],
+                    [
+                        'modelo' => $sonda['modelo'],
+                        'marca' => $sonda['marca'],
+                        'tipo' => "Sonda",
+                    ]
+                );
+                $numSeriesEquipos[] = $sonda['numero_serie'];
+            }
+
+            // Recuperar tanques
+            $tanques = Tanque::whereIn('nombre', ['Diesel', 'Premium', 'Magna'])->get()->keyBy('nombre');
+
+            // Preparar datos para la tabla pivote
+            $pivotData = [];
+            foreach ($request->input('combustibles', []) as $combustible) {
+                $tipoTanque = ucfirst($combustible['tipo']); // Capitalizar el primer carácter
+                $cantidad = $combustible['cantidad'];
+
+                if (isset($tanques[$tipoTanque])) {
+                    $tanqueId = $tanques[$tipoTanque]->id;
+                    // Insertar cada registro como una fila separada en la tabla pivote
+                    $pivotData[] = [
+                        'id_estacion' => $estacion->id,
+                        'id_tanque' => $tanqueId,
+                        'capacidad' => $cantidad,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+
+            // Depuración final de los datos procesados
+            \Log::info('Datos de pivote:', $pivotData);
+
+            // Usar DB::connection para especificar la conexión a la base de datos 'armonia'
+            // Primero, eliminar los registros antiguos
+            DB::connection('segunda_db')->table('estacion_tanque')->where('id_estacion', $estacion->id)->delete();
+
+            // Insertar los nuevos datos
+            DB::connection('segunda_db')->table('estacion_tanque')->insert($pivotData);
+
+            // Primero, eliminar las asociaciones antiguas
+            DB::connection('segunda_db')->table('equipo_estacion')->where('id_estacion', $estacion->id)->delete();
+
+            // Insertar las nuevas asociaciones
+            DB::connection('segunda_db')->table('equipo_estacion')->insert(
+                array_map(fn ($numSerie) => ['id_equipo' => $numSerie, 'id_estacion' => $estacion->id], $numSeriesEquipos)
+            );
 
             // Cargar las plantillas de Word
             $templatePaths = [
@@ -931,9 +1030,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $moral = true;
         }
 
-        // Descomponer la dirección
-        $datosDireccion = $this->descomponerDireccion($direccion);
-
         // Cargar las plantillas de Word
         $templatePaths = [
             'CERTIFICADO.docx',
@@ -951,16 +1047,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $templateProcessor->setValue('${fecha_inspeccion}', $fechaInspeccion);
             $templateProcessor->setValue('${razon_social}', strtoupper($estacion->razon_social));
             $templateProcessor->setValue('${numeroFolioCertificado}', $numeroFolioCertificado);
-
-            // Establecer los valores de la dirección
-            $templateProcessor->setValue('${calle}', $datosDireccion['calle']);
-            $templateProcessor->setValue('${numero}', $datosDireccion['numero']);
-            $templateProcessor->setValue('${numero_interior}', $datosDireccion['numero_interior']);
-            $templateProcessor->setValue('${colonia}', $datosDireccion['colonia']);
-            $templateProcessor->setValue('${codigo_postal}', $datosDireccion['codigo_postal']);
-            $templateProcessor->setValue('${localidad}', $datosDireccion['localidad']);
-            $templateProcessor->setValue('${municipio}', $datosDireccion['municipio']);
-            $templateProcessor->setValue('${entidad_federativa}', $datosDireccion['entidad_federativa']);
 
             // Configurar los valores en el documento basado en si es física o moral
             if ($fisica) {
@@ -1033,44 +1119,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             ->with('success', 'Certificado guardado correctamente.');
     }
 
-    function descomponerDireccion($direccion)
-    {
-        $regex = '/^
-            (?P<calle>.+?)                            # Captura la calle
-            \s*(?:\s*No\.?\s*(?P<numero>\d+))?       # Captura el número (opcionalmente precedido por "No.")
-            \s*(?:\s*(?P<numero_interior>\d+[A-Z]?)?)?  # Captura el número interior (opcionalmente seguido por una letra)
-            \s*(?:C\.P\.\s*(?P<codigo_postal>\d{5}))?  # Captura el código postal (opcional)
-            \s*(?P<colonia>[^,]*)                     # Captura la colonia
-            ,\s*(?P<municipio>[^,]*)                  # Captura el municipio
-            ,\s*(?P<entidad_federativa>[^,]*)         # Captura la entidad federativa
-            $/x';
-    
-        if (preg_match($regex, $direccion, $matches)) {
-            return [
-                'calle' => trim($matches['calle']),
-                'numero' => $matches['numero'] ?? 'S/N',
-                'numero_interior' => $matches['numero_interior'] ?? '',
-                'colonia' => trim($matches['colonia']),
-                'codigo_postal' => $matches['codigo_postal'] ?? '',
-                'localidad' => '', // Puedes ajustar esto si obtienes una localidad específica
-                'municipio' => trim($matches['municipio']),
-                'entidad_federativa' => trim($matches['entidad_federativa']),
-            ];
-        }
-    
-        return [
-            'calle' => '',
-            'numero' => 'S/N',
-            'numero_interior' => '',
-            'colonia' => '',
-            'codigo_postal' => '',
-            'localidad' => '',
-            'municipio' => '',
-            'entidad_federativa' => '',
-        ];
-    }
-    
-    
 
     public function documentacion(Request $request)
     {
