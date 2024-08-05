@@ -23,23 +23,7 @@
                                 </form>
                             </div>
                             <div style="margin-top: 15px;">
-                              
-                               
                             </div>
-
-
-                            <input style="margin-top: 15px;" type="text" id="buscarEstacion" class="form-control mb-3"
-                                placeholder="Buscar estación...">
-
-                                <form action="{{route('documentacion_anexo_medicion.generate')}}" method="POST" class="text-end">
-                                    @csrf
-                                    <input type="hidden" name="nomenclatura" value="{{ $servicio->nomenclatura }}">
-                                    <input type="hidden" name="servicio_id" value="{{ $id }}">
-                                    <button  class="btn btn-info" type="submit">
-                                    <i class="bi bi-download"></i> Sistema de medicion
-                                    </button>
-                                </form>
-
 
                             <table class="table table-striped">
                                 <thead >

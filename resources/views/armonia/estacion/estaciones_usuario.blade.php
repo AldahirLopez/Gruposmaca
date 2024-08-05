@@ -47,8 +47,8 @@
                                         </button>
                                         @if(auth()->check() && auth()->user()->hasRole('Administrador'))
                                         {!! Form::open(['method' => 'DELETE', 'route' => ['estacion.destroy', $estacion->id], 'style' => 'display:inline']) !!}
-                                             {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
-                                             {!! Form::close() !!}
+                                        {!! Form::button('<i class="bi bi-trash-fill"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'title' => 'Eliminar']) !!}
+                                        {!! Form::close() !!}
                                         @endif
 
                                     </td>
@@ -138,6 +138,8 @@
     @endforeach
 
 </section>
+
+
 <!-- Modal para generar nueva estación -->
 <div class="modal fade" id="generarEstacionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -148,7 +150,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario de generación de expediente -->
-                <form action="{{ route('estacion.store') }}" method="POST">
+                <form id="generarEstacionForm" action="{{ route('estacion.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <input type="hidden" name="id_usuario" value="{{ strtoupper($usuario->id) }}">
@@ -157,52 +159,79 @@
                         <!-- Campos del formulario aquí -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="numestacion">Numero de estacion </label>
-                                <input type="text" name="numestacion" class="form-control">
+                                <label for="numestacion">Número de estación</label>
+                                <input type="text" name="numestacion" class="form-control" required value="{{ old('numestacion') }}">
+                                @error('numestacion')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="razonsocial">Razon Social</label>
-                                <input type="text" name="razonsocial" class="form-control">
+                                <label for="razonsocial">Razón Social</label>
+                                <input type="text" name="razonsocial" class="form-control" required value="{{ old('razonsocial') }}">
+                                @error('razonsocial')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="rfc">RFC</label>
-                                <input type="text" name="rfc" class="form-control">
+                                <input type="text" name="rfc" class="form-control" required value="{{ old('rfc') }}">
+                                @error('rfc')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="domicilio_fiscal">Domicilio Fiscal</label>
-                                <input type="text" name="domicilio_fiscal" class="form-control">
+                                <input type="text" name="domicilio_fiscal" class="form-control" required value="{{ old('domicilio_fiscal') }}">
+                                @error('domicilio_fiscal')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="telefono">Telefono</label>
-                                <input type="text" name="telefono" class="form-control">
+                                <label for="telefono">Teléfono</label>
+                                <input type="text" name="telefono" class="form-control" required value="{{ old('telefono') }}">
+                                @error('telefono')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="correo">Correo Electronico</label>
-                                <input type="text" name="correo" class="form-control">
+                                <label for="correo">Correo Electrónico</label>
+                                <input type="email" name="correo" class="form-control" required value="{{ old('correo') }}">
+                                @error('correo')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="repre">Representante Legal</label>
-                                <input type="text" name="repre" class="form-control">
+                                <input type="text" name="repre" class="form-control" required value="{{ old('repre') }}">
+                                @error('repre')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="domicilio_estacion">Domicilio de la Estacion de Servicio</label>
-                                <input type="text" name="domicilio_estacion" class="form-control">
+                                <label for="domicilio_estacion">Domicilio de la Estación de Servicio</label>
+                                <input type="text" name="domicilio_estacion" class="form-control" required value="{{ old('domicilio_estacion') }}">
+                                @error('domicilio_estacion')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label for="estado">Estado</label>
-                                <select name="estado" class="form-select" id="estado" aria-label="Default select example">
+                                <select name="estado" class="form-select" id="estado" aria-label="Default select example" required>
                                     @foreach($estados as $estado)
-                                    <option value="{{ $estado }}">{{ $estado }}</option>
+                                    <option value="{{ $estado }}" {{ old('estado') == $estado ? 'selected' : '' }}>{{ $estado }}</option>
                                     @endforeach
                                 </select>
+                                @error('estado')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center" style="padding-top: 20px;">
                             <button type="submit" class="btn btn-success btn-generar">Generar</button>
                         </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -230,6 +259,28 @@
                 found ? $(this).show() : $(this).hide();
             });
         });
+    });
+</script>
+<!-- Validación JavaScript -->
+<script>
+    document.getElementById('generarEstacionForm').addEventListener('submit', function(event) {
+        const form = event.target;
+        const inputs = form.querySelectorAll('input[required], select[required]');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                valid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     });
 </script>
 @endsection
