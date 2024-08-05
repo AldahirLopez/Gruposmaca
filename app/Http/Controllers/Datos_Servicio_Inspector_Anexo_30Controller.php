@@ -352,21 +352,27 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
     public function descargarWord(Request $request, $archivo, $nomenclatura)
     {
-        // Ejemplo de construcción de la ruta del archivo
-        $nomenclatura = strtoupper($nomenclatura); // Obtener la nomenclatura desde la ruta
+        // Convertir la nomenclatura a mayúsculas
+        $nomenclatura = strtoupper($nomenclatura);
 
-        // Construir la ruta del archivo
-        $rutaArchivo = storage_path("app/public/servicios_anexo30/{$nomenclatura}/expediente/{$archivo}");
+        // Construir las rutas de los archivos
+        $rutaExpediente = storage_path("app/public/servicios_anexo30/{$nomenclatura}/expediente/{$archivo}");
+        $rutaCertificado = storage_path("app/public/servicios_anexo30/{$nomenclatura}/certificado/{$archivo}");
 
-        // Verificar si el archivo existe antes de proceder
-        if (file_exists($rutaArchivo)) {
-            // Devolver el archivo para descargar
-            return response()->download($rutaArchivo);
-        } else {
-            // Manejar el caso en que el archivo no exista
-            abort(404, "El archivo no existe en la ruta especificada.");
+        // Verificar si el archivo existe en la ruta de expediente
+        if (file_exists($rutaExpediente)) {
+            return response()->download($rutaExpediente);
+        }
+        // Verificar si el archivo existe en la ruta de certificado
+        elseif (file_exists($rutaCertificado)) {
+            return response()->download($rutaCertificado);
+        }
+        // Manejar el caso en que el archivo no exista en ninguna ruta
+        else {
+            abort(404, "El archivo no existe en las rutas especificadas.");
         }
     }
+
 
 
     // Método para obtener los datos de una estación de servicio por su ID
@@ -871,7 +877,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         $servicio = ServicioAnexo::findOrFail($idServicio); // Ajustado para buscar por id_servicio
 
         // Obtener las fechas desde el servicio y formatearlas correctamente
-        $fechaInspeccion = $servicio->date_inspeccion_at;
+        $fechaInspeccion = Carbon::parse($servicio->date_inspeccion_at)->format('Y-m-d');
 
         // Definir las reglas de validación
         $rules = [
@@ -913,19 +919,95 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         $numeroFolio = "ACA160422EA7";
         $numeroFolioCertificado = "{$numeroFolio}{$formattedNumeroNomenclatura}{$anoActual}";
 
+        $fisica = false;
+        $moral = false;
 
+        // Ejemplo de dirección
+        $direccion = $estacion->domicilio_estacion_servicio;
+
+        if ($data['RfcRepresentanteLegal'] === $estacion->rfc) {
+            $fisica = true;
+        } else {
+            $moral = true;
+        }
+
+        // Descomponer la dirección
+        $datosDireccion = $this->descomponerDireccion($direccion);
+
+        // Cargar las plantillas de Word
+        $templatePaths = [
+            'CERTIFICADO.docx',
+        ];
+
+        // Reemplazar marcadores en todas las plantillas
+        foreach ($templatePaths as $templatePath) {
+            $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
+
+            // Reemplazar todos los marcadores con los datos del formulario
+            foreach ($data as $key => $value) {
+                $templateProcessor->setValue($key, $value);
+            }
+            // Reemplazar fechas formateadas específicas
+            $templateProcessor->setValue('${fecha_inspeccion}', $fechaInspeccion);
+            $templateProcessor->setValue('${razon_social}', strtoupper($estacion->razon_social));
+            $templateProcessor->setValue('${numeroFolioCertificado}', $numeroFolioCertificado);
+
+            // Establecer los valores de la dirección
+            $templateProcessor->setValue('${calle}', $datosDireccion['calle']);
+            $templateProcessor->setValue('${numero}', $datosDireccion['numero']);
+            $templateProcessor->setValue('${numero_interior}', $datosDireccion['numero_interior']);
+            $templateProcessor->setValue('${colonia}', $datosDireccion['colonia']);
+            $templateProcessor->setValue('${codigo_postal}', $datosDireccion['codigo_postal']);
+            $templateProcessor->setValue('${localidad}', $datosDireccion['localidad']);
+            $templateProcessor->setValue('${municipio}', $datosDireccion['municipio']);
+            $templateProcessor->setValue('${entidad_federativa}', $datosDireccion['entidad_federativa']);
+
+            // Configurar los valores en el documento basado en si es física o moral
+            if ($fisica) {
+                $templateProcessor->setValue('${F}', 'X');
+                $templateProcessor->setValue('${M}', ' ');
+            } elseif ($moral) {
+                $templateProcessor->setValue('${M}', 'X');
+                $templateProcessor->setValue('${F}', ' ');
+            }
+
+            // Colocar cada letra del RFC en su recuadro correspondiente
+            if (strlen($estacion->rfc) <= 12) {
+                for ($i = 0; $i < strlen($estacion->rfc); $i++) {
+                    $char = strtoupper($estacion->rfc[$i]);
+                    // Reemplazar el cero por una "X"
+                    if ($char === '0') {
+                        $char = 'X'; // Reemplaza el 0 por X
+                    }
+
+                    $fieldName = '${c' . ($i + 1) . '}';
+
+                    // Depura los nombres de los campos y los valores
+                    \Log::info("Setting value for field: {$fieldName} with value: {$char}");
+
+                    // Establecer el valor en el documento
+                    $templateProcessor->setValue($fieldName, $char);
+                }
+            }
+
+            // Crear un nombre de archivo basado en la nomenclatura
+            $fileName =  "CE-{$estacion->rfc}_{$numeroFolioCertificado}.docx";
+
+            // Guardar la plantilla procesada en la carpeta de destino
+            $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
+        }
 
         // Crear la estructura del archivo JSON
         $jsonData = [
             'RfcContribuyente' => $estacion->rfc,
-            'RfcRepresentanteLegal' => $data['RfcRepresentanteLegal'],
+            'RfcRepresentanteLegal' => strtoupper($data['RfcRepresentanteLegal']),
             'RfcProveedorCertificado' => "ACA160422EA7",
             'RfcRepresentanteLegalProveedor' => "LOBJ711123NS5",
             'InformacionVerificacion' => [
                 'FechaEmisionCertificado' => $fechaInspeccion,
                 'NumeroFolioCertificado' => $numeroFolioCertificado,
                 'ResultadoCertificado' => "ACREDITADO",
-                'RfcPersonal' => $data['RfcPersonal']
+                'RfcPersonal' => strtoupper($data['RfcPersonal'])
             ]
         ];
 
@@ -933,11 +1015,11 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         $jsonString = json_encode($jsonData, JSON_PRETTY_PRINT);
 
         // Definir el nombre del archivo JSON
-        $fileName = "CE-{$estacion->rfc}_{$numeroFolioCertificado}.json";
-        $filePath = "{$subFolderPath}/{$fileName}";
+        $jsonFileName = "CE-{$estacion->rfc}_{$numeroFolioCertificado}.json";
+        $jsonFilePath = "{$subFolderPath}/{$jsonFileName}";
 
         // Guardar el archivo JSON en la ruta especificada
-        Storage::disk('public')->put($filePath, $jsonString);
+        Storage::disk('public')->put($jsonFilePath, $jsonString);
 
         // Guardar los detalles del certificado en la base de datos
         $certificado = Certificado_Anexo30::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
@@ -950,6 +1032,45 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
             ->with('success', 'Certificado guardado correctamente.');
     }
+
+    function descomponerDireccion($direccion)
+    {
+        $regex = '/^
+            (?P<calle>.+?)                            # Captura la calle
+            \s*(?:\s*No\.?\s*(?P<numero>\d+))?       # Captura el número (opcionalmente precedido por "No.")
+            \s*(?:\s*(?P<numero_interior>\d+[A-Z]?)?)?  # Captura el número interior (opcionalmente seguido por una letra)
+            \s*(?:C\.P\.\s*(?P<codigo_postal>\d{5}))?  # Captura el código postal (opcional)
+            \s*(?P<colonia>[^,]*)                     # Captura la colonia
+            ,\s*(?P<municipio>[^,]*)                  # Captura el municipio
+            ,\s*(?P<entidad_federativa>[^,]*)         # Captura la entidad federativa
+            $/x';
+    
+        if (preg_match($regex, $direccion, $matches)) {
+            return [
+                'calle' => trim($matches['calle']),
+                'numero' => $matches['numero'] ?? 'S/N',
+                'numero_interior' => $matches['numero_interior'] ?? '',
+                'colonia' => trim($matches['colonia']),
+                'codigo_postal' => $matches['codigo_postal'] ?? '',
+                'localidad' => '', // Puedes ajustar esto si obtienes una localidad específica
+                'municipio' => trim($matches['municipio']),
+                'entidad_federativa' => trim($matches['entidad_federativa']),
+            ];
+        }
+    
+        return [
+            'calle' => '',
+            'numero' => 'S/N',
+            'numero_interior' => '',
+            'colonia' => '',
+            'codigo_postal' => '',
+            'localidad' => '',
+            'municipio' => '',
+            'entidad_federativa' => '',
+        ];
+    }
+    
+    
 
     public function documentacion(Request $request)
     {
