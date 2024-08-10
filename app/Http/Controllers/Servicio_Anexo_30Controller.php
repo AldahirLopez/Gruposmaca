@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+
 use Spatie\Permission\Models\Role;
 use App\Models\ServicioOperacion;
 
@@ -156,6 +158,8 @@ class Servicio_Anexo_30Controller extends Controller
         }
 
         // Devolver la URL del PDF como respuesta
+        Log::info($pdfUrl);
+
         return response()->json(['pdf_url' => $pdfUrl]);
     }
 
