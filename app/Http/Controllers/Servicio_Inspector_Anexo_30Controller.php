@@ -234,7 +234,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
            // $archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
             // Ruta de la carpeta donde se guardan los archivos generados
-            $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+            $folderPath = "Servicios_Anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
             $existingFiles = [];
 
             // Verificar si la carpeta existe
@@ -269,7 +269,7 @@ class Servicio_Inspector_Anexo_30Controller extends Controller
                 //$archivoAnexo = Datos_Servicio::where('servicio_anexo_id', $servicio_anexo_id)->first();
 
                 // Ruta de la carpeta donde se guardan los archivos generados
-                $folderPath = "servicios_anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
+                $folderPath = "Servicios_Anexo30/{$estacion->nomenclatura}/formatos_rellenados_anexo30";
                 $existingFiles = [];
 
                 // Verificar si la carpeta existe
