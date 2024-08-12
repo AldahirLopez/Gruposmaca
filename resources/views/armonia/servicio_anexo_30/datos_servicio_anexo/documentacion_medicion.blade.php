@@ -33,7 +33,6 @@
                             <thead>
                                 <tr>
                                     <th scope="col">DESCRIPCIÓN</th>
-                                    <th scope="col">CÓDIGO O REFERENCIA</th>
                                     <th scope="col">TIPO REFERENCIA</th>
                                     @can('Generar-documentacion-anexo_30')
                                     <th scope="col">Agregar</th>
@@ -45,20 +44,6 @@
                                 @foreach($requiredDocuments as $doc)
                                 <tr>
                                     <td>{{ $doc['descripcion'] }}</td>
-                                    <td>
-                                        @php
-                                        $docExists = false;
-                                        $docReferencia = '';
-                                        foreach ($documentos as $documento) {
-                                        if ($documento->nombre === $doc['descripcion']) {
-                                        $docExists = true;
-                                        $docReferencia = $documento->referencia;
-                                        break;
-                                        }
-                                        }
-                                        @endphp
-                                        {{ $docExists ? $docReferencia : 'No disponible' }}
-                                    </td>
                                     <td>{{ $doc['tipo'] }}</td>
                                     @can('Generar-documentacion-anexo_30')
                                     <td>

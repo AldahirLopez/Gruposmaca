@@ -1147,7 +1147,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $id = $request->input('id');
                 $servicio = ServicioAnexo::findOrFail($id);
                 $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/medicion";
 
                 $requiredDocuments = [
                     ['descripcion' => 'Dictámenes de calibración de dispensarios (primero y segundo semestre del año a inspeccionar)', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
@@ -1182,12 +1182,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                         // Extraer referencia y nombre del archivo
                         $partes = explode('-', $nombreArchivo, 3);
-                        $referencia = $partes[0] ?? '';
-                        $nombre = $partes[1] ?? '';
+                        $nombre = $partes[0] ?? '';
 
                         $documentos[] = (object) [
                             'nombre' => $nombre,
-                            'referencia' => $referencia,
                             'ruta' => $rutaArchivo,
                             'extension' => $extension
                         ];
@@ -1212,7 +1210,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
-            'referencia' => 'required',
             'id_documento' => 'required'
         ]);
 
@@ -1221,10 +1218,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/medicion";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/medicion";
 
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
@@ -1247,7 +1244,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                 $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
 
-                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $documento->rutadoc_estacion = "Servicios_Anexo30/{$nomenclatura}/documentacion";
             }
 
             $documento->servicio_id = $data['servicio_id'];
@@ -1276,7 +1273,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
         $estacion = $servicio->estacionServicios()->where('servicio_anexo_id', $servicio->id)->first();
 
-        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/medicion";
+        $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}/documentacion/medicion";
 
 
         $documentos = [];
@@ -1319,7 +1316,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         ];
 
         //Carpeta destino del documento
-        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}/documentacion/sistema_medicion";
+        $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}/documentacion/sistema_medicion";
 
         if (!Storage::disk('public')->exists($customFolderPath)) {
             Storage::disk('public')->makeDirectory($customFolderPath);
@@ -1422,7 +1419,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $nombreArchivoPersonalizado = $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/generales";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/generales";
 
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
@@ -1446,7 +1443,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                 $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
 
-                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $documento->rutadoc_estacion = "Servicios_Anexo30/{$nomenclatura}/documentacion";
             }
 
             $documento->servicio_id = $data['servicio_id'];
@@ -1468,7 +1465,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $id = $request->input('id');
                 $servicio = ServicioAnexo::findOrFail($id);
                 $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/informatico";
 
                 $requiredDocuments = [
                     ['descripcion' => 'Inventario de Activos tecnológicos relacionados con el control Volumétrico', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
@@ -1498,12 +1495,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                         // Extraer referencia y nombre del archivo
                         $partes = explode('-', $nombreArchivo, 3);
-                        $referencia = $partes[0] ?? '';
-                        $nombre = $partes[1] ?? '';
+                        $nombre = $partes[0] ?? '';
 
                         $documentos[] = (object) [
                             'nombre' => $nombre,
-                            'referencia' => $referencia,
                             'ruta' => $rutaArchivo,
                             'extension' => $extension
                         ];
@@ -1527,7 +1522,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
-            'referencia' => 'required',
             'id_documento' => 'required'
         ]);
 
@@ -1536,10 +1530,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/informatico";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/informatico";
 
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
@@ -1562,7 +1556,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                 $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
 
-                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $documento->rutadoc_estacion = "Servicios_Anexo30/{$nomenclatura}/documentacion";
             }
 
             $documento->servicio_id = $data['servicio_id'];
@@ -1584,7 +1578,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 $id = $request->input('id');
                 $servicio = ServicioAnexo::findOrFail($id);
                 $nomenclatura = str_replace([' ', '.'], '_', $servicio->nomenclatura);
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/inspeccion";
 
                 $requiredDocuments = [
                     ['descripcion' => 'Una tirilla de inventario de la consola de monitoreo de tanques', 'codigo' => '', 'tipo' => 'Documental', 'id' => 1],
@@ -1603,12 +1597,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                         // Extraer referencia y nombre del archivo
                         $partes = explode('-', $nombreArchivo, 3);
-                        $referencia = $partes[0] ?? '';
-                        $nombre = $partes[1] ?? '';
+                        $nombre = $partes[0] ?? '';
 
                         $documentos[] = (object) [
                             'nombre' => $nombre,
-                            'referencia' => $referencia,
                             'ruta' => $rutaArchivo,
                             'extension' => $extension
                         ];
@@ -1631,7 +1623,6 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
             'nombre' => 'required',
-            'referencia' => 'required',
             'id_documento' => 'required'
         ]);
 
@@ -1640,10 +1631,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             if ($request->hasFile('rutadoc_estacion')) {
                 $archivoSubido = $request->file('rutadoc_estacion');
-                $nombreArchivoPersonalizado = $data['referencia'] . '-' . $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
+                $nombreArchivoPersonalizado = $data['nombre'] . '-' . $data['id_documento'] . '.' . $archivoSubido->getClientOriginalExtension();
 
                 $nomenclatura = $data['nomenclatura'];
-                $customFolderPath = "servicios_anexo30/{$nomenclatura}/documentacion/inspeccion";
+                $customFolderPath = "Servicios_Anexo30/{$nomenclatura}/documentacion/inspeccion";
 
                 if (!Storage::disk('public')->exists($customFolderPath)) {
                     Storage::disk('public')->makeDirectory($customFolderPath);
@@ -1666,7 +1657,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                 $rutaArchivo = $archivoSubido->storeAs("public/{$customFolderPath}", $nombreArchivoPersonalizado);
 
-                $documento->rutadoc_estacion = "servicios_anexo30/{$nomenclatura}/documentacion";
+                $documento->rutadoc_estacion = "Servicios_Anexo30/{$nomenclatura}/documentacion";
             }
 
             $documento->servicio_id = $data['servicio_id'];
