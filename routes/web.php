@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/descarga-factura-anexo', [Servicio_Anexo_30Controller::class, 'descargarFacturaAnexo'])->name('descargar.factura.anexo');
 
     Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioDeletion')
-        ->name('approve.servicio.deletion');
+        ->name('approve.servicio.deletion'); 
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
 
