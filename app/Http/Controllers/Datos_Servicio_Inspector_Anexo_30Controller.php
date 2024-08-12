@@ -90,7 +90,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             })->first();
 
             // Ruta de la carpeta donde se guardan los archivos generados
-            $folderPath = "servicios_anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
+            $folderPath = "Servicios_Anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
             $existingFiles = [];
 
             // Verificar si la carpeta existe
@@ -122,7 +122,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 })->first();
 
                 // Ruta de la carpeta donde se guardan los archivos generados
-                $folderPath = "servicios_anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
+                $folderPath = "Servicios_Anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
                 $existingFiles = [];
 
                 // Verificar si la carpeta existe
@@ -225,7 +225,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             ];
 
             // Definir la carpeta de destino
-            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+            $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
 
             // Crear la carpeta personalizada si no existe
@@ -301,8 +301,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     public function listGeneratedFiles($nomenclatura)
     {
         // Definir las rutas de las carpetas
-        $expedienteFolderPath = "servicios_anexo30/{$nomenclatura}/expediente/";
-        $certificadoFolderPath = "servicios_anexo30/{$nomenclatura}/certificado/";
+        $expedienteFolderPath = "Servicios_Anexo30/{$nomenclatura}/expediente/";
+        $certificadoFolderPath = "Servicios_Anexo30/{$nomenclatura}/certificado/";
 
         // Obtener archivos de la carpeta expediente
         $expedienteFiles = Storage::disk('public')->files($expedienteFolderPath);
@@ -359,8 +359,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         $nomenclatura = strtoupper($nomenclatura);
 
         // Construir las rutas de los archivos
-        $rutaExpediente = storage_path("app/public/servicios_anexo30/{$nomenclatura}/expediente/{$archivo}");
-        $rutaCertificado = storage_path("app/public/servicios_anexo30/{$nomenclatura}/certificado/{$archivo}");
+        $rutaExpediente = storage_path("app/public/Servicios_Anexo30/{$nomenclatura}/expediente/{$archivo}");
+        $rutaCertificado = storage_path("app/public/Servicios_Anexo30/{$nomenclatura}/certificado/{$archivo}");
 
         // Verificar si el archivo existe en la ruta de expediente
         if (file_exists($rutaExpediente)) {
@@ -488,7 +488,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             ];
 
             // Definir la carpeta de destino
-            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+            $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
 
             // Crear la carpeta personalizada si no existe
@@ -812,7 +812,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             ];
 
             // Definir la carpeta de destino
-            $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+            $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
 
             // Crear la carpeta personalizada si no existe
@@ -992,7 +992,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         $data = $request->validate($rules);
 
         // Definir la carpeta de destino
-        $customFolderPath = "servicios_anexo30/{$data['nomenclatura']}";
+        $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
         $subFolderPath = "{$customFolderPath}/certificado";
 
         // Crear la carpeta personalizada si no existe
