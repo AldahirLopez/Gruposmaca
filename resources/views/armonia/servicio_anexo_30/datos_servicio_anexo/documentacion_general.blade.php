@@ -110,11 +110,6 @@
                                                         <input type="file" name="rutadoc_estacion" class="form-control"
                                                             required>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="referencia">Seleccionar Archivo</label>
-                                                        <input type="text" name="referencia" class="form-control"
-                                                            required>
-                                                    </div>
                                                     <input type="hidden" name="servicio_id" value="{{ $id }}">
 
                                                     <input type="hidden" name="id_documento" value="{{ $doc['id'] }}">
