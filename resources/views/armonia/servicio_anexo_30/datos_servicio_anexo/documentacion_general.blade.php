@@ -85,7 +85,7 @@
                                         @endif
                                     </td>
                                 </tr>
-                                @can('Generar-documentacion-anexo-30')
+                                @can('Generar-documentacion-anexo_30')
                                 <!-- Modal para agregar documento -->
                                 <div class="modal fade" id="agregarDocumentoModal-{{ Str::slug($doc['descripcion']) }}"
                                     tabindex="-1" role="dialog"
