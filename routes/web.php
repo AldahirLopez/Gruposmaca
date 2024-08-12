@@ -252,7 +252,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);
 
     // Rutas para las notificaciones
-    Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
+    Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show'); 
+
+    // Rutas para las notificaciones Eliminacion
+    Route::get('/approval-servicio-operacion/{id}', [ApprovalController::class, 'showOperacion'])->name('approval.showOperacion'); 
+    Route::get('/approval-servicio-anexo/{id}', [ApprovalController::class, 'showAnexo'])->name('approval.showAnexo'); 
 
     Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');

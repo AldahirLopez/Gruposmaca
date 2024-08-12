@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            Solicitud de eliminación
+            Solicitud de eliminación {{ $tipo_servicio }}
         </div>
         <div class="card-body">
             @if(isset($variable->nomenclatura))
@@ -15,11 +15,11 @@
                 <!-- Manejar el caso en que ninguna de las variables esté definida -->
             @endif
             <p class="card-text">¿Estás seguro de que deseas eliminar?</p>
-            <p>Fecha de solicitud: {{ $variable->eliminated_at }}</p>
+            <p>Fecha de solicitud: {{ $variable->date_eliminated_at }}</p>
             
             
           
-            @if($tipo_servicio=="Anexo")
+            @if($tipo_servicio=="Anexo 30")
                 <form action="{{ route('approve.servicio.deletion', $variable->nomenclatura) }}" method="POST">
                     @csrf
                     @method('DELETE') <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
@@ -29,7 +29,7 @@
             @endif
            
 
-            @if($tipo_servicio=="Operacion")
+            @if($tipo_servicio=="Operacion y Mantenimiento")
                 <form action="{{ route('approve.dictamen.deletion', $variable->nomenclatura) }}" method="POST">
                     @csrf
                     @method('DELETE') <!-- Agregar este campo oculto para enviar una solicitud DELETE -->
