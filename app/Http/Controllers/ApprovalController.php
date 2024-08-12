@@ -151,7 +151,7 @@ class ApprovalController extends Controller
 
         try {
             // Intenta encontrar el servicio en la segunda tabla
-            $servicio = ServicioOperacion::where('nomenclatura', $id)->firstOrFail();
+            $servicio = ServicioOperacion::where('id', $id)->firstOrFail();
 
             // Eliminar registros relacionados en Cotizacion operacion
             Cotizacion_Operacion::where('servicio_id', $servicio->id)->delete();
