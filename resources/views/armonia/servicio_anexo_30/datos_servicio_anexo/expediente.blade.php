@@ -956,7 +956,7 @@
                             // Limpia y actualiza el municipio
                             municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
 
-                            if (typeof data.municipios === 'object') {
+                            if (data.municipios && typeof data.municipios === 'object') {
                                 // Itera sobre el objeto de municipios
                                 for (const [id, description] of Object.entries(data.municipios)) {
                                     const option = document.createElement('option');
@@ -971,7 +971,7 @@
                                 }
                             } else {
                                 // Si `data.municipios` no es un objeto, maneja el error
-                                console.error('Error: `data.municipios` no es un objeto', data);
+                                console.error('Error: `data.municipios` no es un objeto o está vacío', data);
                             }
                         } else {
                             // Si no se encuentra estado, limpia los campos
@@ -990,7 +990,7 @@
                 fetch(`/municipios/${estadoId}`)
                     .then(response => response.json())
                     .then(data => {
-                        if (typeof data.municipios === 'object') {
+                        if (data.municipios && typeof data.municipios === 'object') {
                             municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
 
                             // Itera sobre el objeto de municipios
@@ -1002,7 +1002,7 @@
                             }
                         } else {
                             // Si `data.municipios` no es un objeto, maneja el error
-                            console.error('Error: `data.municipios` no es un objeto', data);
+                            console.error('Error: `data.municipios` no es un objeto o está vacío', data);
                             municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
                         }
                     })

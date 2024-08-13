@@ -1670,11 +1670,11 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $estado = $suburb->municipio->estado;
             $municipios = Municipios::where('id_state', $estado->id)
                 ->where('status', 1) // Solo municipios activos
-                ->get(['id', 'description']);
+                ->pluck('description', 'id'); // Usa pluck para obtener un array asociativo
 
             return response()->json([
                 'estado' => $estado,
-                'municipios' => $municipios->toArray() // Asegúrate de convertir a array si es necesario
+                'municipios' => $municipios // Ya es un array asociativo
             ]);
         } else {
             return response()->json(['estado' => null, 'municipios' => []]);
