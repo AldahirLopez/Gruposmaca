@@ -8,6 +8,9 @@ use App\Models\Documento_Servicio_Anexo;
 use App\Models\Equipo;
 use App\Models\Estacion;
 use App\Models\Estacion_Servicio;
+use App\Models\Estados\Estados;
+use App\Models\Estados\Municipios;
+use App\Models\Estados\Postal;
 use App\Models\Expediente_Servicio_Anexo_30;
 use App\Models\ProveedorInformatico;
 use App\Models\ServicioAnexo;
@@ -19,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 
 class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
@@ -41,41 +45,8 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
      */
     public function ExpedienteInspectorAnexo30($slug)
     {
-        // Lista de estados de México
-        $estados = [
-            'Aguascalientes',
-            'Baja California',
-            'Baja California Sur',
-            'Campeche',
-            'Chiapas',
-            'Chihuahua',
-            'Coahuila',
-            'Colima',
-            'Ciudad de México',
-            'Durango',
-            'Guanajuato',
-            'Guerrero',
-            'Hidalgo',
-            'Jalisco',
-            'México',
-            'Michoacán',
-            'Morelos',
-            'Nayarit',
-            'Nuevo León',
-            'Oaxaca',
-            'Puebla',
-            'Querétaro',
-            'Quintana Roo',
-            'San Luis Potosí',
-            'Sinaloa',
-            'Sonora',
-            'Tabasco',
-            'Tamaulipas',
-            'Tlaxcala',
-            'Veracruz',
-            'Yucatán',
-            'Zacatecas'
-        ];
+        // Obtener todos los estados
+        $estados = Estados::all();
 
         // Verificar si el usuario está autenticado
         $usuario = Auth::user();
@@ -803,7 +774,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
             // Insertar las nuevas asociaciones
             DB::connection('segunda_db')->table('equipo_estacion')->insert(
-                array_map(fn ($numSerie) => ['id_equipo' => $numSerie, 'id_estacion' => $estacion->id], $numSeriesEquipos)
+                array_map(fn($numSerie) => ['id_equipo' => $numSerie, 'id_estacion' => $estacion->id], $numSeriesEquipos)
             );
 
             // Cargar las plantillas de Word
@@ -1058,12 +1029,12 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             }
 
             // Colocar cada letra del RFC en su recuadro correspondiente
-            if (strlen($estacion->rfc) <= 12) {
+            if (strlen($estacion->rfc) <= 14) {
                 for ($i = 0; $i < strlen($estacion->rfc); $i++) {
                     $char = strtoupper($estacion->rfc[$i]);
                     // Reemplazar el cero por una "X"
                     if ($char === '0') {
-                        $char = 'X'; // Reemplaza el 0 por X
+                        $char = ' 0'; // Reemplaza el 0 por X
                     }
 
                     $fieldName = '${c' . ($i + 1) . '}';
@@ -1676,5 +1647,37 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
         // Pasar el $id_servicio a la vista
         return view('armonia.servicio_anexo_30.datos_servicio_anexo.lista_inspeccion', compact('id_servicio'));
+    }
+
+    public function getMunicipios($estadoId)
+    {
+        // Obtener municipios por el id del estado
+        $municipios = Municipios::where('id_state', $estadoId)
+            ->where('status', 1) // Filtra por estado activo si es necesario
+            ->pluck('description', 'id');
+
+        // Convertir a un array asociativo
+        return response()->json(['municipios' => $municipios]);
+    }
+    public function buscarLocalidad($codigoPostal)
+    {
+        // Encuentra la suburb basada en el código postal
+        $suburb = Postal::where('cp', $codigoPostal)
+            ->with('municipio', 'municipio.estado') // Asegúrate de definir las relaciones en el modelo
+            ->first();
+
+        if ($suburb) {
+            $estado = $suburb->municipio->estado;
+            $municipios = Municipios::where('id_state', $estado->id)
+                ->where('status', 1) // Solo municipios activos
+                ->get(['id', 'description']);
+
+            return response()->json([
+                'estado' => $estado,
+                'municipios' => $municipios->toArray() // Asegúrate de convertir a array si es necesario
+            ]);
+        } else {
+            return response()->json(['estado' => null, 'municipios' => []]);
+        }
     }
 }

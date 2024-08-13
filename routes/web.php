@@ -327,4 +327,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/lista-inspeccion-anexo/{id_servicio?}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
 
     Route::get('/form/{type}', [ListasAnexo30::class, 'loadForm']);
+
+    Route::get('/municipios/{estadoId}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'getMunicipios']);
+
+    Route::get('/buscar-localidad/{codigoPostal}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'buscarLocalidad']);
+
+
 });
