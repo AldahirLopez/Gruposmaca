@@ -34,7 +34,7 @@
                             <tr>
                                 <td>{{ $estacion->num_estacion }}</td>
                                 <td>{{ $estacion->razon_social }}</td>
-                                <td>{{ $estacion->estado_republica_estacion }}</td>
+                                <td>{{ $estacion->estado_republica }}</td>
                                 <td>
                                     <!-- Botón para editar estación -->
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarEstacionModal-{{ $estacion->id }}">

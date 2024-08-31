@@ -205,6 +205,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/direccion/{id}', [EstacionController::class, 'ObtenerDatosDireccion'])->name('direccion.obtenerdatos');
 
+    Route::put('estacion/{id}/direcciones', [EstacionController::class, 'updateDireccion'])->name('direcciones.update');
+
+
 
 
     Route::get('/seleccion-estacion', [EstacionController::class, 'seleccionestacion'])->name('estacion.selecccion');

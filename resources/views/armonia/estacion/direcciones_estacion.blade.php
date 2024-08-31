@@ -120,15 +120,22 @@
                     </div>
                     <div class="mb-3">
                         <label for="municipio_id_fiscal" class="form-label">Municipio</label>
-                        <input type="text" name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-control" placeholder="Municipio">
+                        <select name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-select">
+                            <option value="">Seleccionar municipio</option>
+                            @foreach($municipios as $municipio)
+                            <option value="{{ $municipio->description }}">
+                                {{ $municipio->description }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="municipio_id_fiscal" class="form-label">Localidad</label>
-                        <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Municipio">
+                        <label for="localidad_fiscal" class="form-label">Localidad</label>
+                        <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Localidad">
                     </div>
                     <div class="mb-3">
-                        <label for="entidad_federativa_id_fiscal" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_id_fiscal" id="entidad_federativa_id_fiscal" class="form-control" placeholder="Entidad Federativa">
+                        <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
+                        <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-control" placeholder="Entidad Federativa">
                     </div>
 
                     <div class="modal-footer">
@@ -150,7 +157,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" method="POST">
+                <form action="{{ route('direcciones.update', $direccionFiscal ? $direccionFiscal->id : '#') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="direccion_id" id="direccion_id">
@@ -159,35 +166,42 @@
 
                     <div class="mb-3">
                         <label for="calle_fiscal_edit" class="form-label">Calle</label>
-                        <input type="text" name="calle_fiscal" id="calle_fiscal_edit" class="form-control" placeholder="Calle">
+                        <input type="text" name="calle_fiscal" id="calle_fiscal_edit" class="form-control" placeholder="Calle" value="{{ old('calle_fiscal', $direccionFiscal->calle ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="numero_ext_fiscal_edit" class="form-label">Número Exterior</label>
-                        <input type="text" name="numero_ext_fiscal" id="numero_ext_fiscal_edit" class="form-control" placeholder="Número Exterior">
+                        <input type="text" name="numero_ext_fiscal" id="numero_ext_fiscal_edit" class="form-control" placeholder="Número Exterior" value="{{ old('numero_ext_fiscal', $direccionFiscal->numero ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="numero_int_fiscal_edit" class="form-label">Número Interior</label>
-                        <input type="text" name="numero_int_fiscal" id="numero_int_fiscal_edit" class="form-control" placeholder="Número Interior">
+                        <input type="text" name="numero_int_fiscal" id="numero_int_fiscal_edit" class="form-control" placeholder="Número Interior" value="{{ old('numero_int_fiscal', $direccionFiscal->numero_interior ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="colonia_fiscal_edit" class="form-label">Colonia</label>
-                        <input type="text" name="colonia_fiscal" id="colonia_fiscal_edit" class="form-control" placeholder="Colonia">
+                        <input type="text" name="colonia_fiscal" id="colonia_fiscal_edit" class="form-control" placeholder="Colonia" value="{{ old('colonia_fiscal', $direccionFiscal->colonia ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="codigo_postal_fiscal_edit" class="form-label">Código Postal</label>
-                        <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal_edit" class="form-control" placeholder="Código Postal">
+                        <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal_edit" class="form-control" placeholder="Código Postal" value="{{ old('codigo_postal_fiscal', $direccionFiscal->codigo_postal ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="municipio_id_fiscal_edit" class="form-label">Municipio</label>
-                        <input type="text" name="municipio_id_fiscal" id="municipio_id_fiscal_edit" class="form-control" placeholder="Municipio">
+                        <select name="municipio_id_fiscal" id="municipio_id_fiscal_edit" class="form-select">
+                            <option value="">Seleccionar municipio</option>
+                            @foreach($municipios as $municipio)
+                            <option value="{{ $municipio->description }}" {{ $municipio->description == old('municipio_id_fiscal', $direccionFiscal->municipio ?? '') ? 'selected' : '' }}>
+                                {{ $municipio->description }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="localidad_fiscal_edit" class="form-label">Localidad</label>
-                        <input type="text" name="localidad_fiscal" id="localidad_fiscal_edit" class="form-control" placeholder="Localidad">
+                        <input type="text" name="localidad_fiscal" id="localidad_fiscal_edit" class="form-control" placeholder="Localidad" value="{{ old('localidad_fiscal', $direccionFiscal->localidad ?? '') }}">
                     </div>
                     <div class="mb-3">
-                        <label for="entidad_federativa_id_fiscal_edit" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_id_fiscal" id="entidad_federativa_id_fiscal_edit" class="form-control" placeholder="Entidad Federativa">
+                        <label for="entidad_federativa_fiscal_edit" class="form-label">Entidad Federativa</label>
+                        <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal_edit" class="form-control" placeholder="Entidad Federativa" value="{{ old('entidad_federativa_fiscal', $direccionFiscal->entidad_federativa ?? '') }}">
                     </div>
 
                     <div class="modal-footer">
@@ -199,6 +213,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal para Agregar Dirección de Estación -->
 <div class="modal fade" id="addEstacionModal" tabindex="-1" role="dialog" aria-labelledby="addEstacionModalLabel" aria-hidden="true">
@@ -235,16 +250,23 @@
                         <input type="text" name="codigo_postal_estacion" id="codigo_postal_estacion" class="form-control" placeholder="Código Postal">
                     </div>
                     <div class="mb-3">
-                        <label for="municipio_id_fiscal" class="form-label">Localidad</label>
-                        <input type="text" name="localidad_estacion" id="localidad_estacion" class="form-control" placeholder="Municipio">
+                        <label for="municipio_id_estacion" class="form-label">Localidad</label>
+                        <input type="text" name="localidad_estacion" id="localidad_estacion" class="form-control" placeholder="Localidad">
                     </div>
                     <div class="mb-3">
                         <label for="municipio_id_estacion" class="form-label">Municipio</label>
-                        <input type="text" name="municipio_id_estacion" id="municipio_id_estacion" class="form-control" placeholder="Municipio">
+                        <select name="municipio_id_estacion" id="municipio_id_estacion" class="form-select">
+                            <option value="">Seleccionar municipio</option>
+                            @foreach($municipios as $municipio)
+                            <option value="{{ $municipio->description }}" }}>
+                                {{ $municipio->description }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="entidad_federativa_id_estacion" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_id_estacion" id="entidad_federativa_id_estacion" class="form-control" placeholder="Entidad Federativa">
+                        <input type="text" name="entidad_federativa_estacion" id="entidad_federativa_estacion" class="form-control" placeholder="Entidad Federativa">
                     </div>
 
                     <div class="modal-footer">
@@ -266,7 +288,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="#" method="POST">
+                <form action="{{ route('direcciones.update', $direccionEstacion ? $direccionEstacion->id : '#') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="direccion_id" id="direccion_id_estacion">
@@ -295,17 +317,23 @@
                     </div>
                     <div class="mb-3">
                         <label for="localidad_estacion_edit" class="form-label">Localidad</label>
-                        <input type="text" name="localidad_estacion" id="localidad_estacion_edit" class="form-control" placeholder="Localidad">
+                        <input type="text" name="localidad_estacion" id="localidad_estacion_edit" class="form-control" placeholder="Localidad" value="{{ old('localidad_fiscal', $direccionEstacion->localidad ?? '') }}">
                     </div>
                     <div class="mb-3">
                         <label for="municipio_id_estacion_edit" class="form-label">Municipio</label>
-                        <input type="text" name="municipio_id_estacion" id="municipio_id_estacion_edit" class="form-control" placeholder="Municipio">
+                        <select name="municipio_id_estacion" id="municipio_id_estacion_edit" class="form-select">
+                            <option value="">Seleccionar municipio</option>
+                            @foreach($municipios as $municipio)
+                            <option value="{{ $municipio->description }}" {{ $municipio->description == old('municipio_id_estacion', $direccionEstacion->municipio ?? '') ? 'selected' : '' }}>
+                                {{ $municipio->description }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="entidad_federativa_id_estacion_edit" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_id_estacion" id="entidad_federativa_id_estacion_edit" class="form-control" placeholder="Entidad Federativa">
+                        <label for="entidad_federativa_estacion_edit" class="form-label">Entidad Federativa</label>
+                        <input type="text" name="entidad_federativa_estacion" id="entidad_federativa_estacion_edit" class="form-control" placeholder="Entidad Federativa" value="{{ old('entidad_federativa_fiscal', $direccionEstacion->entidad_federativa ?? '') }}">
                     </div>
-
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Actualizar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -333,9 +361,17 @@
                         document.getElementById('numero_int_fiscal_edit').value = data.numero_int;
                         document.getElementById('colonia_fiscal_edit').value = data.colonia;
                         document.getElementById('codigo_postal_fiscal_edit').value = data.codigo_postal;
-                        document.getElementById('municipio_id_fiscal_edit').value = data.municipio;
-                        document.getElementById('entidad_federativa_id_fiscal_edit').value = data.entidad_federativa;
-                    });
+
+                        // Establecer el valor del select para municipio
+                        const municipioSelect = document.getElementById('municipio_id_fiscal_edit');
+                        municipioSelect.value = data.municipio; // Cambiar aquí si el valor es diferente
+
+                        // Asegúrate de que el valor esté en el select
+                        if (!Array.from(municipioSelect.options).some(option => option.value == data.municipio)) {
+                            console.warn('Municipio ID no encontrado en las opciones del select');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
             });
         });
 
@@ -352,9 +388,17 @@
                         document.getElementById('numero_int_estacion_edit').value = data.numero_int;
                         document.getElementById('colonia_estacion_edit').value = data.colonia;
                         document.getElementById('codigo_postal_estacion_edit').value = data.codigo_postal;
-                        document.getElementById('municipio_id_estacion_edit').value = data.municipio;
-                        document.getElementById('entidad_federativa_id_estacion_edit').value = data.entidad_federativa;
-                    });
+
+                        // Establecer el valor del select para municipio
+                        const municipioSelect = document.getElementById('municipio_id_estacion_edit');
+                        municipioSelect.value = data.municipio; // Cambiar aquí si el valor es diferente
+
+                        // Asegúrate de que el valor esté en el select
+                        if (!Array.from(municipioSelect.options).some(option => option.value == data.municipio)) {
+                            console.warn('Municipio ID no encontrado en las opciones del select');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
             });
         });
     });
