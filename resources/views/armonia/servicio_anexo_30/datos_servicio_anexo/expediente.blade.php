@@ -344,14 +344,95 @@
 
                                                 <!-- Campos adicionales para RFC -->
                                                 <div class="form-group mt-3">
-                                                    <label for="RfcRepresentanteLegal">RFC del Representante
-                                                        Legal:</label>
+                                                    <label for="RfcRepresentanteLegal">RFC del Representante Legal:</label>
                                                     <input type="text" class="form-control" id="RfcRepresentanteLegal" name="RfcRepresentanteLegal" required>
+                                                    @error('RfcRepresentanteLegal')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="form-group mt-3">
                                                     <label for="RfcPersonal">RFC del Personal:</label>
                                                     <input type="text" class="form-control" id="RfcPersonal" name="RfcPersonal" required>
+                                                    @error('RfcPersonal')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="calle">CALLE</label>
+                                                                <input type="text" name="calle" id="calle" class="form-control" required value="{{ old('calle') }}">
+                                                                @error('calle')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="numero_exterior">NUMERO Y/O LETRA EXTERIOR</label>
+                                                                <input type="text" name="numero_exterior" id="numero_exterior" class="form-control" required value="{{ old('numero_exterior') }}">
+                                                                @error('numero_exterior')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="numero_interior">NUMERO Y/O LETRA INTERIOR</label>
+                                                                <input type="text" name="numero_interior" id="numero_interior" class="form-control" required value="{{ old('numero_interior') }}">
+                                                                @error('numero_interior')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="colonia">COLONIA</label>
+                                                                <input type="text" name="colonia" id="colonia" class="form-control" required value="{{ old('colonia') }}">
+                                                                @error('colonia')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="codigo_postal">CODIGO POSTAL</label>
+                                                                <input type="text" name="codigo_postal" id="codigo_postal" class="form-control" required value="{{ old('codigo_postal') }}">
+                                                                @error('codigo_postal')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <!-- Selección de Entidad Federativa (Estado) -->
+                                                            <div class="form-group">
+                                                                <label for="estado">ENTIDAD FEDERATIVA</label>
+                                                                <select name="estado" id="estado" class="form-select" required>
+                                                                    <option value="">Seleccione un estado</option>
+                                                                    @foreach($estados as $estado)
+                                                                    <option value="{{ $estado->id }}">{{ $estado->description }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('estado')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+
+                                                            <!-- Selección de Municipio/Alcaldía -->
+                                                            <div class="form-group">
+                                                                <label for="municipio_alcaldia">MUNICIPIO/ALCALDIA</label>
+                                                                <select name="municipio_alcaldia" id="municipio_alcaldia" class="form-select" required>
+                                                                    <option value="">Seleccione un municipio</option>
+                                                                </select>
+                                                                @error('municipio_alcaldia')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="localidad">LOCALIDAD</label>
+                                                                <input type="text" name="localidad" id="localidad" class="form-control" required value="{{ old('localidad') }}">
+                                                                @error('localidad')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                                 <div class="text-center mt-3">
@@ -363,6 +444,7 @@
                                 </div>
                             </div>
                             @endcan
+
 
 
 
@@ -460,7 +542,7 @@
                                                             <label for="estado">Estado</label>
                                                             <select name="estado" id="estado" class="form-select" required>
                                                                 @foreach($estados as $estado)
-                                                                <option value="{{ $estado }}" {{ old('estado') == $estado ? 'selected' : '' }}>{{ $estado }}</option>
+                                                                <option value="{{ $estado->description }}" {{ old('estado') == $estado->description ? 'selected' : '' }}>{{ $estado->description }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('estado')
@@ -851,6 +933,84 @@
 
             return div;
         }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const codigoPostalInput = document.getElementById('codigo_postal');
+        const estadoSelect = document.getElementById('estado');
+        const municipioSelect = document.getElementById('municipio_alcaldia');
+
+        // Actualizar estado y municipio basado en el código postal
+        codigoPostalInput.addEventListener('input', function() {
+            const codigoPostal = this.value;
+
+            if (codigoPostal.length >= 5) { // Ajusta la longitud según sea necesario
+                fetch(`/buscar-localidad/${codigoPostal}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.estado) {
+                            // Actualiza el estado
+                            estadoSelect.value = data.estado.id;
+
+                            // Limpia y actualiza el municipio
+                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+                            if (data.municipios && typeof data.municipios === 'object') {
+                                // Itera sobre el objeto de municipios
+                                for (const [id, description] of Object.entries(data.municipios)) {
+                                    const option = document.createElement('option');
+                                    option.value = id;
+                                    option.textContent = description;
+                                    municipioSelect.appendChild(option);
+                                }
+
+                                // Configura el primer municipio como seleccionado si hay alguno
+                                if (Object.keys(data.municipios).length > 0) {
+                                    municipioSelect.value = Object.keys(data.municipios)[0];
+                                }
+                            } else {
+                                // Si `data.municipios` no es un objeto, maneja el error
+                                console.error('Error: `data.municipios` no es un objeto o está vacío', data);
+                            }
+                        } else {
+                            // Si no se encuentra estado, limpia los campos
+                            estadoSelect.value = '';
+                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error al buscar localidad:', error));
+            }
+        });
+
+        // Actualizar los municipios cuando se cambia el estado manualmente
+        estadoSelect.addEventListener('change', function() {
+            const estadoId = this.value;
+            if (estadoId) {
+                fetch(`/municipios/${estadoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.municipios && typeof data.municipios === 'object') {
+                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+                            // Itera sobre el objeto de municipios
+                            for (const [id, description] of Object.entries(data.municipios)) {
+                                const option = document.createElement('option');
+                                option.value = id;
+                                option.textContent = description;
+                                municipioSelect.appendChild(option);
+                            }
+                        } else {
+                            // Si `data.municipios` no es un objeto, maneja el error
+                            console.error('Error: `data.municipios` no es un objeto o está vacío', data);
+                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+            }
+        });
     });
 </script>
 @endcan

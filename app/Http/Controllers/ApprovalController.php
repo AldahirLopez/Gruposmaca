@@ -34,22 +34,31 @@ class ApprovalController extends Controller
         return view('notificaciones.index', compact('dictamenes', 'servicios'));
     }
 
-    /*public function show($id)
+    public function showOperacion($id)
     {
-        $tipo_servicio;
         try {
-            // Intenta encontrar el dictamen en la primera tabla
             $variable = ServicioOperacion::findOrFail($id);
-            $tipo_servicio="Operacion";
+            $tipo_servicio = "Operacion y Mantenimiento";
         } catch (ModelNotFoundException $e) {
-            // Si no se encuentra en la primera tabla, busca en la segunda tabla
-            $variable = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
-            $tipo_servicio="Anexo";
+            $tipo_servicio = "Servicio no encontrado";
         }
 
         // Ahora puedes pasar el dictamen encontrado a la vista
-        return view('notificaciones.show', compact('variable','tipo_servicio'));
-    }*/
+        return view('notificaciones.show', compact('variable', 'tipo_servicio'));
+    }
+
+    public function showAnexo($id)
+    {
+        try {
+            $variable = ServicioAnexo::findOrFail($id);
+            $tipo_servicio = "Anexo 30";
+        } catch (ModelNotFoundException $e) {
+            $tipo_servicio = "Servicio no encontrado";
+        }
+
+        // Ahora puedes pasar el dictamen encontrado a la vista
+        return view('notificaciones.show', compact('variable', 'tipo_servicio'));
+    }
 
     public function approveDictamenDeletion(Request $request, $id)
     {
@@ -99,26 +108,25 @@ class ApprovalController extends Controller
     {
         try {
             // Intenta encontrar el servicio en la segunda tabla
-            $servicio = ServicioAnexo::where('nomenclatura', $id)->firstOrFail();
+            $servicio = ServicioAnexo::where('id', $id)->firstOrFail();
 
             // Eliminar registros relacionados en cotizacion_anexo_30
             Cotizacion_Servicio_Anexo30::where('servicio_anexo_id', $servicio->id)->delete();
 
-             // Eliminar registros relacionados en Expediente operacion
+            // Eliminar registros relacionados en Expediente operacion
             Expediente_Servicio_Anexo_30::where('servicio_anexo_id', $servicio->id)->delete();
-            
+
             Documento_Servicio_Anexo::where('servicio_id', $servicio->id)->delete();
-        
-             //Elimnar regustros relacionados en pago
-             $pago=Pago_Anexo::where('servicio_anexo_id', $servicio->id)->first();
-             
-             if($pago){
+
+            //Elimnar regustros relacionados en pago
+            $pago = Pago_Anexo::where('servicio_anexo_id', $servicio->id)->first();
+
+            if ($pago) {
                 Factura_Anexo::where('id_pago', $pago->id)->delete();
                 $pago->delete();
+            }
 
-             }
 
-           
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;
             $customFolderPath = "servicios_anexo30/{$nomenclatura}";
@@ -140,10 +148,10 @@ class ApprovalController extends Controller
 
     public function approveServicioOperacionDeletion(Request $request, $id)
     {
-       
+
         try {
             // Intenta encontrar el servicio en la segunda tabla
-            $servicio = ServicioOperacion::where('nomenclatura', $id)->firstOrFail();
+            $servicio = ServicioOperacion::where('id', $id)->firstOrFail();
 
             // Eliminar registros relacionados en Cotizacion operacion
             Cotizacion_Operacion::where('servicio_id', $servicio->id)->delete();
@@ -155,12 +163,12 @@ class ApprovalController extends Controller
             Documento_Servicio_operacion::where('servicio_id', $servicio->id)->delete();
 
             //Elimnar regustros relacionados en acta de verificacion 
-            Acta_Operacion::where('servicio_id', $servicio->id)->delete();
+            //Acta_Operacion::where('servicio_id', $servicio->id)->delete();
 
             //Elimnar regustros relacionados en Pago operaciob
             Pago_Operacion::where('servicio_id', $servicio->id)->delete();
 
-    
+
             // Obtener la nomenclatura para la carpeta de archivos
             $nomenclatura = $servicio->nomenclatura;
             $customFolderPath = "OperacionyMantenimiento/{$nomenclatura}";
@@ -199,6 +207,4 @@ class ApprovalController extends Controller
 
         return redirect()->route('notificaciones.index')->with('success', 'Eliminación del dictamen cancelada correctamente');
     }
-
-
 }

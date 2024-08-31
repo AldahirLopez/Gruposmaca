@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/descarga-factura-anexo', [Servicio_Anexo_30Controller::class, 'descargarFacturaAnexo'])->name('descargar.factura.anexo');
 
     Route::delete('/approve-servicio-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioDeletion')
-        ->name('approve.servicio.deletion');
+        ->name('approve.servicio.deletion'); 
 
     Route::post('/approval/{id}/cancel', [ApprovalController::class, 'cancelDeletion'])->name('approval.cancel');
 
@@ -261,7 +261,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/fetch-notifications', [NotificationController::class, 'fetchNotifications']);
 
     // Rutas para las notificaciones
-    Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show');
+    Route::get('/approval/{id}', [ApprovalController::class, 'show'])->name('approval.show'); 
+
+    // Rutas para las notificaciones Eliminacion
+    Route::get('/approval-servicio-operacion/{id}', [ApprovalController::class, 'showOperacion'])->name('approval.showOperacion'); 
+    Route::get('/approval-servicio-anexo/{id}', [ApprovalController::class, 'showAnexo'])->name('approval.showAnexo'); 
 
     Route::delete('/approve-dictamen-deletion/{id}', 'App\Http\Controllers\ApprovalController@approveServicioOperacionDeletion')
         ->name('approve.dictamen.deletion');

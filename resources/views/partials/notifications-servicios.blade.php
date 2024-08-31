@@ -21,9 +21,9 @@
             <i class="bi bi-exclamation-circle text-warning"></i>
             <div>
                 <h4>Solicitud de eliminación</h4>
-                <p>El dictamen "{{ $dictamen->nombre }}" está pendiente de aprobación para ser eliminado.</p>
+                <p>El dictamen "{{ $dictamen->nomenclatura }}" está pendiente de aprobación para ser eliminado.</p>
                 <p>{{ $dictamen->updated_at->diffForHumans() }}</p>
-                <a href="{{ route('approval.show', $dictamen->id) }}" class="btn btn-primary">Ver detalles</a>
+                <a href="{{ route('approval.showOperacion', $dictamen->id) }}" class="btn btn-primary">Ver detalles</a>
             </div>
         </li>
         <li> 
@@ -38,12 +38,12 @@
                 <h4>Solicitud de eliminación</h4>
                 <p>El servicio "{{ $servicio->nomenclatura }}" está pendiente de aprobación para ser eliminado.</p>
                 <p>{{ $servicio->updated_at->diffForHumans() }}</p>
-                <a href="{{ route('approval.show', $servicio->nomenclatura) }}" class="btn btn-primary">Ver detalles</a>
+                <a href="{{ route('approval.showAnexo', $servicio->id) }}" class="btn btn-primary">Ver detalles</a>
             </div>
         </li>
         <li>
             <hr class="dropdown-divider">
-        </li>
+        </li> 
         @endforeach
 
         <li class="dropdown-footer">
