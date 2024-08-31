@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Documento_Estacion;
 use App\Models\Estacion;
 use App\Http\Controllers\Controller;
+use App\Models\Direccion;
+use App\Models\EstacionDireccion;
+use App\Models\Estados\Estados;
 use App\Models\Usuario_Estacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\Auth; // Importa la clase Auth
 
 class EstacionController extends Controller
 {
- 
+
     protected $connection = 'segunda_db';
 
     public function seleccionestacion()
@@ -29,42 +32,8 @@ class EstacionController extends Controller
         // Obtener el usuario autenticado
         $usuario = Auth::user();
 
-        // Lista de estados
-        $estados = [
-            'Aguascalientes',
-            'Baja California',
-            'Baja California Sur',
-            'Campeche',
-            'Chiapas',
-            'Chihuahua',
-            'Coahuila',
-            'Colima',
-            'Ciudad de México',
-            'Durango',
-            'Guanajuato',
-            'Guerrero',
-            'Hidalgo',
-            'Jalisco',
-            'México',
-            'Michoacán',
-            'Morelos',
-            'Nayarit',
-            'Nuevo León',
-            'Oaxaca',
-            'Puebla',
-            'Querétaro',
-            'Quintana Roo',
-            'San Luis Potosí',
-            'Sinaloa',
-            'Sonora',
-            'Tabasco',
-            'Tamaulipas',
-            'Tlaxcala',
-            'Veracruz',
-            'Yucatán',
-            'Zacatecas'
-        ];
-
+        // Obtener la lista de estados (asumiendo que se necesita en la vista)
+        $estados = Estados::where('id_country', 42)->get();
         // Inicializar la variable para almacenar las estaciones
         $estaciones = [];
 
@@ -117,49 +86,46 @@ class EstacionController extends Controller
                 'numestacion' => 'required|string|max:255',
                 'razonsocial' => 'required|string|max:255',
                 'rfc' => 'required|string|max:255',
-                'domicilio_fiscal' => 'required|string|max:255',
                 'repre' => 'required',
                 'telefono' => 'nullable|string|max:255',
                 'correo' => 'nullable|email|max:255',
-                'domicilio_estacion' => 'required|string|max:255',
                 'estado' => 'required|string|max:255',
             ]);
 
-            // Crear una nueva instancia del modelo Estacion
-            $estacionServicio = new Estacion();
+            // Verificar si el número de estación ya existe en la segunda base de datos
+            $exists = DB::connection('segunda_db')->table('estacion')
+                ->where('num_estacion', $data['numestacion'])
+                ->exists();
 
-            // Asignar los datos validados al modelo
-            $estacionServicio->num_estacion = $data['numestacion'];
-            $estacionServicio->razon_social = $data['razonsocial'];
-            $estacionServicio->rfc = $data['rfc'];
-            $estacionServicio->domicilio_fiscal = $data['domicilio_fiscal'];
-            $estacionServicio->telefono = $data['telefono'];
-            $estacionServicio->correo_electronico = $data['correo'];
-            $estacionServicio->nombre_representante_legal = $data['repre'];
-            $estacionServicio->domicilio_estacion_servicio = $data['domicilio_estacion'];
-            $estacionServicio->estado_republica_estacion = $data['estado'];
-            $estacionServicio->usuario_id = $data['id_usuario'];
+            if ($exists) {
+                return redirect()->route('estaciones.usuario')->with('error', 'Error la estacion ya existe (numero de estacion).');
+            } else {
+                // Crear una nueva instancia del modelo Estacion en la base de datos principal
+                $estacionServicio = new Estacion();
 
-            // Definir la carpeta de destino dentro de 'public/storage'
-            $razonSocial = str_replace([' ', '.'], '_', $data['razonsocial']); // Eliminar espacios y puntos en la razón social
-            $customFolderPath = "armonia/estaciones/{$razonSocial}";
+                // Asignar los datos validados al modelo
+                $estacionServicio->num_estacion = $data['numestacion'];
+                $estacionServicio->razon_social = $data['razonsocial'];
+                $estacionServicio->rfc = $data['rfc'];
+                $estacionServicio->telefono = $data['telefono'];
+                $estacionServicio->correo_electronico = $data['correo'];
+                $estacionServicio->nombre_representante_legal = $data['repre'];
+                $estacionServicio->estado_republica_estacion = $data['estado'];
+                $estacionServicio->usuario_id = $data['id_usuario'];
 
-            // Crear la carpeta si no existe
-            if (!Storage::disk('public')->exists($customFolderPath)) {
-                Storage::disk('public')->makeDirectory($customFolderPath);
+                // Guardar el objeto en la base de datos
+                $estacionServicio->save();
+
+                // Redirigir con un mensaje de éxito
+                return redirect()->route('estaciones.usuario')->with('success', 'Estación agregada exitosamente');
             }
-
-            // Guardar el objeto en la base de datos
-            $estacionServicio->save();
-
-            // Redirigir con un mensaje de éxito
-            return redirect()->route('estaciones.usuario')->with('success', 'Estación agregada exitosamente');
         } catch (\Exception $e) {
             // Captura cualquier excepción y muestra el mensaje
             dd($e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Hubo un problema al intentar guardar la estación.']);
         }
     }
+
 
     public function destroy($id)
     {
@@ -254,6 +220,118 @@ class EstacionController extends Controller
         } catch (\Exception $e) {
             // Capturar y manejar cualquier excepción
             return redirect()->route('estaciones.usuario')->with('error', 'Error al agregar el documento.');
+        }
+    }
+
+    public function verDirecciones($id)
+    {
+        // Encuentra la estación por su ID
+        $estacion = Estacion::findOrFail($id);
+
+        // Obtener las direcciones asociadas a la estación desde la tabla de pivote
+        $estacionDirecciones = EstacionDireccion::where('id_estacion', $id)->get();
+
+        // Obtener los IDs de las direcciones
+        $direccionIds = $estacionDirecciones->pluck('id_direccion');
+
+        // Obtener las direcciones completas desde la tabla de direcciones
+        $direcciones = Direccion::whereIn('id', $direccionIds)->get();
+
+        // Separar las direcciones por tipo
+        $direccionFiscal = $direcciones->firstWhere('tipo', 'Fiscal');
+        $direccionEstacion = $direcciones->firstWhere('tipo', 'Estacion');
+
+        // Pasar los datos a la vista
+        return view('armonia.estacion.direcciones_estacion', [
+            'estacion' => $estacion,
+            'direccionFiscal' => $direccionFiscal,
+            'direccionEstacion' => $direccionEstacion
+        ]);
+    }
+
+
+
+    public function guardarDireccion(Request $request)
+    {
+        // Validación inicial
+        $request->validate([
+            'direccionSelect' => 'required|in:fiscal,estacion',
+        ]);
+
+        // Determina el tipo de dirección y realiza la validación y el guardado correspondientes
+        $tipoDireccion = $request->input('direccionSelect');
+        $campos = [
+            'fiscal' => [
+                'calle_fiscal' => 'required|max:255',
+                'numero_ext_fiscal' => 'required|max:10',
+                'numero_int_fiscal' => 'nullable|max:10',
+                'colonia_fiscal' => 'required|max:255',
+                'codigo_postal_fiscal' => 'required',
+                'municipio_id_fiscal' => 'required',
+                'localidad_fiscal' => 'required',
+                'entidad_federativa_id_fiscal' => 'required',
+            ],
+            'estacion' => [
+                'calle_estacion' => 'required|max:255',
+                'numero_ext_estacion' => 'required|max:10',
+                'numero_int_estacion' => 'nullable|max:10',
+                'colonia_estacion' => 'required|max:255',
+                'codigo_postal_estacion' => 'required',
+                'municipio_id_estacion' => 'required',
+                'localidad_estacion' => 'required',
+                'entidad_federativa_id_estacion' => 'required',
+            ],
+        ];
+
+        // Validación específica para el tipo de dirección
+        $request->validate($campos[$tipoDireccion]);
+
+        // Capitaliza el tipo de dirección
+        $tipoDireccionCapitalizado = ucfirst($tipoDireccion);
+
+        // Crear nueva dirección
+        $direccion = new Direccion();
+        $direccion->tipo = $tipoDireccionCapitalizado;
+        $direccion->calle = $request->input("calle_{$tipoDireccion}");
+        $direccion->numero = $request->input("numero_ext_{$tipoDireccion}");
+        $direccion->numero_interior = $request->input("numero_int_{$tipoDireccion}");
+        $direccion->colonia = $request->input("colonia_{$tipoDireccion}");
+        $direccion->codigo_postal = $request->input("codigo_postal_{$tipoDireccion}");
+        $direccion->localidad = $request->input("localidad_{$tipoDireccion}");
+        $direccion->municipio = $request->input("municipio_id_{$tipoDireccion}");
+        $direccion->entidad_federativa = $request->input("entidad_federativa_id_{$tipoDireccion}");
+        $direccion->save();
+
+        // Crear relación con la estación
+        $estacionDireccion = new EstacionDireccion();
+        $estacionDireccion->id_estacion = $request->input('estacion_id');
+        $estacionDireccion->id_direccion = $direccion->id;
+        $estacionDireccion->save();
+
+        return redirect()->back()->with('success', 'Dirección guardada exitosamente.');
+    }
+
+    public function ObtenerDatosDireccion($id)
+    {
+        try {
+            // Buscar la dirección por ID
+            $direccion = Direccion::findOrFail($id);
+
+            // Retornar los datos de la dirección en formato JSON
+            return response()->json([
+                'id' => $direccion->id,
+                'calle' => $direccion->calle,
+                'numero_ext' => $direccion->numero,
+                'numero_int' => $direccion->numero_interior,
+                'colonia' => $direccion->colonia,
+                'codigo_postal' => $direccion->codigo_postal,
+                'municipio' => $direccion->municipio,
+                'localidad' => $direccion->localidad,
+                'entidad_federativa' => $direccion->entidad_federativa
+            ]);
+        } catch (\Exception $e) {
+            // Manejo de errores
+            return response()->json(['error' => 'No se pudo encontrar la dirección.'], 404);
         }
     }
 }

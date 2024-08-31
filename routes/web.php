@@ -167,6 +167,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/obtener-datos-estacion/{id}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'obtenerDatosEstacion']);
 
+    
+
     // En web.php (o routes.php)
     Route::post('/guardar-dictamenes-informatico', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'guardarDictamenesInformatico'])->name('guardar.dictamenesinformatico');
 
@@ -194,8 +196,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('estacion', EstacionController::class);
 
+    Route::post('/guardar-direccion', [EstacionController::class, 'guardarDireccion'])->name('guardar.direccion');
+
+    Route::get('/estacion/{id}/direcciones', [EstacionController::class, 'verDirecciones'])->name('estacion.direcciones');
+
 
     Route::post('/direccion/store', [EstacionController::class, 'storedirecciones'])->name('direccion.store');
+
+    Route::get('/direccion/{id}', [EstacionController::class, 'ObtenerDatosDireccion'])->name('direccion.obtenerdatos');
+
 
 
     Route::get('/seleccion-estacion', [EstacionController::class, 'seleccionestacion'])->name('estacion.selecccion');
@@ -323,4 +332,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/lista-inspeccion-anexo/{id_servicio?}', [Datos_Servicio_Inspector_Anexo_30Controller::class, 'ListaInspeccion'])->name('lista_inspeccion_anexo');
 
     Route::get('/form/{type}', [ListasAnexo30::class, 'loadForm']);
+
+    
 });

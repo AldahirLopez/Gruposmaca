@@ -20,8 +20,6 @@ class Estacion extends Model
         'num_estacion',
         'razon_social',
         'rfc',
-        'domicilio_fiscal',
-        'domicilio_estacion_servicio',
         'estado_republica_estacion',
         'num_cre',
         'num_constancia',
