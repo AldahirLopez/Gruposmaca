@@ -112,7 +112,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
                 return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('estacion', 'estados', 'servicio_anexo_id', 'servicioAnexo', 'existingFiles'));
             } else {
-                return redirect()->route('servicio_anexo_30.datos_servicio_anexo.index')->with('error', 'Servicio no válido');
+                return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Servicio no válido');
             }
         }
     }
