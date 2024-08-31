@@ -200,9 +200,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/estacion/{id}/direcciones', [EstacionController::class, 'verDirecciones'])->name('estacion.direcciones');
 
-
-    Route::post('/direccion/store', [EstacionController::class, 'storedirecciones'])->name('direccion.store');
-
     Route::get('/direccion/{id}', [EstacionController::class, 'ObtenerDatosDireccion'])->name('direccion.obtenerdatos');
 
     Route::put('estacion/{id}/direcciones', [EstacionController::class, 'updateDireccion'])->name('direcciones.update');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certificado_Anexo30;
+use App\Models\Direccion;
 use App\Models\Documento_Servicio_Anexo;
 use App\Models\Equipo;
 use App\Models\Estacion;
@@ -50,15 +51,28 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
 
         // Verificar si el usuario está autenticado
         $usuario = Auth::user();
-        if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador o auditor puede ver todo y editar todo 
-            $servicio_anexo_id = $slug;
-            $servicioAnexo = ServicioAnexo::find($servicio_anexo_id);
 
+        // Obtener el servicio anexo
+        $servicio_anexo_id = $slug;
+        $servicioAnexo = ServicioAnexo::find($servicio_anexo_id);
+
+        // Lógica compartida para obtener la estación, direcciones, y archivos generados
+        $obtenerDatos = function ($servicioAnexo, $servicio_anexo_id) {
             // Obtener la estación relacionada con el servicio anexo
             $estacion = Estacion::whereHas('estacionServicios', function ($query) use ($servicio_anexo_id) {
                 $query->where('servicio_anexo_id', $servicio_anexo_id);
             })->first();
+
+            // Obtener la dirección fiscal y la dirección de la estación si existen
+            $direccionFiscal = Direccion::where('id', $estacion->domicilio_fiscal_id)->first();
+            $direccionEstacion = Direccion::where('id', $estacion->domicilio_servicio_id)->first();
+
+            // Encuentra la estación por su ID
+            $estado = $estacion->estado_republica;
+            $estado_id = Estados::where('description', $estado)->first()->id ?? null;
+
+            // Obtener los municipios del estado asociado
+            $municipios = $estado_id ? Municipios::where('id_state', $estado_id)->get() : collect();
 
             // Ruta de la carpeta donde se guardan los archivos generados
             $folderPath = "Servicios_Anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
@@ -78,44 +92,30 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 }
             }
 
+            return compact('estacion', 'direccionFiscal', 'direccionEstacion', 'municipios', 'existingFiles');
+        };
+
+        if ($usuario->hasAnyRole(['Administrador', 'Auditor'])) {
+            $datos = $obtenerDatos($servicioAnexo, $servicio_anexo_id);
+
             $estaciones = Estacion::all();
-            return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('estacion', 'estados', 'servicio_anexo_id', 'servicioAnexo', 'existingFiles', 'estaciones'));
+            return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', array_merge($datos, compact('estados', 'servicio_anexo_id', 'servicioAnexo', 'estaciones')));
         } else {
             // Verificar si el usuario tiene acceso al servicio
-            $servicio_anexo_id = $slug;
-            $servicioAnexo = ServicioAnexo::find($servicio_anexo_id);
             $validar_servicio = ($servicioAnexo->usuario_id == $usuario->id);
 
             if ($validar_servicio) {
-                // Obtener la estación relacionada con el servicio anexo
-                $estacion = Estacion::whereHas('estacionServicios', function ($query) use ($servicio_anexo_id) {
-                    $query->where('servicio_anexo_id', $servicio_anexo_id);
-                })->first();
+                $datos = $obtenerDatos($servicioAnexo, $servicio_anexo_id);
 
-                // Ruta de la carpeta donde se guardan los archivos generados
-                $folderPath = "Servicios_Anexo30/{$servicioAnexo->nomenclatura}/formatos_rellenados_anexo30";
-                $existingFiles = [];
-
-                // Verificar si la carpeta existe
-                if (Storage::disk('public')->exists($folderPath)) {
-                    // Obtener los archivos existentes en la carpeta
-                    $files = Storage::disk('public')->files($folderPath);
-
-                    // Construir la lista de archivos con su URL
-                    foreach ($files as $file) {
-                        $existingFiles[] = [
-                            'name' => basename($file),
-                            'url' => Storage::url($file)
-                        ];
-                    }
-                }
-
-                return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', compact('estacion', 'estados', 'servicio_anexo_id', 'servicioAnexo', 'existingFiles'));
+                return view('armonia.servicio_anexo_30.datos_servicio_anexo.expediente', array_merge($datos, compact('estados', 'servicio_anexo_id', 'servicioAnexo')));
             } else {
                 return redirect()->route('servicio_inspector_anexo_30.index')->with('error', 'Servicio no válido');
             }
         }
     }
+
+
+
 
     public function generateWord(Request $request)
     {
@@ -359,12 +359,10 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'numestacion' => $estacion->num_estacion,
                 'razonsocial' => $estacion->razon_social,
                 'rfc' => $estacion->rfc,
-                'domicilio_fiscal' => $estacion->domicilio_fiscal,
                 'telefono' => $estacion->telefono,
                 'correo' => $estacion->correo_electronico,
                 'cre' => $estacion->num_cre,
                 'constancia' => $estacion->num_constancia,
-                'domicilio_estacion' => $estacion->domicilio_estacion_servicio,
                 'estado' => $estacion->estado_republica_estacion,
                 'contacto' => $estacion->contacto,
                 'nom_repre' => $estacion->nombre_representante_legal,

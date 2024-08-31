@@ -486,9 +486,13 @@
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
+                                                        <!-- Botones para ver o registrar dirección fiscal -->
                                                         <div class="form-group">
-                                                            <label for="domicilio_fiscal">Domicilio Fiscal</label>
-                                                            <input type="text" name="domicilio_fiscal" id="domicilio_fiscal" class="form-control" required value="{{ old('domicilio_fiscal') }}">
+                                                            @if($direccionFiscal)
+                                                            <a href="#" class="btn btn-info" data-id="{{ $direccionFiscal->id }}" data-toggle="modal" data-target="#verDireccionFiscalModal" style="margin-top: 10px;">Ver Dirección Fiscal</a>
+                                                            @else
+                                                            <a href="#" class="btn btn-warning" id="registrarDireccionFiscalButton" data-toggle="modal" data-target="#registrarDireccionFiscalModal" style="margin-top: 10px;">Registrar Dirección Fiscal</a>
+                                                            @endif
                                                             @error('domicilio_fiscal')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
@@ -532,9 +536,12 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="domicilio_estacion">Domicilio de la Estación de Servicio</label>
-                                                            <input type="text" name="domicilio_estacion" id="domicilio_estacion" class="form-control" required value="{{ old('domicilio_estacion') }}">
-                                                            @error('domicilio_estacion')
+                                                            @if($direccionEstacion)
+                                                            <a href="#" class="btn btn-info" data-id="{{ $direccionEstacion->id }}" data-toggle="modal" data-target="#verDireccionFiscalModal" style="margin-top: 10px;">Ver Dirección Estacion</a>
+                                                            @else
+                                                            <a href="#" class="btn btn-warning" id="registrarDireccionEstacionButton" data-toggle="modal" data-target="#registrarDireccionEstacionModal" style="margin-top: 10px;">Registrar Dirección Estacion</a>
+                                                            @endif
+                                                            @error('domicilio_fiscal')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
@@ -593,6 +600,142 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Modal para Ver Dirección Fiscal -->
+                            <div class="modal fade" id="verDireccionFiscalModal" tabindex="-1" role="dialog" aria-labelledby="verDireccionFiscalModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="verDireccionFiscalModalLabel">Dirección Fiscal Registrada</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="direccionFiscalDetalles">
+                                            <!-- Aquí se mostrarán los detalles de la dirección fiscal -->
+                                            <!-- Los detalles se cargarán mediante AJAX -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal para Registrar Dirección Fiscal -->
+                            <div class="modal fade" id="registrarDireccionFiscalModal" tabindex="-1" role="dialog" aria-labelledby="registrarDireccionFiscalModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content rounded-3 shadow-lg">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="registrarDireccionFiscalModalLabel">Registrar Dirección Fiscal</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('guardar.direccion') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="direccionSelect" value="fiscal">
+                                                <input type="hidden" name="estacion_id" value="{{ $estacion->id }}">
+
+                                                <div class="mb-3">
+                                                    <label for="calle_fiscal" class="form-label">Calle</label>
+                                                    <input type="text" name="calle_fiscal" id="calle_fiscal" class="form-control" placeholder="Calle">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="numero_ext_fiscal" class="form-label">Número Exterior</label>
+                                                    <input type="text" name="numero_ext_fiscal" id="numero_ext_fiscal" class="form-control" placeholder="Número Exterior">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="numero_int_fiscal" class="form-label">Número Interior</label>
+                                                    <input type="text" name="numero_int_fiscal" id="numero_int_fiscal" class="form-control" placeholder="Número Interior">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="colonia_fiscal" class="form-label">Colonia</label>
+                                                    <input type="text" name="colonia_fiscal" id="colonia_fiscal" class="form-control" placeholder="Colonia">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="codigo_postal_fiscal" class="form-label">Código Postal</label>
+                                                    <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal" class="form-control" placeholder="Código Postal">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="municipio_id_fiscal" class="form-label">Municipio</label>
+                                                    <select name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-select">
+                                                        <option value="">Seleccione un municipio</option>
+                                                        @foreach($municipios as $municipio)
+                                                        <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="localidad_fiscal" class="form-label">Localidad</label>
+                                                    <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Localidad">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
+                                                    <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-control" placeholder="Entidad Federativa">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">Registrar Dirección Fiscal</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal para Registrar Dirección de la Estación -->
+                            <div class="modal fade" id="registrarDireccionEstacionModal" tabindex="-1" role="dialog" aria-labelledby="registrarDireccionEstacionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content rounded-3 shadow-lg">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="registrarDireccionEstacionModalLabel">Registrar Dirección de la Estación</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('guardar.direccion') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="direccionSelect" value="estacion">
+                                                <input type="hidden" name="estacion_id" value="{{ $estacion->id }}">
+
+                                                <div class="mb-3">
+                                                    <label for="calle_estacion" class="form-label">Calle</label>
+                                                    <input type="text" name="calle_estacion" id="calle_estacion" class="form-control" placeholder="Calle">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="numero_ext_estacion" class="form-label">Número Exterior</label>
+                                                    <input type="text" name="numero_ext_estacion" id="numero_ext_estacion" class="form-control" placeholder="Número Exterior">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="numero_int_estacion" class="form-label">Número Interior</label>
+                                                    <input type="text" name="numero_int_estacion" id="numero_int_estacion" class="form-control" placeholder="Número Interior">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="colonia_estacion" class="form-label">Colonia</label>
+                                                    <input type="text" name="colonia_estacion" id="colonia_estacion" class="form-control" placeholder="Colonia">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="codigo_postal_estacion" class="form-label">Código Postal</label>
+                                                    <input type="text" name="codigo_postal_estacion" id="codigo_postal_estacion" class="form-control" placeholder="Código Postal">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="municipio_id_estacion" class="form-label">Municipio</label>
+                                                    <select name="municipio_id_estacion" id="municipio_id_estacion" class="form-select">
+                                                        <option value="">Seleccione un municipio</option>
+                                                        @foreach($municipios as $municipio)
+                                                        <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="localidad_estacion" class="form-label">Localidad</label>
+                                                    <input type="text" name="localidad_estacion" id="localidad_estacion" class="form-control" placeholder="Localidad">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="entidad_federativa_estacion" class="form-label">Entidad Federativa</label>
+                                                    <input type="text" name="entidad_federativa_estacion" id="entidad_federativa_estacion" class="form-control" placeholder="Entidad Federativa">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">Registrar Dirección de la Estación</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                             @endcan
 
                             <!-- Contenedor para la tabla de archivos generados -->
@@ -644,24 +787,52 @@
                                 <p>No hay archivos existentes.</p>
                                 @endif
                             </div>
-
-
-
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
-<!-- Incluir jQuery y Bootstrap desde un CDN -->
+<!-- Incluir jQuery y Bootstrap 4 desde un CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
 
 <!-- Script optimizado -->
 <script>
+    $(document).ready(function() {
+        // Evento de clic para abrir el modal y cargar los datos
+        $('.btn-info[data-id]').on('click', function() {
+            var direccionId = $(this).data('id');
+
+            $.ajax({
+                url: '/direccion/' + direccionId,
+                method: 'GET',
+                success: function(response) {
+                    // Actualizar el contenido del modal con los datos de la dirección fiscal
+                    $('#direccionFiscalDetalles').html(
+                        '<p><strong>Calle:</strong> ' + response.calle + '</p>' +
+                        '<p><strong>Número Exterior:</strong> ' + response.numero_ext + '</p>' +
+                        '<p><strong>Número Interior:</strong> ' + response.numero_int + '</p>' +
+                        '<p><strong>Colonia:</strong> ' + response.colonia + '</p>' +
+                        '<p><strong>Código Postal:</strong> ' + response.codigo_postal + '</p>' +
+                        '<p><strong>Municipio:</strong> ' + response.municipio + '</p>' +
+                        '<p><strong>Localidad:</strong> ' + response.localidad + '</p>' +
+                        '<p><strong>Entidad Federativa:</strong> ' + response.entidad_federativa + '</p>'
+                    );
+                    // Abrir el modal
+                    var modal = new bootstrap.Modal(document.getElementById('verDireccionFiscalModal'));
+                    modal.show();
+                },
+                error: function(xhr) {
+                    // Manejar errores
+                    alert('Error al obtener los datos de la dirección.');
+                }
+            });
+        });
+    });
+
     $(document).ready(function() {
         // Función para cargar los archivos generados
         function loadGeneratedFiles() {
@@ -933,84 +1104,6 @@
 
             return div;
         }
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const codigoPostalInput = document.getElementById('codigo_postal');
-        const estadoSelect = document.getElementById('estado');
-        const municipioSelect = document.getElementById('municipio_alcaldia');
-
-        // Actualizar estado y municipio basado en el código postal
-        codigoPostalInput.addEventListener('input', function() {
-            const codigoPostal = this.value;
-
-            if (codigoPostal.length >= 5) { // Ajusta la longitud según sea necesario
-                fetch(`/buscar-localidad/${codigoPostal}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.estado) {
-                            // Actualiza el estado
-                            estadoSelect.value = data.estado.id;
-
-                            // Limpia y actualiza el municipio
-                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
-
-                            if (data.municipios && typeof data.municipios === 'object') {
-                                // Itera sobre el objeto de municipios
-                                for (const [id, description] of Object.entries(data.municipios)) {
-                                    const option = document.createElement('option');
-                                    option.value = id;
-                                    option.textContent = description;
-                                    municipioSelect.appendChild(option);
-                                }
-
-                                // Configura el primer municipio como seleccionado si hay alguno
-                                if (Object.keys(data.municipios).length > 0) {
-                                    municipioSelect.value = Object.keys(data.municipios)[0];
-                                }
-                            } else {
-                                // Si `data.municipios` no es un objeto, maneja el error
-                                console.error('Error: `data.municipios` no es un objeto o está vacío', data);
-                            }
-                        } else {
-                            // Si no se encuentra estado, limpia los campos
-                            estadoSelect.value = '';
-                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
-                        }
-                    })
-                    .catch(error => console.error('Error al buscar localidad:', error));
-            }
-        });
-
-        // Actualizar los municipios cuando se cambia el estado manualmente
-        estadoSelect.addEventListener('change', function() {
-            const estadoId = this.value;
-            if (estadoId) {
-                fetch(`/municipios/${estadoId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.municipios && typeof data.municipios === 'object') {
-                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
-
-                            // Itera sobre el objeto de municipios
-                            for (const [id, description] of Object.entries(data.municipios)) {
-                                const option = document.createElement('option');
-                                option.value = id;
-                                option.textContent = description;
-                                municipioSelect.appendChild(option);
-                            }
-                        } else {
-                            // Si `data.municipios` no es un objeto, maneja el error
-                            console.error('Error: `data.municipios` no es un objeto o está vacío', data);
-                            municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
-            }
-        });
     });
 </script>
 @endcan

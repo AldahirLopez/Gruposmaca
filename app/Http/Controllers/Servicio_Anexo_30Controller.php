@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Factura_Anexo;
@@ -26,10 +27,10 @@ class Servicio_Anexo_30Controller extends Controller
 
     function __construct()
     {
-  
+
         //COTIZACION
         $this->middleware('permission:Generar-cotizacion-anexo_30', ['only' => ['generarpdfcotizacion']]);
-        $this->middleware('permission:Descargar-cotizacion-anexo_30', ['only' => ['descargarCotizacionAjax']]);    
+        $this->middleware('permission:Descargar-cotizacion-anexo_30', ['only' => ['descargarCotizacionAjax']]);
         //PAGOS
         $this->middleware('permission:Ver-pagos-anexo_30', ['only' => ['pagosAnexo']]);
         $this->middleware('permission:Subir-pago-anexo_30', ['only' => ['storePagoAnexo']]);
@@ -37,10 +38,6 @@ class Servicio_Anexo_30Controller extends Controller
         //FACTURA
         $this->middleware('permission:Subir-factura-anexo_30', ['only' => ['storeFactura']]);
         $this->middleware('permission:Descargar-factura-anexo_30', ['only' => ['descargarFacturaAnexo']]);
-
-    
-    
-        
     }
     /**
      * Display a listing of the resource.
@@ -60,19 +57,16 @@ class Servicio_Anexo_30Controller extends Controller
 
     public function apro_servicio_anexo()
     {
-        // Obtener el usuario autenticado
         $usuario = Auth::user();
 
-        // Verificar si el usuario es administrador
         if (auth()->check() && $usuario->hasAnyRole(['Administrador', 'Auditor'])) {
-            // Si es administrador, obtener todos los dictámenes
-            $servicios = ServicioAnexo::all();
+            $servicios = ServicioAnexo::with('estacionServicios.direccionFiscal', 'estacionServicios.direccionServicio')->get();
         } else {
-            // Si no es administrador, obtener solo los dictámenes del usuario autenticado
-            $servicios = ServicioAnexo::where('usuario_id', $usuario->id)->get();
+            $servicios = ServicioAnexo::where('usuario_id', $usuario->id)
+                ->with('estacionServicios.direccionFiscal', 'estacionServicios.direccionServicio')
+                ->get();
         }
 
-        // Pasar los dictámenes a la vista
         return view('armonia.servicio_anexo_30.aprobacion_servicio.index', compact('servicios'));
     }
 
@@ -104,10 +98,22 @@ class Servicio_Anexo_30Controller extends Controller
         $id_servicio = $request->input('id_servicio');
         $nomenclatura = $request->input('nomenclatura');
         $nombre_estacion = strtoupper($request->input('razon_social'));
-        $direccion_estacion = strtoupper($request->input('direccion'));
+
+        // Obtener los componentes individuales de la dirección
+        $calle = strtoupper($request->input('calle'));
+        $numero_ext = strtoupper($request->input('numero_ext'));
+        $numero_int = strtoupper($request->input('numero_int'));
+        $colonia = strtoupper($request->input('colonia'));
+        $codigo_postal = strtoupper($request->input('codigo_postal'));
+        $municipio = strtoupper($request->input('municipio'));
+        $entidad_federativa = strtoupper($request->input('entidad_federativa'));
+
+        // Combinar los componentes de la dirección en una sola cadena
+        $direccion_estacion = "Calle: $calle, Número Ext: $numero_ext $numero_int, Colonia: $colonia, C.P.: $codigo_postal, Municipio: $municipio, Entidad Federativa: $entidad_federativa";
+
         $costo = $request->input('costo');
 
-        // Calcular el 16% de IVA 
+        // Calcular el 16% de IVA
         $iva = $costo * 0.16;
 
         // Obtener la fecha actual en el formato deseado (día de mes de año)
@@ -163,6 +169,7 @@ class Servicio_Anexo_30Controller extends Controller
         return response()->json(['pdf_url' => $pdfUrl]);
     }
 
+
     public function descargarCotizacionAjax(Request $request)
     {
         // Obtener la ruta del documento desde la solicitud GET
@@ -195,11 +202,11 @@ class Servicio_Anexo_30Controller extends Controller
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
         ]);
-       
-      
+
+
         try {
             $pago = Pago_Anexo::firstOrNew(['servicio_anexo_id' => $data['servicio_id']]);
-            $pago->comentarios="";
+            $pago->comentarios = "";
             if ($request->hasFile('rutadoc')) {
                 $archivoSubido = $request->file('rutadoc');
 
@@ -227,13 +234,13 @@ class Servicio_Anexo_30Controller extends Controller
                 // Obtener la URL pública del PDF
                 $pdfUrl = Storage::url($rutaArchivo);
 
-                $pago->rutadoc_pago = $pdfUrl;      
+                $pago->rutadoc_pago = $pdfUrl;
             }
 
             $pago->servicio_anexo_id = $data['servicio_id'];
             $pago->estado_pago = false;
             $pago->save();
-          
+
             return redirect()->route('servicio_inspector_anexo_30.index', ['id' => $data['servicio_id']])->with('success', 'Pago guardado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->route('servicio_inspector_anexo_30.index', ['id' => $data['servicio_id']])->with('error', 'Pago no guardado exitosamente.');
@@ -259,14 +266,14 @@ class Servicio_Anexo_30Controller extends Controller
 
     public function storeFacturaAnexo(Request $request)
     {
-       
+
         $data = $request->validate([
             'rutadoc' => 'required|file|mimes:pdf',
             'servicio_id' => 'required',
             'nomenclatura' => 'required',
         ]);
 
-           $usuario = Auth::user();
+        $usuario = Auth::user();
 
         try {
             $pago = Pago_Anexo::where('servicio_anexo_id', $data['servicio_id'])->first();
@@ -305,14 +312,14 @@ class Servicio_Anexo_30Controller extends Controller
                 $pdfUrl = Storage::url($rutaArchivo);
 
                 $factura->ruta_pdf = $pdfUrl;
-                $factura->rutad_xml=$pdfUrl;
+                $factura->rutad_xml = $pdfUrl;
             }
 
             $pago->estado_pago = true;
             $pago->save();
 
-            $factura->id_pago = $pago->id;        
-            $factura->usuario_id = $usuario->id;        
+            $factura->id_pago = $pago->id;
+            $factura->usuario_id = $usuario->id;
             $factura->save();
 
             return redirect()->route('pagosAnexo.index', ['id' => $data['servicio_id']])->with('success', 'Factura guardada exitosamente.');

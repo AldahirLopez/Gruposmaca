@@ -41,6 +41,17 @@ class Estacion extends Model
     {
         return $this->belongsToMany(ServicioAnexo::class, 'estacion_servicio', 'estacion_id', 'servicio_anexo_id');
     }
+    // Relación con la dirección fiscal
+    public function direccionFiscal()
+    {
+        return $this->belongsTo(Direccion::class, 'domicilio_fiscal_id');
+    }
+
+    // Relación con la dirección de servicio
+    public function direccionServicio()
+    {
+        return $this->belongsTo(Direccion::class, 'domicilio_servicio_id');
+    }
 
     // Relación con la tabla pivote estacion_servicio
     public function estacionServicios()
@@ -50,7 +61,7 @@ class Estacion extends Model
 
     public function estacionServicioOperacionMantenimiento()
     {
-        return $this->hasMany(Estacion_Operacion::class,'estacion_id');
+        return $this->hasMany(Estacion_Operacion::class, 'estacion_id');
     }
 
     public function usuarios()
@@ -58,17 +69,15 @@ class Estacion extends Model
         return $this->belongsToMany(User::class, 'usuario_estacion', 'estacion_id', 'usuario_id');
     }
 
-     //Relaciones N a N
-     public function equipos()
-     {
-         return $this->belongsToMany(Equipo::class, 'equipo_estacion', 'id_estacion', 'id_equipo');
-     }
+    //Relaciones N a N
+    public function equipos()
+    {
+        return $this->belongsToMany(Equipo::class, 'equipo_estacion', 'id_estacion', 'id_equipo');
+    }
 
-     public function tanques()
-     {
-         return $this->belongsToMany(Tanque::class, 'estacion_tanque', 'id_estacion', 'id_tanque')
-         ->withPivot(['capacidad']);;
-     }
-
-
+    public function tanques()
+    {
+        return $this->belongsToMany(Tanque::class, 'estacion_tanque', 'id_estacion', 'id_tanque')
+            ->withPivot(['capacidad']);;
+    }
 }
