@@ -630,50 +630,80 @@
                                                 <input type="hidden" name="direccionSelect" value="fiscal">
                                                 <input type="hidden" name="estacion_id" value="{{ $estacion->id }}">
 
-                                                <div class="mb-3">
-                                                    <label for="calle_fiscal" class="form-label">Calle</label>
-                                                    <input type="text" name="calle_fiscal" id="calle_fiscal" class="form-control" placeholder="Calle">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="numero_ext_fiscal" class="form-label">Número Exterior</label>
-                                                    <input type="text" name="numero_ext_fiscal" id="numero_ext_fiscal" class="form-control" placeholder="Número Exterior">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="numero_int_fiscal" class="form-label">Número Interior</label>
-                                                    <input type="text" name="numero_int_fiscal" id="numero_int_fiscal" class="form-control" placeholder="Número Interior">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="colonia_fiscal" class="form-label">Colonia</label>
-                                                    <input type="text" name="colonia_fiscal" id="colonia_fiscal" class="form-control" placeholder="Colonia">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="codigo_postal_fiscal" class="form-label">Código Postal</label>
-                                                    <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal" class="form-control" placeholder="Código Postal">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="municipio_id_fiscal" class="form-label">Municipio</label>
-                                                    <select name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-select">
-                                                        <option value="">Seleccione un municipio</option>
-                                                        @foreach($municipios as $municipio)
-                                                        <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="localidad_fiscal" class="form-label">Localidad</label>
-                                                    <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Localidad">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
-                                                    <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-control" placeholder="Entidad Federativa">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="calle_fiscal" class="form-label">Calle</label>
+                                                            <input type="text" name="calle_fiscal" id="calle_fiscal" class="form-control" placeholder="Calle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="numero_ext_fiscal" class="form-label">Número Exterior</label>
+                                                            <input type="text" name="numero_ext_fiscal" id="numero_ext_fiscal" class="form-control" placeholder="Número Exterior">
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary">Registrar Dirección Fiscal</button>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="numero_int_fiscal" class="form-label">Número Interior</label>
+                                                            <input type="text" name="numero_int_fiscal" id="numero_int_fiscal" class="form-control" placeholder="Número Interior">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="colonia_fiscal" class="form-label">Colonia</label>
+                                                            <input type="text" name="colonia_fiscal" id="colonia_fiscal" class="form-control" placeholder="Colonia">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="codigo_postal_fiscal" class="form-label">Código Postal</label>
+                                                            <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal" class="form-control" placeholder="Código Postal">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="municipio_id_fiscal" class="form-label">Municipio</label>
+                                                            <select name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-select">
+                                                                <option value="">Seleccione un municipio</option>
+                                                                @foreach($municipios as $municipio)
+                                                                <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="localidad_fiscal" class="form-label">Localidad</label>
+                                                            <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Localidad">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
+                                                            <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-control" placeholder="Entidad Federativa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary">Registrar Dirección Fiscal</button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Modal para Registrar Dirección de la Estación -->
                             <div class="modal fade" id="registrarDireccionEstacionModal" tabindex="-1" role="dialog" aria-labelledby="registrarDireccionEstacionModalLabel" aria-hidden="true">
@@ -689,45 +719,74 @@
                                                 <input type="hidden" name="direccionSelect" value="estacion">
                                                 <input type="hidden" name="estacion_id" value="{{ $estacion->id }}">
 
-                                                <div class="mb-3">
-                                                    <label for="calle_estacion" class="form-label">Calle</label>
-                                                    <input type="text" name="calle_estacion" id="calle_estacion" class="form-control" placeholder="Calle">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="numero_ext_estacion" class="form-label">Número Exterior</label>
-                                                    <input type="text" name="numero_ext_estacion" id="numero_ext_estacion" class="form-control" placeholder="Número Exterior">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="numero_int_estacion" class="form-label">Número Interior</label>
-                                                    <input type="text" name="numero_int_estacion" id="numero_int_estacion" class="form-control" placeholder="Número Interior">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="colonia_estacion" class="form-label">Colonia</label>
-                                                    <input type="text" name="colonia_estacion" id="colonia_estacion" class="form-control" placeholder="Colonia">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="codigo_postal_estacion" class="form-label">Código Postal</label>
-                                                    <input type="text" name="codigo_postal_estacion" id="codigo_postal_estacion" class="form-control" placeholder="Código Postal">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="municipio_id_estacion" class="form-label">Municipio</label>
-                                                    <select name="municipio_id_estacion" id="municipio_id_estacion" class="form-select">
-                                                        <option value="">Seleccione un municipio</option>
-                                                        @foreach($municipios as $municipio)
-                                                        <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="localidad_estacion" class="form-label">Localidad</label>
-                                                    <input type="text" name="localidad_estacion" id="localidad_estacion" class="form-control" placeholder="Localidad">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="entidad_federativa_estacion" class="form-label">Entidad Federativa</label>
-                                                    <input type="text" name="entidad_federativa_estacion" id="entidad_federativa_estacion" class="form-control" placeholder="Entidad Federativa">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="calle_estacion" class="form-label">Calle</label>
+                                                            <input type="text" name="calle_estacion" id="calle_estacion" class="form-control" placeholder="Calle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="numero_ext_estacion" class="form-label">Número Exterior</label>
+                                                            <input type="text" name="numero_ext_estacion" id="numero_ext_estacion" class="form-control" placeholder="Número Exterior">
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary">Registrar Dirección de la Estación</button>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="numero_int_estacion" class="form-label">Número Interior</label>
+                                                            <input type="text" name="numero_int_estacion" id="numero_int_estacion" class="form-control" placeholder="Número Interior">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="colonia_estacion" class="form-label">Colonia</label>
+                                                            <input type="text" name="colonia_estacion" id="colonia_estacion" class="form-control" placeholder="Colonia">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="codigo_postal_estacion" class="form-label">Código Postal</label>
+                                                            <input type="text" name="codigo_postal_estacion" id="codigo_postal_estacion" class="form-control" placeholder="Código Postal">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="municipio_id_estacion" class="form-label">Municipio</label>
+                                                            <select name="municipio_id_estacion" id="municipio_id_estacion" class="form-select">
+                                                                <option value="">Seleccione un municipio</option>
+                                                                @foreach($municipios as $municipio)
+                                                                <option value="{{ $municipio->description }}">{{ $municipio->description }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="localidad_estacion" class="form-label">Localidad</label>
+                                                            <input type="text" name="localidad_estacion" id="localidad_estacion" class="form-control" placeholder="Localidad">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="entidad_federativa_estacion" class="form-label">Entidad Federativa</label>
+                                                            <input type="text" name="entidad_federativa_estacion" id="entidad_federativa_estacion" class="form-control" placeholder="Entidad Federativa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary">Registrar Dirección de la Estación</button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
