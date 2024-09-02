@@ -73,7 +73,7 @@
                 <td>{{ $direccionEstacion->municipio }}</td>
                 <td>{{ $direccionEstacion->entidad_federativa }}</td>
                 <td>
-                    @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento', 'Auditor']))
+                    @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEstacionModal" data-id="{{ $direccionEstacion->id }}">Editar</button>
                 </td>
                 @endif
