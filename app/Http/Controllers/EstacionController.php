@@ -229,6 +229,7 @@ class EstacionController extends Controller
         $estacion = Estacion::findOrFail($id);
 
         // Obtener el ID del estado asociado a la estación
+        $estados = Estados::where('id_country', 42)->get();
         $estado = $estacion->estado_republica;
         $estado_id = Estados::where('description', $estado)->first()->id ?? null;
 
@@ -254,7 +255,7 @@ class EstacionController extends Controller
 
 
 
- 
+
     public function guardarDireccion(Request $request)
     {
         // Validación inicial utilizando la conexión a la segunda base de datos
@@ -294,6 +295,10 @@ class EstacionController extends Controller
         // Capitaliza el tipo de dirección
         $tipoDireccionCapitalizado = ucfirst($tipoDireccion);
 
+        // Obtener el nombre del municipio basado en su ID
+        $estadoId = $request->input("entidad_federativa_{$tipoDireccion}");
+        $estado = Estados::on('segunda_db')->findOrFail($estadoId);
+
         // Crear nueva dirección en la segunda base de datos
         $direccion = new Direccion();
         $direccion->setConnection('segunda_db');  // Cambia la conexión a la segunda base de datos
@@ -305,7 +310,7 @@ class EstacionController extends Controller
         $direccion->codigo_postal = $request->input("codigo_postal_{$tipoDireccion}");
         $direccion->localidad = $request->input("localidad_{$tipoDireccion}");
         $direccion->municipio = $request->input("municipio_id_{$tipoDireccion}");
-        $direccion->entidad_federativa = $request->input("entidad_federativa_{$tipoDireccion}");
+        $direccion->entidad_federativa = $estado->description;
         $direccion->save();
 
         // Actualizar la referencia de la dirección en la estación correspondiente en la segunda base de datos
@@ -327,6 +332,7 @@ class EstacionController extends Controller
         try {
             // Buscar la dirección por ID
             $direccion = Direccion::findOrFail($id);
+
 
             // Retornar los datos de la dirección en formato JSON
             return response()->json([
@@ -351,6 +357,7 @@ class EstacionController extends Controller
         try {
             $direccion = Direccion::findOrFail($id);
 
+
             // Verifica si es dirección fiscal o de estación y actualiza en consecuencia
             if ($request->direccionSelect == 'fiscal') {
                 $direccion->calle = $request->calle_fiscal;
@@ -360,7 +367,11 @@ class EstacionController extends Controller
                 $direccion->codigo_postal = $request->codigo_postal_fiscal;
                 $direccion->localidad = $request->localidad_fiscal;
                 $direccion->municipio = $request->municipio_id_fiscal;
-                $direccion->entidad_federativa = $request->entidad_federativa_fiscal;
+
+                // Obtener el nombre del municipio basado en su ID
+                $estadoId = $request->entidad_federativa_fiscal;
+                $estado = Estados::on('segunda_db')->findOrFail($estadoId);
+                $direccion->entidad_federativa = $estado->description;
             } else {
                 $direccion->calle = $request->calle_estacion;
                 $direccion->numero = $request->numero_ext_estacion;
@@ -378,5 +389,11 @@ class EstacionController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Dirección no guardada exitosamente.');
         }
+    }
+
+    public function getMunicipios($estadoId)
+    {
+        $municipios = Municipios::where('id_state', $estadoId)->get();
+        return response()->json($municipios);
     }
 }

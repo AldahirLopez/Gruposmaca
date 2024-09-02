@@ -73,8 +73,10 @@
                 <td>{{ $direccionEstacion->municipio }}</td>
                 <td>{{ $direccionEstacion->entidad_federativa }}</td>
                 <td>
+                    @if(auth()->check() && auth()->user()->hasRole(['Verificador Anexo 30', 'Administrador', 'Operacion y Mantenimiento', 'Auditor']))
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEstacionModal" data-id="{{ $direccionEstacion->id }}">Editar</button>
                 </td>
+                @endif
             </tr>
         </tbody>
     </table>
@@ -97,7 +99,15 @@
                     @csrf
                     <input type="hidden" name="direccionSelect" value="fiscal">
                     <input type="hidden" name="estacion_id" value="{{ $estacion->id }}">
-
+                    <div class="mb-3">
+                        <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
+                        <select name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-select">
+                            <option value="">Seleccionar estado</option>
+                            @foreach($estados as $estado)
+                            <option value="{{ $estado->id }}">{{ $estado->description }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="mb-3">
                         <label for="calle_fiscal" class="form-label">Calle</label>
                         <input type="text" name="calle_fiscal" id="calle_fiscal" class="form-control" placeholder="Calle">
@@ -122,22 +132,12 @@
                         <label for="municipio_id_fiscal" class="form-label">Municipio</label>
                         <select name="municipio_id_fiscal" id="municipio_id_fiscal" class="form-select">
                             <option value="">Seleccionar municipio</option>
-                            @foreach($municipios as $municipio)
-                            <option value="{{ $municipio->description }}">
-                                {{ $municipio->description }}
-                            </option>
-                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="localidad_fiscal" class="form-label">Localidad</label>
                         <input type="text" name="localidad_fiscal" id="localidad_fiscal" class="form-control" placeholder="Localidad">
                     </div>
-                    <div class="mb-3">
-                        <label for="entidad_federativa_fiscal" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal" class="form-control" placeholder="Entidad Federativa">
-                    </div>
-
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -184,24 +184,34 @@
                         <label for="codigo_postal_fiscal_edit" class="form-label">Código Postal</label>
                         <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal_edit" class="form-control" placeholder="Código Postal" value="{{ old('codigo_postal_fiscal', $direccionFiscal->codigo_postal ?? '') }}">
                     </div>
+
+                    <div class="mb-3">
+                        <label for="entidad_federativa_fiscal_edit" class="form-label">Entidad Federativa</label>
+                        <select name="entidad_federativa_fiscal" id="entidad_federativa_fiscal_edit" class="form-select">
+                            <option value="">Seleccionar estado</option>
+                            @foreach($estados as $estado)
+                            <option value="{{ $estado->id }}" {{ $estado->id == old('entidad_federativa_fiscal', $direccionFiscal->description ?? '') ? 'selected' : '' }}>
+                                {{ $estado->description }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="municipio_id_fiscal_edit" class="form-label">Municipio</label>
                         <select name="municipio_id_fiscal" id="municipio_id_fiscal_edit" class="form-select">
                             <option value="">Seleccionar municipio</option>
                             @foreach($municipios as $municipio)
-                            <option value="{{ $municipio->description }}" {{ $municipio->description == old('municipio_id_fiscal', $direccionFiscal->municipio ?? '') ? 'selected' : '' }}>
-                                {{ $municipio->description }}
+                            <option value="{{ $municipio->id }}" {{ $municipio->id == old('municipio_id_fiscal', $direccionFiscal->municipio_id ?? '') ? 'selected' : '' }}>
+                                {{ $municipio->nombre }}
                             </option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="mb-3">
                         <label for="localidad_fiscal_edit" class="form-label">Localidad</label>
                         <input type="text" name="localidad_fiscal" id="localidad_fiscal_edit" class="form-control" placeholder="Localidad" value="{{ old('localidad_fiscal', $direccionFiscal->localidad ?? '') }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="entidad_federativa_fiscal_edit" class="form-label">Entidad Federativa</label>
-                        <input type="text" name="entidad_federativa_fiscal" id="entidad_federativa_fiscal_edit" class="form-control" placeholder="Entidad Federativa" value="{{ old('entidad_federativa_fiscal', $direccionFiscal->entidad_federativa ?? '') }}">
                     </div>
 
                     <div class="modal-footer">
@@ -348,6 +358,33 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Selección de estado y municipios para la creación y edición
+        const estadoSelect = document.getElementById('entidad_federativa_fiscal');
+        const municipioSelect = document.getElementById('municipio_id_fiscal');
+
+        if (estadoSelect && municipioSelect) {
+            estadoSelect.addEventListener('change', function() {
+                const estadoId = this.value;
+
+                // Limpiar el select de municipios
+                municipioSelect.innerHTML = '<option value="">Seleccionar municipio</option>';
+
+                if (estadoId) {
+                    fetch(`/municipios/${estadoId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(municipio => {
+                                const option = document.createElement('option');
+                                option.value = municipio.description;
+                                option.textContent = municipio.description;
+                                municipioSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error al cargar municipios:', error));
+                }
+            });
+        }
+
         // Editar Dirección Fiscal
         document.querySelectorAll('button[data-bs-target="#editFiscalModal"]').forEach(button => {
             button.addEventListener('click', function() {
@@ -362,14 +399,25 @@
                         document.getElementById('colonia_fiscal_edit').value = data.colonia;
                         document.getElementById('codigo_postal_fiscal_edit').value = data.codigo_postal;
 
-                        // Establecer el valor del select para municipio
-                        const municipioSelect = document.getElementById('municipio_id_fiscal_edit');
-                        municipioSelect.value = data.municipio; // Cambiar aquí si el valor es diferente
+                        // Actualizar el estado y cargar los municipios correspondientes
+                        const estadoSelectEdit = document.getElementById('entidad_federativa_fiscal_edit');
+                        const municipioSelectEdit = document.getElementById('municipio_id_fiscal_edit');
 
-                        // Asegúrate de que el valor esté en el select
-                        if (!Array.from(municipioSelect.options).some(option => option.value == data.municipio)) {
-                            console.warn('Municipio ID no encontrado en las opciones del select');
-                        }
+                        estadoSelectEdit.value = data.entidad_federativa_id;
+                        fetch(`/municipios/${data.entidad_federativa_id}`)
+                            .then(response => response.json())
+                            .then(municipios => {
+                                municipioSelectEdit.innerHTML = '<option value="">Seleccionar municipio</option>';
+                                municipios.forEach(municipio => {
+                                    const option = document.createElement('option');
+                                    option.value = municipio.description;
+                                    option.textContent = municipio.description;
+                                    if (municipio.description === data.municipio) {
+                                        option.selected = true;
+                                    }
+                                    municipioSelectEdit.appendChild(option);
+                                });
+                            });
                     })
                     .catch(error => console.error('Error fetching data:', error));
             });
@@ -389,14 +437,25 @@
                         document.getElementById('colonia_estacion_edit').value = data.colonia;
                         document.getElementById('codigo_postal_estacion_edit').value = data.codigo_postal;
 
-                        // Establecer el valor del select para municipio
-                        const municipioSelect = document.getElementById('municipio_id_estacion_edit');
-                        municipioSelect.value = data.municipio; // Cambiar aquí si el valor es diferente
+                        // Actualizar el estado y cargar los municipios correspondientes
+                        const estadoSelectEdit = document.getElementById('entidad_federativa_estacion_edit');
+                        const municipioSelectEdit = document.getElementById('municipio_id_estacion_edit');
 
-                        // Asegúrate de que el valor esté en el select
-                        if (!Array.from(municipioSelect.options).some(option => option.value == data.municipio)) {
-                            console.warn('Municipio ID no encontrado en las opciones del select');
-                        }
+                        estadoSelectEdit.value = data.entidad_federativa_id;
+                        fetch(`/municipios/${data.entidad_federativa_id}`)
+                            .then(response => response.json())
+                            .then(municipios => {
+                                municipioSelectEdit.innerHTML = '<option value="">Seleccionar municipio</option>';
+                                municipios.forEach(municipio => {
+                                    const option = document.createElement('option');
+                                    option.value = municipio.description;
+                                    option.textContent = municipio.description;
+                                    if (municipio.description === data.municipio) {
+                                        option.selected = true;
+                                    }
+                                    municipioSelectEdit.appendChild(option);
+                                });
+                            });
                     })
                     .catch(error => console.error('Error fetching data:', error));
             });

@@ -205,6 +205,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('estacion/{id}/direcciones', [EstacionController::class, 'updateDireccion'])->name('direcciones.update');
 
 
+    Route::get('/municipios/{estado}', [EstacionController::class, 'getMunicipios']);
+
+
 
 
     Route::get('/seleccion-estacion', [EstacionController::class, 'seleccionestacion'])->name('estacion.selecccion');
