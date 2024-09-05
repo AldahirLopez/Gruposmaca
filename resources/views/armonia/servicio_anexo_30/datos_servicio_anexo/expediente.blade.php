@@ -554,7 +554,7 @@
                                                             <label for="estado">Estado</label>
                                                             <select name="estado" id="estado" class="form-select" required>
                                                                 @foreach($estados as $estado)
-                                                                <option value="{{ $estado->description }}" {{ old('estado_republica') == $estado->description ? 'selected' : '' }}>{{ $estado->description }}</option>
+                                                                <option value="{{ $estado->description }}" {{ old('estado') == $estado->description ? 'selected' : '' }}>{{ $estado->description }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('estado')

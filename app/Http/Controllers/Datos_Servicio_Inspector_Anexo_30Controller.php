@@ -371,7 +371,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'correo' => $estacion->correo_electronico,
                 'cre' => $estacion->num_cre,
                 'constancia' => $estacion->num_constancia,
-                'estado' => $estacion->estado_republica_estacion,
+                'estado' => $estacion->estado_republica,
                 'contacto' => $estacion->contacto,
                 'nom_repre' => $estacion->nombre_representante_legal,
                 // Agrega más campos según sea necesario
