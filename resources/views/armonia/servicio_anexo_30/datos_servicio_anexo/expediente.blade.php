@@ -95,7 +95,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endcan @can('Generar-dictamenes-anexo')
+                                @endcan
+                                @if(auth()->check() && auth()->user()->hasRole('Administrador'))
                                 <!-- Tarjeta 4 - Certificado y JSON  -->
                                 <div class="col-md-4 dictamenes-card" style="display: none;">
                                     <div class="card">
@@ -111,8 +112,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
-                            @endcan
+
 
                             @can('Generar-dictamenes-anexo')
                             <!-- Modal para Dictámenes Informático -->
