@@ -110,8 +110,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
-                            @endif
+
 
 
                             @can('Generar-dictamenes-anexo')
