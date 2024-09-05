@@ -115,17 +115,17 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     }
 
 
- 
+
 
     public function generateWord(Request $request)
     {
         try {
             // Obtener el ID de la estación desde la solicitud
             $idEstacion = $request->input('idestacion');
-    
+
             // Buscar la estación por su ID y obtener los datos necesarios
             $estacion = Estacion::findOrFail($idEstacion);
-    
+
             // Definir las reglas de validación
             $rules = [
                 'nomenclatura' => 'required',
@@ -140,51 +140,57 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'fecha_inspeccion' => 'required|date',
                 'cantidad' => 'required',
             ];
-    
+
             // Validar los datos del formulario
             $data = $request->validate($rules);
-    
+
             // Obtener las direcciones de la estación
             $direccionFiscal = Direccion::where('id', $estacion->domicilio_fiscal_id)->first();
             $direccionEstacion = Direccion::where('id', $estacion->domicilio_servicio_id)->first();
-    
+
             // Completar los datos necesarios para el procesamiento
             $data['numestacion'] = $estacion->num_estacion;
             $data['fecha_actual'] = Carbon::now()->format('d/m/Y');
             $data['razonsocial'] = $estacion->razon_social;
             $data['rfc'] = $estacion->rfc;
-    
+
             // Direcciones: Si existen, se formatean. Si no, se coloca "N/A"
-            $data['domicilio_fiscal'] = $direccionFiscal ? "{$direccionFiscal->calle} {$direccionFiscal->numero}, {$direccionFiscal->colonia}, {$direccionFiscal->localidad}, {$direccionFiscal->municipio}, {$direccionFiscal->entidad_federativa}" : 'N/A';
-            $data['domicilio_estacion'] = $direccionEstacion ? "{$direccionEstacion->calle} {$direccionEstacion->numero}, {$direccionEstacion->colonia}, {$direccionEstacion->localidad}, {$direccionEstacion->municipio}, {$direccionEstacion->entidad_federativa}" : 'N/A';
+            $data['domicilio_fiscal'] = $direccionFiscal
+                ? "Calle: {$direccionFiscal->calle} Número: {$direccionFiscal->numero}\nColonia: {$direccionFiscal->colonia}\nLocalidad: {$direccionFiscal->localidad}\nMunicipio: {$direccionFiscal->municipio}\nEntidad Federativa: {$direccionFiscal->entidad_federativa}"
+                : 'N/A';
+
+            $data['domicilio_estacion'] = $direccionEstacion
+                ? "Calle: {$direccionEstacion->calle} Número: {$direccionEstacion->numero}\nColonia: {$direccionEstacion->colonia}\nLocalidad: {$direccionEstacion->localidad}\nMunicipio: {$direccionEstacion->municipio}\nEntidad Federativa: {$direccionEstacion->entidad_federativa}"
+                : 'N/A';
+
             $data['estado'] = $estacion->estado_republica_estacion;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
-    
+
             // Si algún campo opcional no está en los datos validados, úsalo de la base de datos
             $data['cre'] = $data['cre'] ?? $estacion->num_cre ?? '';
             $data['contacto'] = $data['contacto'] ?? $estacion->contacto ?? '';
             $data['nom_repre'] = $data['nom_repre'] ?? $estacion->nombre_representante_legal ?? '';
             $data['constancia'] = $data['constancia'] ?? $estacion->num_constancia ?? '';
-    
+
             // Cálculo de precios con IVA
             $data['iva'] = $data['cantidad'] * 0.16;
             $data['total'] = $data['cantidad'] + $data['iva'];
             $data['total_mitad'] = $data['total'] * 0.50;
             $data['total_restante'] = $data['total'] - $data['total_mitad'];
-    
+
             // Formatear los valores
             $data['cantidad'] = number_format($data['cantidad'], 2, '.', ',');
             $data['iva'] = number_format($data['iva'], 2, '.', ',');
             $data['total'] = number_format($data['total'], 2, '.', ',');
             $data['total_mitad'] = number_format($data['total_mitad'], 2, '.', ',');
             $data['total_restante'] = number_format($data['total_restante'], 2, '.', ',');
-    
+
             // Convertir las fechas al formato deseado
             $fechaInspeccion = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->format('d-m-Y');
             $fechaRecepcion = Carbon::createFromFormat('Y-m-d', $data['fecha_recepcion'])->format('d-m-Y');
             $fechaInspeccionAumentada = Carbon::createFromFormat('Y-m-d', $data['fecha_inspeccion'])->addYear()->format('d-m-Y');
-    
+
             // Cargar las plantillas de Word
             $templatePaths = [
                 'ORDEN DE TRABAJO.docx',
@@ -193,25 +199,25 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'PLAN DE INSPECCIÓN DE PROGRAMAS INFORMATICOS.docx',
                 'PLAN DE INSPECCIÓN DE LOS SISTEMAS DE MEDICION.docx',
             ];
-    
+
             // Definir la carpeta de destino
             $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
-    
+
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
             }
-    
+
             // Verificar y crear la subcarpeta si no existe
             if (!Storage::disk('public')->exists($subFolderPath)) {
                 Storage::disk('public')->makeDirectory($subFolderPath);
             }
-    
+
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
                 $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
-    
+
                 // Reemplazar todos los marcadores con los datos del formulario
                 foreach ($data as $key => $value) {
                     $templateProcessor->setValue($key, $value);
@@ -220,32 +226,32 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
                 }
-    
+
                 // Crear un nombre de archivo basado en la nomenclatura
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
-    
+
                 // Guardar la plantilla procesada en la carpeta de destino
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
-    
+
             // Guardar los datos adicionales en las tablas correspondientes
             $estacion->num_cre = $data['cre'];
             $estacion->num_constancia = $data['constancia'];
             $estacion->contacto = $data['contacto'];
             $estacion->nombre_representante_legal = $data['nom_repre'];
             $estacion->save();
-    
+
             $servicio = ServicioAnexo::firstOrNew(['id' => $data['id_servicio']]);
             $servicio->date_recepcion_at = $data['fecha_recepcion'];
             $servicio->date_inspeccion_at = $data['fecha_inspeccion'];
             $servicio->save();
-    
+
             $expediente = Expediente_Servicio_Anexo_30::firstOrNew(['servicio_anexo_id' => $data['id_servicio']]);
             $expediente->rutadoc_estacion = $subFolderPath;
             $expediente->servicio_anexo_id = $data['id_servicio'];
             $expediente->usuario_id = $data['id_usuario'];
             $expediente->save();
-    
+
             // Crear la lista de archivos generados con sus URLs
             $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
@@ -254,7 +260,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     'url' => Storage::url("{$subFolderPath}/{$fileName}"),
                 ];
             }, $templatePaths);
-    
+
             // Redirigir a la vista deseada con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles)
@@ -265,7 +271,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
-    
+
 
     public function listGeneratedFiles($nomenclatura)
     {
