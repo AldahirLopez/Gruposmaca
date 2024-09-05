@@ -21,7 +21,6 @@
                 <th>Localidad</th>
                 <th>Municipio</th>
                 <th>Entidad Federativa</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +33,6 @@
                 <td>{{ $direccionFiscal->localidad }}</td>
                 <td>{{ $direccionFiscal->municipio }}</td>
                 <td>{{ $direccionFiscal->entidad_federativa}}</td>
-                <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editFiscalModal" data-id="{{ $direccionFiscal->id }}">Editar</button>
-                </td>
             </tr>
         </tbody>
     </table>
