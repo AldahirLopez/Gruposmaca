@@ -28,7 +28,7 @@
                                 <tr>
                                     <td>{{ $estacion->num_estacion }}</td>
                                     <td>{{ $estacion->razon_social }}</td>
-                                    <td>{{ $estacion->estado_republica_estacion }}</td>
+                                    <td>{{ $estacion->estado_republica }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
