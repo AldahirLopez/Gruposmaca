@@ -72,8 +72,6 @@
                 <td>{{ $direccionEstacion->localidad }}</td>
                 <td>{{ $direccionEstacion->municipio }}</td>
                 <td>{{ $direccionEstacion->entidad_federativa }}</td>
-
-                @endif
             </tr>
         </tbody>
     </table>
