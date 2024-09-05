@@ -389,18 +389,27 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
         try {
             // Obtener el ID de servicio desde la solicitud
             $idServicio = $request->input('id_servicio');
-
             $idUsuario = $request->input('id_usuario');
-
             $idEstacion = $request->input('idestacion');
-
+    
             // Buscar el servicio anexo por su ID y obtener los datos necesarios
             $servicio = ServicioAnexo::findOrFail($idServicio);
-
             $usuario = User::findOrFail($idUsuario);
-
             $estacion = Estacion::findOrFail($idEstacion);
-
+    
+            // Obtener las direcciones de la estación
+            $direccionFiscal = Direccion::where('id', $estacion->domicilio_fiscal_id)->first();
+            $direccionEstacion = Direccion::where('id', $estacion->domicilio_servicio_id)->first();
+    
+            // Formatear las direcciones
+            $data['direccion_fiscal'] = $direccionFiscal
+                ? "Calle: {$direccionFiscal->calle} Número: {$direccionFiscal->numero}\nColonia: {$direccionFiscal->colonia}\nLocalidad: {$direccionFiscal->localidad}\nMunicipio: {$direccionFiscal->municipio}\nEntidad Federativa: {$direccionFiscal->entidad_federativa}"
+                : 'N/A';
+    
+            $data['direccion_estacion'] = $direccionEstacion
+                ? "Calle: {$direccionEstacion->calle} Número: {$direccionEstacion->numero}\nColonia: {$direccionEstacion->colonia}\nLocalidad: {$direccionEstacion->localidad}\nMunicipio: {$direccionEstacion->municipio}\nEntidad Federativa: {$direccionEstacion->entidad_federativa}"
+                : 'N/A';
+    
             // Definir las reglas de validación
             $rules = [
                 'nomenclatura' => 'required|string',
@@ -411,214 +420,91 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 'rfc_proveedor' => 'required',
                 'software' => 'required',
                 'version' => 'required',
-
-                'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion4' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion5' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion6' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'detalleOpinion1' => 'required', // Texto
-                'recomendaciones1' => 'required', // Texto
-                'detalleOpinion2' => 'required', // Texto
-                'recomendaciones2' => 'required', // Texto
-                'detalleOpinion3' => 'required', // Texto
-                'recomendaciones3' => 'required', // Texto
-                'detalleOpinion4' => 'required', // Texto
-                'recomendaciones4' => 'required', // Texto
-                'detalleOpinion5' => 'required', // Texto
-                'recomendaciones5' => 'required', // Texto
-
+                'opcion1' => 'required',
+                'opcion2' => 'required',
+                'opcion3' => 'required',
+                'opcion4' => 'required',
+                'opcion5' => 'required',
+                'opcion6' => 'required',
+                'detalleOpinion1' => 'required',
+                'recomendaciones1' => 'required',
+                'detalleOpinion2' => 'required',
+                'recomendaciones2' => 'required',
+                'detalleOpinion3' => 'required',
+                'recomendaciones3' => 'required',
+                'detalleOpinion4' => 'required',
+                'recomendaciones4' => 'required',
+                'detalleOpinion5' => 'required',
+                'recomendaciones5' => 'required',
             ];
-
+    
             // Validar los datos del formulario
             $data = $request->validate($rules);
+    
             // Obtener las fechas desde el servicio y formatearlas correctamente
             $fechaInspeccion = Carbon::parse($servicio->date_inspeccion_at)->format('d-m-Y');
             $fechaRecepcion = Carbon::parse($servicio->date_recepcion_at)->format('d-m-Y');
             $fechaInspeccionAumentada = Carbon::parse($servicio->date_inspeccion_at)->addYear()->format('d-m-Y');
-
+    
             // Completar los datos necesarios para el procesamiento
             $data['fecha_inspeccion'] = $fechaInspeccion;
             $data['fecha_recepcion'] = $fechaRecepcion;
             $data['fecha_inspeccion_modificada'] = $fechaInspeccionAumentada;
             $data['nom_verificador'] = $usuario->name;
             $data['razonsocial'] = $estacion->razon_social;
-            $data['direccion_estacion'] = $estacion->domicilio_estacion_servicio;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
-
-            // Buscar o crear un nuevo registro
+    
+            // Buscar o crear un nuevo registro para el proveedor de software
             $software = ProveedorInformatico::updateOrCreate(
-                ['servicio_anexo_id' => $idServicio], // Condiciones para buscar el registro
+                ['servicio_anexo_id' => $idServicio],
                 [
                     'nombre' => $data['proveedor'],
                     'rfc' => $data['rfc_proveedor'],
                     'nombre_software' => $data['software'],
                     'version' => $data['version'],
                     'servicio_anexo_id' => $idServicio
-                ] // Atributos a actualizar o establecer
+                ]
             );
+    
             // Cargar las plantillas de Word
             $templatePaths = [
                 'DICTAMEN TECNICO DE PROGRAMAS INFORMATICOS.docx',
             ];
-
+    
             // Definir la carpeta de destino
             $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
-
+    
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
             }
-
+    
             // Verificar y crear la subcarpeta si no existe
             if (!Storage::disk('public')->exists($subFolderPath)) {
                 Storage::disk('public')->makeDirectory($subFolderPath);
             }
-
+    
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
                 $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
-
+    
                 // Reemplazar todos los marcadores con los datos del formulario
                 foreach ($data as $key => $value) {
                     $templateProcessor->setValue($key, $value);
-                    // Reemplazar fechas formateadas específicas
                     $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
                     $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
-
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion1']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si', 'X');
-                            $templateProcessor->setValue('no', ' ');
-                            $templateProcessor->setValue('noaplica', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si', ' ');
-                            $templateProcessor->setValue('no', 'X');
-                            $templateProcessor->setValue('noaplica', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si', ' ');
-                            $templateProcessor->setValue('no', ' ');
-                            $templateProcessor->setValue('noaplica', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion2']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si2', 'X');
-                            $templateProcessor->setValue('no2', ' ');
-                            $templateProcessor->setValue('noaplica2', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si2', ' ');
-                            $templateProcessor->setValue('no2', 'X');
-                            $templateProcessor->setValue('noaplica2', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si2', ' ');
-                            $templateProcessor->setValue('no2', ' ');
-                            $templateProcessor->setValue('noaplica2', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion3']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si3', 'X');
-                            $templateProcessor->setValue('no3', ' ');
-                            $templateProcessor->setValue('noaplica3', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si3', ' ');
-                            $templateProcessor->setValue('no3', 'X');
-                            $templateProcessor->setValue('noaplica3', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si3', ' ');
-                            $templateProcessor->setValue('no3', ' ');
-                            $templateProcessor->setValue('noaplica3', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion4']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si4', 'X');
-                            $templateProcessor->setValue('no4', ' ');
-                            $templateProcessor->setValue('noaplica4', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si4', ' ');
-                            $templateProcessor->setValue('no4', 'X');
-                            $templateProcessor->setValue('noaplica4', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si4', ' ');
-                            $templateProcessor->setValue('no4', ' ');
-                            $templateProcessor->setValue('noaplica4', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion5']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si5', 'X');
-                            $templateProcessor->setValue('no5', ' ');
-                            $templateProcessor->setValue('noaplica5', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si5', ' ');
-                            $templateProcessor->setValue('no5', 'X');
-                            $templateProcessor->setValue('noaplica5', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si5', ' ');
-                            $templateProcessor->setValue('no5', ' ');
-                            $templateProcessor->setValue('noaplica5', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion6']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si6', 'X');
-                            $templateProcessor->setValue('no6', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si6', ' ');
-                            $templateProcessor->setValue('no6', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
                 }
-
+    
                 // Crear un nombre de archivo basado en la nomenclatura
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
-
+    
                 // Guardar la plantilla procesada en la carpeta de destino
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
-
+    
             // Crear la lista de archivos generados con sus URLs
             $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
@@ -627,7 +513,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     'url' => Storage::url("{$subFolderPath}/{$fileName}"),
                 ];
             }, $templatePaths);
-
+    
             // Retornar respuesta con los archivos generados
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles)
@@ -638,86 +524,92 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
+    
 
     public function guardarDictamenesMedicion(Request $request)
     {
         try {
             // Obtener el ID de servicio desde la solicitud
             $idServicio = $request->input('id_servicio');
-
             $idUsuario = $request->input('id_usuario');
-
             $idEstacion = $request->input('idestacion');
-
-            // Buscar el servicio anexo por su ID y obtener los datos necesarios
+    
+            // Buscar el servicio anexo, usuario y estación
             $servicio = ServicioAnexo::findOrFail($idServicio);
-
             $usuario = User::findOrFail($idUsuario);
-
             $estacion = Estacion::findOrFail($idEstacion);
-
+    
+            // Obtener las direcciones de la estación
+            $direccionFiscal = Direccion::where('id', $estacion->domicilio_fiscal_id)->first();
+            $direccionEstacion = Direccion::where('id', $estacion->domicilio_servicio_id)->first();
+    
+            // Formatear las direcciones
+            $data['direccion_fiscal'] = $direccionFiscal
+                ? "Calle: {$direccionFiscal->calle} Número: {$direccionFiscal->numero}\nColonia: {$direccionFiscal->colonia}\nLocalidad: {$direccionFiscal->localidad}\nMunicipio: {$direccionFiscal->municipio}\nEntidad Federativa: {$direccionFiscal->entidad_federativa}"
+                : 'N/A';
+    
+            $data['direccion_estacion'] = $direccionEstacion
+                ? "Calle: {$direccionEstacion->calle} Número: {$direccionEstacion->numero}\nColonia: {$direccionEstacion->colonia}\nLocalidad: {$direccionEstacion->localidad}\nMunicipio: {$direccionEstacion->municipio}\nEntidad Federativa: {$direccionEstacion->entidad_federativa}"
+                : 'N/A';
+    
+            // Buscar el proveedor de software asociado al servicio
             $software = ProveedorInformatico::where('servicio_anexo_id', $idServicio)->firstOrFail();
-
-
+    
             // Definir las reglas de validación
             $rules = [
                 'nomenclatura' => 'required|string',
                 'id_servicio' => 'required',
                 'id_usuario' => 'required',
                 'nom_repre' => 'required',
-
-                'opcion1' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion2' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion3' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion4' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'opcion6' => 'required', // Asegúrate de ajustar las reglas de validación según tu necesidad
-                'detalleOpinion1' => 'required', // Texto
-                'recomendaciones1' => 'required', // Texto
-                'detalleOpinion2' => 'required', // Texto
-                'recomendaciones2' => 'required', // Texto
-                'detalleOpinion3' => 'required', // Texto
-                'recomendaciones3' => 'required', // Texto
-                'detalleOpinion4' => 'required', // Texto
-                'recomendaciones4' => 'required', // Texto
-
+                'opcion1' => 'required',
+                'opcion2' => 'required',
+                'opcion3' => 'required',
+                'opcion4' => 'required',
+                'opcion6' => 'required',
+                'detalleOpinion1' => 'required',
+                'recomendaciones1' => 'required',
+                'detalleOpinion2' => 'required',
+                'recomendaciones2' => 'required',
+                'detalleOpinion3' => 'required',
+                'recomendaciones3' => 'required',
+                'detalleOpinion4' => 'required',
+                'recomendaciones4' => 'required',
             ];
-
+    
             // Validar los datos del formulario
             $data = $request->validate($rules);
+    
             // Obtener las fechas desde el servicio y formatearlas correctamente
             $fechaInspeccion = Carbon::parse($servicio->date_inspeccion_at)->format('d-m-Y');
             $fechaRecepcion = Carbon::parse($servicio->date_recepcion_at)->format('d-m-Y');
             $fechaInspeccionAumentada = Carbon::parse($servicio->date_inspeccion_at)->addYear()->format('d-m-Y');
-
+    
             // Completar los datos necesarios para el procesamiento
             $data['fecha_inspeccion'] = $fechaInspeccion;
             $data['fecha_recepcion'] = $fechaRecepcion;
             $data['fecha_inspeccion_modificada'] = $fechaInspeccionAumentada;
             $data['nom_verificador'] = $usuario->name;
             $data['razonsocial'] = $estacion->razon_social;
-            $data['direccion_estacion'] = $estacion->domicilio_estacion_servicio;
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
-
-            //Software
-            $data['proveedor'] =  $software->nombre;
-            $data['rfc_proveedor'] =  $software->rfc;
-            //Datos de los equipos
+    
+            // Información del proveedor de software
+            $data['proveedor'] = $software->nombre;
+            $data['rfc_proveedor'] = $software->rfc;
+    
+            // Obtener datos de los equipos
             $dispensarios = $request->input('dispensarios', []);
             $sondas = $request->input('sondas', []);
             $combustibles = $request->input('combustibles', []);
-
+    
             // Depuración: Imprimir datos recibidos
-            \Log::info('Datos recibidos:', [
-                'combustibles' => $combustibles,
-            ]);
-
+            \Log::info('Datos recibidos:', ['combustibles' => $combustibles]);
+    
             $numSeriesEquipos = [];
-            $usuario = Auth::user();
-
             if (!$dispensarios || !$sondas) {
                 return redirect()->route('dictamen_datos.create')->with('error', 'Rellenar todos los campos');
             }
+    
             // Crear o actualizar dispensarios y sondas
             foreach ($dispensarios as $dispensario) {
                 $equipo = Equipo::updateOrCreate(
@@ -730,7 +622,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 );
                 $numSeriesEquipos[] = $dispensario['numero_serie'];
             }
-
+    
             foreach ($sondas as $sonda) {
                 $equipo = Equipo::updateOrCreate(
                     ['num_serie' => $sonda['numero_serie']],
@@ -742,19 +634,18 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 );
                 $numSeriesEquipos[] = $sonda['numero_serie'];
             }
-
+    
             // Recuperar tanques
             $tanques = Tanque::whereIn('nombre', ['Diesel', 'Premium', 'Magna'])->get()->keyBy('nombre');
-
+    
             // Preparar datos para la tabla pivote
             $pivotData = [];
             foreach ($request->input('combustibles', []) as $combustible) {
-                $tipoTanque = ucfirst($combustible['tipo']); // Capitalizar el primer carácter
+                $tipoTanque = ucfirst($combustible['tipo']);
                 $cantidad = $combustible['cantidad'];
-
+    
                 if (isset($tanques[$tipoTanque])) {
                     $tanqueId = $tanques[$tipoTanque]->id;
-                    // Insertar cada registro como una fila separada en la tabla pivote
                     $pivotData[] = [
                         'id_estacion' => $estacion->id,
                         'id_tanque' => $tanqueId,
@@ -764,165 +655,53 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     ];
                 }
             }
-
-            // Depuración final de los datos procesados
+    
             \Log::info('Datos de pivote:', $pivotData);
-
-            // Usar DB::connection para especificar la conexión a la base de datos 'armonia'
-            // Primero, eliminar los registros antiguos
+    
+            // Eliminar registros antiguos e insertar los nuevos en la tabla pivote
             DB::connection('segunda_db')->table('estacion_tanque')->where('id_estacion', $estacion->id)->delete();
-
-            // Insertar los nuevos datos
             DB::connection('segunda_db')->table('estacion_tanque')->insert($pivotData);
-
-            // Primero, eliminar las asociaciones antiguas
+    
+            // Actualizar relaciones equipo-estación
             DB::connection('segunda_db')->table('equipo_estacion')->where('id_estacion', $estacion->id)->delete();
-
-            // Insertar las nuevas asociaciones
             DB::connection('segunda_db')->table('equipo_estacion')->insert(
                 array_map(fn($numSerie) => ['id_equipo' => $numSerie, 'id_estacion' => $estacion->id], $numSeriesEquipos)
             );
-
+    
             // Cargar las plantillas de Word
             $templatePaths = [
                 'DICTAMEN TECNICO DE SISTEMAS DE MEDICION.docx',
             ];
-
+    
             // Definir la carpeta de destino
             $customFolderPath = "Servicios_Anexo30/{$data['nomenclatura']}";
             $subFolderPath = "{$customFolderPath}/expediente";
-
+    
             // Crear la carpeta personalizada si no existe
             if (!Storage::disk('public')->exists($customFolderPath)) {
                 Storage::disk('public')->makeDirectory($customFolderPath);
             }
-
+    
             // Verificar y crear la subcarpeta si no existe
             if (!Storage::disk('public')->exists($subFolderPath)) {
                 Storage::disk('public')->makeDirectory($subFolderPath);
             }
-
+    
             // Reemplazar marcadores en todas las plantillas
             foreach ($templatePaths as $templatePath) {
                 $templateProcessor = new TemplateProcessor(storage_path("app/templates/formatos_anexo30/{$templatePath}"));
-
-                // Reemplazar todos los marcadores con los datos del formulario
+    
                 foreach ($data as $key => $value) {
                     $templateProcessor->setValue($key, $value);
-                    // Reemplazar fechas formateadas específicas
                     $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
                     $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
-
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion1']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si', 'X');
-                            $templateProcessor->setValue('no', ' ');
-                            $templateProcessor->setValue('noaplica', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si', ' ');
-                            $templateProcessor->setValue('no', 'X');
-                            $templateProcessor->setValue('noaplica', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si', ' ');
-                            $templateProcessor->setValue('no', ' ');
-                            $templateProcessor->setValue('noaplica', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion2']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si2', 'X');
-                            $templateProcessor->setValue('no2', ' ');
-                            $templateProcessor->setValue('noaplica2', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si2', ' ');
-                            $templateProcessor->setValue('no2', 'X');
-                            $templateProcessor->setValue('noaplica2', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si2', ' ');
-                            $templateProcessor->setValue('no2', ' ');
-                            $templateProcessor->setValue('noaplica2', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion3']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si3', 'X');
-                            $templateProcessor->setValue('no3', ' ');
-                            $templateProcessor->setValue('noaplica3', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si3', ' ');
-                            $templateProcessor->setValue('no3', 'X');
-                            $templateProcessor->setValue('noaplica3', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si3', ' ');
-                            $templateProcessor->setValue('no3', ' ');
-                            $templateProcessor->setValue('noaplica3', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion4']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si4', 'X');
-                            $templateProcessor->setValue('no4', ' ');
-                            $templateProcessor->setValue('noaplica4', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si4', ' ');
-                            $templateProcessor->setValue('no4', 'X');
-                            $templateProcessor->setValue('noaplica4', ' ');
-                            break;
-                        case 'no_aplica':
-                            $templateProcessor->setValue('si4', ' ');
-                            $templateProcessor->setValue('no4', ' ');
-                            $templateProcessor->setValue('noaplica4', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
-                    // Establecer los valores correctos basados en la opción seleccionada
-                    switch ($data['opcion6']) {
-                        case 'cumple':
-                            $templateProcessor->setValue('si6', 'X');
-                            $templateProcessor->setValue('no6', ' ');
-                            break;
-                        case 'no_cumple':
-                            $templateProcessor->setValue('si6', ' ');
-                            $templateProcessor->setValue('no6', 'X');
-                            break;
-                        default:
-                            // Manejar cualquier otro caso aquí si es necesario
-                            break;
-                    }
                 }
-
-                // Crear un nombre de archivo basado en la nomenclatura
+    
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
-
-                // Guardar la plantilla procesada en la carpeta de destino
                 $templateProcessor->saveAs(storage_path("app/public/{$subFolderPath}/{$fileName}"));
             }
-
-            // Crear la lista de archivos generados con sus URLs
+    
             $generatedFiles = array_map(function ($templatePath) use ($subFolderPath, $data) {
                 $fileName = pathinfo($templatePath, PATHINFO_FILENAME) . "_{$data['nomenclatura']}.docx";
                 return [
@@ -930,17 +709,16 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                     'url' => Storage::url("{$subFolderPath}/{$fileName}"),
                 ];
             }, $templatePaths);
-
-            // Retornar respuesta con los archivos generados
+    
             return redirect()->route('expediente.anexo30', ['slug' => $data['id_servicio']])
                 ->with('generatedFiles', $generatedFiles)
-                ->with('success', 'Dictamen de medicion guardado correctamente.');
+                ->with('success', 'Dictamen de medición guardado correctamente.');
         } catch (\Exception $e) {
-            // Capturar y registrar cualquier excepción ocurrida
             \Log::error("Error al generar documentos: " . $e->getMessage());
             return response()->json(['error' => 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo más tarde.'], 500);
         }
     }
+    
 
     public function guardarCertificado(Request $request)
     {
