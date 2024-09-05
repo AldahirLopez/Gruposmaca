@@ -148,6 +148,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $direccionFiscal = Direccion::where('id', $estacion->domicilio_fiscal_id)->first();
             $direccionEstacion = Direccion::where('id', $estacion->domicilio_servicio_id)->first();
 
+            // Buscar el usuario por su ID en la primera base de datos y obtener su nombre
+            $usuario = User::on('mysql')->findOrFail($request->input('id_usuario'));  // Asumiendo que el modelo Usuario usa la conexión a la primera base de datos
+
             // Completar los datos necesarios para el procesamiento
             $data['numestacion'] = $estacion->num_estacion;
             $data['fecha_actual'] = Carbon::now()->format('d/m/Y');
@@ -222,6 +225,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
                 foreach ($data as $key => $value) {
                     $templateProcessor->setValue($key, $value);
                     // Reemplazar fechas formateadas específicas
+                    $templateProcessor->setValue('id_usuario', $usuario->name);
                     $templateProcessor->setValue('fecha_inspeccion', $fechaInspeccion);
                     $templateProcessor->setValue('fecha_recepcion', $fechaRecepcion);
                     $templateProcessor->setValue('fecha_inspeccion_modificada', $fechaInspeccionAumentada);
