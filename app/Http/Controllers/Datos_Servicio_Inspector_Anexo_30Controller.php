@@ -448,7 +448,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['fecha_inspeccion_modificada'] = $fechaInspeccionAumentada;
             $data['nom_verificador'] = $usuario->name;
             $data['razonsocial'] = $estacion->razon_social;
-            $data['direccion_estacion'] = $direccionEstacion;
+            $data['direccion_estacion'] = $direccionEstacion
+                ? "Calle: {$direccionEstacion->calle}\nNúmero Exterior: {$direccionEstacion->numero}\nColonia: {$direccionEstacion->colonia}\nLocalidad: {$direccionEstacion->localidad}\nMunicipio: {$direccionEstacion->municipio}\nEntidad Federativa: {$direccionEstacion->entidad_federativa}\nCódigo Postal: {$direccionEstacion->codigo_postal}"
+                : 'N/A';
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
 
@@ -704,7 +706,9 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
             $data['fecha_inspeccion_modificada'] = $fechaInspeccionAumentada;
             $data['nom_verificador'] = $usuario->name;
             $data['razonsocial'] = $estacion->razon_social;
-            $data['direccion_estacion'] = $direccionEstacion;
+            $data['direccion_estacion'] = $direccionEstacion
+                ? "Calle: {$direccionEstacion->calle}\nNúmero Exterior: {$direccionEstacion->numero}\nColonia: {$direccionEstacion->colonia}\nLocalidad: {$direccionEstacion->localidad}\nMunicipio: {$direccionEstacion->municipio}\nEntidad Federativa: {$direccionEstacion->entidad_federativa}\nCódigo Postal: {$direccionEstacion->codigo_postal}"
+                : 'N/A';
             $data['telefono'] = $estacion->telefono;
             $data['correo'] = $estacion->correo_electronico;
 
