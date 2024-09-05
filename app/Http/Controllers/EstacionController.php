@@ -295,10 +295,6 @@ class EstacionController extends Controller
         // Capitaliza el tipo de dirección
         $tipoDireccionCapitalizado = ucfirst($tipoDireccion);
 
-        // Obtener el nombre del municipio basado en su ID
-        $estadoId = $request->input("entidad_federativa_{$tipoDireccion}");
-        $estado = Estados::on('segunda_db')->findOrFail($estadoId);
-
         // Crear nueva dirección en la segunda base de datos
         $direccion = new Direccion();
         $direccion->setConnection('segunda_db');  // Cambia la conexión a la segunda base de datos
@@ -310,7 +306,19 @@ class EstacionController extends Controller
         $direccion->codigo_postal = $request->input("codigo_postal_{$tipoDireccion}");
         $direccion->localidad = $request->input("localidad_{$tipoDireccion}");
         $direccion->municipio = $request->input("municipio_id_{$tipoDireccion}");
-        $direccion->entidad_federativa = $estado->description;
+
+        // Validación condicional para el campo "entidad_federativa"
+        if ($tipoDireccion == 'fiscal') {
+            // Si es fiscal, obtener el nombre del estado
+            $estadoId = $request->input("entidad_federativa_{$tipoDireccion}");
+            $estado = Estados::on('segunda_db')->findOrFail($estadoId);
+            $direccion->entidad_federativa = $estado->description;
+        } else {
+            // Si no es fiscal, simplemente guardar el valor ingresado
+            $direccion->entidad_federativa = $request->input("entidad_federativa_{$tipoDireccion}");
+        }
+
+        // Guardar la dirección
         $direccion->save();
 
         // Actualizar la referencia de la dirección en la estación correspondiente en la segunda base de datos
@@ -324,6 +332,7 @@ class EstacionController extends Controller
 
         return redirect()->back()->with('success', 'Dirección guardada exitosamente.');
     }
+
 
 
 
