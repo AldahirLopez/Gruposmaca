@@ -115,7 +115,7 @@ class Datos_Servicio_Inspector_Anexo_30Controller extends Controller
     }
 
 
-
+ 
 
     public function generateWord(Request $request)
     {

@@ -491,7 +491,9 @@
                                                             @if($direccionFiscal)
                                                             <a href="#" class="btn btn-info" data-id="{{ $direccionFiscal->id }}" data-toggle="modal" data-target="#verDireccionFiscalModal" style="margin-top: 10px;">Ver Dirección Fiscal</a>
                                                             @else
-                                                            <a href="#" class="btn btn-warning" id="registrarDireccionFiscalButton" data-toggle="modal" data-target="#registrarDireccionFiscalModal" style="margin-top: 10px;">Registrar Dirección Fiscal</a>
+                                                            <a href="{{ route('estacion.direcciones', ['id' => $estacion->id]) }}" class="btn btn-warning" style="margin-top: 10px;">
+                                                                Registrar Dirección Fiscal
+                                                            </a>
                                                             @endif
                                                             @error('domicilio_fiscal')
                                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -767,7 +769,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                </div> 
+                                                </div>
 
                                                 <div class="row">
                                                     <div class="col-md-6">
