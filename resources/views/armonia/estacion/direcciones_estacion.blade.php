@@ -59,7 +59,7 @@
                 <th>Localidad</th>
                 <th>Municipio</th>
                 <th>Entidad Federativa</th>
-                <th>Acciones</th>
+             
             </tr>
         </thead>
         <tbody>
@@ -72,10 +72,7 @@
                 <td>{{ $direccionEstacion->localidad }}</td>
                 <td>{{ $direccionEstacion->municipio }}</td>
                 <td>{{ $direccionEstacion->entidad_federativa }}</td>
-                <td>
-                    @if(auth()->check() && auth()->user()->hasRole(['Administrador']))
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editEstacionModal" data-id="{{ $direccionEstacion->id }}">Editar</button>
-                </td>
+
                 @endif
             </tr>
         </tbody>
