@@ -541,8 +541,9 @@
                                                             @if($direccionEstacion)
                                                             <a href="#" class="btn btn-info" data-id="{{ $direccionEstacion->id }}" data-toggle="modal" data-target="#verDireccionFiscalModal" style="margin-top: 10px;">Ver Dirección Estacion</a>
                                                             @else
-                                                            <a href="#" class="btn btn-warning" id="registrarDireccionEstacionButton" data-toggle="modal" data-target="#registrarDireccionEstacionModal" style="margin-top: 10px;">Registrar Dirección Estacion</a>
-                                                            @endif
+                                                            <a href="{{ route('estacion.direcciones', ['id' => $estacion->id]) }}" class="btn btn-warning" style="margin-top: 10px;">
+                                                                Registrar Dirección Fiscal
+                                                            </a> @endif
                                                             @error('domicilio_fiscal')
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
